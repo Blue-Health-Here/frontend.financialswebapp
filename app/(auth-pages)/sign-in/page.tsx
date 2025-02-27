@@ -7,13 +7,12 @@ import Link from "next/link";
 import authImage from "../../../public/auth-image.svg"
 import passwordIcon from "../../../public/password.svg"
 import Image from "next/image";
+import AuthBackgroundImage from "@/components/common-components/AuthBackgroundImage";
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
     <div className="flex h-screen">
-      <div className="flex-[3] bg-[#F8F8F8] justify-center items-center hidden md:flex">
-        <Image src={authImage} alt="Auth Image" />
-      </div>
+      <AuthBackgroundImage />
       <div className="flex-[1] p-10 md:p-20 flex flex-col h-full justify-between">
         <h1 className="text-[24px] text-center font-bold">LOGO</h1>
         <div className="flex flex-col">

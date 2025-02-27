@@ -5,6 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SmtpMessage } from "../smtp-message";
+import Image from "next/image";
+import authImage from "../../../public/auth-image.svg"
+import passwordIcon from "../../../public/password.svg"
+import AuthBackgroundImage from "@/components/common-components/AuthBackgroundImage";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
@@ -20,32 +24,44 @@ export default async function Signup(props: {
 
   return (
     <>
-      <form className="flex flex-col min-w-64 max-w-64 mx-auto">
-        <h1 className="text-2xl font-medium">Sign up</h1>
-        <p className="text-sm text text-foreground">
-          Already have an account?{" "}
-          <Link className="text-primary font-medium underline" href="/sign-in">
-            Sign in
-          </Link>
-        </p>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type="password"
-            name="password"
-            placeholder="Your password"
-            minLength={6}
-            required
-          />
-          <SubmitButton formAction={signUpAction} pendingText="Signing up...">
-            Sign up
-          </SubmitButton>
-          <FormMessage message={searchParams} />
+      <div className="flex min-h-screen">
+        <AuthBackgroundImage />
+        <div className="flex-[1] p-10 md:p-20 flex flex-col h-full justify-between">
+          <h1 className="text-[24px] text-center font-bold">LOGO</h1>
+          <div className="flex flex-col py-10">
+            <h2 className="text-[24px] font-normal">
+              Register Account 😍
+            </h2>
+            <p className="text-[14px] text-[grey]">Register your account today.</p>
+            <form className="flex flex-col min-w-64 gap-y-6">
+              <div className="flex flex-col text-[grey] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3]">
+                <Label htmlFor="name">Full Name</Label>
+                <Input name="name" placeholder="Enter your Name" required />
+                <Label htmlFor="email">Email</Label>
+                <Input name="email" placeholder="you@example.com" required />
+                <div className="flex justify-between items-center">
+                  <Label htmlFor="password">Password</Label>
+                </div>
+                <Input type="password" name="password" placeholder="Your password" required className="placeholder:text-[#B9B9C3] mb-3" />
+                <div className="flex justify-between items-center">
+                  <Label htmlFor="password">Confirm Password</Label>
+                </div>
+                <Input type="password" name="password" placeholder="Confirm password" required className="placeholder:text-[#B9B9C3] mb-3" />
+                <SubmitButton className="mb-3 text-[14px] text-white" pendingText="Signing In..." formAction={signUpAction}>
+                  Register
+                </SubmitButton>
+                <FormMessage message={searchParams} />
+                <Link className="text-[12px] text-center text-foreground underline" href="/forgot-password">
+                  Forgot Password?
+                </Link>
+              </div>
+            </form>
+          </div>
+          <p className="text-center text-[grey] text-[14px]">
+            Already have an account?<Link href="/forgot-password" className="text-black">Sign in</Link>
+          </p>
         </div>
-      </form>
-      <SmtpMessage />
+      </div>
     </>
   );
 }
