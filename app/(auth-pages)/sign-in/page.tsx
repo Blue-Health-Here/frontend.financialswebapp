@@ -13,7 +13,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
   return (
     <div className="flex h-screen">
       <AuthBackgroundImage />
-      <div className="flex-[1] p-10 md:p-20 flex flex-col h-full justify-between">
+      <div className="flex-[1] p-10 md:p-20 flex flex-col h-full justify-between min-h-screen">
         <h1 className="text-center font-bold">LOGO</h1>
         <div className="flex flex-col">
           <h1 className="text-[24px] font-normal">
