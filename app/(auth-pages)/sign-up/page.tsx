@@ -9,7 +9,11 @@ import Image from "next/image";
 import authImage from "../../../public/auth-image.svg"
 import passwordIcon from "../../../public/password.svg"
 import AuthBackgroundImage from "@/components/common/AuthBackgroundImage";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Sign Up - Financials Web App",
+};
 export default async function Signup(props: {
   searchParams: Promise<Message>;
 }) {

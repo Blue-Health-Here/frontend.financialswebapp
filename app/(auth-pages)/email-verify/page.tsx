@@ -8,7 +8,10 @@ import { SmtpMessage } from "../smtp-message";
 import Image from "next/image";
 import backArrow from "../../../public/backArrow.svg"
 import AuthBackgroundImage from "@/components/common/AuthBackgroundImage";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+    title: "Email Verify - Financials Web App",
+};
 export default async function Verification(props: {
     searchParams: Promise<Message>;
 }) {

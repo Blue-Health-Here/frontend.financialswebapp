@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { signInAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
@@ -8,6 +9,11 @@ import authImage from "../../../public/auth-image.svg"
 import passwordIcon from "../../../public/password.svg"
 import Image from "next/image";
 import AuthBackgroundImage from "@/components/common/AuthBackgroundImage";
+
+export const metadata: Metadata = {
+  title: "Sign In - Financials Web App",
+};
+
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
