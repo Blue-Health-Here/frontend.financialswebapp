@@ -1,34 +1,19 @@
 "use client";
 import Image from "next/image";
-import searchIcon from "../../../public/search-icon.svg"
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
-import { pharmacyData, sidebarItems, statsData } from "@/utils/constants";
-import { StatsCard } from "@/components/common/StatsCard";
+import { pharmacyData } from "@/utils/constants";
 import Sidebar from "@/components/common/Sidebar";
 import Topbar from "@/components/common/Topbar";
+import searchIcon from "../../../public/search-icon.svg"
 
-export default function Dashboard() {
+export default function Pharmacies() {
     return (
         <div className="flex min-h-screen bg-gray-100 overflow-x-hidden">
-            <Sidebar />
-            <div className="flex-1 ml-[266px]  min-h-screen p-6">
-                <Topbar />
-                {/* Statistics */}
-                <div className="mt-4">
-                    <h3 className="text-[#5E5873] p-2">Statistics</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {statsData.map((item, index) => (
-                                <StatsCard key={index} value={item.value} label={item.label} color={item.color} />
-                            ))}
-                        </div>
-                        <div className="bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
-                            <p className="text-gray-500">[Insert Chart Component Here]</p>
-                        </div>
-                    </div>
-                </div>
 
+            <Sidebar />
+            <div className="flex-1 ml-[266px] min-h-screen p-6">
+                <Topbar />
                 {/* Pharmacies */}
                 <div className="mt-6 pl-6 pr-6 pt-12 pb-12 bg-white shadow-lg rounded-lg">
                     <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
