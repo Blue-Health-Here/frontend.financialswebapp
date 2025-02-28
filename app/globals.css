@@ -63,7 +63,20 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+h1 {
+  @apply text-[24px] font-bold;
+}
+
+h2 {
+  @apply text-[20px] font-semibold;
+}
+
+p {
+  @apply text-sm;
 }
