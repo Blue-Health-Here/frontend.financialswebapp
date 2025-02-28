@@ -3,6 +3,7 @@ import React from 'react'
 import profileImage from '../../public/profile-image.png'
 import notificatioIcon from '../../public/notification-icon.svg'
 import exitIcon from '../../public/navbar-exit-right.svg'
+import { signOutAction } from '@/app/actions'
 const Topbar = () => {
     return (
         <nav className="flex items-center justify-between bg-white shadow-lg p-4 h-[62px] rounded-lg">
@@ -15,7 +16,7 @@ const Topbar = () => {
                         <p className="text-[#B9B9C3]">Admin</p>
                     </div>
                     <Image src={profileImage} alt="" />
-                    <Image src={exitIcon} alt="" />
+                    <Image src={exitIcon} alt="" onClick={signOutAction} />
                 </div>
             </div>
         </nav>)
