@@ -104,16 +104,19 @@ export default function Dashboard() {
 
                 {/* Navbar */}
                 <nav className="flex items-center justify-between bg-white shadow-lg p-4 h-[62px] rounded-lg">
-                    <p className="text-[21px]">Wednesday, 14 Jan 24</p>
-                    <div className="flex items-center gap-x-6 cursor-pointer">
-                        <Image src={notificatioIcon} alt="" width={17} height={19} />
-                        <div className="flex gap-x-4">
-                            <div className="text-right">
-                                <span className="text-grey">Sam Lee</span>
-                                <p className="text-[#B9B9C3]">Admin</p>
+                    <p className="text-sm md:text-[21px]">Wednesday, 14 Jan 24</p>
+
+                    <div className="flex items-center gap-x-4 md:gap-x-6 cursor-pointer">
+                        <Image src={notificatioIcon} alt="Notification" width={17} height={19} />
+
+                        <div className="flex items-center gap-x-2 md:gap-x-4">
+                            <div className="hidden md:block text-right">
+                                <span className="text-gray-700">Sam Lee</span>
+                                <p className="text-[#B9B9C3] text-sm">Admin</p>
                             </div>
-                            <Image src={profileImage} alt="" />
-                            <Image src={exitIcon} alt="" />
+
+                            <Image src={profileImage} alt="Profile" className="w-8 h-8 md:w-auto md:h-auto" />
+                            <Image src={exitIcon} alt="Exit" className="w-6 h-6 md:w-auto md:h-auto" />
                         </div>
                     </div>
                 </nav>
