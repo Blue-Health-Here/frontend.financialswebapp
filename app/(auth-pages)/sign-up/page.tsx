@@ -36,9 +36,9 @@ export default async function Signup(props: {
             <h1 className="font-normal">
               Register Account 😍
             </h1>
-            <p className="text-[grey]">Register your account today.</p>
+            <p className="text-grey">Register your account today.</p>
             <form className="flex flex-col min-w-64 gap-y-6">
-              <div className="flex flex-col text-[grey] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px]">
+              <div className="flex flex-col text-grey gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px]">
                 <Label size="xs" htmlFor="name">Full Name</Label>
                 <Input name="name" placeholder="Enter your Name" required />
                 <Label size="xs" htmlFor="email">Email</Label>
@@ -61,7 +61,7 @@ export default async function Signup(props: {
               </div>
             </form>
           </div>
-          <p className="text-center text-[grey]">
+          <p className="text-center text-grey">
             Already have an account? <Link href="/sign-in" className="text-black text-sm">Sign in</Link>
           </p>
         </div>

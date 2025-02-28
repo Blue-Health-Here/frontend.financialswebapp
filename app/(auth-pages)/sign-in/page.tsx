@@ -25,9 +25,9 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           <h1 className="text-[24px] font-normal">
             Welcome to Vuexy! 👋🏻
           </h1>
-          <p className="text-[grey]">Please sign-in to your account</p>
+          <p className="text-grey">Please sign-in to your account</p>
           <form className="flex flex-col min-w-64 gap-y-6">
-            <div className="flex flex-col text-[grey] text-[12px] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px]">
+            <div className="flex flex-col text-grey text-[12px] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px]">
               <Label size="xs" htmlFor="email">Email</Label>
               <Input name="email" placeholder="you@example.com" required />
               <div className="flex justify-between items-center">
@@ -48,7 +48,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             </div>
           </form>
         </div>
-        <p className="text-center text-[grey]">
+        <p className="text-center text-grey">
           New on our platform? <Link href="/sign-up" className="text-black text-sm">Register Account</Link>
         </p>
       </div>

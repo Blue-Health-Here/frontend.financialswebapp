@@ -77,6 +77,10 @@ h2 {
   @apply text-[20px] font-semibold;
 }
 
+h3 {
+  @apply text-[21px];
+}
+
 p {
   @apply text-sm;
 }

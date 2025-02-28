@@ -27,10 +27,10 @@ export default async function Verification(props: {
                             <h1 className="font-normal">
                                 Verify your email ✉️
                             </h1>
-                            <p className="text-[grey]">Account activation link sent to your email address. Please check your email and click on the activation link to verify your account.</p>
+                            <p className="text-grey">Account activation link sent to your email address. Please check your email and click on the activation link to verify your account.</p>
                         </div>
                         <form className="flex flex-col min-w-64 gap-y-6">
-                            <div className="flex flex-col text-[grey] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px] ">
+                            <div className="flex flex-col text-grey gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px] ">
                                 <SubmitButton className="mb-3 text-white" pendingText="Signing In..." formAction={forgotPasswordAction}>
                                     Okay
                                 </SubmitButton>
