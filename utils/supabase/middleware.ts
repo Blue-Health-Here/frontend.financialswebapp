@@ -44,7 +44,6 @@ export const updateSession = async (request: NextRequest) => {
       request.nextUrl.pathname.startsWith("/protected") || 
       request.nextUrl.pathname.search("/admin")
     ) !== -1 && user === null) {
-      console.log(user, "user from middleware");
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 

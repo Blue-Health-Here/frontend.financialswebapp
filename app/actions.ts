@@ -4,6 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getUserRole } from "@/utils/helper";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -44,16 +45,22 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error: userMessage, data: { user } } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    return encodedRedirect("error", "/sign-in", error.message);
+  if (userMessage) {
+    return encodedRedirect("error", "/sign-in", userMessage.message);
   }
 
-  return redirect("/admin/dashboard");
+  const role = await getUserRole(user);
+
+  if (role === "admin") {
+    return redirect("/admin/dashboard");
+  } else {
+    return redirect("/pharmacy/dashboard");
+  }
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
