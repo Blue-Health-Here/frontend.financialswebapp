@@ -1,10 +1,3 @@
-import dashboardIcon from "../public/sidebar-Dashboard-home.svg";
-import pharmacyIcon from "../public/sidebar-pharmacy.svg";
-import budgetIcon from "../public/sidebar-budget.svg";
-import checklistIcon from "../public/sidebar-checklist.svg";
-import coursesIcon from "../public/sidebar-courses.svg";
-import categoriesIcon from "../public/sidebar-categories.svg";
-import profileIcon from "../public/sidebar-profile.svg";
 // Pharmacy card data 
 export const pharmacyData = [
     { name: "Pharmacy XYZ", expense: "1500.00", courses: "2 / 5", progress: 50, image: "/avatar.jpg" },
@@ -17,13 +10,13 @@ export const pharmacyData = [
 
 // Side bar data 
 export const sidebarItems = [
-    { name: "Dashboard", icon: dashboardIcon },
-    { name: "Pharmacies", icon: pharmacyIcon },
-    { name: "Budget", icon: budgetIcon },
-    { name: "Checklist", icon: checklistIcon },
-    { name: "Courses", icon: coursesIcon },
-    { name: "Categories", icon: categoriesIcon },
-    { name: "Profile", icon: profileIcon }
+    { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg" },
+    { name: "Pharmacies", icon: "/sidebar-pharmacy.svg" },
+    { name: "Budget", icon: "/sidebar-budget.svg" },
+    { name: "Checklist", icon: "/sidebar-checklist.svg" },
+    { name: "Courses", icon: "/sidebar-courses.svg" },
+    { name: "Categories", icon: "/sidebar-categories.svg" },
+    { name: "Profile", icon: "/sidebar-profile.svg" }
 ];
 
 // statistic card data
