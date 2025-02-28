@@ -10,7 +10,7 @@ export default async function Dashboard() {
     return (
         <AdminLayout>
             {/* Statistics */}
-            <div className="mt-4">
+            <div className="mt-20">
                 <h3 className="text-[#5E5873] p-2">Statistics</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
