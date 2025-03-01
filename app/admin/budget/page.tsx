@@ -2,10 +2,13 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData } from "@/utils/constants";
+import Sidebar from "@/components/common/Sidebar";
+import Topbar from "@/components/common/Topbar";
 import searchIcon from "../../../public/search-icon.svg"
+import { BudgetCard } from "@/components/common/BudgetCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
 
-export default async function Pharmacies() {
+export default function AdminBudget() {
     return (
         <AdminLayout>
             <div className="mt-20 pl-6 pr-6 pt-12 pb-12 bg-white shadow-lg rounded-lg">
