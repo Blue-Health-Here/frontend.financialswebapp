@@ -10,13 +10,13 @@ export const pharmacyData = [
 
 // Side bar data 
 export const sidebarItems = [
-    { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg" },
-    { name: "Pharmacies", icon: "/sidebar-pharmacy.svg" },
-    { name: "Budget", icon: "/sidebar-budget.svg" },
-    { name: "Checklist", icon: "/sidebar-checklist.svg" },
-    { name: "Courses", icon: "/sidebar-courses.svg" },
-    { name: "Categories", icon: "/sidebar-categories.svg" },
-    { name: "Profile", icon: "/sidebar-profile.svg" }
+    { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/admin/dashboard" },
+    { name: "Pharmacies", icon: "/sidebar-pharmacy.svg", path: "/admin/pharmacies" },
+    { name: "Budget", icon: "/sidebar-budget.svg", path: "/admin/budget" },
+    { name: "Checklist", icon: "/sidebar-checklist.svg", path: "/admin/checklist" },
+    { name: "Courses", icon: "/sidebar-courses.svg", path: "/admin/courses" },
+    { name: "Categories", icon: "/sidebar-categories.svg", path: "/admin/categories" },
+    { name: "Profile", icon: "/sidebar-profile.svg", path: "/admin/profile" }
 ];
 
 // statistic card data
