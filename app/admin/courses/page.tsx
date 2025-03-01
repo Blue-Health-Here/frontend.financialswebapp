@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import searchIcon from "../../../public/search-icon.svg"
 import AdminLayout from "@/components/layouts/AdminLayout";
-import CourseCard from "@/components/common/CourseCard";
+import AdminCourseCard from "@/components/common/AdminCourseCard";
 
 const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
 export default async function Pharmacies() {
@@ -20,7 +20,7 @@ export default async function Pharmacies() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {corses.map((course, index) => (
-                        <CourseCard key={index} courseName={course} />
+                        <AdminCourseCard key={index} courseName={course} />
                     ))}
                 </div>
             </div>

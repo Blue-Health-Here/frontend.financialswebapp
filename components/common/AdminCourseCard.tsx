@@ -3,7 +3,7 @@ import deleteIcon from "../../public/delete-icon.svg"
 import editIcon from "../../public/edit-icon.svg"
 
 
-export const CourseCard = ({ courseName }: { courseName: string }) => {
+export const AdminCourseCard = ({ courseName }: { courseName: string }) => {
     return (
         <div className="flex items-center justify-between bg-white p-4 border rounded-lg shadow-sm w-full max-w-md">
             <span className="">{courseName}</span>
@@ -15,4 +15,4 @@ export const CourseCard = ({ courseName }: { courseName: string }) => {
     );
 };
 
-export default CourseCard;
+export default AdminCourseCard;
