@@ -1,17 +1,16 @@
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { PharmacyCard } from "@/components/common/PharmacyCard";
-import { pharmacyData } from "@/utils/constants";
 import searchIcon from "../../../public/search-icon.svg"
 import AdminLayout from "@/components/layouts/AdminLayout";
+import CourseCard from "@/components/common/CourseCard";
 
+const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
 export default async function Pharmacies() {
     return (
         <AdminLayout>
-            {/* Pharmacies */}
-            <div className="mt-6 pl-6 pr-6 pt-10 pb-10 bg-white shadow-lg rounded-lg">
+            <div className="mt-20 pl-6 pr-6 pt-10 pb-10 bg-white shadow-lg rounded-lg">
                 <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-                    <h1>Pharmacies</h1>
+                    <h1>Courses</h1>
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg" />
                         <span className="absolute right-3 top-2.5 text-gray-500">
@@ -20,8 +19,8 @@ export default async function Pharmacies() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {pharmacyData.map((pharmacy, index) => (
-                        <PharmacyCard key={index} pharmacy={pharmacy} />
+                    {corses.map((course, index) => (
+                        <CourseCard key={index} courseName={course} />
                     ))}
                 </div>
             </div>
