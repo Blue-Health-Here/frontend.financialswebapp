@@ -9,6 +9,7 @@ import authImage from "../../../public/auth-image.svg"
 import passwordIcon from "../../../public/password.svg"
 import Image from "next/image";
 import AuthBackgroundImage from "@/components/common/AuthBackgroundImage";
+import LoginForm from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
   title: "Sign In - Financials Web App",
@@ -26,7 +27,8 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             Welcome to Vuexy! 👋🏻
           </h1>
           <p className="text-grey">Please sign-in to your account</p>
-          <form className="flex flex-col min-w-64 gap-y-6">
+          <LoginForm message={searchParams} />
+          {/* <form className="flex flex-col min-w-64 gap-y-6">
             <div className="flex flex-col text-grey text-[12px] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
               <Label size="xs" htmlFor="email">Email</Label>
               <Input name="email" placeholder="you@example.com" required />
@@ -46,7 +48,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                 Forgot Password?
               </Link>
             </div>
-          </form>
+          </form> */}
         </div>
         <p className="text-center text-grey">
           New on our platform? <Link href="/sign-up" className="text-black text-sm">Register Account</Link>

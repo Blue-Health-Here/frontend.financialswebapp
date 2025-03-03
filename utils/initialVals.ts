@@ -4,3 +4,8 @@ export const signUpInitialVals = {
     password: "",
     confirmPassword: "",
 };
+
+export const signInInitialVals = {
+    email: "",
+    password: "",
+};
