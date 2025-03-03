@@ -6,7 +6,7 @@ import exitIcon from '../../public/navbar-exit-right.svg'
 import { signOutAction } from '@/app/actions'
 const Topbar = () => {
     return (
-        <nav className="topbar fixed top-4 right-6 bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
+        <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
             <p className="text-[21px]">Wednesday, 14 Jan 24</p>
             <div className="flex justify-end items-center gap-x-6 cursor-pointer">
                 <Image src={notificatioIcon} alt="" width={17} height={19} />

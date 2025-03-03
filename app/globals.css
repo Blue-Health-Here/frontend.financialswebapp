@@ -84,7 +84,3 @@ h3 {
 p {
   @apply text-sm;
 }
-
-.topbar {
-  left: calc(20% + 1.5rem);
-}
