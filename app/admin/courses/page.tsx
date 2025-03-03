@@ -4,6 +4,7 @@ import searchIcon from "../../../public/search-icon.svg"
 import AdminLayout from "@/components/layouts/AdminLayout";
 import InfoCard from "@/components/common/InfoCard";
 import { Button } from "@/components/ui/button";
+// import AddCourseModal from "@/components/admin/AddCourseModal";
 
 const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
 export default async function Courses() {
@@ -27,6 +28,7 @@ export default async function Courses() {
                     ))}
                 </div>
             </div>
+            {/* <AddCourseModal /> */}
         </AdminLayout>
     );
 }
