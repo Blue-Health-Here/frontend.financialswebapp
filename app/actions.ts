@@ -59,7 +59,7 @@ export const signInAction = async (formData: FormData) => {
   if (role === "admin") {
     return redirect("/admin/dashboard");
   } else {
-    return redirect("/pharmacy/dashboard");
+    return redirect("/admin/dashboard");
   }
 };
 

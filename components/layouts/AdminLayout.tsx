@@ -16,10 +16,10 @@ export default async function AdminLayout({
   } = await supabase.auth.getUser();
 
   if (user) {
-    const role = await getUserRole(user);
-    if (role !== "admin") {
-      redirect("/not-found");
-    }
+    // const role = await getUserRole(user);
+    // if (role !== "admin") {
+    //   redirect("/not-found");
+    // }
   }
 
   return (
