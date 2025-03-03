@@ -8,6 +8,12 @@ const config = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
+  safelist: [
+    'text-custom-green',
+    'text-custom-purple',
+    'text-custom-orange',
+    'text-custom-red',
+  ],
   prefix: "",
   theme: {
     container: {
@@ -55,6 +61,10 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'custom-green': '#28C76F',
+        'custom-purple': '#7367F0',
+        'custom-red': '#EA5455',
+        'custom-orange': '#FF9F43',
       },
       borderRadius: {
         lg: "var(--radius)",

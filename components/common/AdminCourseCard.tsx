@@ -5,7 +5,7 @@ import editIcon from "../../public/edit-icon.svg"
 
 export const AdminCourseCard = ({ courseName }: { courseName: string }) => {
     return (
-        <div className="flex items-center justify-between bg-white p-4 border rounded-lg shadow-sm w-full max-w-md">
+        <div className="flex items-center justify-between bg-white p-4 border rounded-lg shadow-sm w-full">
             <span className="">{courseName}</span>
             <div className="flex space-x-3 cursor-pointer">
                 <Image src={deleteIcon} alt="" width={20} height={20} />
