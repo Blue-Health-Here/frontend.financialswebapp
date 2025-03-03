@@ -30,7 +30,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
                     <InputField label="Password" className="placeholder:text-themeLight" name="password" type="password" placeholder="Your password" />
 
                     <SubmitButton type="submit" className="my-3 text-sm text-white w-full" disabled={isSubmitting} pendingText="Signing In...">
-                        {isSubmitting ? "Signing In..." : "Sign Up"}
+                        {isSubmitting ? "Signing In..." : "Sign In"}
                     </SubmitButton>
                     
                     <FormMessage message={message} />
