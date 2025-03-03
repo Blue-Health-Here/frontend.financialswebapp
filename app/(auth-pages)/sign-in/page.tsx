@@ -27,7 +27,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           </h1>
           <p className="text-grey">Please sign-in to your account</p>
           <form className="flex flex-col min-w-64 gap-y-6">
-            <div className="flex flex-col text-grey text-[12px] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-[#B9B9C3] [&>input]:placeholder:text-[12px]">
+            <div className="flex flex-col text-grey text-[12px] gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
               <Label size="xs" htmlFor="email">Email</Label>
               <Input name="email" placeholder="you@example.com" required />
               <div className="flex justify-between items-center">
@@ -35,7 +35,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
               </div>
               <div className="relative">
                 <Image src={passwordIcon} alt="password" className="absolute right-4 top-3" />
-                <Input type="password" name="password" placeholder="Your password" required className="placeholder:text-[#B9B9C3] placeholder:text-[12px] mb-3" />
+                <Input type="password" name="password" placeholder="Your password" required className="placeholder:text-themeLight placeholder:text-[12px] mb-3" />
               </div>
 
               <SubmitButton className="mb-3 text-sm text-white" pendingText="Signing In..." formAction={signInAction}>

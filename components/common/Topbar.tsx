@@ -13,7 +13,7 @@ const Topbar = () => {
                 <div className="flex gap-x-4 items-center">
                     <div className="text-right">
                         <span className="text-grey">Sam Lee</span>
-                        <p className="text-[#B9B9C3]">Admin</p>
+                        <p className="text-themeLight">Admin</p>
                     </div>
                     <Image src={profileImage} alt="" />
                     <Image src={exitIcon} alt="" onClick={signOutAction} />

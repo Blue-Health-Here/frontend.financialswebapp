@@ -22,6 +22,7 @@ const config = {
         primary: "#1E3A8A",
         secondary: "#93C5FD",
         grey: "#6E6B7B",
+        themeLight: "#B9B9C3",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
