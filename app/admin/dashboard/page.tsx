@@ -5,6 +5,7 @@ import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData, statsData } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
+import BarChart from "@/components/common/BarChart";
 
 export default async function Dashboard() {
     return (
@@ -18,8 +19,8 @@ export default async function Dashboard() {
                             <StatsCard key={index} value={item.value} label={item.label} color={item.color} />
                         ))}
                     </div>
-                    <div className="bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
-                        <p className="text-gray-500">[Insert Chart Component Here]</p>
+                    <div className="bg-white rounded-lg shadow-lg pl-6 pr-6  flex items-center justify-center">
+                        <BarChart />
                     </div>
                 </div>
             </div>
