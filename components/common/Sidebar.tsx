@@ -8,7 +8,7 @@ import Link from 'next/link';
 const Sidebar = () => {
     const pathName = usePathname()
     return (
-        <aside className="w-[18%] bg-primary text-white shadow-lg pt-8 pb-8 pl-4 pr-4 fixed left-0 top-0 h-full">
+        <aside className="w-[15%] bg-primary text-white shadow-lg pt-8 pb-8 pl-4 pr-4 fixed left-0 top-0 h-full">
             <h1 className="text-xl text-center font-semibold">LOGO</h1>
             <ul className="mt-16 flex flex-col gap-y-2 text-[15px]">
                 {sidebarItems.map((item, index) => {

@@ -21,8 +21,8 @@ export const sidebarItems = [
 
 // statistic card data
 export const statsData = [
-    { value: "55", label: "Categories", color: "text-green-500" },
-    { value: "10", label: "Pharmacies", color: "text-purple-500" },
-    { value: "$567.435", label: "Total monthly expense", color: "text-orange-500" },
-    { value: "75%", label: "Total task completed", color: "text-red-500" },
+    { value: "55", label: "Categories", color: "text-custom-green" },
+    { value: "10", label: "Pharmacies", color: "text-custom-purple" },
+    { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange" },
+    { value: "75%", label: "Total task completed", color: "text-custom-red" },
 ];
