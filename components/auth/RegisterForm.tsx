@@ -15,11 +15,7 @@ const RegisterForm: React.FC<any> = ({ message }) => {
         formData.append("email", values.email);
         formData.append("password", values.password);
         formData.append("name", values.name);
-        try {
-            signUpAction(formData);
-        } catch (error: any) {
-            console.log("Error:", error?.message);
-        }
+        signUpAction(formData);
     };
 
     return (
