@@ -28,7 +28,7 @@ export default async function Dashboard() {
             </div>
 
             {/* Pharmacies */}
-            <div className="mt-8 p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
+            <div className="mt-6 p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
                 <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                     <h1>Pharmacies</h1>
                     <div className="relative w-[390px] sm:max-w-md">

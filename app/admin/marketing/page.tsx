@@ -13,7 +13,7 @@ export default async function Marketing() {
             <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
                 <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                     <div className="flex items-center justify-between gap-3">
-                        <h1>Marketing Material</h1><Button className="w-6 h-7 text-2xl text-white">+</Button>
+                        <h1>Marketing Material</h1><Button className="w-6 h-7 text-2xl text-white pb-2.5">+</Button>
                     </div>
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg" />
