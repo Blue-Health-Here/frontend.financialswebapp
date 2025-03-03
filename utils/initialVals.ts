@@ -9,3 +9,7 @@ export const signInInitialVals = {
     email: "",
     password: "",
 };
+
+export const forgotPassInitialVals = {
+    email: "",
+};

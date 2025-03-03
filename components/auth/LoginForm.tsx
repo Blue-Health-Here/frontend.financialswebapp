@@ -35,7 +35,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
                     
                     <FormMessage message={message} />
                     
-                    <Link className="text-[12px] text-center text-foreground underline" href="/forgot-password">
+                    <Link className="text-sm text-center text-foreground underline" href="/forgot-password">
                         Forgot Password?
                     </Link>
                 </Form>
