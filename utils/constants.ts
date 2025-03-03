@@ -26,3 +26,10 @@ export const statsData = [
     { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange" },
     { value: "75%", label: "Total task completed", color: "text-custom-red" },
 ];
+
+//Admin Category Data
+export const categoryData: Record<string, string[]> = {
+    Onboarding: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8", "Category 9", "Category 10", "Category 11", "Category 12"],
+    Operations: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8", "Category 9", "Category 10", "Category 11", "Category 12"],
+    Expense: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8", "Category 9", "Category 10", "Category 11", "Category 12"],
+};
