@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import deleteIcon from "../../public/delete-icon.svg"
 import editIcon from "../../public/edit-icon.svg"
