@@ -5,7 +5,11 @@ import Image from "next/image";
 import { Pencil, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import profile from "../../../public/profileImage.svg"
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Profile - Financials Web App",
+};
 export default function Profile() {
     return (
         <AdminLayout>
