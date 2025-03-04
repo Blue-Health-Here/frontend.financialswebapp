@@ -33,3 +33,18 @@ export const categoryData: Record<string, string[]> = {
     Operations: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8", "Category 9", "Category 10", "Category 11", "Category 12"],
     Expense: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8", "Category 9", "Category 10", "Category 11", "Category 12"],
 };
+
+export const accordionData = [
+    {
+        title: 'Section 1',
+        content: 'Content for section 1 goes here.',
+    },
+    {
+        title: 'Section 2',
+        content: 'Content for section 2 goes here.',
+    },
+    {
+        title: 'Section 3',
+        content: 'Content for section 3 goes here.',
+    },
+];

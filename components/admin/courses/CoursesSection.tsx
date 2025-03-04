@@ -8,6 +8,8 @@ import AddCourseModal from "./AddCourseModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddCourse } from "@/store/features/course/courseSlice";
+// import Accordion from "@/components/common/Accordion";
+// import { accordionData } from "@/utils/constants";
 
 const CoursesSection = () => {
     const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
@@ -36,6 +38,7 @@ const CoursesSection = () => {
                     <InfoCard key={index} courseName={course} />
                 ))}
             </div>
+            {/* <Accordion items={accordionData} /> */}
             {isAddCourse && <AddCourseModal />}
         </div>
     );
