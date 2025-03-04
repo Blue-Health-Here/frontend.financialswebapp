@@ -1,7 +1,5 @@
-import { Geist } from "next/font/google";
-// import { ThemeProvider } from "next-themes";
-// import Link from "next/link";
 import "./globals.css";
+import ThemeProvider from "./ThemeProvider";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -13,20 +11,15 @@ export const metadata = {
   description: "The financials web app for all your financial needs.",
 };
 
-const geistSans = Geist({
-  display: "swap",
-  subsets: ["latin"],
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
