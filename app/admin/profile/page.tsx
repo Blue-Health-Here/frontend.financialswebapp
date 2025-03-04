@@ -20,7 +20,7 @@ export default function Profile() {
                         Save Changes
                     </Button>
                 </div>
-                <div className="flex gap-x-8 pt-8 pb-8">
+                <div className="flex gap-x-8 pt-8">
                     <div className="w-full space-y-4">
                         <div>
                             <Label className="text-[12px] text-grey">Full Name</Label>
@@ -36,7 +36,7 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start w-auto">
+                    <div className="flex flex-col items-center w-auto">
                         <div className="relative w-[120px] h-[120px] rounded-md">
                             <Image
                                 src={profile}
@@ -54,10 +54,11 @@ export default function Profile() {
                                 </button>
                             </div>
                         </div>
-                        <p className="text-[10px] text-[#A1A5B7] mt-4 text-center">
+                        <p className="text-[12px] text-[#A1A5B7] mt-4 text-center whitespace-nowrap">
                             Allowed file types: png, jpg, jpeg.
                         </p>
                     </div>
+
 
 
                 </div>
