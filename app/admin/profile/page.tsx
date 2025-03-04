@@ -1,0 +1,82 @@
+import AdminLayout from "@/components/layouts/AdminLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import { Pencil, X } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import profile from "../../../public/profileImage.svg"
+
+export default function Profile() {
+    return (
+        <AdminLayout>
+            <div className="mt-6 p-6 bg-white shadow-lg rounded-lg">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-xl font-semibold">Account</h1>
+                    <Button className="bg-[#3B82F6] hover:bg-[#65acfd] px-5 py-2 text-white">
+                        Save Changes
+                    </Button>
+                </div>
+                <div className="flex gap-x-8 pt-8 pb-8">
+                    <div className="w-full space-y-4">
+                        <div>
+                            <Label className="text-[12px] text-grey">Full Name</Label>
+                            <Input type="text" placeholder="Full Name" className="placeholder:text-[#4E4E4E]" />
+                        </div>
+                        <div>
+                            <Label className="text-[12px] text-grey">Email</Label>
+                            <Input
+                                type="email"
+                                placeholder="johndoe@gmail.com"
+                                className="bg-gray-200 placeholder:text-[#4E4E4E]"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-start w-auto">
+                        <div className="relative w-[120px] h-[120px] rounded-md">
+                            <Image
+                                src={profile}
+                                alt="Profile"
+                                width={120}
+                                height={120}
+                                className="rounded-md object-cover"
+                            />
+                            <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                                <button className="p-1 bg-white rounded-md shadow-lg">
+                                    <X size={14} className="text-gray-600" />
+                                </button>
+                                <button className="p-1 bg-white rounded-md shadow-lg">
+                                    <Pencil size={14} className="text-gray-600" />
+                                </button>
+                            </div>
+                        </div>
+                        <p className="text-[10px] text-[#A1A5B7] mt-4 text-center">
+                            Allowed file types: png, jpg, jpeg.
+                        </p>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            {/* Update Password Section */}
+            <div className="mt-6 p-6 space-y-4 bg-white shadow-lg rounded-lg">
+                <h2 className="text-xl font-semibold">Update Password</h2>
+                <p className="text-[16px] text-[#7E8299]">Please Enter Your Old Password.</p>
+
+                <div className="relative">
+                    <Label className="text-[12px] text-grey">Type here</Label>
+                    <Input
+                        type="password"
+                        placeholder="••••••••"
+                        className="w-80"
+                    />
+                    <p className="absolute left-[16.5rem] top-[44px] transform -translate-y-1/2 underline font-bold">
+                        Verify
+                    </p>
+                </div>
+            </div>
+        </AdminLayout>
+    );
+}
