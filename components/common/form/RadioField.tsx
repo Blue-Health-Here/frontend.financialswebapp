@@ -29,7 +29,7 @@ const RadioField: React.FC<RadioFieldProps> = ({ className, ref, label, options,
                             type="radio"
                             id={`${props.name}-${option.value}`}
                             className={cn(
-                                "h-4 w-4 text-themeLight border-input bg-background focus:ring-themeLight",
+                                "w-4 h-4 text-blue-600 bg-gray-100 border-secondary checked:border-secondary focus:ring-blue-500 dark:focus:ring-blue-600 checked:text-secondary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600",
                                 className,
                             )}
                             ref={ref}

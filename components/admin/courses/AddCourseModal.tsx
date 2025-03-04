@@ -1,24 +1,70 @@
 import { useDispatch } from "react-redux";
 import { setIsAddCourse } from "@/store/features/course/courseSlice";
 import Modal from "@/components/common/Modal";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Formik, Form } from "formik";
+import InputField from "@/components/common/form/InputField";
+import SelectField from "@/components/common/form/SelectField";
+import RadioField from "@/components/common/form/RadioField";
+import HeaderModal from "@/components/common/HeaderModal";
+import { SubmitButton } from "@/components/submit-button";
+import Image from "next/image";
+import upload from "../../../public/upload-icon.svg"
 
 const AddCourseModal = () => {
     const dispatch = useDispatch();
     const handleClose = () => {
-        dispatch(setIsAddCourse(false))
-    }
-    
+        dispatch(setIsAddCourse(false));
+    };
+
     return (
-        <Modal>
-            <div className="bg-white p-8 w-96 rounded-lg h-full">
-                <h1 className="text-2xl font-semibold pb-4">Add Course<Button onClick={handleClose} className="w-6 h-7 text-2xl text-white pb-2.5">x</Button></h1>
-                <Input name="course" placeholder="Course Name" className="h-[42px] border-none shadow-lg rounded-lg" />
-                <Button className="w-full h-[42px] bg-primary text-white mt-4">Add Course</Button>
-            </div>
-        </Modal>
-    )
-}
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+            <Modal>
+                <div className="bg-white w-96 rounded-lg h-full">
+                    <HeaderModal title="Add New Course" onClose={handleClose} />
+                    <div className="p-6">
+                        <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+                            <Form className="flex flex-col gap-y-4">
+                                <InputField label="Course Title" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />
+                                <InputField label="Course Description" className="placeholder:text-themeLight" name="description" placeholder="Enter Description" />
+                                <SelectField
+                                    label="Pharmacy"
+                                    name="pharmacy"
+                                    options={[
+                                        { value: "Pharmacy1", label: "Pharmacy1" },
+                                        { value: "Pharmacy2", label: "Pharmacy2" },
+                                    ]}
+                                />
+                                <div className="flex gap-x-6">
+                                    <RadioField
+                                        label=""
+                                        name="uploadType"
+                                        options={[
+                                            { value: "link", label: "Link" },
+                                        ]}
+                                    /> <RadioField
+                                        label=""
+                                        name="uploadType"
+                                        options={[
+                                            { value: "uploadFile", label: "Upload File" },
+                                        ]}
+                                        className="b"
+                                    />
+                                </div>
+                                <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
+
+                                <SubmitButton type="button" className="relative p-0 text-primary bg-white hover:bg-white border border-secondary">
+                                    <input type="file" name="" className="absolute left-0 right-0 top-0 bottom-0 opacity-0" />
+                                    <Image src={upload} alt="" /> <p className="ml-2">Upload</p>
+                                </SubmitButton>
+
+                                <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                            </Form>
+                        </Formik>
+                    </div>
+                </div>
+            </Modal>
+        </div>
+    );
+};
 
 export default AddCourseModal;
