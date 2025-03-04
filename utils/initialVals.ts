@@ -7,10 +7,7 @@ export const signUpInitialVals = {
 
 export const signInInitialVals = {
     email: "",
-    password: "",
-    gender: "",
-    agree: false,
-    description: "",
+    password: ""
 };
 
 export const forgotPassInitialVals = {
