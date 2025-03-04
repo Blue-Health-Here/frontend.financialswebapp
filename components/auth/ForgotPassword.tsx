@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import { Formik, Form } from "formik";
-import InputField from "../common/InputField";
+import InputField from "../common/form/InputField";
 import { FormMessage } from "../form-message";
 import { SubmitButton } from "../submit-button";
 import { forgotPassInitialVals } from "@/utils/initialVals";

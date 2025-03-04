@@ -2,7 +2,7 @@
 import React from "react";
 import { Formik, Form } from "formik";
 import { signUpValidationSchema } from "@/utils/validationSchema";
-import InputField from "../common/InputField";
+import InputField from "../common/form/InputField";
 import { FormMessage } from "../form-message";
 import { SubmitButton } from "../submit-button";
 import { signUpInitialVals } from "@/utils/initialVals";
