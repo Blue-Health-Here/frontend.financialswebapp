@@ -1,7 +1,10 @@
-"use client";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
 import Link from "next/link";
 
+export const metadata: Metadata = {
+    title: "404 - Financials Web App",
+};
 export default function NotFoundPage() {
     return (
         <div className="flex h-screen items-center justify-center bg-gradient-to-br from-primary to-black animate-gradientBackground">

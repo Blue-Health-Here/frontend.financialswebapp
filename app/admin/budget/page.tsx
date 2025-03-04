@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData } from "@/utils/constants";
-import Sidebar from "@/components/common/Sidebar";
-import Topbar from "@/components/common/Topbar";
 import searchIcon from "../../../public/search-icon.svg"
 import { BudgetCard } from "@/components/common/BudgetCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Budget - Financials Web App",
+};
 
 export default function AdminBudget() {
     return (
