@@ -5,6 +5,11 @@ import plusIcon from "../../../public/plus-white-icon.svg"
 import AdminLayout from "@/components/layouts/AdminLayout";
 import InfoCard from "@/components/common/InfoCard";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Marketing - Financials Web App",
+};
 
 const marketinMaterial = ['Marketing Material 1', 'Marketing Material 2', 'Marketing Material 3', 'Marketing Material 4', 'Marketing Material 5', 'Marketing Material 6']
 export default async function Marketing() {

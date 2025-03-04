@@ -4,6 +4,11 @@ import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData } from "@/utils/constants";
 import searchIcon from "../../../public/search-icon.svg"
 import AdminLayout from "@/components/layouts/AdminLayout";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Pharmacies - Financials Web App",
+};
 
 export default async function Pharmacies() {
     return (

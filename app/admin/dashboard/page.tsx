@@ -6,6 +6,11 @@ import { pharmacyData, statsData } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
 import BarChart from "@/components/common/BarChart";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Dashboard - Financials Web App",
+};
 
 export default async function Dashboard() {
     return (
