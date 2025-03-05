@@ -48,3 +48,22 @@ export const accordionData = [
         content: 'Content for section 3 goes here.',
     },
 ];
+
+export const checklists = [
+    {
+        name: 'On boarding',
+        list: [
+            { title: 'Pharmacy Policy & Procedures', content: 'Content for course 1 goes here.' },
+            { title: 'Pharmacy Policy & Procedures', content: 'Content for course 2 goes here.' },
+            { title: 'Pharmacy Policy & Procedures', content: 'Content for course 3 goes here.' },
+        ]
+    },
+    {
+        name: 'Operational',
+        list: [
+            { title: 'Pharmacy Policy & Procedures', content: 'Content for course 1 goes here.' },
+            { title: 'Pharmacy Policy & Procedures', content: 'Content for course 2 goes here.' },
+            { title: 'Pharmacy Policy & Procedures', content: 'Content for course 3 goes here.' },
+        ]
+    }
+]

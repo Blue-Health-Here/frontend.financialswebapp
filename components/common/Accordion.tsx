@@ -8,20 +8,20 @@ const Accordion: React.FC<{ items: any[] }> = ({ items }) => {
     };
 
     return (
-        <div className="w-full max-w-[600px] mx-auto">
+        <div className="w-full mx-auto">
             {items.map((item: any, index: number) => (
-                <div key={index} className="border border-gray-300 rounded-lg mb-2.5 overflow-hidden">
+                <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden">
                     <div
-                        className={`flex justify-between items-center p-2.5 cursor-pointer rounded-lg ${activeIndex === index ? 'bg-primary text-white' : 'bg-gray-50 hover:bg-gray-100'}`}
+                        className={`flex justify-between items-center px-6 py-4 cursor-pointer ${activeIndex === index ? 'bg-primary text-white' : 'bg-gray-50 hover:bg-gray-100'}`}
                         onClick={() => onTitleClick(index)}
                     >
-                        <div>{item.title}</div>
+                        <h2>{item.title}</h2>
                         <span>{activeIndex === index ? '-' : '+'}</span>
                     </div>
                     <div
                         className={`transition-all duration-300 ease-in-out ${activeIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}
                     >
-                        <div className="p-2.5 bg-white border-t border-gray-300">
+                        <div className="p-6 bg-white border-t border-gray-300">
                             {item.content}
                         </div>
                     </div>

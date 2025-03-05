@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { pharmacyData } from "@/utils/constants";
-import searchIcon from "../../../public/search-icon.svg"
 import { BudgetCard } from "@/components/common/BudgetCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
 import { Metadata } from "next";
@@ -19,7 +18,7 @@ export default function AdminBudget() {
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                            <Image src={searchIcon} alt="" />
+                            <Image src="/search-icon.svg" alt="" height={20} width={20} />
                         </span>
                     </div>
                 </div>

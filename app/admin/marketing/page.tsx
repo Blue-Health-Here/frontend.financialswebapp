@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import searchIcon from "../../../public/search-icon.svg"
 import plusIcon from "../../../public/plus-white-icon.svg"
 import AdminLayout from "@/components/layouts/AdminLayout";
 import InfoCard from "@/components/common/InfoCard";
@@ -23,7 +22,7 @@ export default async function Marketing() {
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Marketing Material" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                            <Image src={searchIcon} alt="" />
+                            <Image src="/search-icon.svg" alt="" width={20} height={20} />
                         </span>
                     </div>
                 </div>

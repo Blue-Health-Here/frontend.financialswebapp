@@ -1,5 +1,4 @@
 import Image from "next/image";
-import searchIcon from "../../../public/search-icon.svg"
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData, statsData } from "@/utils/constants";
@@ -39,7 +38,7 @@ export default async function Dashboard() {
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                            <Image src={searchIcon} alt="" />
+                            <Image src="/search-icon.svg" alt="" width={20} height={20} />
                         </span>
                     </div>
                 </div>
