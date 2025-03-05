@@ -34,16 +34,24 @@ const Topbar = () => {
         };
     }, []);
 
+    const getCurrentDate = () => {
+        const date = new Date();
+        const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
+        let formattedDate = date.toLocaleDateString('en-GB', options);
+        
+        return formattedDate.replace(/(\d{2}) (\w{3})/, '$1, $2');
+    };
+
     return (
         <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
-            <p className="text-[21px] font-medium">Wednesday, 14 Jan 24</p>
-            <div className="flex justify-end items-center gap-x-6 cursor-pointer">
-                <IoNotificationsOutline className='w-7 h-7' />
+            <p className="text-[21px] font-medium">{getCurrentDate()}</p>
+            <div className="flex justify-end items-center gap-x-4 cursor-pointer">
+                <IoNotificationsOutline className='w-6 h-6' />
                 <div className="flex gap-x-4 items-center relative" ref={dropdownRef}>
-                    <button className='flex gap-x-4 items-center' onClick={toggleDropdown}>
+                    <button className='flex gap-x-3 items-center' onClick={toggleDropdown}>
                         <div className="text-right">
-                            <span className="text-grey font-medium">Sam Lee</span>
-                            <p className="text-themeLight">Admin</p>
+                            <span className="text-grey text-sm font-medium">Sam Lee</span>
+                            <p className="text-themeLight text-sm">Admin</p>
                         </div>
                         <Image src={profileImage} alt="" />
                     </button>
@@ -51,7 +59,7 @@ const Topbar = () => {
                         <NavbarProfileDropdown />
                     )}
                 </div>
-                <MdOutlineLogout onClick={signOutAction} className='w-8 h-8 text-primary' />
+                <MdOutlineLogout onClick={signOutAction} className='w-7 h-7 text-primary' />
             </div>
         </nav>)
 }

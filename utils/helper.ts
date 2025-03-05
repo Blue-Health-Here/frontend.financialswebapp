@@ -24,4 +24,3 @@ export const getUserRole = async (user: any) => {
     }
     return role;
 }
-
