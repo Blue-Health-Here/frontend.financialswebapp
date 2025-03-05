@@ -5,6 +5,8 @@ import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserRole } from "@/utils/helper";
+import { store } from "@/store/store";
+import { setUser } from "@/store/features/auth/authSlice";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -50,12 +52,15 @@ export const signInAction = async (formData: FormData) => {
     password,
   });
 
-  if (userMessage) {
-    return encodedRedirect("error", "/sign-in", userMessage.message);
+  const { data: { session }, error } = await supabase.auth.getSession();
+  
+  if ((userMessage && !user) || (!session && error)) {
+    return encodedRedirect("error", "/sign-in", userMessage?.message || error?.message || "Unknown error");
   }
+  
+  store.dispatch(setUser({ user: session?.user, token: session?.access_token }));
 
   const role = await getUserRole(user);
-
   if (role === "admin") {
     return redirect("/admin/dashboard");
   } else {
