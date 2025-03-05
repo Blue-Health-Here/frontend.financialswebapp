@@ -1,19 +1,17 @@
-
 "use client";
+import React from 'react'
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { SubmitButton } from "../submit-button";
 import { IoSearch } from "react-icons/io5";
 import InfoCard from "@/components/common/InfoCard";
 import { Button } from "@/components/ui/button";
 import { categoryData } from "@/utils/constants";
 import { FaPlus } from "react-icons/fa";
-
-export default function CategoryContent() {
+import { SubmitButton } from '@/components/submit-button';
+const CategoriesSection = () => {
     const [selectedCategory, setSelectedCategory] = useState("Onboarding");
 
     return (
-
         <div className="flex">
             {/*Secondary Sidebar */}
             <aside className=" max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] pt-8 pb-8 pl-4 pr-4 fixed left-[250px] xl:left-[318px] top-20 h-auto z-[999]">
@@ -72,6 +70,7 @@ export default function CategoryContent() {
                 </div>
             </main>
         </div>
-    );
+    )
 }
 
+export default CategoriesSection
