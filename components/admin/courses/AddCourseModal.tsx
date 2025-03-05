@@ -7,8 +7,7 @@ import SelectField from "@/components/common/form/SelectField";
 import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
-import Image from "next/image";
-import upload from "../../../public/upload-icon.svg"
+import { MdOutlineFileUpload } from "react-icons/md";
 
 const AddCourseModal = () => {
     const dispatch = useDispatch();
@@ -53,7 +52,7 @@ const AddCourseModal = () => {
 
                                 <SubmitButton type="button" className="relative p-0 text-primary bg-white hover:bg-white border border-secondary">
                                     <input type="file" name="" className="absolute left-0 right-0 top-0 bottom-0 opacity-0" />
-                                    <Image src={upload} alt="" /> <p className="ml-2">Upload</p>
+                                    <MdOutlineFileUpload className="w-5 h-5 text-primary" /> <p className="ml-2">Upload</p>
                                 </SubmitButton>
 
                                 <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>

@@ -1,14 +1,11 @@
 import { forgotPasswordAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { SmtpMessage } from "../smtp-message";
-import Image from "next/image";
-import backArrow from "../../../public/backArrow.svg"
 import AuthBackgroundImage from "@/components/common/AuthBackgroundImage";
 import { Metadata } from "next";
+import { IoIosArrowBack } from "react-icons/io";
+
 export const metadata: Metadata = {
     title: "Email Verify - Financials Web App",
 };
@@ -35,8 +32,8 @@ export default async function Verification(props: {
                                     Okay
                                 </SubmitButton>
                                 <FormMessage message={searchParams} />
-                                <Link className="text-[14px] text-black text-center flex gap-x-2 justify-center" href="/sign-in">
-                                    <Image src={backArrow} alt="" /> <p> Back to login</p>
+                                <Link className="text-[14px] text-black text-center flex gap-x-1 justify-center" href="/sign-in">
+                                    <IoIosArrowBack className="w-[18px] h-[18px]" /> <p> Back to login</p>
                                 </Link>
                             </div>
                         </form>

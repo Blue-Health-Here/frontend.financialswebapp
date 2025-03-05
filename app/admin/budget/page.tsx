@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { pharmacyData } from "@/utils/constants";
-import searchIcon from "../../../public/search-icon.svg"
 import { BudgetCard } from "@/components/common/BudgetCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
+import { IoSearch } from "react-icons/io5";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,8 +17,8 @@ export default function AdminBudget() {
                     <h1>Pharmacies Budgeting </h1>
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg" />
-                        <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                            <Image src={searchIcon} alt="" />
+                        <span className="absolute right-3 top-2.5 text-grey cursor-pointer">
+                            <IoSearch className="w-5 h-5" />
                         </span>
                     </div>
                 </div>
