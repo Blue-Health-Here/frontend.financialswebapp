@@ -8,6 +8,8 @@ import { signInInitialVals } from "@/utils/initialVals";
 import { signInAction } from "@/app/actions";
 import { signInValidationSchema } from "@/utils/validationSchema";
 import Link from "next/link";
+import { FiEye } from "react-icons/fi";
+
 
 const LoginForm: React.FC<any> = ({ message }) => {
     const handleSubmit = (values: typeof signInInitialVals) => {
@@ -27,7 +29,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
             {({ isSubmitting }) => (
                 <Form className="flex flex-col min-w-64 text-grey gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                     <InputField label="Email" className="placeholder:text-themeLight" name="email" type="email" placeholder="Your Email" />
-                    <InputField label="Password" className="placeholder:text-themeLight" name="password" type="password" placeholder="Your password" />
+                    <InputField label="Password" className="placeholder:text-themeLight" name="password" type="password" placeholder="Your password" Icon={FiEye} />
                     {/* <SelectField
                         label="Gender"
                         name="gender"
@@ -53,7 +55,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
                     </SubmitButton>
                     <FormMessage message={message} />
 
-                    <Link className="text-sm text-center text-foreground underline font-semibold" href="/forgot-password">
+                    <Link className="text-sm text-center text-foreground underline" href="/forgot-password">
                         Forgot Password?
                     </Link>
                 </Form>

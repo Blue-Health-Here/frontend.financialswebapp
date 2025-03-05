@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useField } from "formik";
-import Image from "next/image";
 import { Label } from "../../ui/label";
 import { SubmitButton } from "@/components/submit-button";
-import InfoCard from "../InfoCard";
 import FilePreview from "../FilePreview";
+import { MdOutlineFileUpload } from "react-icons/md";
 
 interface FileUploadFieldProps {
     label?: string;
@@ -35,7 +34,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, classNam
             )}
             <SubmitButton type="button" className="relative p-0 text-primary bg-white hover:bg-white border border-secondary">
                 <input type="file" onChange={handleFileChange} name={name} className="absolute left-0 right-0 top-0 bottom-0 opacity-0" />
-                <Image src="/upload-icon.svg" alt="" width={15} height={15} loading="lazy" /> <p className="ml-2">Upload</p>
+                <MdOutlineFileUpload className="w-5 h-5 text-primary" /> <p className="ml-2">Upload</p>
             </SubmitButton>
             {meta.touched && meta.error && (
                 <p className="text-red-500 text-sm mt-1">{meta.error}</p>

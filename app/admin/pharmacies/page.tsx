@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData } from "@/utils/constants";
+import { IoSearch } from "react-icons/io5";
 import AdminLayout from "@/components/layouts/AdminLayout";
 import { Metadata } from "next";
 
@@ -18,7 +19,7 @@ export default async function Pharmacies() {
                     <div className="relative w-[390px] sm:max-w-md">
                         <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                            <Image src="/search-icon.svg" alt="" width={20} height={20} />
+                            <IoSearch className="w-5 h-5" />
                         </span>
                     </div>
                 </div>

@@ -1,13 +1,13 @@
 
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import AdminLayout from "@/components/layouts/AdminLayout";
+import { SubmitButton } from "../submit-button";
+import { IoSearch } from "react-icons/io5";
 import InfoCard from "@/components/common/InfoCard";
 import { Button } from "@/components/ui/button";
 import { categoryData } from "@/utils/constants";
-import { SubmitButton } from "../submit-button";
+import { FaPlus } from "react-icons/fa";
 
 export default function CategoryContent() {
     const [selectedCategory, setSelectedCategory] = useState("Onboarding");
@@ -16,8 +16,7 @@ export default function CategoryContent() {
 
         <div className="flex">
             {/*Secondary Sidebar */}
-            <aside className=" max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] pt-8 pb-8 pl-4 pr-4 fixed left-[250px] xl:left-[318px] top-20 h-auto z-[999]
-">
+            <aside className=" max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] pt-8 pb-8 pl-4 pr-4 fixed left-[250px] xl:left-[318px] top-20 h-auto z-[999]">
                 <h3 className="text-[#5E5873] pb-4 font-medium">Categories</h3>
                 <ul className="space-y-3">
                     {Object.keys(categoryData).map((category) => (
@@ -46,9 +45,9 @@ export default function CategoryContent() {
 
                     <div className="flex justify-between items-center pb-6">
                         <div className="flex items-center space-x-3">
-                            <h4 className="text-[16px] text-gray-700 font-medium">Add Categories</h4>
-                            <Button className="w-7 h-7 text-2xl bg-secondary hover:bg-[#65acfd] pb-2.5">
-                                +
+                            <h4 className="text-[16px] text-gray-700">Add Categories</h4>
+                            <Button className="w-7 h-7 p-1 text-white bg-secondary hover:bg-[#65acfd]">
+                                <FaPlus className="text-white" size={12} />
                             </Button>
                         </div>
                         <div className="relative w-80">
@@ -58,7 +57,7 @@ export default function CategoryContent() {
                                 className="h-[42px] border-gray-300 shadow-md rounded-lg pl-4 font-medium"
                             />
                             <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                                <Image src="/search-icon.svg" alt="Search" width={20} height={20} />
+                                <IoSearch className="w-5 h-5" />
                             </span>
                         </div>
                     </div>

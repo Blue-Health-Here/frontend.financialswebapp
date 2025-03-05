@@ -8,8 +8,7 @@ import { forgotPassInitialVals } from "@/utils/initialVals";
 import { forgotPasswordAction } from "@/app/actions";
 import { forgotPassValidationSchema } from "@/utils/validationSchema";
 import Link from "next/link";
-import Image from "next/image";
-
+import { IoIosArrowBack } from "react-icons/io";
 const ForgotPasswordForm: React.FC<any> = ({ message }) => {
     const handleSubmit = (values: typeof forgotPassInitialVals) => {
         console.log("Form submitted:", values);
@@ -32,8 +31,8 @@ const ForgotPasswordForm: React.FC<any> = ({ message }) => {
                     </SubmitButton>
 
                     <FormMessage message={message} />
-                    <Link className="text-[14px] text-black text-center flex gap-x-2 justify-center font-semibold" href="/sign-in">
-                        <Image src="/backArrow.svg" alt="" loading="lazy" width={20} height={10} /> <p> Back to login</p>
+                    <Link className="text-[14px] text-black text-center flex gap-x-1 justify-center" href="/sign-in">
+                        <IoIosArrowBack className="w-[18px] h-[18px]" /> <p> Back to login</p>
                     </Link>
                 </Form>
             )}
