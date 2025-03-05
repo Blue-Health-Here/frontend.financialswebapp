@@ -1,12 +1,37 @@
-import React from 'react'
+"use client"
+import React, { useRef, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Pencil, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import profile from "../../../public/profileImage.svg"
 import { SubmitButton } from '@/components/submit-button';
 import UpdatePasswordSection from '@/components/common/UpdatePasswordSection';
 const ProfileSection = () => {
+    const [profile, setProfile] = useState(null);
+    const fileInputRef: any = useRef(null);
+
+    const handleFileChange = (e: any) => {
+        const file = e.target.files[0];
+        if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+            const reader: any = new FileReader();
+            reader.onloadend = () => {
+                setProfile(reader.result);
+            };
+            reader.readAsDataURL(file);
+
+        } else {
+            alert('Please select a valid image file (png, jpg, jpeg).');
+        }
+    };
+
+    const handleEditClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleRemoveClick = () => {
+        setProfile(null)
+    };
+
     return (
         <div>
 
@@ -34,19 +59,26 @@ const ProfileSection = () => {
                     </div>
 
                     <div className="flex flex-col items-center w-auto">
-                        <div className="relative w-[120px] h-[120px] rounded-md">
-                            <Image
-                                src={profile}
-                                alt="Profile"
-                                width={120}
-                                height={120}
-                                className="rounded-md object-cover"
-                            />
+                        <div className="relative">
+                            <div className='w-[120px] h-[120px] overflow-hidden rounded-md'>
+                                <Image
+                                    src={profile || '/default-profile.png'}
+                                    alt="Profile"
+                                    width={120}
+                                    height={120}
+                                    className="rounded-md object-cover"
+                                /></div>
                             <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                                <button className="p-1 bg-white rounded-md shadow-lg">
+                                <button
+                                    className="p-1 bg-white rounded-md shadow-lg"
+                                    onClick={handleRemoveClick}
+                                >
                                     <X size={14} className="text-gray-600" />
                                 </button>
-                                <button className="p-1 bg-white rounded-md shadow-lg">
+                                <button
+                                    className="p-1 bg-white rounded-md shadow-lg"
+                                    onClick={handleEditClick}
+                                >
                                     <Pencil size={14} className="text-gray-600" />
                                 </button>
                             </div>
@@ -54,6 +86,13 @@ const ProfileSection = () => {
                         <p className="text-[12px] text-[#A1A5B7] mt-4 text-center whitespace-nowrap font-semibold">
                             Allowed file types: png, jpg, jpeg.
                         </p>
+                        <input
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            ref={fileInputRef}
+                            className="hidden"
+                            onChange={handleFileChange}
+                        />
                     </div>
                 </div>
             </div>
