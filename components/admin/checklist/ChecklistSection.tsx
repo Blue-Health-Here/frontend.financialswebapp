@@ -3,11 +3,14 @@
 import Accordion from "@/components/common/Accordion";
 import InputField from "@/components/common/form/InputField";
 import SelectField from "@/components/common/form/SelectField";
+import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { checklists } from "@/utils/constants";
 import { Form, Formik } from "formik";
 import Image from "next/image";
+import { FaPlus } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
 const ChecklistSection = () => {
     return (
@@ -19,12 +22,15 @@ const ChecklistSection = () => {
                 <div className="relative w-[390px] sm:max-w-md">
                     <Input name="email" placeholder="Search Courses" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                        <Image src="/search-icon.svg" alt="" width={20} height={20} />
+                        <IoSearch className="w-5 h-5" />
                     </span>
                 </div>
             </div>
             <div className="py-2 flex justify-between items-center gap-4">
-                <h3 className="align-middle text-base flex items-center justify-center gap-2"><span>Add new Question</span> <Button className="w-4 h-6 text-lg text-white">+</Button></h3>
+                <h3 className="align-middle text-base flex items-center justify-center gap-2">
+                    <span>Add new Question</span> 
+                    <SubmitButton className="w-7 h-7 p-1 text-white"><FaPlus className="text-white" size={12} /></SubmitButton>
+                </h3>
                 <Formik
                     initialValues={{ type: "", category: "", search: "" }}
                     onSubmit={() => { }}
@@ -32,6 +38,7 @@ const ChecklistSection = () => {
                     {({ isSubmitting }) => (
                         <Form className="flex min-w-64 text-grey gap-2 [&>input]:mb-3 mt-8 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                             <SelectField
+                                className="border-none shadow-lg rounded-lg font-medium min-w-48"
                                 name="type"
                                 options={[
                                     { value: "all", label: "All Types" },
@@ -40,6 +47,7 @@ const ChecklistSection = () => {
                                 ]}
                             />
                             <SelectField
+                                className="border-none shadow-lg rounded-lg font-medium min-w-48"
                                 name="category"
                                 options={[
                                     { value: "all", label: "All Categories" },
@@ -47,10 +55,11 @@ const ChecklistSection = () => {
                                     { value: "operational", label: "Operational" },
                                 ]}
                             />
-                            <div className="relative">
-                                <InputField className="placeholder:text-themeLight" name="search" type="text" placeholder="Search Checklist" />
+                            <div className="relative w-[390px] sm:max-w-md">
+                                <Input name="email" placeholder="Search Courses" className="border-none shadow-lg rounded-lg font-medium" />
                                 <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                                    <Image src="/search-icon.svg" alt="" width={20} height={20} /></span>
+                                    <IoSearch className="w-5 h-5" />
+                                </span>
                             </div>
                         </Form>
                     )}
@@ -58,7 +67,7 @@ const ChecklistSection = () => {
             </div>
             <div className="flex flex-col gap-6">
                 {checklists.map((checklist, index) => (
-                    <div className="w-full">
+                    <div className="w-full" key={index}>
                         <h2 className="text-lg font-semibold mb-4">{checklist.name + " Checklist"}</h2>
                         <Accordion key={index} items={checklist.list} />
                     </div>
