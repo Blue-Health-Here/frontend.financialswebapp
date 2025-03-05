@@ -38,7 +38,7 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-start w-auto">
+                    <div className="flex flex-col items-center w-auto">
                         <div className="relative w-[120px] h-[120px] rounded-md">
                             <Image
                                 src={profile}
@@ -56,33 +56,14 @@ export default function Profile() {
                                 </button>
                             </div>
                         </div>
-                        <p className="text-[10px] text-[#A1A5B7] mt-4 text-center">
+                        <p className="text-[12px] text-[#A1A5B7] mt-4 text-center whitespace-nowrap">
                             Allowed file types: png, jpg, jpeg.
                         </p>
                     </div>
-
-
                 </div>
-
             </div>
 
             {/* Update Password Section */}
-            {/* <div className="mt-6 p-6 space-y-4 bg-white shadow-lg rounded-lg">
-                <h2 className="text-xl font-semibold">Update Password</h2>
-                <p className="text-[16px] text-[#7E8299]">Please Enter Your Old Password.</p>
-
-                <div className="relative">
-                    <Label className="text-[12px] text-grey">Type here</Label>
-                    <Input
-                        type="password"
-                        placeholder="••••••••"
-                        className="w-80"
-                    />
-                    <p className="absolute left-[16.5rem] top-[44px] transform -translate-y-1/2 underline font-bold">
-                        Verify
-                    </p>
-                </div>
-            </div> */}
             <UpdatePasswordSection />
         </AdminLayout>
     );
