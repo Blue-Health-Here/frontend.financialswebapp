@@ -6,11 +6,10 @@ import editIcon from "../../public/edit-icon.svg"
 import DeleteModal from "./DeleteModal";
 import { useState } from "react";
 
-
-export const InfoCard = ({ courseName }: { courseName: string }) => {
+const InfoCard = ({ courseName }: { courseName: string }) => {
     const [isCloseModal, setIsCloseModal] = useState(false);
     const handleDelete = () => {
-        console.log("Delete");
+        // console.log("Delete");
         setIsCloseModal(true);
     };
 
