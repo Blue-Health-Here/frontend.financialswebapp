@@ -70,11 +70,11 @@
 }
 
 h1 {
-  @apply text-[24px] font-bold;
+  @apply text-[24px] font-semibold;
 }
 
 h2 {
-  @apply text-[20px] font-semibold;
+  @apply text-[20px] font-bold;
 }
 
 h3 {

@@ -52,8 +52,8 @@ const LoginForm: React.FC<any> = ({ message }) => {
                         {isSubmitting ? "Signing In..." : "Sign In"}
                     </SubmitButton>
                     <FormMessage message={message} />
-                    
-                    <Link className="text-sm text-center text-foreground underline" href="/forgot-password">
+
+                    <Link className="text-sm text-center text-foreground underline font-semibold" href="/forgot-password">
                         Forgot Password?
                     </Link>
                 </Form>

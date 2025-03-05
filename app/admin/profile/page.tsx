@@ -56,7 +56,7 @@ export default function Profile() {
                                 </button>
                             </div>
                         </div>
-                        <p className="text-[12px] text-[#A1A5B7] mt-4 text-center whitespace-nowrap">
+                        <p className="text-[12px] text-[#A1A5B7] mt-4 text-center whitespace-nowrap font-semibold">
                             Allowed file types: png, jpg, jpeg.
                         </p>
                     </div>

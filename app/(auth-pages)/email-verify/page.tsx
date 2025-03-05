@@ -21,7 +21,7 @@ export default async function Verification(props: {
             <div className="flex h-screen">
                 <AuthBackgroundImage />
                 <div className="flex-1 p-10 md:p-20 flex flex-col items-center min-h-screen">
-                    <h1 className="text-center font-bold justify-center">LOGO</h1>
+                    <h1 className="text-center font-[800] justify-center">LOGO</h1>
                     <div className="flex flex-col justify-center h-full">
                         <div>
                             <h1 className="font-normal">
@@ -35,7 +35,7 @@ export default async function Verification(props: {
                                     Okay
                                 </SubmitButton>
                                 <FormMessage message={searchParams} />
-                                <Link className="text-[14px] text-black text-center flex gap-x-2 justify-center" href="/sign-in">
+                                <Link className="text-[14px] text-black text-center flex gap-x-2 justify-center font-semibold" href="/sign-in">
                                     <Image src={backArrow} alt="" /> <p> Back to login</p>
                                 </Link>
                             </div>

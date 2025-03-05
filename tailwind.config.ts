@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config = {
   darkMode: ["class"],
@@ -24,6 +25,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-montserrat)", ...fontFamily.sans],
+      },
       colors: {
         primary: "#1E3A8A",
         secondary: "#93C5FD",

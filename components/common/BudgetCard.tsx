@@ -9,10 +9,10 @@ export const BudgetCard = ({ pharmacy, className }: any) => {
                 <h2 className="font-bold">{pharmacy.name}</h2>
             </div>
             <div className="mt-3 flex flex-col gap-y-4 text-black leading-3">
-                <p className="text-[16px] font-[500]">Total Expense <span className="text-[16px] font-[500] float-right">${pharmacy.expense}</span></p>
-                <p className="text-[16px] font-[500]">Total Expense <span className="text-[16px] font-[500] float-right">${pharmacy.expense}</span></p>
-                <p className="text-[16px] font-[500]">Total Expense <span className="text-[16px] font-[500] float-right">${pharmacy.expense}</span></p>
-                <p className="text-[16px] font-[500]">Total Expense <span className="text-[16px] font-[500] float-right">${pharmacy.expense}</span></p>
+                <p className="text-[16px] font-medium">Total Expense <span className="text-[16px] font-medium float-right">${pharmacy.expense}</span></p>
+                <p className="text-[16px] font-medium">Total Expense <span className="text-[16px] font-medium float-right">${pharmacy.expense}</span></p>
+                <p className="text-[16px] font-medium">Total Expense <span className="text-[16px] font-medium float-right">${pharmacy.expense}</span></p>
+                <p className="text-[16px] font-medium">Total Expense <span className="text-[16px] font-medium float-right">${pharmacy.expense}</span></p>
             </div>
         </div>
     );

@@ -26,14 +26,14 @@ export default async function Signup(props: {
         <div className="flex-[1] p-10 md:p-20 flex flex-col h-full justify-between min-h-screen">
           <h1 className="text-center font-bold">LOGO</h1>
           <div className="flex flex-col py-10">
-            <h1 className="font-normal">
+            <h1>
               Register Account 😍
             </h1>
             <p className="text-grey">Register your account today.</p>
             <RegisterForm message={searchParams} />
           </div>
           <p className="text-center text-grey">
-            Already have an account? <Link href="/sign-in" className="text-black text-sm">Sign in</Link>
+            Already have an account? <Link href="/sign-in" className="text-black text-sm font-semibold">Sign in</Link>
           </p>
         </div>
       </div>

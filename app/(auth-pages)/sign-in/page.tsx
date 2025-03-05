@@ -16,14 +16,14 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       <div className="flex-[1] p-10 md:p-20 flex flex-col h-full justify-between min-h-screen">
         <h1 className="text-center font-bold">LOGO</h1>
         <div className="flex flex-col">
-          <h1 className="text-[24px] font-normal">
+          <h1>
             Welcome to Vuexy! 👋🏻
           </h1>
           <p className="text-grey">Please sign-in to your account</p>
           <LoginForm message={searchParams} />
         </div>
         <p className="text-center text-grey">
-          New on our platform? <Link href="/sign-up" className="text-black text-sm">Register Account</Link>
+          New on our platform? <Link href="/sign-up" className="text-black text-sm font-semibold">Register Account</Link>
         </p>
       </div>
     </div>

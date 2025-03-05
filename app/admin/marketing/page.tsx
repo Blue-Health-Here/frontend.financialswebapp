@@ -21,7 +21,7 @@ export default async function Marketing() {
                         <h1>Marketing Material</h1><Button className="w-6 h-7 text-2xl text-white pb-2.5">+</Button>
                     </div>
                     <div className="relative w-[390px] sm:max-w-md">
-                        <Input name="email" placeholder="Search Marketing Material" className="h-[42px] border-none shadow-lg rounded-lg" />
+                        <Input name="email" placeholder="Search Marketing Material" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                             <Image src={searchIcon} alt="" />
                         </span>

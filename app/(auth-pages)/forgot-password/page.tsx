@@ -17,7 +17,7 @@ export default async function ForgotPassword(props: {
           <h1 className="text-center font-bold">LOGO</h1>
           <div className="flex flex-col h-full justify-center">
             <div className="">
-              <h1 className="font-normal">
+              <h1>
                 Forgot Password? 🔑
               </h1>
               <p className="text-grey">Enter your email and we'll send you the link to reset your password.</p>

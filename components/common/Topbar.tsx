@@ -7,12 +7,12 @@ import { signOutAction } from '@/app/actions'
 const Topbar = () => {
     return (
         <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
-            <p className="text-[21px]">Wednesday, 14 Jan 24</p>
+            <p className="text-[21px] font-medium">Wednesday, 14 Jan 24</p>
             <div className="flex justify-end items-center gap-x-6 cursor-pointer">
                 <Image src={notificatioIcon} alt="" width={17} height={19} />
                 <div className="flex gap-x-4 items-center">
                     <div className="text-right">
-                        <span className="text-grey">Sam Lee</span>
+                        <span className="text-grey font-medium">Sam Lee</span>
                         <p className="text-themeLight">Admin</p>
                     </div>
                     <Image src={profileImage} alt="" />

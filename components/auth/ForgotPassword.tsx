@@ -30,9 +30,9 @@ const ForgotPasswordForm: React.FC<any> = ({ message }) => {
                     <SubmitButton type="submit" className="my-3 text-sm text-white w-full" disabled={isSubmitting} pendingText="Sending...">
                         {isSubmitting ? "Sending..." : "Send reset link"}
                     </SubmitButton>
-                    
+
                     <FormMessage message={message} />
-                    <Link className="text-[14px] text-black text-center flex gap-x-2 justify-center" href="/sign-in">
+                    <Link className="text-[14px] text-black text-center flex gap-x-2 justify-center font-semibold" href="/sign-in">
                         <Image src="/backArrow.svg" alt="" loading="lazy" width={20} height={10} /> <p> Back to login</p>
                     </Link>
                 </Form>

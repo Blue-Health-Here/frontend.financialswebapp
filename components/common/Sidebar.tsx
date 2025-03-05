@@ -15,7 +15,7 @@ const Sidebar = () => {
                     const isActive = pathName === item.path
                     return (
                         <Link href={item.path} key={index}>
-                            <li className={`flex items-center gap-x-3 p-3 rounded-lg cursor-pointer transition
+                            <li className={`flex items-center gap-x-3 p-3 rounded-lg cursor-pointer transition font-medium
                               ${isActive ? "bg-secondary" : "hover:bg-secondary"}`}>
                                 <Image src={item.icon} alt={`${item.name} Icon`} width={20} height={20} />
                                 <span>{item.name}</span>
