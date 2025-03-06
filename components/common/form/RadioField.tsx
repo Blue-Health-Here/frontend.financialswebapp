@@ -22,7 +22,7 @@ const RadioField: React.FC<RadioFieldProps> = ({ className, ref, label, options,
     return (
         <div>
             <Label size="xs">{label}</Label>
-            <div className="space-y-2">
+            <div className="flex gap-x-14 items-center justify-center">
                 {options.map((option) => (
                     <div key={option.value} className="flex items-center">
                         <input
