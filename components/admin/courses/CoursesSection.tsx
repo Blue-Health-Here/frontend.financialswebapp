@@ -11,9 +11,6 @@ import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";
 import { corses } from "@/utils/constants";
 
-// import Accordion from "@/components/common/Accordion";
-// import { accordionData } from "@/utils/constants";
-
 const CoursesSection = () => {
     const { isAddCourse } = useSelector((state: RootState) => state.course);
     const dispatch = useDispatch();
@@ -41,7 +38,6 @@ const CoursesSection = () => {
                     <InfoCard key={index} courseName={course} />
                 ))}
             </div>
-            {/* <Accordion items={accordionData} /> */}
             {isAddCourse && <AddCourseModal />}
         </div>
     );
