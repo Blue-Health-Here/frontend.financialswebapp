@@ -1,7 +1,7 @@
 
 
+import CategoriesSection from "@/components/admin/categories/CategoriesSection";
 import AdminLayout from "@/components/layouts/AdminLayout";
-import CategoryContent from "@/components/common/CategoryContent";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export default function Categories() {
 
     return (
         <AdminLayout>
-            <CategoryContent />
+            <CategoriesSection />
         </AdminLayout>
     );
 }

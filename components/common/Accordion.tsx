@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { MdKeyboardArrowRight } from 'react-icons/md';
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 const Accordion: React.FC<{ items: any[] }> = ({ items }) => {
     const [activeIndex, setActiveIndex] = useState(null);
@@ -16,7 +18,7 @@ const Accordion: React.FC<{ items: any[] }> = ({ items }) => {
                         onClick={() => onTitleClick(index)}
                     >
                         <h2>{item.title}</h2>
-                        <span>{activeIndex === index ? '-' : '+'}</span>
+                        {activeIndex === index ? <RiArrowDropDownLine size={34} /> : <MdKeyboardArrowRight size={24} />}
                     </div>
                     <div
                         className={`transition-all duration-300 ease-in-out ${activeIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}

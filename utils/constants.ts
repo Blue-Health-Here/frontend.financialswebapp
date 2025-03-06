@@ -67,3 +67,7 @@ export const checklists = [
         ]
     }
 ]
+
+export const marketinMaterial = ['Marketing Material 1', 'Marketing Material 2', 'Marketing Material 3', 'Marketing Material 4', 'Marketing Material 5', 'Marketing Material 6']
+
+export const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']

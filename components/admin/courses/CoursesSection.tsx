@@ -9,12 +9,12 @@ import { setIsAddCourse } from "@/store/features/course/courseSlice";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";
+import { corses } from "@/utils/constants";
 
 // import Accordion from "@/components/common/Accordion";
 // import { accordionData } from "@/utils/constants";
 
 const CoursesSection = () => {
-    const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
     const { isAddCourse } = useSelector((state: RootState) => state.course);
     const dispatch = useDispatch();
 

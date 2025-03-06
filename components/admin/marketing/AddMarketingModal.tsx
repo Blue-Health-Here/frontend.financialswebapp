@@ -1,5 +1,5 @@
+import React from 'react'
 import { useDispatch } from "react-redux";
-import { setIsAddCourse } from "@/store/features/course/courseSlice";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
@@ -8,23 +8,22 @@ import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import FileUploadField from "@/components/common/form/FileUploadField";
-
-const AddCourseModal = () => {
+import { setIsAddMarketing } from '@/store/features/marketing/marketingSlice';
+const AddMarketingModal = () => {
     const dispatch = useDispatch();
     const handleClose = () => {
-        dispatch(setIsAddCourse(false));
+        dispatch(setIsAddMarketing(false));
     };
-
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
             <Modal>
                 <div className="bg-white w-96 rounded-lg h-full">
-                    <HeaderModal title="Add New Course" onClose={handleClose} />
+                    <HeaderModal title="Add New Marketing Material" onClose={handleClose} />
                     <div className="p-6">
                         <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
                             <Form className="flex flex-col gap-y-4">
-                                <InputField label="Course Title" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />
-                                <InputField label="Course Description" className="placeholder:text-themeLight" name="description" placeholder="Enter Description" />
+                                <InputField label="Marketing Material Title" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />
+                                <InputField label="Marketing Material Description" className="placeholder:text-themeLight" name="description" placeholder="Enter Description" />
                                 <SelectField
                                     label="Pharmacy"
                                     name="pharmacy"
@@ -51,7 +50,7 @@ const AddCourseModal = () => {
                 </div>
             </Modal>
         </div>
-    );
-};
+    )
+}
 
-export default AddCourseModal;
+export default AddMarketingModal
