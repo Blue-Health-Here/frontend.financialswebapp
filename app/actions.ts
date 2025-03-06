@@ -26,6 +26,7 @@ export const signUpAction = async (formData: FormData) => {
     email,
     password,
     options: {
+      data: { name: formData.get("name")?.toString() },
       emailRedirectTo: `${origin}/auth/callback`,
     },
   });
@@ -58,8 +59,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", userMessage?.message || error?.message || "Unknown error");
   }
   
-  store.dispatch(setUser({ user: session?.user, token: session?.access_token }));
-
   const role = await getUserRole(user);
   if (role === "admin") {
     return redirect("/admin/dashboard");
