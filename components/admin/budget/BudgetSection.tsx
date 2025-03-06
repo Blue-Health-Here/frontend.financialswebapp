@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import { budgetStatsData, expenseCategories, pharmacyData } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';

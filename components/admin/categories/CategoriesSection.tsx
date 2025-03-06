@@ -8,8 +8,14 @@ import { Button } from "@/components/ui/button";
 import { categoryData } from "@/utils/constants";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from '@/components/submit-button';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsAddCategory } from '@/store/features/category/categorySlice';
+import { RootState } from '@/store/store';
+import AddCategoryModal from './AddCategoryModal';
 const CategoriesSection = () => {
     const [selectedCategory, setSelectedCategory] = useState("Onboarding");
+    const { isAddCategory } = useSelector((state: RootState) => state.category);
+    const dispatch = useDispatch();
 
     return (
         <div className="flex">
@@ -36,7 +42,7 @@ const CategoriesSection = () => {
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <div className="flex items-center justify-between pb-6">
                         <h1 className="text-xl font-semibold">{selectedCategory}</h1>
-                        <SubmitButton className="bg-secondary hover:bg-[#65acfd]">
+                        <SubmitButton className="bg-secondary hover:text-white">
                             Save Changes
                         </SubmitButton>
                     </div>
@@ -49,9 +55,9 @@ const CategoriesSection = () => {
 
                     <div className="flex justify-between items-center pb-6">
                         <div className="flex items-center space-x-3">
-                            <h4 className="text-[16px] text-gray-700">Add Categories</h4>
-                            <Button className="w-7 h-7 p-1 text-white bg-secondary hover:bg-[#65acfd]">
-                                <FaPlus className="text-white" size={12} />
+                            <h4 className="text-[16px] text-grey">Add Categories</h4>
+                            <Button className="group w-7 h-7 p-1 text-white bg-secondary hover:text-white" onClick={() => dispatch(setIsAddCategory(true))}>
+                                <FaPlus className=" text-black group-hover:text-white" size={12} />
                             </Button>
                         </div>
 
@@ -66,6 +72,7 @@ const CategoriesSection = () => {
                     </div>
                 </div>
             </main>
+            {isAddCategory && <AddCategoryModal />}
         </div>
     )
 }
