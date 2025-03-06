@@ -21,7 +21,7 @@ const InfoCard = ({ courseName }: { courseName: string }) => {
                 <Image src={editIcon} alt="" width={20} height={20} />
             </div>
             {isCloseModal && <DeleteModal title={courseName.toUpperCase()} content={`<p className="text-base">
-                    <span>Are you sure you want to delete this material?</span> <br />
+                    <span>Are you sure you want to delete this ${courseName}?</span> <br />
                     <span>You'll not be able to recover it.</span>
                 </p>`} handleClose={() => setIsCloseModal(false)} handleSuccess={() => console.log("handle success")} />}
         </div>

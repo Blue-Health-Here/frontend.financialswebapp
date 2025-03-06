@@ -15,7 +15,6 @@ const AddNewQuestionModal = () => {
         dispatch(setIsAddQuestion(false));
     };
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
             <Modal>
                 <div className="bg-white w-96 rounded-lg h-full">
                     <HeaderModal title="Add New Question" onClose={handleClose} />
@@ -65,7 +64,7 @@ const AddNewQuestionModal = () => {
                     </div>
                 </div>
             </Modal>
-        </div>)
+        )
 }
 
 export default AddNewQuestionModal
