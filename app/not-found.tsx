@@ -10,8 +10,8 @@ export default function NotFoundPage() {
         <div className="flex h-screen items-center justify-center bg-gradient-to-br from-primary to-black animate-gradientBackground">
             <div className="text-center">
                 <h1 className="text-9xl font-extrabold text-white tracking-widest">404</h1>
-                <p className="text-2xl text-[#B9B9C3] mt-4">Oops! Page not found</p>
-                <p className="text-[#B9B9C3] mt-2">The page you are looking for doesn’t exist.</p>
+                <p className="text-2xl text-themeLight mt-4">Oops! Page not found</p>
+                <p className="text-themeLight mt-2">The page you are looking for doesn’t exist.</p>
                 <Link href="/">
                     <Button className="mt-6 px-12 font-semibold rounded-full bg-white hover:text-white hover:bg-primary transition">
                         Go Back

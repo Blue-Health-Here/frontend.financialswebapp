@@ -38,7 +38,7 @@ const ProfileSection = () => {
             <div className="mt-6 p-6 bg-white shadow-lg rounded-lg">
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold">Account</h1>
-                    <SubmitButton className="bg-secondary">
+                    <SubmitButton className="bg-secondary hover:text-white">
                         Save Changes
                     </SubmitButton>
                 </div>

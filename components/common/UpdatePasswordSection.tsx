@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { SubmitButton } from '../submit-button';
@@ -53,7 +52,7 @@ export default function UpdatePasswordSection() {
                             className="w-80"
                         />
                     </div>
-                    <SubmitButton className="bg-secondary">
+                    <SubmitButton className="bg-secondary hover:text-white">
                         Save Changes
                     </SubmitButton>
                 </>

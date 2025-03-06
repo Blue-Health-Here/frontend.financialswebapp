@@ -38,7 +38,7 @@ const Topbar = () => {
         const date = new Date();
         const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
         let formattedDate = date.toLocaleDateString('en-GB', options);
-        
+
         return formattedDate.replace(/(\d{2}) (\w{3})/, '$1, $2');
     };
 
@@ -46,7 +46,10 @@ const Topbar = () => {
         <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
             <p className="text-[21px] font-medium">{getCurrentDate()}</p>
             <div className="flex justify-end items-center gap-x-4 cursor-pointer">
-                <IoNotificationsOutline className='w-6 h-6' />
+                <div className="relative">
+                    <IoNotificationsOutline className='w-6 h-6' />
+                    <div className="w-5 h-5 rounded-full bg-primary text-white absolute text-center bottom-3 left-3"><p>8</p></div>
+                </div>
                 <div className="flex gap-x-4 items-center relative" ref={dropdownRef}>
                     <button className='flex gap-x-3 items-center' onClick={toggleDropdown}>
                         <div className="text-right">
