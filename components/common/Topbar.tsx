@@ -7,15 +7,37 @@ import { signOutAction } from '@/app/actions'
 import NavbarProfileDropdown from './NavbarProfileDropdown'
 import { IoNotificationsOutline } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
+import { RootState, store } from '@/store/store'
+import { useSelector } from 'react-redux'
+import { createClient } from '@/utils/supabase/client'
+import { setUser } from '@/store/features/auth/authSlice'
+import { capitalize } from '@/utils/helperClient'
 
-const Topbar = () => {
+interface TopbarProps {
+    role?: string;
+}
+
+const Topbar: React.FC<TopbarProps> = ({ role }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    // const [role, setRole] = useState<string>('');
+    const { user } = useSelector((state: RootState) => state.auth);
 
+    const fetchAuthUser = async () => {
+        const supabase = await createClient();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (session) {
+            console.log(session?.user);
+            
+            // const role = await getUserRole(session?.user);
+            // setRole(role);
+            store.dispatch(setUser({ user: session?.user, token: session?.access_token }));
+        }
+    }
+    
     // Function to toggle the dropdown
     const toggleDropdown = () => {
-        console.log('toggleDropdown');
-
         setIsDropdownOpen(!isDropdownOpen);
     };
 
@@ -28,6 +50,9 @@ const Topbar = () => {
 
     // Add event listener for clicking outside
     useEffect(() => {
+        if (!user) {
+            fetchAuthUser()
+        }
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -53,8 +78,8 @@ const Topbar = () => {
                 <div className="flex gap-x-4 items-center relative" ref={dropdownRef}>
                     <button className='flex gap-x-3 items-center' onClick={toggleDropdown}>
                         <div className="text-right">
-                            <span className="text-grey text-sm font-medium">Sam Lee</span>
-                            <p className="text-themeLight text-sm">Admin</p>
+                            <span className="text-grey text-sm font-medium">{user?.user_metadata?.name}</span>
+                            <p className="text-themeLight text-sm">{capitalize(role)}</p>
                         </div>
                         <Image src={profileImage} alt="" />
                     </button>
