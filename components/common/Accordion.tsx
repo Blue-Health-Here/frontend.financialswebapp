@@ -3,7 +3,15 @@ import React, { useState } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { RiArrowDropDownLine } from "react-icons/ri";
 
-const Accordion: React.FC<{ items: any[] }> = ({ items }) => {
+interface AccordionProps {
+    items: {
+        title: string;
+        content: string | string[];
+    }[];
+    handleEditQuestion?: () => void;
+}
+
+const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
     const onTitleClick = (index: any) => {
@@ -33,7 +41,7 @@ const Accordion: React.FC<{ items: any[] }> = ({ items }) => {
                                                 <Image src="/greencheck.png" alt="" width={20} height={20} />
                                                 <span className="text-gray-700">{text}</span>
                                             </div>
-                                            <button className="text-gray-500 hover:text-blue-500 transition">
+                                            <button className="text-gray-500 hover:text-blue-500 transition" onClick={handleEditQuestion}>
                                                 <Image src="/edit-icon.svg" alt="" width={18} height={18} />
                                             </button>
                                         </li>
@@ -42,7 +50,7 @@ const Accordion: React.FC<{ items: any[] }> = ({ items }) => {
                             ) : item.content ? (
                                 <div className="flex items-center justify-between">
                                     <p className="text-gray-700">{item.content}</p>
-                                    <button className="text-gray-500 hover:text-blue-500 transition">
+                                    <button className="text-gray-500 hover:text-blue-500 transition" onClick={handleEditQuestion}>
                                         <Image src="/edit-icon.svg" alt="" width={18} height={18} />
                                     </button>
                                 </div>

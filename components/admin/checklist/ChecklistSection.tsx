@@ -11,16 +11,21 @@ import { IoSearch } from "react-icons/io5";
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddQuestion } from "@/store/features/checklist/checklistSlice";
+import { setIsAddQuestion, setIsEditQuestion } from "@/store/features/checklist/checklistSlice";
+import EditQuestionModal from "./EditQuestionModal";
 
 const ChecklistSection = () => {
     const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
+    const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const dispatch = useDispatch();
 
     const handleAddQuestion = () => {
         dispatch(setIsAddQuestion(true))
     };
 
+    const handleEditQuestion = () => {
+        dispatch(setIsEditQuestion(true))
+    }
 
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -53,7 +58,6 @@ const ChecklistSection = () => {
                                 className="border-none shadow-lg rounded-lg font-medium min-w-48"
                                 name="category"
                                 options={[
-                                    { value: "allCategories", label: "All Categories" },
                                     { value: "on-boarding", label: "On boarding" },
                                     { value: "operational", label: "Operational" },
                                 ]}
@@ -72,11 +76,12 @@ const ChecklistSection = () => {
                 {checklists.map((checklist, index) => (
                     <div className="w-full" key={index}>
                         <h1 className="text-lg mb-4">{checklist.name + " Checklist"}</h1>
-                        <Accordion key={index} items={checklist.list} />
+                        <Accordion key={index} items={checklist.list} handleEditQuestion={handleEditQuestion} />
                     </div>
                 ))}
             </div>
             {isAddQuestion && <AddNewQuestionModal />}
+            {isEditQuestion && <EditQuestionModal />}
         </div>
     );
 }
