@@ -1,18 +1,27 @@
 "use client"
 
 import Accordion from "@/components/common/Accordion";
-import InputField from "@/components/common/form/InputField";
 import SelectField from "@/components/common/form/SelectField";
 import { SubmitButton } from "@/components/submit-button";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { checklists } from "@/utils/constants";
 import { Form, Formik } from "formik";
-import Image from "next/image";
 import { FaPlus } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
+import AddNewQuestionModal from "./AddNewQuestionModal";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setIsAddQuestion } from "@/store/features/checklist/checklistSlice";
 
 const ChecklistSection = () => {
+    const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
+    const dispatch = useDispatch();
+
+    const handleAddQuestion = () => {
+        dispatch(setIsAddQuestion(true))
+    };
+
+
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6 border-b border-gray-100">
@@ -28,8 +37,8 @@ const ChecklistSection = () => {
             </div>
             <div className="py-2 flex justify-between items-center gap-4">
                 <h3 className="align-middle text-base flex items-center justify-center gap-2">
-                    <span>Add new Question</span> 
-                    <SubmitButton className="w-7 h-7 p-1 text-white"><FaPlus className="text-white" size={12} /></SubmitButton>
+                    <span>Add new Question</span>
+                    <SubmitButton className="w-7 h-7 p-1 text-white" onClick={handleAddQuestion}><FaPlus className="text-white" size={12} /></SubmitButton>
                 </h3>
                 <Formik
                     initialValues={{ type: "", category: "", search: "" }}
@@ -50,7 +59,7 @@ const ChecklistSection = () => {
                                 className="border-none shadow-lg rounded-lg font-medium min-w-48"
                                 name="category"
                                 options={[
-                                    { value: "all", label: "All Categories" },
+                                    { value: "allCategories", label: "All Categories" },
                                     { value: "on-boarding", label: "On boarding" },
                                     { value: "operational", label: "Operational" },
                                 ]}
@@ -73,6 +82,7 @@ const ChecklistSection = () => {
                     </div>
                 ))}
             </div>
+            {isAddQuestion && <AddNewQuestionModal />}
         </div>
     );
 }
