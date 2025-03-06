@@ -20,7 +20,19 @@ const DashboardSection = () => {
                         />))}
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
-                    <BarChart />
+                    <BarChart
+                        Xlabels={["Jan", "Feb", "Mar", "Apr"]}
+                        Ylabels={{
+                            Utility: [200, 300, 270, 220],
+                        }}
+                        useGradient={false}
+                        barColors={["#1E3A8A"]}
+                        barThickness={8}
+                        yAxisTitle="Total Expense"
+                        pointStyle="circle"
+                        showTopValues={false}
+                    />
+
                 </div>
             </div>
 

@@ -40,6 +40,12 @@ const CategoriesSection = () => {
                             Save Changes
                         </SubmitButton>
                     </div>
+                    <div className="flex items-center space-x-3">
+                        <h4 className="text-[16px] text-gray-700">Add Categories</h4>
+                        <Button className="w-7 h-7 p-1 text-white bg-secondary hover:bg-[#65acfd]">
+                            <FaPlus className="text-white" size={12} />
+                        </Button>
+                    </div>
 
                     <div className="flex justify-between items-center pb-6">
                         <div className="flex items-center space-x-3">
@@ -48,16 +54,7 @@ const CategoriesSection = () => {
                                 <FaPlus className="text-white" size={12} />
                             </Button>
                         </div>
-                        <div className="relative w-80">
-                            <Input
-                                name="search"
-                                placeholder="Search Category"
-                                className="h-[42px] border-gray-300 shadow-md rounded-lg pl-4 font-medium"
-                            />
-                            <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                                <IoSearch className="w-5 h-5" />
-                            </span>
-                        </div>
+
                     </div>
 
                     {/* Category List */}

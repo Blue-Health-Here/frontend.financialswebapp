@@ -71,3 +71,40 @@ export const checklists = [
 export const marketinMaterial = ['Marketing Material 1', 'Marketing Material 2', 'Marketing Material 3', 'Marketing Material 4', 'Marketing Material 5', 'Marketing Material 6']
 
 export const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
+
+
+export const expenseCategories = [
+    { name: "Utilities", budget: "$10,000", actual: "$8,000", percentage: 15 },
+    { name: "Salaries", budget: "$10,000", actual: "$12,000", percentage: 15 },
+    { name: "Rent", budget: "$10,000", actual: "$8,000", percentage: 15 },
+];
+
+export const budgetStatsData = [
+    { value: "55", label: "Categories", color: "text-custom-green" },
+    { value: "10", label: "Pharmacies", color: "text-custom-purple" },
+    { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange" },
+];
+
+export const chartData = {
+    Xlabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "sep"],
+    Ylables: [70, 80, 95, 90, 75, 100, 85, 95],
+    barThickness: 8,
+    barBackgroundColor: "#1E3A8A",
+    label: "Pharmacy",
+    showTicks: false,
+    yAxixTitle: "Total Expense",
+    yTitleColor: "#6E6B7B",
+    pointStyle: "circle",
+};
+
+export const budgetChartData = {
+    Xlabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "sep"],
+    Ylables: [70, 80, 95, 90, 75, 100, 85, 95],
+    barThickness: 8,
+    barBackgroundColor: "#1E3A8A",
+    label: "Pharmacy",
+    showTicks: false,
+    yAxixTitle: "Total Expense",
+    yTitleColor: "#6E6B7B",
+    pointStyle: "circle",
+};

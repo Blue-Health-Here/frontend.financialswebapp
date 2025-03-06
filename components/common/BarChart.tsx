@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Bar } from "react-chartjs-2";
 import {
@@ -10,23 +10,40 @@ import {
     Tooltip,
     Legend,
     ChartOptions,
+
 } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
-const BarChart = () => {
-    const data = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "sep"],
-        datasets: [
-            {
-                label: "Pharmacy",
-                data: [70, 80, 95, 90, 75, 100, 85, 95],
-                backgroundColor: "#1E3A8A",
-                barThickness: 8,
-            },
-        ],
-
+const BarChart = ({
+    Xlabels,
+    Ylabels,
+    useGradient = false,
+    barColors = [],
+    barThickness,
+    yAxisTitle,
+    pointStyle,
+    showTopValues = true
+}: any) => {
+    const getGradient = (ctx: any, chartArea: any) => {
+        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+        gradient.addColorStop(0, "#1E3A8A");
+        gradient.addColorStop(1, "#93C5FD");
+        return gradient;
     };
+
+    const data = {
+        labels: Xlabels,
+        datasets: Object.keys(Ylabels).map((key, index) => ({
+            label: key.charAt(0).toUpperCase() + key.slice(1),
+            data: Ylabels[key],
+            barThickness: barThickness,
+            backgroundColor: (ctx: any) =>
+                useGradient && ctx.chart.chartArea ? getGradient(ctx.chart.ctx, ctx.chart.chartArea) : barColors[index] || "#999",
+        })),
+    };
+
     const options: ChartOptions<"bar"> = {
         responsive: true,
         plugins: {
@@ -35,36 +52,41 @@ const BarChart = () => {
                 position: "bottom",
                 labels: {
                     usePointStyle: true,
-                    pointStyle: "circle",
+                    pointStyle: pointStyle,
                     boxWidth: 8,
                     boxHeight: 8,
                     padding: 30
                 },
             },
+            datalabels: showTopValues
+                ? {
+                    color: "black",
+                    anchor: "end",
+                    align: "top",
+                    font: { weight: "bold", size: 12 },
+                    formatter: (value, context) => {
+                        const datasetIndex = context.datasetIndex;
+                        const dataIndex = context.dataIndex;
+                        const total = data.datasets.reduce((sum, dataset) => sum + dataset.data[dataIndex], 0);
+                        return datasetIndex === data.datasets.length - 1 ? `$${total}` : "";
+                    },
+                }
+                : false,
         },
+
         scales: {
             x: {
+                stacked: true,
                 grid: { display: false },
-                ticks: { display: false },
-
             },
             y: {
+                stacked: true,
                 beginAtZero: true,
-                grid: {
-                    display: true,
-                    lineWidth: 1,
-                    drawOnChartArea: true,
-                    drawTicks: false,
-                },
+                grid: { drawOnChartArea: true },
                 title: {
                     display: true,
-                    text: "Total Expense",
-                    font: { size: 16 },
-                    color: "grey",
-                },
-                ticks: {
-                    padding: 10,
-                    stepSize: 30,
+                    text: yAxisTitle,
+                    font: { size: 14 },
                 },
             },
         },
