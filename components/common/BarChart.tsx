@@ -77,7 +77,7 @@ const BarChart = ({
                         return datasetIndex === data.datasets.length - 1 ? `$${total}` : "";
                     },
                 }
-                : false,
+                : undefined,
         },
 
         scales: {
