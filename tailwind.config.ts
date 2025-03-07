@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 const config = {
   darkMode: ["class"],
@@ -7,6 +8,12 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
+  ],
+  safelist: [
+    'text-custom-green',
+    'text-custom-purple',
+    'text-custom-orange',
+    'text-custom-red',
   ],
   prefix: "",
   theme: {
@@ -18,10 +25,19 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-montserrat)", ...fontFamily.sans],
+      },
       colors: {
         primary: "#1E3A8A",
         secondary: "#93C5FD",
         grey: "#6E6B7B",
+        themeLight: "#B9B9C3",
+        bodyBG: "#f3f4f6",
+        btnLight: "#F3F3F5",
+        primaryRed: "#D70002",
+        themeGrey: "#5E5873",
+        whiteLight: "#F8F8F8",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -55,6 +71,10 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'custom-green': '#28C76F',
+        'custom-purple': '#7367F0',
+        'custom-red': '#EA5455',
+        'custom-orange': '#FF9F43',
       },
       borderRadius: {
         lg: "var(--radius)",

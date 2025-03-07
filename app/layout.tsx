@@ -1,11 +1,16 @@
-import { Geist } from "next/font/google";
-// import { ThemeProvider } from "next-themes";
-// import Link from "next/link";
 import "./globals.css";
-
+import ThemeProvider from "./ThemeProvider";
+import { Montserrat } from "next/font/google"
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  display: 'swap',
+});
+
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
@@ -13,20 +18,15 @@ export const metadata = {
   description: "The financials web app for all your financial needs.",
 };
 
-const geistSans = Geist({
-  display: "swap",
-  subsets: ["latin"],
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className="bg-background text-foreground">
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

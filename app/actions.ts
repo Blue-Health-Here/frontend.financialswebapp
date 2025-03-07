@@ -4,6 +4,9 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getUserRole } from "@/utils/helper";
+import { store } from "@/store/store";
+import { setUser } from "@/store/features/auth/authSlice";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -23,6 +26,7 @@ export const signUpAction = async (formData: FormData) => {
     email,
     password,
     options: {
+      data: { name: formData.get("name")?.toString() },
       emailRedirectTo: `${origin}/auth/callback`,
     },
   });
@@ -44,16 +48,23 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error: userMessage, data: { user } } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (error) {
-    return encodedRedirect("error", "/sign-in", error.message);
+  const { data: { session }, error } = await supabase.auth.getSession();
+  
+  if ((userMessage && !user) || (!session && error)) {
+    return encodedRedirect("error", "/sign-in", userMessage?.message || error?.message || "Unknown error");
   }
-
-  return redirect("/protected");
+  
+  const role = await getUserRole(user);
+  if (role === "admin") {
+    return redirect("/admin/dashboard");
+  } else {
+    return redirect("/admin/dashboard");
+  }
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
