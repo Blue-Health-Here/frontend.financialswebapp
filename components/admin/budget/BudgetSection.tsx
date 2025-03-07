@@ -13,27 +13,28 @@ import BarChart from '@/components/common/BarChart';
 const BudgetSection = () => {
     return (
         <>
-            <h3 className="text-[#5E5873] font-medium">Statistics</h3>
+            <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <div className="h-full col-span-1 md:col-span-6 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
                     {budgetStatsData.map((item, index) => (
                         <BudgetStatsCard
                             key={index}
+                            icon={item.icon}
                             value={item.value}
                             label={item.label}
                             color={item.color} />))}
                 </div>
                 <div className="w-full col-span-1 md:col-span-6 lg:col-span-7 xl:col-span-8 bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
                     <BarChart
-                        Xlabels={["Jan", "Feb", "Mar", "Apr", "May"]}
+                        Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"]}
                         Ylabels={{
-                            Utility: [10, 20, 30, 40, 50],
-                            Salary: [20, 30, 40, 50, 60],
-                            Rent: [30, 40, 50, 60, 70],
-                            Others: [40, 50, 60, 70, 80]
+                            Utility: [40, 20, 110, 50, 40, 60, 60, 70, 80, 40, 100],
+                            Salary: [50, 30, 90, 40, 90, 100, 60, 70, 40, 80, 100, 30],
+                            Rent: [30, 40, 50, 80, 70, 40, 90, 100, 80, 70, 60],
+                            Others: [40, 50, 60, 70, 40, 40, 100, 110, 40, 50, 80],
                         }}
                         barColors={["#0C1737", "#152961", "#354E96", "#7889B9"]}
-                        barThickness={40}
+                        barThickness={50}
                         yAxisTitle="Expenses"
                         pointStyle="circle"
                         showTopValues={true}

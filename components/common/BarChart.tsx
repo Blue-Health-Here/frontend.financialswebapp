@@ -43,6 +43,7 @@ const BarChart = ({
             label: key.charAt(0).toUpperCase() + key.slice(1),
             data: Ylabels[key],
             barThickness: barThickness,
+            borderRadius: 10,
             backgroundColor: (ctx: any) =>
                 useGradient && ctx.chart.chartArea ? getGradient(ctx.chart.ctx, ctx.chart.chartArea) : barColors[index] || "#999",
         })),
@@ -59,7 +60,8 @@ const BarChart = ({
                     pointStyle: pointStyle,
                     boxWidth: 8,
                     boxHeight: 8,
-                    padding: 30
+                    padding: 30,
+                    borderRadius: 50,
                 },
             },
             datalabels: showTopValues

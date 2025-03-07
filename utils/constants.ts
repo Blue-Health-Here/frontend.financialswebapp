@@ -21,11 +21,11 @@ export const sidebarItems = [
 
 // statistic card data
 export const statsData = [
-    { value: "55", label: "Categories", color: "text-custom-green" },
-    { value: "10", label: "Pharmacies", color: "text-custom-purple" },
-    { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange" },
-    { value: "75%", label: "Total task completed", color: "text-custom-red" },
-];
+    { value: "55", label: "Categories", color: "text-custom-green", icon: "/statistics-Category.svg" },
+    { value: "10", label: "Pharmacies", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
+    { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
+    { value: "75%", label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
+]; 
 
 //Admin Category Data
 export const categoryData: Record<string, string[]> = {
@@ -80,9 +80,9 @@ export const expenseCategories = [
 ];
 
 export const budgetStatsData = [
-    { value: "55", label: "Categories", color: "text-custom-green" },
-    { value: "10", label: "Pharmacies", color: "text-custom-purple" },
-    { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange" },
+    { value: "$3000.00", label: "Revenue", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
+    { value: "$2000.00", label: "Total monthly Expense", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
+    { value: "$1000.00", label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
 ];
 
 export const chartData = {

@@ -21,7 +21,7 @@ const CategoriesSection = () => {
         <div className="flex">
             {/*Secondary Sidebar */}
             <aside className=" max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] pt-8 pb-8 pl-4 pr-4 fixed left-[250px] xl:left-[318px] top-20 h-auto z-[999]">
-                <h3 className="text-[#5E5873] pb-4 font-medium">Categories</h3>
+                <h3 className="text-themeGrey pb-4 font-medium">Categories</h3>
                 <ul className="space-y-3">
                     {Object.keys(categoryData).map((category) => (
                         <li
@@ -46,12 +46,6 @@ const CategoriesSection = () => {
                             Save Changes
                         </SubmitButton>
                     </div>
-                    <div className="flex items-center space-x-3">
-                        <h4 className="text-[16px] text-gray-700">Add Categories</h4>
-                        <Button className="w-7 h-7 p-1 text-white bg-secondary hover:bg-[#65acfd]">
-                            <FaPlus className="text-white" size={12} />
-                        </Button>
-                    </div>
 
                     <div className="flex justify-between items-center pb-6">
                         <div className="flex items-center space-x-3">
@@ -60,7 +54,6 @@ const CategoriesSection = () => {
                                 <FaPlus className=" text-black group-hover:text-white" size={12} />
                             </Button>
                         </div>
-
                     </div>
 
                     {/* Category List */}

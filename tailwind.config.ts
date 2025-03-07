@@ -36,6 +36,8 @@ const config = {
         bodyBG: "#f3f4f6",
         btnLight: "#F3F3F5",
         primaryRed: "#D70002",
+        themeGrey: "#5E5873",
+        whiteLight: "#F8F8F8",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

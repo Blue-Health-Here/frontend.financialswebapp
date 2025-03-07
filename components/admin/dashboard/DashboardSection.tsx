@@ -8,7 +8,7 @@ import { IoSearch } from "react-icons/io5";
 const DashboardSection = () => {
     return (
         <>
-            <h3 className="text-[#5E5873] font-medium">Statistics</h3>
+            <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {statsData.map((item, index) => (
@@ -17,6 +17,7 @@ const DashboardSection = () => {
                             value={item.value}
                             label={item.label}
                             color={item.color}
+                            icon={item.icon}
                         />))}
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
