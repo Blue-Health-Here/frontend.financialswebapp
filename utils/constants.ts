@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // Pharmacy card data 
 export const pharmacyData = [
     { name: "Pharmacy XYZ", expense: "1500.00", courses: "2 / 5", progress: 50, image: "/avatar.jpg" },
@@ -71,3 +73,13 @@ export const checklists = [
 export const marketinMaterial = ['Marketing Material 1', 'Marketing Material 2', 'Marketing Material 3', 'Marketing Material 4', 'Marketing Material 5', 'Marketing Material 6']
 
 export const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
+
+
+export const courseData = [
+    { id: 1, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", isSelected: false },
+    { id: 2, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", isSelected: false },
+    { id: 3, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", isSelected: false },
+    { id: 4, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", isSelected: false },
+    { id: 5, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", isSelected: false },
+    { id: 6, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", isSelected: false },
+];

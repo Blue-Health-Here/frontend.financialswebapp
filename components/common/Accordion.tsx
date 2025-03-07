@@ -23,7 +23,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion }) => {
             {items.map((item: any, index: number) => (
                 <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden">
                     <div
-                        className={`flex justify-between items-center px-6 py-4 cursor-pointer ${activeIndex === index ? 'bg-primary text-white' : 'bg-gray-50 hover:bg-gray-100'}`}
+                        className={`flex justify-between items-center px-6 py-4 cursor-pointer ${activeIndex === index ? 'bg-primary text-white' : 'bg-white'}`}
                         onClick={() => onTitleClick(index)}
                     >
                         <h1 className='text-lg'>{item.title}</h1>

@@ -1,9 +1,13 @@
 import Image from "next/image";
 import profileImage from "../../public/profile-image.png"
 
-export const PharmacyCard = ({ pharmacy, className }: any) => {
+interface HeaderModalProps {
+    pharmacy: any;
+    showPharmacyDetail: () => void;
+}
+export const PharmacyCard = ({ pharmacy, showPharmacyDetail }: HeaderModalProps) => {
     return (
-        <div className={`bg-white p-4 shadow-md rounded-lg ${className} min-h-[250px] flex flex-col`}>
+        <div onClick={showPharmacyDetail} className="bg-white p-4 shadow-md rounded-lg min-h-[250px] flex flex-col">
             <div className="flex flex-col gap-3">
                 <Image src={profileImage} alt="" className="w-12 h-12 rounded-full" />
                 <h2 className="font-bold">{pharmacy.name}</h2>
