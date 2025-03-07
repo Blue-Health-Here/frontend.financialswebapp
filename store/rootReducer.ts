@@ -5,6 +5,7 @@ import checklistReducer from "./features/checklist/checklistSlice"
 import marketingReducer from "./features/marketing/marketingSlice"
 import categoryReducer from "./features/category/categorySlice"
 import expenseReducer from "./features/expense/expenseSlice";
+import globalReducer from "./features/global/globalSlice"
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     checklist: checklistReducer,
     marketing: marketingReducer,
     category: categoryReducer,
-    expense: expenseReducer
+    expense: expenseReducer,
+    global: globalReducer
 });
 
 export default rootReducer

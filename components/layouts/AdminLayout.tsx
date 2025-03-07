@@ -26,10 +26,8 @@ export default async function AdminLayout({
     <div className="flex min-h-screen bg-gray-100 overflow-x-hidden">
       <Sidebar />
       <div className="w-full">
-        <div className="bg-bodyBG fixed top-0 left-[250px] xl:left-[300px] right-0 px-6 py-4 z-50">
-          <Topbar role={role} />
-        </div>
-        <div className="ml-[250px] xl:ml-[300px] min-h-screen p-6 pt-[6.7rem]">
+        <Topbar role={role} />
+        <div className="ml-auto lg:ml-[250px] xl:ml-[300px] min-h-screen p-6 pt-[6.7rem]">
           {children}
         </div>
       </div>
