@@ -7,10 +7,8 @@ import { signOutAction } from '@/app/actions'
 import NavbarProfileDropdown from './NavbarProfileDropdown'
 import { IoNotificationsOutline } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-import { RootState, store } from '@/store/store'
+import { RootState } from '@/store/store'
 import { useSelector } from 'react-redux'
-import { createClient } from '@/utils/supabase/client'
-import { setUser } from '@/store/features/auth/authSlice'
 import { capitalize } from '@/utils/helperClient'
 
 interface TopbarProps {
@@ -20,21 +18,7 @@ interface TopbarProps {
 const Topbar: React.FC<TopbarProps> = ({ role }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    // const [role, setRole] = useState<string>('');
     const { user } = useSelector((state: RootState) => state.auth);
-
-    const fetchAuthUser = async () => {
-        const supabase = await createClient();
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (session) {
-            console.log(session?.user);
-            
-            // const role = await getUserRole(session?.user);
-            // setRole(role);
-            store.dispatch(setUser({ user: session?.user, token: session?.access_token }));
-        }
-    }
     
     // Function to toggle the dropdown
     const toggleDropdown = () => {
@@ -50,9 +34,6 @@ const Topbar: React.FC<TopbarProps> = ({ role }) => {
 
     // Add event listener for clicking outside
     useEffect(() => {
-        if (!user) {
-            fetchAuthUser()
-        }
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
