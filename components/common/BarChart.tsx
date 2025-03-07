@@ -24,12 +24,16 @@ const BarChart = ({
     barThickness,
     yAxisTitle,
     pointStyle,
-    showTopValues = true
+    showTopValues = true,
+    stepSize
 }: any) => {
     const getGradient = (ctx: any, chartArea: any) => {
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-        gradient.addColorStop(0, "#1E3A8A");
-        gradient.addColorStop(1, "#93C5FD");
+        gradient.addColorStop(0, "#0C1737");
+        gradient.addColorStop(0.25, "#152961");
+        gradient.addColorStop(0.5, "#354E96");
+        gradient.addColorStop(0.75, "#7889B9");
+
         return gradient;
     };
 
@@ -87,6 +91,10 @@ const BarChart = ({
                     display: true,
                     text: yAxisTitle,
                     font: { size: 14 },
+                },
+                ticks: {
+                    padding: 10,
+                    stepSize: stepSize,
                 },
             },
         },

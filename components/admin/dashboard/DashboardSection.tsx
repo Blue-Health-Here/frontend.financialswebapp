@@ -23,7 +23,7 @@ const DashboardSection = () => {
                     <BarChart
                         Xlabels={["Jan", "Feb", "Mar", "Apr"]}
                         Ylabels={{
-                            Utility: [200, 300, 270, 220],
+                            pharmacy: [200, 300, 270, 220, 400],
                         }}
                         useGradient={false}
                         barColors={["#1E3A8A"]}

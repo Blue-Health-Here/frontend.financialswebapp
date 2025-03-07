@@ -8,6 +8,7 @@ import { FaPlus } from "react-icons/fa";
 import { Input } from '@/components/ui/input';
 import { IoSearch } from "react-icons/io5";
 import { BudgetCard } from '@/components/common/BudgetCard';
+import BarChart from '@/components/common/BarChart';
 
 const BudgetSection = () => {
     return (
@@ -23,7 +24,21 @@ const BudgetSection = () => {
                             color={item.color} />))}
                 </div>
                 <div className="w-full col-span-1 md:col-span-6 lg:col-span-7 xl:col-span-8 bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
-                    Chart here
+                    <BarChart
+                        Xlabels={["Jan", "Feb", "Mar", "Apr", "May"]}
+                        Ylabels={{
+                            Utility: [10, 20, 30, 40, 50],
+                            Salary: [20, 30, 40, 50, 60],
+                            Rent: [30, 40, 50, 60, 70],
+                            Others: [40, 50, 60, 70, 80]
+                        }}
+                        barColors={["#0C1737", "#152961", "#354E96", "#7889B9"]}
+                        barThickness={40}
+                        yAxisTitle="Expenses"
+                        pointStyle="circle"
+                        showTopValues={true}
+                        stepSize={40}
+                    />
                 </div>
             </div>
 
