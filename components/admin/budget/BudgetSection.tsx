@@ -9,13 +9,15 @@ import { Input } from '@/components/ui/input';
 import { IoSearch } from "react-icons/io5";
 import { BudgetCard } from '@/components/common/BudgetCard';
 import BarChart from '@/components/common/BarChart';
+import useWindowSize from '@/hooks/useWindowSize';
 
 const BudgetSection = () => {
+    const { width } = useWindowSize();
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <div className="h-full col-span-1 md:col-span-6 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="h-full col-span-1 md:col-span-1 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
                     {budgetStatsData.map((item, index) => (
                         <BudgetStatsCard
                             key={index}
@@ -24,7 +26,7 @@ const BudgetSection = () => {
                             label={item.label}
                             color={item.color} />))}
                 </div>
-                <div className="w-full col-span-1 md:col-span-6 lg:col-span-7 xl:col-span-8 bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
+                <div className="w-full col-span-1 md:col-span-1 lg:col-span-7 xl:col-span-8 bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
                     <BarChart
                         Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"]}
                         Ylabels={{
@@ -34,7 +36,7 @@ const BudgetSection = () => {
                             Others: [40, 50, 60, 70, 40, 40, 100, 110, 40, 50, 80],
                         }}
                         barColors={["#0C1737", "#152961", "#354E96", "#7889B9"]}
-                        barThickness={50}
+                        barThickness={width > 1400 ? 50 : width > 1200 ? 40 : 30}
                         yAxisTitle="Expenses"
                         pointStyle="circle"
                         showTopValues={true}
