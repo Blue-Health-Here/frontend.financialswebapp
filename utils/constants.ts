@@ -157,3 +157,24 @@ export const budgetData = [
         amount: "$1500",
     }
 ];
+
+export const onBoardingchecklists = [
+    {
+        name: 'Onboarding Checklist',
+        progress: 50,
+        list: [
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Content for course 1 goes here.', 'Content for course 1 goes here.', 'Content for course 1 goes here.']
+            },
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Donec sodales scelerisque eleifend.', 'Nullam fermentum nunc nec.']
+            },
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Content for operational task 1.', 'Another point for operational task 1.']
+            },
+        ]
+    },
+];

@@ -63,7 +63,7 @@ const ChecklistSection = () => {
                                 ]}
                             />
                             <div className="relative sm:max-w-md">
-                                <Input name="email" placeholder="Search Checklist" className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
+                                <Input name="search" placeholder="Search Checklist" className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
                                 <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                                     <IoSearch size={18} />
                                 </span>
