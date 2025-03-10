@@ -1,4 +1,4 @@
-import ClientLayout from "@/components/layouts/ClientLayout";
+import PharmacyLayout from "@/components/layouts/PharmacyLayout";
 import BudgetSection from "@/components/pharmacy/budget/BudgetSection";
 
 import { Metadata } from "next";
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
     return (
-        <ClientLayout>
+        <PharmacyLayout>
             <BudgetSection />
-        </ClientLayout>
+        </PharmacyLayout>
     );
 }

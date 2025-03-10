@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getUserRole } from "@/utils/helper";
 import { redirect } from "next/navigation";
 
-export default async function ClientLayout({
+export default async function PharmacyLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -24,7 +24,7 @@ export default async function ClientLayout({
 
     return (
         <div className="flex min-h-screen bg-gray-100 overflow-x-hidden">
-            <Sidebar />
+            <Sidebar role={role} />
             <div className="w-full">
                 <Topbar role={role} user={user} />
                 <div className="ml-auto lg:ml-[250px] xl:ml-[300px] min-h-screen p-6 pt-[6.7rem]">
