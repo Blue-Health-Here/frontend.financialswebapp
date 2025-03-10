@@ -55,6 +55,7 @@ const Topbar: React.FC<TopbarProps> = ({ role }) => {
         dispatch(setIsSidebarOpen(true));
     }
 
+    console.log(user, "user");
     return (
         <div className="bg-bodyBG fixed top-0 left-0 lg:left-[250px] xl:left-[300px] right-0 px-6 py-4 z-50">
             <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
