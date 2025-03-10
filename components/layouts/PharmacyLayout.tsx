@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getUserRole } from "@/utils/helper";
 import { redirect } from "next/navigation";
 
-export default async function ClientLayout({
+export default async function PharmacyLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
