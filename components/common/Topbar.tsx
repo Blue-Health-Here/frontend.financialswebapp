@@ -7,20 +7,20 @@ import { signOutAction } from '@/app/actions'
 import NavbarProfileDropdown from './NavbarProfileDropdown'
 import { IoNotificationsOutline } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-import { RootState } from '@/store/store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { capitalize } from '@/utils/helperClient'
 import { FaBars } from 'react-icons/fa'
 import { setIsSidebarOpen } from '@/store/features/global/globalSlice'
+import { setUser } from '@/store/features/auth/authSlice'
 
 interface TopbarProps {
     role?: string;
+    user?: any | null | undefined
 }
 
-const Topbar: React.FC<TopbarProps> = ({ role }) => {
+const Topbar: React.FC<TopbarProps> = ({ role, user }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const { user } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
     
     // Function to toggle the dropdown
@@ -37,6 +37,7 @@ const Topbar: React.FC<TopbarProps> = ({ role }) => {
 
     // Add event listener for clicking outside
     useEffect(() => {
+        dispatch(setUser(user));
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);

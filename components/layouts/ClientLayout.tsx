@@ -26,7 +26,7 @@ export default async function ClientLayout({
         <div className="flex min-h-screen bg-gray-100 overflow-x-hidden">
             <Sidebar />
             <div className="w-full">
-                <Topbar role={role} />
+                <Topbar role={role} user={user} />
                 <div className="ml-auto lg:ml-[250px] xl:ml-[300px] min-h-screen p-6 pt-[6.7rem]">
                     {children}
                 </div>
