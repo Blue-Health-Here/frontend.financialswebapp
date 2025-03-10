@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SubmitButton } from '@/components/submit-button'
 import { IoIosArrowBack } from "react-icons/io";
 import { GoHome } from "react-icons/go";
@@ -27,10 +27,14 @@ const PharmacyDetail = () => {
     const router = useRouter();
     const params = useParams()
     const id = params.id
+
+
     const pharmacy = pharmacyData.find((pharmacy) => pharmacy.id === Number(id))
     if (!pharmacy) {
         return <p>Pharmacy not found.</p>;
     }
+
+
     const toggleSelect = (id: number) => {
         setCourses((prevCourses) =>
             prevCourses.map((course) =>
@@ -38,9 +42,26 @@ const PharmacyDetail = () => {
             )
         );
     };
+
+
     const handleEditQuestion = () => {
         dispatch(setIsAddQuestion(true))
     }
+
+
+    useEffect(() => {
+        if (isAddQuestion) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isAddQuestion]);
+
+
     return (
 
         <>
