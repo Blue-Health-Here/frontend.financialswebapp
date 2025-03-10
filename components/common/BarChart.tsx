@@ -25,7 +25,13 @@ const BarChart = ({
     yAxisTitle,
     pointStyle,
     showTopValues = true,
-    stepSize
+    stepSize,
+    borderRadius,
+    yTitleColor,
+    yLabelColor,
+    xLabelColor,
+    showXLabels = true,
+    tooltipOptions = {},
 }: any) => {
     const getGradient = (ctx: any, chartArea: any) => {
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
@@ -43,7 +49,7 @@ const BarChart = ({
             label: key.charAt(0).toUpperCase() + key.slice(1),
             data: Ylabels[key],
             barThickness: barThickness,
-            borderRadius: 10,
+            borderRadius: borderRadius,
             backgroundColor: (ctx: any) =>
                 useGradient && ctx.chart.chartArea ? getGradient(ctx.chart.ctx, ctx.chart.chartArea) : barColors[index] || "#999",
         })),
@@ -51,6 +57,7 @@ const BarChart = ({
 
     const options: ChartOptions<"bar"> = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: true,
@@ -64,26 +71,35 @@ const BarChart = ({
                     borderRadius: 50,
                 },
             },
-            datalabels: showTopValues
-                ? {
-                    color: "black",
-                    anchor: "end",
-                    align: "top",
-                    font: { weight: "bold", size: 12 },
-                    formatter: (value, context) => {
-                        const datasetIndex = context.datasetIndex;
-                        const dataIndex = context.dataIndex;
-                        const total = data.datasets.reduce((sum, dataset) => sum + dataset.data[dataIndex], 0);
-                        return datasetIndex === data.datasets.length - 1 ? `$${total}` : "";
-                    },
-                }
-                : undefined,
+            tooltip: {
+                backgroundColor: '#93C5FD',
+                titleColor: '#1E3A8A',
+                bodyColor: '#1E3A8A',
+                ...tooltipOptions,
+            },
+            datalabels: {
+                display: showTopValues,
+                color: "black",
+                anchor: "end",
+                align: "top",
+                font: { size: 12 },
+                formatter: (value, context) => {
+                    const datasetIndex = context.datasetIndex;
+                    const dataIndex = context.dataIndex;
+                    const total = data.datasets.reduce((sum, dataset) => sum + dataset.data[dataIndex], 0);
+                    return datasetIndex === data.datasets.length - 1 ? `$${total}` : "";
+                },
+            },
         },
 
         scales: {
             x: {
                 stacked: true,
                 grid: { display: false },
+                ticks: {
+                    display: showXLabels,
+                    color: xLabelColor
+                },
             },
             y: {
                 stacked: true,
@@ -92,11 +108,13 @@ const BarChart = ({
                 title: {
                     display: true,
                     text: yAxisTitle,
+                    color: yTitleColor,
                     font: { size: 14 },
                 },
                 ticks: {
                     padding: 10,
                     stepSize: stepSize,
+                    color: yLabelColor
                 },
             },
         },

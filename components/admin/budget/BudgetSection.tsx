@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { budgetStatsData, expenseCategories, pharmacyData } from "@/utils/constants";
+import { budgetData, budgetStatsData, expenseCategories, pharmacyData } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -41,41 +41,45 @@ const BudgetSection = () => {
                         pointStyle="circle"
                         showTopValues={true}
                         stepSize={40}
+                        borderRadius={8}
+                        yTitleColor="black"
+                        xLabelColor="black"
+                        yLabelColor="black"
                     />
                 </div>
             </div>
 
-            <div className="mt-6 p-6 space-y-4 bg-white shadow-lg rounded-lg">
+            <div className="mt-6 px-6 py-8 space-y-4 bg-white shadow-lg rounded-lg">
                 <h2 className="text-xl font-semibold">Expense Categories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {expenseCategories.map((category, index) => (
-                        <div key={index} className="p-4 min-h-[135px] bg-white shadow-lg rounded-lg flex flex-col gap-3">
+                        <div key={index} className="p-6 min-h-[135px] bg-white shadow-lg rounded-lg flex flex-col gap-4">
                             <div className="flex justify-between items-center">
-                                <p className="text-lg font-medium">{category.name}</p>
-                                <span className={`text-sm font-semibold p-4 rounded-full ${category.percentage >= 15 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+                                <p className="text-xl font-bold">{category.name}</p>
+                                <span className={`text-sm font-semibold flex items-center justify-center rounded-full min-w-[60px] min-h-[60px]  ${category.percentage >= 15 ? 'bg-[#FFE8E8] text-[#CD5052]' : 'bg-[#E8FFF3] text-[#50CD89] '}`}>
                                     {category.percentage}%
                                 </span>
                             </div>
-                            <p className="text-gray-500 text-sm">Budgeted Amount: <span className='text-[16px] font-medium float-right'>{category.budget}</span></p>
-                            <p className="text-gray-500 text-sm">Actual Amount: <span className='text-[16px] font-medium float-right'>{category.actual}</span></p>
+                            <p className="text-[16px] font-medium">Budgeted Amount: <span className='text-grey float-right'>${category.budget}</span></p>
+                            <p className="text-[16px] font-medium">Actual Amount: <span className='text-grey float-right'>${category.actual}</span></p>
                         </div>
                     ))}
                 </div>
             </div>
 
-            <div className="mt-6 p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
+            <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
 
                 <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                     <h1 className="text-xl font-semibold">Expense</h1>
                     <SubmitButton className="bg-secondary hover:bg-[#65acfd]">
-                        Save Changes
+                        Report
                     </SubmitButton>
                 </div>
                 <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                     <div className="flex items-center space-x-3">
-                        <h4 className="text-[16px] text-gray-700">Add Categories</h4>
-                        <SubmitButton className="w-7 h-7 p-1 text-white bg-secondary hover:bg-[#65acfd]">
-                            <FaPlus className="text-white" size={12} />
+                        <h4 className="text-[16px] text-gray-700">Add Expense</h4>
+                        <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary">
+                            <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
                     <div className="relative w-[390px] sm:max-w-md">
@@ -87,8 +91,8 @@ const BudgetSection = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {pharmacyData.map((pharmacy, index) => (
-                        <BudgetCard key={index} pharmacy={pharmacy} />
+                    {budgetData.map((budget, index) => (
+                        <BudgetCard key={index} budget={budget} />
                     ))}
                 </div>
             </div></>

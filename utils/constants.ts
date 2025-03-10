@@ -25,7 +25,7 @@ export const statsData = [
     { value: "10", label: "Pharmacies", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
     { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
     { value: "75%", label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
-]; 
+];
 
 //Admin Category Data
 export const categoryData: Record<string, string[]> = {
@@ -74,9 +74,9 @@ export const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'co
 
 
 export const expenseCategories = [
-    { name: "Utilities", budget: "$10,000", actual: "$8,000", percentage: 15 },
-    { name: "Salaries", budget: "$10,000", actual: "$12,000", percentage: 15 },
-    { name: "Rent", budget: "$10,000", actual: "$8,000", percentage: 15 },
+    { name: "Utilities", budget: "10,000", actual: "8,000", percentage: 15 },
+    { name: "Salaries", budget: "10,000", actual: "12,000", percentage: 5 },
+    { name: "Rent", budget: "10,000", actual: "8,000", percentage: 15 },
 ];
 
 export const budgetStatsData = [
@@ -108,3 +108,43 @@ export const budgetChartData = {
     yTitleColor: "#6E6B7B",
     pointStyle: "circle",
 };
+
+
+export const budgetData = [
+    {
+        name: "Security Camera",
+        category: "Utilities",
+        date: "30 Oct 2024",
+        amount: "$1500",
+    },
+    {
+        name: "Water",
+        category: "Utilities",
+        date: "30 Oct 2024",
+        amount: "$500",
+    },
+    {
+        name: "Security Camera",
+        category: "Utilities",
+        date: "30 Oct 2024",
+        amount: "$1500",
+    },
+    {
+        name: "Security Camera",
+        category: "Utilities",
+        date: "30 Oct 2024",
+        amount: "$1500",
+    },
+    {
+        name: "Security Camera",
+        category: "Utilities",
+        date: "30 Oct 2024",
+        amount: "$1500",
+    },
+    {
+        name: "Security Camera",
+        category: "Utilities",
+        date: "30 Oct 2024",
+        amount: "$1500",
+    }
+];
