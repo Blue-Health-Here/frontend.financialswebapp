@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isShowPharmacy: false
+    isAddQuestion: false
 }
 
 const pharmacySlice = createSlice({
     name: 'pharmacy',
     initialState,
     reducers: {
-        setIsShowPharmacy: (state, action) => {
-            state.isShowPharmacy = action.payload
+        setIsAddQuestion: (state, action) => {
+            state.isAddQuestion = action.payload
         }
     }
 })
 
-export const { setIsShowPharmacy } = pharmacySlice.actions
+export const { setIsAddQuestion } = pharmacySlice.actions
 export default pharmacySlice.reducer

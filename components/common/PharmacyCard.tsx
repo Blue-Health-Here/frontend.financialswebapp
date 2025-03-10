@@ -3,12 +3,11 @@ import Link from "next/link";
 
 interface HeaderModalProps {
     pharmacy: any;
-    showPharmacyDetail: () => void;
 }
-export const PharmacyCard = ({ pharmacy, showPharmacyDetail }: HeaderModalProps) => {
+export const PharmacyCard = ({ pharmacy }: HeaderModalProps) => {
     return (
         <Link href={`/admin/pharmacies/${pharmacy.id}`}>
-            <div onClick={showPharmacyDetail} className="bg-white p-4 shadow-md rounded-lg min-h-[250px] flex flex-col">
+            <div className="bg-white p-4 shadow-md rounded-lg min-h-[250px] flex flex-col">
                 <div className="flex flex-col gap-3">
                     <Image src={pharmacy.image} alt="" className="rounded-full" width={48} height={48} />
                     <h2 className="font-bold">{pharmacy.name}</h2>

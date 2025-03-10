@@ -15,9 +15,15 @@ import CourseCard from './CourseCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { setIsAddQuestion } from '@/store/features/pharmacy/pharmacySlice';
+import AddNewQuestionModal from './AddNewQuestionModal';
 
 const PharmacyDetail = () => {
     const [courses, setCourses] = useState(courseData)
+    const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy)
+    const dispatch = useDispatch()
     const router = useRouter();
     const params = useParams()
     const id = params.id
@@ -32,7 +38,9 @@ const PharmacyDetail = () => {
             )
         );
     };
-
+    const handleEditQuestion = () => {
+        dispatch(setIsAddQuestion(true))
+    }
     return (
 
         <>
@@ -49,7 +57,7 @@ const PharmacyDetail = () => {
                         <MdKeyboardArrowRight />
                         <p className='text-[#3F4254]'>{pharmacy.name}</p>
                     </div>
-                    <div className="flex gap-x-2 items-center">
+                    <div className="flex gap-x-4 items-center">
                         <FileDownloadField title='Reports' />
                         <Image src="/delete-icon.svg" alt="" width={20} height={20} />
                     </div>
@@ -137,7 +145,7 @@ const PharmacyDetail = () => {
                 <div className="w-full mt-6  px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
                     <div className="flex flex-col gap-6">
                         <h1 className="text-lg mb-4">{checklist.name + " Checklist"}</h1>
-                        <Accordion key={index} items={checklist.list} />
+                        <Accordion key={index} items={checklist.list} handleEditQuestion={handleEditQuestion} />
                     </div>
                 </div>
             ))}
@@ -157,6 +165,7 @@ const PharmacyDetail = () => {
                     ))}
                 </div>
             </div>
+            {isAddQuestion && <AddNewQuestionModal />}
         </>
     )
 }

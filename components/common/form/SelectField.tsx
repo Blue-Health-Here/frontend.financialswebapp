@@ -9,9 +9,10 @@ interface SelectFieldProps {
     options: { value: string; label: string }[];
     className?: string;
     ref?: any;
+    onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ className, ref, label, options, ...props }) => {
+const SelectField: React.FC<SelectFieldProps> = ({ className, ref, label, options, onChange, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
@@ -25,6 +26,7 @@ const SelectField: React.FC<SelectFieldProps> = ({ className, ref, label, option
                 ref={ref}
                 {...props}
                 {...field}
+                onChange={onChange}
             >
                 {options.map(option => (
                     <option key={option.value} value={option.value}>

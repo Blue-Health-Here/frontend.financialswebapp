@@ -4,16 +4,8 @@ import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData } from "@/utils/constants";
 import { IoSearch } from "react-icons/io5";
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { setIsShowPharmacy } from '@/store/features/pharmacy/pharmacySlice';
-import PharmacyDetail from './PharmacyDetail';
 const PharmaciesSection = () => {
-    const { isShowPharmacy } = useSelector((state: RootState) => state.pharmacy)
-    const dispatch = useDispatch()
-    const showPharmacyDetail = () => {
-        dispatch(setIsShowPharmacy(true))
-    }
+
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
@@ -27,7 +19,7 @@ const PharmaciesSection = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {pharmacyData.map((pharmacy, index) => (
-                    <PharmacyCard key={index} pharmacy={pharmacy} showPharmacyDetail={showPharmacyDetail} />
+                    <PharmacyCard key={index} pharmacy={pharmacy} />
                 ))}
             </div>
         </div>
