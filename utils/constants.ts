@@ -25,7 +25,7 @@ export const statsData = [
     { value: "10", label: "Pharmacies", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
     { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
     { value: "75%", label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
-]; 
+];
 
 //Admin Category Data
 export const categoryData: Record<string, string[]> = {
@@ -108,3 +108,25 @@ export const budgetChartData = {
     yTitleColor: "#6E6B7B",
     pointStyle: "circle",
 };
+
+
+export const onBoardingchecklists = [
+    {
+        name: 'Onboarding Checklist',
+        progress: 50,
+        list: [
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Content for course 1 goes here.', 'Content for course 1 goes here.', 'Content for course 1 goes here.']
+            },
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Donec sodales scelerisque eleifend.', 'Nullam fermentum nunc nec.']
+            },
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Content for operational task 1.', 'Another point for operational task 1.']
+            },
+        ]
+    },
+];
