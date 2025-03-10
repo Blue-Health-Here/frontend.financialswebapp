@@ -27,7 +27,6 @@ const DashboardSection = () => {
                 </div>
                 <div className="bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
                     <ExpenseChart />
-
                 </div>
             </div>
 
