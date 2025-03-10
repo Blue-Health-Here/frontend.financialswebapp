@@ -78,7 +78,7 @@ const ExpenseChart = () => {
                     weight: 'normal',
                 },
                 padding: {
-                    top: 0,
+                    top: -35,
                     bottom: 5,
                 },
 
