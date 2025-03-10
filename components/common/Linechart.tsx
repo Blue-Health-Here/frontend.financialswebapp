@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import { useEffect, useRef } from "react";
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle, Colors } from "chart.js";
+import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle } from "chart.js";
 import { Line } from "react-chartjs-2";
+import customSubtitlePlugin from "./customSubtitlePlugin";
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle);
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle, customSubtitlePlugin);
 
 const ExpenseChart = () => {
     const chartRef = useRef<ChartJS<"line"> | null>(null);
@@ -41,7 +42,7 @@ const ExpenseChart = () => {
         ],
     };
 
-    const options = {
+    const options: any = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -70,17 +71,17 @@ const ExpenseChart = () => {
             },
             subtitle: {
                 display: true,
-                text: 'This Month\n$86,589',
-                align: 'end',
-                Color: "#6E6B7B",
+                text: '',
+                align: 'center',
                 font: {
-                    size: 14,
+                    size: 18,
                     weight: 'normal',
                 },
                 padding: {
                     top: 0,
-                    bottom: 10,
+                    bottom: 5,
                 },
+
             },
         },
         scales: {
@@ -97,7 +98,7 @@ const ExpenseChart = () => {
     };
 
     return (
-        <div style={{ width: "100%", height: "300px" }}>
+        <div style={{ width: "100%", height: "100%" }}>
             <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} />
         </div>
     );

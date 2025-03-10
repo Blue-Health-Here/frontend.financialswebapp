@@ -59,7 +59,6 @@ const AddNewQuestionModal = () => {
                                 { value: "3 Jan 2024", label: "3 Jan 2024" },
                                 { value: "4 Jan 2024", label: "4 Jan 2024" }
                             ]}
-                            onChange={handleDateSelect}
                         />
                         {selectedDates.length > 0 && (
                             <div>
