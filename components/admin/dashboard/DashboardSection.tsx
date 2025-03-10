@@ -20,11 +20,11 @@ const DashboardSection = () => {
                             icon={item.icon}
                         />))}
                 </div>
-                <div className="bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
+                <div className="w-full h-full bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
                     <BarChart
-                        Xlabels={["Jan", "Feb", "Mar", "Apr"]}
+                        Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]}
                         Ylabels={{
-                            pharmacy: [200, 300, 270, 220, 400],
+                            pharmacy: [80, 100, 220, 180, 80, 120, 120, 140, 160],
                         }}
                         useGradient={false}
                         barColors={["#1E3A8A"]}
@@ -32,6 +32,8 @@ const DashboardSection = () => {
                         yAxisTitle="Total Expense"
                         pointStyle="circle"
                         showTopValues={false}
+                        stepSize={50}
+                        showXLabels={false}
                     />
 
                 </div>
