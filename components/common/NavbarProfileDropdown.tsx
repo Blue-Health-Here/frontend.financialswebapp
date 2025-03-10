@@ -1,11 +1,15 @@
 import { signOutAction } from "@/app/actions"
-import { sidebarItems } from "@/utils/constants"
+import { adminSidebarItems, pharmacySidebarItems } from "@/utils/constants";
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+interface NavbarProfileDropdownProps {
+    role?: string;
+}
 
-const NavbarProfileDropdown = () => {
+const NavbarProfileDropdown: React.FC<NavbarProfileDropdownProps> = ({ role }) => {
     const pathname = usePathname();
+    const sidebarItems = role === 'admin' ? adminSidebarItems : pharmacySidebarItems
     return (
         <div className="absolute right-0 top-full p-4 w-60 bg-primary rounded-lg shadow-lg">
             {sidebarItems.map((item, index) => {

@@ -1,4 +1,4 @@
-import ClientLayout from "@/components/layouts/ClientLayout";
+import ClientLayout from "@/components/layouts/PharmacyLayout";
 import BudgetSection from "@/components/pharmacy/budget/BudgetSection";
 
 import { Metadata } from "next";

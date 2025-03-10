@@ -22,7 +22,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, user }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
-    
+
     // Function to toggle the dropdown
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -75,7 +75,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, user }) => {
                             <Image src={profileImage} alt="" />
                         </button>
                         {isDropdownOpen && (
-                            <NavbarProfileDropdown />
+                            <NavbarProfileDropdown role={role} />
                         )}
                     </div>
                     <FaBars size={22} className='text-primary block lg:hidden' onClick={handleNavbarToggler} />

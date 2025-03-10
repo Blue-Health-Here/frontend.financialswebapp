@@ -11,13 +11,23 @@ export const pharmacyData = [
 ];
 
 // Side bar data 
-export const sidebarItems = [
+export const adminSidebarItems = [
     { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/admin/dashboard" },
     { name: "Pharmacies", icon: "/sidebar-pharmacy.svg", path: "/admin/pharmacies" },
     { name: "Budget", icon: "/sidebar-budget.svg", path: "/admin/budget" },
     { name: "Checklist", icon: "/sidebar-checklist.svg", path: "/admin/checklist" },
     { name: "Courses", icon: "/sidebar-courses.svg", path: "/admin/courses" },
     { name: "Categories", icon: "/sidebar-categories.svg", path: "/admin/categories" },
+    { name: "Profile", icon: "/sidebar-profile.svg", path: "/admin/profile" }
+];
+
+export const pharmacySidebarItems = [
+    { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/pharmacy/dashboard" },
+    { name: "Budget", icon: "/sidebar-budget.svg", path: "/pharmacy/budget" },
+    { name: "Onboarding Checklist", icon: "/sidebar-checklist.svg", path: "/pharmacy/pharmacies" },
+    { name: "Operations Checklist", icon: "/sidebar-operations-checklis.svg", path: "/pharmacy/checklist" },
+    { name: "Document Verification", icon: "/sidebar-docs-verification.svg", path: "/pharmacy/courses" },
+    { name: "Courses", icon: "/sidebar-courses.svg", path: "/pharmacy/courses" },
     { name: "Profile", icon: "/sidebar-profile.svg", path: "/admin/profile" }
 ];
 
