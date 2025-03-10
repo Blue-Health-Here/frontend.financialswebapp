@@ -6,6 +6,7 @@ import marketingReducer from "./features/marketing/marketingSlice"
 import categoryReducer from "./features/category/categorySlice"
 import expenseReducer from "./features/expense/expenseSlice";
 import globalReducer from "./features/global/globalSlice"
+import pharmacyReducer from "./features/pharmacy/pharmacySlice";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     marketing: marketingReducer,
     category: categoryReducer,
     expense: expenseReducer,
-    global: globalReducer
+    global: globalReducer,
+    pharmacy: pharmacyReducer,
 });
 
 export default rootReducer

@@ -1,11 +1,13 @@
+import { useState } from "react";
+
 // Pharmacy card data 
 export const pharmacyData = [
-    { name: "Pharmacy XYZ", expense: "1500.00", courses: "2 / 5", progress: 50, image: "/avatar.jpg" },
-    { name: "Pharmacy ABC", expense: "1200.00", courses: "3 / 5", progress: 60, image: "/avatar2.jpg" },
-    { name: "Pharmacy DEF", expense: "1800.00", courses: "4 / 5", progress: 80, image: "/avatar3.jpg" },
-    { name: "Pharmacy GHI", expense: "1300.00", courses: "1 / 5", progress: 30, image: "/avatar4.jpg" },
-    { name: "Pharmacy JKL", expense: "1400.00", courses: "3 / 5", progress: 70, image: "/avatar5.jpg" },
-    { name: "Pharmacy MNO", expense: "1100.00", courses: "2 / 5", progress: 40, image: "/avatar6.jpg" },
+    { id: 1, name: "Pharmacy XYZ-1", expense: "1500.00", courses: "2 / 5", progress: 50, image: "/Ellipse.png" },
+    { id: 2, name: "Pharmacy ABC-2", expense: "1200.00", courses: "3 / 5", progress: 60, image: "/Ellipse.png" },
+    { id: 3, name: "Pharmacy DEF-3", expense: "1800.00", courses: "4 / 5", progress: 80, image: "/Ellipse.png" },
+    { id: 4, name: "Pharmacy GHI-4", expense: "1300.00", courses: "1 / 5", progress: 30, image: "/Ellipse.png" },
+    { id: 5, name: "Pharmacy JKL-5", expense: "1400.00", courses: "3 / 5", progress: 70, image: "/Ellipse.png" },
+    { id: 6, name: "Pharmacy MNO-6", expense: "1100.00", courses: "2 / 5", progress: 40, image: "/Ellipse.png" },
 ];
 
 // Side bar data 
@@ -72,7 +74,6 @@ export const marketinMaterial = ['Marketing Material 1', 'Marketing Material 2',
 
 export const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
 
-
 export const expenseCategories = [
     { name: "Utilities", budget: "$10,000", actual: "$8,000", percentage: 15 },
     { name: "Salaries", budget: "$10,000", actual: "$12,000", percentage: 15 },
@@ -108,3 +109,13 @@ export const budgetChartData = {
     yTitleColor: "#6E6B7B",
     pointStyle: "circle",
 };
+
+export const courseData = [
+    { id: 1, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada ipsum nec tellus consequat, vitae dictum ", isSelected: false },
+    { id: 2, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada ipsum nec tellus consequat, vitae dictum ", isSelected: false },
+    { id: 3, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada ipsum nec tellus consequat, vitae dictum .", isSelected: false },
+    { id: 4, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada ipsum nec tellus consequat, vitae dictum ", isSelected: false },
+    { id: 5, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada ipsum nec tellus consequat, vitae dictum ", isSelected: false },
+    { id: 6, title: "Course Title", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada ipsum nec tellus consequat, vitae dictum ", isSelected: false },
+];
+

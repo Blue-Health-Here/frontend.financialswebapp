@@ -1,9 +1,11 @@
+"use client"
 import React from 'react'
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData } from "@/utils/constants";
 import { IoSearch } from "react-icons/io5";
 const PharmaciesSection = () => {
+
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
