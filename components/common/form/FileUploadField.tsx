@@ -9,10 +9,11 @@ interface FileUploadFieldProps {
     label?: string;
     name: string;
     className?: string;
+    title?: string;
     isMultiSelect?: boolean;
 }
 
-const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, className, isMultiSelect = false }) => {
+const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, className, title, isMultiSelect = false }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
 
@@ -36,15 +37,19 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, classNam
 
     return (
         <>
-            <div className="flex flex-col gap-y-3">
+            <div className="flex flex-col gap-4">
                 {label && <Label size="xs" htmlFor={name}>{label}</Label>}
-                <div className={`grid  ${isMultiSelect ? "grid-cols-3 gap-4" : "grid-cols-1"} `}>
-                    {preview.map((file, index) => (
-                        <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
-                    ))}
-                </div>
+                {
+                    preview.length > 0 && (
+                        <div className={`grid  ${isMultiSelect ? "grid-cols-3 gap-4" : "grid-cols-1"} `}>
+                            {preview.map((file, index) => (
+                                <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
+                            ))}
+                        </div>
+                    )
+                }
 
-                <SubmitButton type="button" className={`relative mb-4 p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
+                <SubmitButton type="button" className={`relative p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
                     <input
                         type="file"
                         multiple={isMultiSelect}
@@ -52,13 +57,13 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, classNam
                         name={name}
                         className="absolute left-0 right-0 top-0 bottom-0 opacity-0"
                     />
-                    <MdOutlineFileUpload className="w-5 h-5 text-primary" /> <p className="ml-2">Upload</p>
+                    <MdOutlineFileUpload className="w-5 h-5 text-primary" /> <p className="ml-2">{title}</p>
                 </SubmitButton>
-            </div>
 
-            {meta.touched && meta.error && (
-                <p className="text-red-500 text-sm mt-1">{meta.error}</p>
-            )}
+                {meta.touched && meta.error && (
+                    <p className="text-red-500 text-sm mt-1">{meta.error}</p>
+                )}
+            </div>
         </>
     );
 };

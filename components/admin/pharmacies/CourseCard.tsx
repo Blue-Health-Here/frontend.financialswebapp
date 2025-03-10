@@ -12,13 +12,13 @@ const CourseCard = ({ title, description }: any) => {
     };
     return (
         <div
-            className="bg-white p-4 shadow-md rounded-lg min-h-[125px] flex flex-col cursor-pointer"
+            className="bg-white p-7 shadow-md rounded-lg min-h-[125px] cursor-pointer"
             onClick={handleCardClick}
         >
-            <div className="flex justify-between items-center">
-                <div>
-                    <h3 className="font-semibold text-lg">{title}</h3>
-                    <p className="text-gray-500 text-sm">{description}</p>
+            <div className="flex justify-between">
+                <div className="space-y-3">
+                    <h3 className="font-medium text-sm">{title}</h3>
+                    <p className="text-gray-500 text-xs">{description}</p>
                 </div>
                 <label className="custom-checkbox" htmlFor={`checkbox-${title}`}>
                     <input

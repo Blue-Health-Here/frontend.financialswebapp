@@ -14,7 +14,7 @@ const AddMarketingModal = () => {
     const handleClose = () => {
         dispatch(setIsAddMarketing(false));
     };
-    
+
     return (
         <Modal>
             <div className="bg-white w-96 h-full">
@@ -41,7 +41,7 @@ const AddMarketingModal = () => {
                                 ]}
                             />
                             <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
-                            <FileUploadField name="file" />
+                            <FileUploadField title="Upload" name="file" />
 
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
                         </Form>
