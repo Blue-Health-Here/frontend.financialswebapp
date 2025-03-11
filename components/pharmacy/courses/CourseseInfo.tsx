@@ -6,42 +6,40 @@ const CourseInfo = () => {
   const [checked, setChecked] = useState(false);
 
   return (
-    <div className="bg-white shadow-lg rounded-sm p-6">
+    <label
+      className="bg-white shadow-lg rounded-sm p-6 block cursor-pointer"
+      onClick={() => setChecked(!checked)}
+    >
       <div className="flex items-center justify-between">
         <span className="text-gray-800 font-semibold">Course Title</span>
-        <label className="flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="hidden"
-            checked={checked}
-            onChange={() => setChecked(!checked)}
-          />
-          <div
-            className={`w-[17px] h-[17px] flex items-center justify-center border-2 border-gray-500 rounded-full transition-all 
-            ${checked ? "bg-[#0BD700] border-[#0BD700]" : "bg-white border-gray-500"}`}
-          >
-            {checked && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                className="w-[14px] h-[14px]"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M20.707 5.293a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L10 14.586l9.293-9.293a1 1 0 0 1 1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-          </div>
-        </label>
+        <div
+          className={`w-[17px] h-[17px] flex items-center justify-center border-2 rounded-full transition-all 
+          ${checked ? "bg-[#0BD700] border-[#0BD700]" : "bg-white border-gray-500"}`}
+        >
+          {checked && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="white"
+              className="w-[14px] h-[14px]"
+            >
+              <path
+                fillRule="evenodd"
+                d="M20.707 5.293a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L10 14.586l9.293-9.293a1 1 0 0 1 1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          )}
+        </div>
       </div>
       <p className="text-gray-600 text-sm mt-1">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima deleniti
         tempore adipisci pariatuur...
       </p>
-      <button className="mt-2 bg-[#1E3A8A] text-white px-4 py-2 rounded-md transition w-full flex items-center justify-center gap-2">
+      <button
+        className="mt-2 bg-[#1E3A8A] text-white px-4 py-2 rounded-md transition w-full flex items-center justify-center gap-2"
+        onClick={(e) => e.stopPropagation()} // Prevents toggling when clicking the button
+      >
         <svg
           width="17"
           height="17"
@@ -56,7 +54,7 @@ const CourseInfo = () => {
         </svg>
         Download File
       </button>
-    </div>
+    </label>
   );
 };
 
