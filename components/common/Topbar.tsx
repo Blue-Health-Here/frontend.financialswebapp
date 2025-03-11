@@ -12,16 +12,18 @@ import { capitalize } from '@/utils/helperClient'
 import { FaBars } from 'react-icons/fa'
 import { setIsSidebarOpen } from '@/store/features/global/globalSlice'
 import { setUser } from '@/store/features/auth/authSlice'
+import { Session } from '@supabase/supabase-js'
 
 interface TopbarProps {
     role?: string;
-    user?: any | null | undefined
+    session: Session | null
 }
 
-const Topbar: React.FC<TopbarProps> = ({ role, user }) => {
+const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
+    const { user } = session ?? {};
 
     // Function to toggle the dropdown
     const toggleDropdown = () => {
@@ -37,8 +39,8 @@ const Topbar: React.FC<TopbarProps> = ({ role, user }) => {
 
     // Add event listener for clicking outside
     useEffect(() => {
-        if (user) {
-            dispatch(setUser(user));
+        if (session) {
+            dispatch(setUser(session));
         }
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -58,7 +60,6 @@ const Topbar: React.FC<TopbarProps> = ({ role, user }) => {
         dispatch(setIsSidebarOpen(true));
     }
 
-    console.log(user, "user");
     return (
         <div className="bg-bodyBG fixed top-0 left-0 lg:left-[250px] xl:left-[300px] right-0 px-6 py-4 z-50">
             <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
