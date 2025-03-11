@@ -14,8 +14,8 @@ import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setIsAddExpense } from '@/store/features/expense/expenseSlice';
-import AddExpenseModal from '@/components/admin/budget/AddExpenseModal';
+import AddExpenseModal from './AddExpenseModal';
+import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpense';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();

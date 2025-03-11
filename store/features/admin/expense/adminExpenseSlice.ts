@@ -4,9 +4,9 @@ const initialState = {
     isAddExpense: false
 };
 
-const expenseSlice = createSlice({
-  name: 'expense',
-    initialState, 
+const adminExpenseSlice = createSlice({
+    name: 'expense',
+    initialState,
     reducers: {
         setIsAddExpense: (state, action) => {
             state.isAddExpense = action.payload;
@@ -14,6 +14,6 @@ const expenseSlice = createSlice({
     }
 });
 
-export const { setIsAddExpense } = expenseSlice.actions;
+export const { setIsAddExpense } = adminExpenseSlice.actions;
 
-export default expenseSlice.reducer;
+export default adminExpenseSlice.reducer;

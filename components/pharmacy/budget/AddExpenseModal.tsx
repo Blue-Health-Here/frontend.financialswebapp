@@ -5,7 +5,7 @@ import InputField from "@/components/common/form/InputField";
 import SelectField from "@/components/common/form/SelectField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
-import { setIsAddExpense } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setIsAddExpense } from "@/store/features/pharmacy/expense/pharmacyExpense";
 
 const AddExpenseModal = () => {
     const dispatch = useDispatch();

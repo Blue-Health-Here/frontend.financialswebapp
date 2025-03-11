@@ -14,7 +14,7 @@ import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import AddExpenseModal from './AddExpenseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddExpense } from '@/store/features/expense/expenseSlice';
+import { setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
 import { RootState } from '@/store/store';
 
 const BudgetSection = () => {

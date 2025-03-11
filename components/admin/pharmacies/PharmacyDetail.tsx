@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setIsAddQuestion } from '@/store/features/pharmacy/pharmacySlice';
+import { setIsAddQuestion } from '@/store/features/admin/pharmacy/adminPharmacySlice';
 import AddNewQuestionModal from './AddNewQuestionModal';
 
 const PharmacyDetail = () => {

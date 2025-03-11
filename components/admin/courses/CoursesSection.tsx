@@ -5,7 +5,7 @@ import InfoCard from "../../common/InfoCard";
 import AddCourseModal from "./AddCourseModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddCourse } from "@/store/features/course/courseSlice";
+import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";

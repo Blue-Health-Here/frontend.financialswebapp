@@ -5,7 +5,7 @@ const initialState = {
     isEditQuestion: false
 }
 
-const checklistSlice = createSlice({
+const adminChecklistSlice = createSlice({
     name: "checklist",
     initialState,
     reducers: {
@@ -18,6 +18,6 @@ const checklistSlice = createSlice({
     }
 })
 
-export const { setIsAddQuestion, setIsEditQuestion } = checklistSlice.actions
+export const { setIsAddQuestion, setIsEditQuestion } = adminChecklistSlice.actions
 
-export default checklistSlice.reducer
+export default adminChecklistSlice.reducer
