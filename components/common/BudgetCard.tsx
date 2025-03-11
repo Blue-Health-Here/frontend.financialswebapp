@@ -1,6 +1,6 @@
 "use client"
 
-import { setIsAddExpense } from "@/store/features/pharmacy/expense/pharmacyExpense";
+import { setIsAddExpense } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 

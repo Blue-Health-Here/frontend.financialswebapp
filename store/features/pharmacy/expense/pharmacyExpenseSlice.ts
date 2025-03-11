@@ -4,7 +4,7 @@ const initialState = {
     isAddExpense: false
 };
 
-const pharmacyExpense = createSlice({
+const pharmacyExpenseSlice = createSlice({
     name: 'expense',
     initialState,
     reducers: {
@@ -14,6 +14,6 @@ const pharmacyExpense = createSlice({
     }
 });
 
-export const { setIsAddExpense } = pharmacyExpense.actions;
+export const { setIsAddExpense } = pharmacyExpenseSlice.actions;
 
-export default pharmacyExpense.reducer;
+export default pharmacyExpenseSlice.reducer;

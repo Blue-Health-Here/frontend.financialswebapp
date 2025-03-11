@@ -15,12 +15,12 @@ import FileDownloadField from '@/components/common/form/FileDownloadField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
-import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpense';
+import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch();
-    const { isAddExpense } = useSelector((state: RootState) => state.expense)
+    const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
