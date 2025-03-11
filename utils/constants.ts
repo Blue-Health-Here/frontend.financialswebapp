@@ -28,7 +28,7 @@ export const pharmacySidebarItems = [
     { name: "Operations Checklist", icon: "/sidebar-operations-checklis.svg", path: "/pharmacy/checklist" },
     { name: "Document Verification", icon: "/sidebar-docs-verification.svg", path: "/pharmacy/courses" },
     { name: "Courses", icon: "/sidebar-courses.svg", path: "/pharmacy/courses" },
-    { name: "Profile", icon: "/sidebar-profile.svg", path: "/admin/profile" }
+    { name: "Profile", icon: "/sidebar-profile.svg", path: "/pharmacy/profile" }
 ];
 
 // statistic card data
