@@ -8,7 +8,7 @@ import { marketinMaterial } from '@/utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddMarketingModal from './AddMarketingModal';
-import { setIsAddMarketing } from '@/store/features/marketing/marketingSlice';
+import { setIsAddMarketing } from '@/store/features/admin/marketing/adminMarketingSlice';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
 
