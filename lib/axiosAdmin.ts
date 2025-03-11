@@ -15,7 +15,6 @@ export const axiosAdmin: AxiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Ensures cookies (if needed) are sent with requests
 });
 
 // Request Interceptor to attach Authorization token
