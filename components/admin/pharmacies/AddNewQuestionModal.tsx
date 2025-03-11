@@ -5,7 +5,7 @@ import InputField from "@/components/common/form/InputField";
 import SelectField from "@/components/common/form/SelectField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
-import { setIsAddQuestion } from "@/store/features/pharmacy/pharmacySlice";
+import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import TextareaField from "@/components/common/form/TextareaField";
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";

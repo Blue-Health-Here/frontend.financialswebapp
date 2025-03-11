@@ -12,9 +12,15 @@ import BarChart from '@/components/common/BarChart';
 import useWindowSize from '@/hooks/useWindowSize';
 import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
+import AddExpenseModal from './AddExpenseModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
+import { RootState } from '@/store/store';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
+    const dispatch = useDispatch();
+    const { isAddExpense } = useSelector((state: RootState) => state.expense)
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
@@ -71,7 +77,8 @@ const BudgetSection = () => {
                 <div className="flex items-center justify-between flex-wrap gap-4 py-6">
                     <div className="flex items-center space-x-3">
                         <h4 className="text-[16px] text-gray-700">Add Expense</h4>
-                        <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary">
+                        <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary"
+                            onClick={() => { dispatch(setIsAddExpense(true)) }}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
@@ -88,7 +95,9 @@ const BudgetSection = () => {
                         <BudgetCard key={index} budget={budget} />
                     ))}
                 </div>
-            </div></>
+            </div>
+            {isAddExpense && <AddExpenseModal />}
+        </>
     )
 }
 

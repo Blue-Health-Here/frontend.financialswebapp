@@ -4,7 +4,7 @@ const initialState = {
     isAddQuestion: false
 }
 
-const pharmacySlice = createSlice({
+const adminPharmacySlice = createSlice({
     name: 'pharmacy',
     initialState,
     reducers: {
@@ -14,5 +14,5 @@ const pharmacySlice = createSlice({
     }
 })
 
-export const { setIsAddQuestion } = pharmacySlice.actions
-export default pharmacySlice.reducer
+export const { setIsAddQuestion } = adminPharmacySlice.actions
+export default adminPharmacySlice.reducer
