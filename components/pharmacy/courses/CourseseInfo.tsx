@@ -39,7 +39,7 @@ const CourseInfo = () => {
       </div>
       <p className="text-gray-600 text-sm mt-1">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima deleniti
-        tempore adipisci pariatur...
+        tempore adipisci pariatuur...
       </p>
       <button className="mt-2 bg-[#1E3A8A] text-white px-4 py-2 rounded-md transition w-full flex items-center justify-center gap-2">
         <svg
