@@ -13,7 +13,7 @@ interface FileUploadFieldProps {
     isMultiSelect?: boolean;
     description?: string;
     variant?: "button" | "dropzone";
-    id: string
+    id?: string
 }
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
