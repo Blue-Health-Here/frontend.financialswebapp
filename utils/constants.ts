@@ -25,7 +25,7 @@ export const pharmacySidebarItems = [
     { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/pharmacy/dashboard" },
     { name: "Budget", icon: "/sidebar-budget.svg", path: "/pharmacy/budget" },
     { name: "Onboarding Checklist", icon: "/sidebar-checklist.svg", path: "/pharmacy/pharmacies" },
-    { name: "Operations Checklist", icon: "/sidebar-operations-checklis.svg", path: "/pharmacy/checklist" },
+    { name: "Operations Checklist", icon: "/sidebar-operations-checklis.svg", path: "/pharmacy/operations" },
     { name: "Document Verification", icon: "/sidebar-docs-verification.svg", path: "/pharmacy/courses" },
     { name: "Courses", icon: "/sidebar-courses.svg", path: "/pharmacy/courses" },
     { name: "Profile", icon: "/sidebar-profile.svg", path: "/pharmacy/profile" }
@@ -171,6 +171,27 @@ export const budgetData = [
 export const onBoardingchecklists = [
     {
         name: 'Onboarding Checklist',
+        progress: 50,
+        list: [
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Content for course 1 goes here.', 'Content for course 1 goes here.', 'Content for course 1 goes here.']
+            },
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Donec sodales scelerisque eleifend.', 'Nullam fermentum nunc nec.']
+            },
+            {
+                title: 'Pharmacy Policy & Procedures',
+                content: ['Content for operational task 1.', 'Another point for operational task 1.']
+            },
+        ]
+    },
+];
+
+export const operationalchecklists = [
+    {
+        name: 'Operational Checklist',
         progress: 50,
         list: [
             {
