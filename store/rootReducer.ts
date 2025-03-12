@@ -8,6 +8,7 @@ import adminExpenseReducer from "./features/admin/expense/adminExpenseSlice";
 import globalReducer from "./features/global/globalSlice"
 import adminPharmacyReducer from "./features/admin/pharmacy/adminPharmacySlice";
 import pharmacyExpenseReducer from "./features/pharmacy/expense/pharmacyExpenseSlice";
+import operationsExpenseReducer from "./features/pharmacy/operations/operationsExpenseSlice"
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     pharmacy: adminPharmacyReducer,
 
     // Pharmacy Reducers
-    pharmacyExpense: pharmacyExpenseReducer
+    pharmacyExpense: pharmacyExpenseReducer,
+    operations: operationsExpenseReducer
 });
 
 export default rootReducer;
