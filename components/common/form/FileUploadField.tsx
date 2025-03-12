@@ -38,7 +38,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, classNam
     return (
         <>
             <div className="flex flex-col gap-4">
-                {label && <Label size="xs" htmlFor={name}>{label}</Label>}
+                {label && <Label size="xs" className="text-[#6E6B7B]" htmlFor={name}>{label}</Label>}
                 {
                     preview.length > 0 && (
                         <div className={`grid  ${isMultiSelect ? "grid-cols-3 gap-4" : "grid-cols-1"} `}>

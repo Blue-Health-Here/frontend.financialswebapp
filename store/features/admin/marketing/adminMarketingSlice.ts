@@ -4,7 +4,7 @@ const initialState = {
     isAddMarketing: false
 }
 
-const marketingSlice = createSlice({
+const adminMarketingSlice = createSlice({
     name: 'marketing',
     initialState,
     reducers: {
@@ -14,5 +14,5 @@ const marketingSlice = createSlice({
     }
 })
 
-export const { setIsAddMarketing } = marketingSlice.actions
-export default marketingSlice.reducer
+export const { setIsAddMarketing } = adminMarketingSlice.actions
+export default adminMarketingSlice.reducer

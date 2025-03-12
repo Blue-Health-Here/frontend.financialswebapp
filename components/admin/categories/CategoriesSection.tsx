@@ -9,7 +9,7 @@ import { categoryData } from "@/utils/constants";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from '@/components/submit-button';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddCategory } from '@/store/features/category/categorySlice';
+import { setIsAddCategory } from '@/store/features/admin/category/adminCategorySlice';
 import { RootState } from '@/store/store';
 import AddCategoryModal from './AddCategoryModal';
 const CategoriesSection = () => {
