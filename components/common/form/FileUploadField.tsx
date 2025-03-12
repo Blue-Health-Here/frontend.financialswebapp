@@ -11,15 +11,26 @@ interface FileUploadFieldProps {
     className?: string;
     title?: string;
     isMultiSelect?: boolean;
+    description?: string;
+    variant?: "button" | "dropzone";
+    id?: string
 }
 
-const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, className, title, isMultiSelect = false }) => {
+const FileUploadField: React.FC<FileUploadFieldProps> = ({
+    label,
+    name,
+    className = "",
+    title,
+    description,
+    isMultiSelect = false,
+    variant = "button",
+    id
+}) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(event.currentTarget.files || []);
-        console.log("Selected files:", files);
         if (isMultiSelect) {
             setPreview((prev) => [...prev, ...files]);
             helpers.setValue([...(field.value || []), ...files]);
@@ -36,35 +47,53 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({ label, name, classNam
     };
 
     return (
-        <>
-            <div className="flex flex-col gap-4">
-                {label && <Label size="xs" className="text-[#6E6B7B]" htmlFor={name}>{label}</Label>}
-                {
-                    preview.length > 0 && (
-                        <div className={`grid  ${isMultiSelect ? "grid-cols-3 gap-4" : "grid-cols-1"} `}>
-                            {preview.map((file, index) => (
-                                <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
-                            ))}
-                        </div>
-                    )
-                }
+        <div className="flex flex-col gap-4">
+            {label && <Label size="xs" className="text-[#6E6B7B]" htmlFor={name}>{label}</Label>}
 
+            {preview.length > 0 && (
+                <div className={`grid ${isMultiSelect ? "grid-cols-3 gap-4" : "grid-cols-1"}`}>
+                    {preview.map((file, index) => (
+                        <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
+                    ))}
+                </div>
+            )}
+
+            {variant === "button" ? (
+                // Button-style upload
                 <SubmitButton type="button" className={`relative p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
                     <input
                         type="file"
                         multiple={isMultiSelect}
                         onChange={handleFileChange}
                         name={name}
-                        className="absolute left-0 right-0 top-0 bottom-0 opacity-0"
+                        className="absolute left-0 right-0 top-0 bottom-0 opacity-0 cursor-pointer"
                     />
-                    <MdOutlineFileUpload className="w-5 h-5 text-primary" /> <p className="ml-2">{title}</p>
+                    <MdOutlineFileUpload className="w-5 h-5 text-primary" />
+                    <p className="ml-2">{title}</p>
                 </SubmitButton>
+            ) : (
+                // Dropzone-style upload
+                <div className="flex justify-center items-center border-dashed border h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
+                    <label htmlFor={id} className="flex flex-col items-center cursor-pointer">
+                        <MdOutlineFileUpload className="w-10 h-10 text-[#969696]" />
+                        <h2 className="font-semibold">{title}</h2>
+                        {description && <p className="text-xs text-[#969696]">{description}</p>}
+                    </label>
+                    <input
+                        id={id}
+                        type="file"
+                        multiple={isMultiSelect}
+                        onChange={handleFileChange}
+                        className="hidden"
+                    />
+                </div>
 
-                {meta.touched && meta.error && (
-                    <p className="text-red-500 text-sm mt-1">{meta.error}</p>
-                )}
-            </div>
-        </>
+            )}
+
+            {meta.touched && meta.error && (
+                <p className="text-red-500 text-sm mt-1">{meta.error}</p>
+            )}
+        </div>
     );
 };
 
