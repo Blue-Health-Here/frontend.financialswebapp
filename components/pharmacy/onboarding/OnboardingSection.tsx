@@ -2,71 +2,69 @@
 
 import React from "react";
 import { Input } from "@/components/ui/input";
-import {
-  onBoardingchecklists,
-  pharmacyData,
-  statsData,
-} from "@/utils/constants";
-import { StatsCard } from "@/components/common/StatsCard";
+import { onBoardingchecklists } from "@/utils/constants";
 import { IoSearch, IoDownload } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
-import ExpenseChart from "@/components/common/Linechart";
 import { Form, Formik } from "formik";
 import SelectField from "@/components/common/form/SelectField";
 
 const OnboardingSection = () => {
   return (
     <>
-      <div className="w-full mt-6  px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
-        <div className="flex justify-end items-end gap-4">
-          <button className="border-none shadow-lg rounded-md font-semibold min-w-40 h-10 bg-[#93C5FD] hover:bg-blue-400 transition-all flex items-center gap-x-2 justify-center text-[#1E3A8A] text-md">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
-                fill="#1E3A8A"
-              />
-            </svg>
-            Report
-          </button>
-          <Formik
-            initialValues={{ category: "", search: "" }}
-            onSubmit={() => {}}
-          >
-            {({ isSubmitting }) => (
-              <Form className="flex  min-w-64 text-grey gap-4 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
-                <SelectField
-                  className="border-none shadow-lg rounded-lg font-medium min-w-48 h-10"
-                  name="category"
-                  options={[
-                    { value: "Al Categories", label: "Al Categories" },
-                    { value: "operational", label: "Operational" },
-                  ]}
+      <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
+        <div className="flex justify-between items-center gap-4">
+          <h1 className="text-2xl font-semibold flex-1 text-nowrap">
+            {onBoardingchecklists[0].name}
+          </h1>
+
+          <div className="flex items-center gap-4">
+            <button className="border-none shadow-lg rounded-md font-semibold min-w-40 h-10 bg-[#93C5FD] hover:bg-blue-400 transition-all flex items-center gap-x-2 justify-center text-[#1E3A8A] text-md">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
+                  fill="#1E3A8A"
                 />
-                <div className="relative sm:max-w-md">
-                  <Input
-                    name="search"
-                    placeholder="Search Checklist"
-                    className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
+              </svg>
+              Report
+            </button>
+            <Formik
+              initialValues={{ category: "", search: "" }}
+              onSubmit={() => {}}
+            >
+              {({ isSubmitting }) => (
+                <Form className="flex min-w-64 text-grey gap-4">
+                  <SelectField
+                    className="border-none shadow-lg rounded-lg font-medium min-w-48 h-10"
+                    name="category"
+                    options={[
+                      { value: "Al Categories", label: "Al Categories" },
+                      { value: "operational", label: "Operational" },
+                    ]}
                   />
-                  <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                    <IoSearch size={18} />
-                  </span>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  <div className="relative sm:max-w-md">
+                    <Input
+                      name="search"
+                      placeholder="Search Checklist"
+                      className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
+                    />
+                    <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
+                      <IoSearch size={18} />
+                    </span>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
+
         {onBoardingchecklists.map((checklist, index) => (
-          <div className="flex flex-col gap-6" key={index}>
-            <div className="py-4 flex justify-between items-center gap-4">
-              <h1 className="text-lg mb-4">{checklist.name}</h1>
-            </div>
+          <div className="flex flex-col gap-6 mt-6" key={index}>
             <div>
               <p className="font-semibold">Checklist Progress</p>
               <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
