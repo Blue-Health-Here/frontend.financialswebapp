@@ -1,13 +1,18 @@
+"use client"
+
+import { setIsAddExpense } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 
 export const BudgetCard = ({ budget, className }: any) => {
+    const dispatch = useDispatch();
     return (
         <div className={`bg-white p-6 shadow-md rounded-lg flex flex-col ${className}`}>
             <div className="flex justify-between items-center mb-3">
                 <h2 className="font-bold">{budget.name}</h2>
-                <div className="flex gap-2">
+                <div className="flex gap-2 cursor-pointer">
                     <Image src="/delete-icon.svg" alt="Delete" width={20} height={20} />
-                    <Image src="/edit-icon.svg" alt="Edit" width={20} height={20} />
+                    <Image src="/edit-icon.svg" alt="Edit" width={20} height={20} onClick={() => { dispatch(setIsAddExpense(true)) }} />
                 </div>
             </div>
 

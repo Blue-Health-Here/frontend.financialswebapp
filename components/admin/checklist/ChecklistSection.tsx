@@ -11,7 +11,7 @@ import { IoSearch } from "react-icons/io5";
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddQuestion, setIsEditQuestion } from "@/store/features/checklist/checklistSlice";
+import { setIsAddQuestion, setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
 import EditQuestionModal from "./EditQuestionModal";
 
 const ChecklistSection = () => {

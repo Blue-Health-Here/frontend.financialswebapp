@@ -8,7 +8,7 @@ import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { setIsAddMarketing } from '@/store/features/marketing/marketingSlice';
+import { setIsAddMarketing } from '@/store/features/admin/marketing/adminMarketingSlice';
 const AddMarketingModal = () => {
     const dispatch = useDispatch();
     const handleClose = () => {

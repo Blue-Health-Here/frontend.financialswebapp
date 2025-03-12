@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setIsAddCourse } from "@/store/features/course/courseSlice";
+import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
