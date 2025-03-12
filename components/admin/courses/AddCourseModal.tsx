@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setIsAddCourse } from "@/store/features/course/courseSlice";
+import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
@@ -41,7 +41,7 @@ const AddCourseModal = () => {
                                 ]}
                             />
                             <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
-                            <FileUploadField title="Upload" name="file" />
+                            <FileUploadField title="Upload" name="file" id="" />
 
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
                         </Form>

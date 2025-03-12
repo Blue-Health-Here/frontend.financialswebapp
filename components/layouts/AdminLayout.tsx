@@ -11,22 +11,18 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // if (user) {
-  const role = await getUserRole(user);
-  // if (role !== "admin") {
-  //   redirect("/not-found");
-  // }
-  // }
+  const { data: { session }, error } = await supabase.auth.getSession();
+  
+  const role = await getUserRole(session?.user);
+  if (role !== "admin") {
+    redirect("/not-found");
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-100 overflow-x-hidden">
       <Sidebar role={role} />
       <div className="w-full">
-        <Topbar role={role} user={user} />
+        <Topbar role={role} session={session} />
         <div className="ml-auto lg:ml-[250px] xl:ml-[300px] min-h-screen p-6 pt-[6.7rem]">
           {children}
         </div>

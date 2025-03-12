@@ -4,9 +4,9 @@ const initialState = {
     isAddCategory: false
 };
 
-const categorySlice = createSlice({
-  name: 'category',
-    initialState, 
+const adminCategorySlice = createSlice({
+    name: 'category',
+    initialState,
     reducers: {
         setIsAddCategory: (state, action) => {
             state.isAddCategory = action.payload;
@@ -14,6 +14,6 @@ const categorySlice = createSlice({
     }
 });
 
-export const { setIsAddCategory } = categorySlice.actions;
+export const { setIsAddCategory } = adminCategorySlice.actions;
 
-export default categorySlice.reducer;
+export default adminCategorySlice.reducer;
