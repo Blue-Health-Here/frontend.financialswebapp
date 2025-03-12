@@ -24,7 +24,7 @@ export const adminSidebarItems = [
 export const pharmacySidebarItems = [
     { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/pharmacy/dashboard" },
     { name: "Budget", icon: "/sidebar-budget.svg", path: "/pharmacy/budget" },
-    { name: "Onboarding Checklist", icon: "/sidebar-checklist.svg", path: "/pharmacy/pharmacies" },
+    { name: "Onboarding Checklist", icon: "/sidebar-checklist.svg", path: "/pharmacy/onboarding" },
     { name: "Operations Checklist", icon: "/sidebar-operations-checklis.svg", path: "/pharmacy/checklist" },
     { name: "Document Verification", icon: "/sidebar-docs-verification.svg", path: "/pharmacy/document" },
     { name: "Courses", icon: "/sidebar-courses.svg", path: "/pharmacy/courses" },
