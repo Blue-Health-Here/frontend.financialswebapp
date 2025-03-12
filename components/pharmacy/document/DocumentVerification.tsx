@@ -14,17 +14,23 @@ const DocumentVerification = () => {
     <>
       <div className="px-6 py-8 bg-white shadow-lg rounded-lg">
         <h1>Document Verification</h1>
-        <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+        <Formik
+          initialValues={{ document835: null, bankStatement: null }}
+          onSubmit={(values) => {
+          }}
+        >
           <Form className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <FileUploadField
-              name="document"
+              name="document835"
+              id="document835"
               title="Upload 835 File"
               description="Maximum size allowed is 25MB. Supported formats: pdf"
               variant="dropzone"
             />
             <FileUploadField
-              name="document"
-              title="Upload 835 File"
+              name="bankStatement"
+              id="bankStatement"
+              title="Upload Bank Statement"
               description="Maximum size allowed is 25MB. Supported formats: pdf"
               variant="dropzone"
             />
@@ -34,8 +40,8 @@ const DocumentVerification = () => {
               </SubmitButton>
             </div>
           </Form>
-
         </Formik>
+
       </div>
 
 
@@ -43,15 +49,15 @@ const DocumentVerification = () => {
       {/* History Table */}
       <div className="mt-6 py-8 bg-white shadow-lg rounded-lg overflow-hidden">
 
-        <div className="pb-6 flex justify-between items-center gap-4">
-          <h1 className="px-6">History</h1>
+        <div className="pb-6 px-6 flex justify-between items-center gap-4">
+          <h1 className="">History</h1>
 
           <Formik
             initialValues={{ type: "", category: "", search: "" }}
             onSubmit={() => { }}
           >
             {({ isSubmitting }) => (
-              <Form className="flex min-w-64 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
+              <Form className="flex min-w-64  text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                 <SelectField
                   className="border-none shadow-lg rounded-lg font-medium min-w-48"
                   name="type"
@@ -83,7 +89,7 @@ const DocumentVerification = () => {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-[#F3F2F7] text-center text-themeGrey text-sm border-b border-[#E9ECEF]">
+              <tr className="bg-[#F3F2F7] uppercase text-center text-themeGrey text-sm border-b border-[#E9ECEF]">
                 <th className="p-4">Serial No</th>
                 <th className="p-4">835 File</th>
                 <th className="p-4">835 AMT</th>

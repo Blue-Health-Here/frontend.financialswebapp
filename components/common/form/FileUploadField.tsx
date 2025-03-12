@@ -13,6 +13,7 @@ interface FileUploadFieldProps {
     isMultiSelect?: boolean;
     description?: string;
     variant?: "button" | "dropzone";
+    id: string
 }
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
@@ -23,6 +24,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     description,
     isMultiSelect = false,
     variant = "button",
+    id
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
@@ -72,13 +74,13 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             ) : (
                 // Dropzone-style upload
                 <div className="flex justify-center items-center border-dashed border h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
-                    <label htmlFor="file-upload" className="flex flex-col items-center cursor-pointer">
+                    <label htmlFor={id} className="flex flex-col items-center cursor-pointer">
                         <MdOutlineFileUpload className="w-10 h-10 text-[#969696]" />
                         <h2 className="font-semibold">{title}</h2>
                         {description && <p className="text-xs text-[#969696]">{description}</p>}
                     </label>
                     <input
-                        id="file-upload"
+                        id={id}
                         type="file"
                         multiple={isMultiSelect}
                         onChange={handleFileChange}

@@ -41,7 +41,7 @@ const AddMarketingModal = () => {
                                 ]}
                             />
                             <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
-                            <FileUploadField title="Upload" name="file" />
+                            <FileUploadField title="Upload" name="file" id="" />
 
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
                         </Form>
