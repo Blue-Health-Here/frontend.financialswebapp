@@ -1,12 +1,18 @@
 import Image from "next/image";
+import { useState } from "react";
+import DeleteModal from "./DeleteModal";
 
 export const BudgetCard = ({ budget, className }: any) => {
+    const [isCloseModal, setIsCloseModal] = useState(false);
+    const handleDelete = () => {
+        setIsCloseModal(true);
+    };
     return (
         <div className={`bg-white p-6 shadow-md rounded-lg flex flex-col ${className}`}>
             <div className="flex justify-between items-center mb-3">
                 <h2 className="font-bold">{budget.name}</h2>
                 <div className="flex gap-2">
-                    <Image src="/delete-icon.svg" alt="Delete" width={20} height={20} />
+                    <Image src="/delete-icon.svg" alt="Delete" width={20} height={20} onClick={handleDelete} />
                     <Image src="/edit-icon.svg" alt="Edit" width={20} height={20} />
                 </div>
             </div>
@@ -21,6 +27,13 @@ export const BudgetCard = ({ budget, className }: any) => {
                 <span className="text-left">Amount</span>
                 <span className="text-right text-grey">{budget.amount}</span>
             </div>
+            {isCloseModal && <DeleteModal title="Expense"
+                content={`<p className="text-base">
+                <span>Are you sure you want to delete this expense?</span> <br />
+                <span>You’ll not be able to recover it.</span>
+            </p>`}
+                handleClose={() => setIsCloseModal(false)}
+                handleSuccess={() => console.log("handle success")} />}
         </div>
     );
 };
