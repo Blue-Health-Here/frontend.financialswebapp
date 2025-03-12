@@ -4,9 +4,9 @@ const initialState = {
     isAddCourse: false
 };
 
-const courseSlice = createSlice({
-  name: 'course',
-    initialState, 
+const adminCourseSlice = createSlice({
+    name: 'course',
+    initialState,
     reducers: {
         setIsAddCourse: (state, action) => {
             state.isAddCourse = action.payload;
@@ -14,6 +14,6 @@ const courseSlice = createSlice({
     }
 });
 
-export const { setIsAddCourse } = courseSlice.actions;
+export const { setIsAddCourse } = adminCourseSlice.actions;
 
-export default courseSlice.reducer;
+export default adminCourseSlice.reducer;

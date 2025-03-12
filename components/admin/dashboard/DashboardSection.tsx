@@ -1,11 +1,30 @@
-import React from 'react'
+"use client";
+
+import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { pharmacyData, statsData } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
 import BarChart from "@/components/common/BarChart";
 import { IoSearch } from "react-icons/io5";
+import { axiosAdmin } from '@/lib/axiosAdmin';
+
 const DashboardSection = () => {
+    const [stats, setStats] = useState([]);
+    useEffect(() => {
+        console.log("admin dashboard")
+        fetchAllStats();
+    }, []);
+
+    const fetchAllStats = async () => {
+        try {
+            const response = await axiosAdmin.get("/v1/admin-statistics");
+            console.log(response, "res");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>

@@ -1,3 +1,7 @@
+"use client"
+
+import { setIsAddExpense } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import { useState } from "react";
 import DeleteModal from "./DeleteModal";

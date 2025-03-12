@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setIsAddQuestion } from '@/store/features/pharmacy/pharmacySlice';
+import { setIsAddQuestion } from '@/store/features/admin/pharmacy/adminPharmacySlice';
 import AddNewQuestionModal from './AddNewQuestionModal';
 
 const PharmacyDetail = () => {
@@ -141,7 +141,7 @@ const PharmacyDetail = () => {
                     >
                         {() => (
                             <Form>
-                                <FileUploadField label="Licensing" title="Upload License" name="file" isMultiSelect={true} className='w-60 mb-6 border-primary' />
+                                <FileUploadField label="Licensing" title="Upload License" name="file" isMultiSelect={true} className='w-60 mb-6 border-primary' id="" />
                             </Form>
                         )}
                     </Formik>
@@ -151,7 +151,7 @@ const PharmacyDetail = () => {
                     >
                         {() => (
                             <Form className='w-full'>
-                                <FileUploadField label="Certifications" title="Upload Certification" name="file" isMultiSelect={true} className='w-60 border-primary' />
+                                <FileUploadField label="Certifications" title="Upload Certification" name="file" isMultiSelect={true} className='w-60 border-primary' id="" />
                             </Form>
                         )}
                     </Formik>

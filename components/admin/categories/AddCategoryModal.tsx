@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setIsAddCourse } from "@/store/features/course/courseSlice";
+import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
@@ -8,7 +8,7 @@ import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { setIsAddCategory } from "@/store/features/category/categorySlice";
+import { setIsAddCategory } from "@/store/features/admin/category/adminCategorySlice";
 
 const AddCategoryModal = () => {
     const dispatch = useDispatch();
