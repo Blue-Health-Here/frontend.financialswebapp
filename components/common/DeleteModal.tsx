@@ -17,7 +17,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ title, content, handleClose, 
                 <div className="mx-auto">
                     <Image src="/Delete-Modal-image.svg" alt="delete modal image" className="" width={120} height={120} loading="lazy" />
                 </div>
-                {content && <p className="text-sm text-grey whitespace-nowrap" dangerouslySetInnerHTML={{ __html: content }} />}
+                {content && <p className="text-sm text-[#1C1C1CCC] whitespace-nowrap" dangerouslySetInnerHTML={{ __html: content }} />}
                 <div className="flex justify-center space-x-4 mt-4 w-full">
                     <Button onClick={handleClose} className="bg-btnLight hover:bg-primaryRed flex-1 hover:text-white text-grey min-w-32 max-w-full rounded-full">No</Button>
                     <Button onClick={handleSuccess} className="bg-primaryRed hover:bg-btnLight flex-1 hover:text-grey text-white min-w-32 max-w-full rounded-full">Delete</Button>
