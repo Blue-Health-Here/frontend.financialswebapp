@@ -8,7 +8,9 @@ import { SubmitButton } from '@/components/submit-button';
 import UpdatePasswordSection from '@/components/common/UpdatePasswordSection';
 import { Form, Formik } from 'formik';
 import FileUploadField from '@/components/common/form/FileUploadField';
+import DeleteAccountModal from './DeleteAccountModal';
 const ProfileSection = () => {
+    const [isCloseModal, setIsCloseModal] = useState(false);
     const [profile, setProfile] = useState(null);
     const fileInputRef: any = useRef(null);
 
@@ -32,6 +34,9 @@ const ProfileSection = () => {
 
     const handleRemoveClick = () => {
         setProfile(null)
+    };
+    const handleDelete = () => {
+        setIsCloseModal(true);
     };
 
     return (
@@ -132,12 +137,12 @@ const ProfileSection = () => {
                 <h2 className="text-xl font-semibold">Delete Account</h2>
                 <div className="flex justify-between items-center">
                     <p className="text-[16px] text-[#7E8299]">It’ll permanently delete your account..</p>
-                    <SubmitButton className='bg-white border border-[#D02E2E] text-[#FF0000] hover:bg-transparent'>Delete</SubmitButton>
+                    <SubmitButton onClick={handleDelete} className='bg-white border border-[#D02E2E] text-[#FF0000] hover:bg-transparent'>Delete</SubmitButton>
                 </div>
 
 
             </div>
-
+            {isCloseModal && <DeleteAccountModal title='Account' description='Are you sure you want to delete your account?' handleClose={() => setIsCloseModal(false)} handleSuccess={() => console.log("handle success")} />}
         </div>
     )
 }
