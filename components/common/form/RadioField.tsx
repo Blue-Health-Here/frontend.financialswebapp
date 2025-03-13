@@ -41,7 +41,7 @@ const RadioField: React.FC<RadioFieldProps> = ({ className, ref, label, options,
                         <Label
                             size="xs"
                             htmlFor={`${props.name}-${option.value}`}
-                            className="ml-2"
+                            className="ml-2 cursor-pointer"
                         >
                             {option.label}
                         </Label>
