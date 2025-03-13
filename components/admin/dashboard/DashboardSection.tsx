@@ -1,44 +1,45 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
-import { pharmacyData, statsData } from "@/utils/constants";
-import { StatsCard } from "@/components/common/StatsCard";
+import { pharmacyData } from "@/utils/constants";
 import BarChart from "@/components/common/BarChart";
 import { IoSearch } from "react-icons/io5";
 import { axiosAdmin } from '@/lib/axiosAdmin';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setStats } from '@/store/features/admin/dashboard/adminDashboardSlice';
+import StatsSection from './StatsSection';
 
 const DashboardSection = () => {
-    const [stats, setStats] = useState([]);
+    const dispatch = useDispatch();
+    const hasFetched = useRef(false);
+
     useEffect(() => {
-        console.log("admin dashboard")
-        fetchAllStats();
+        if (!hasFetched.current) {
+            hasFetched.current = true;
+            fetchAllStats();
+        }
     }, []);
 
     const fetchAllStats = async () => {
         try {
             const response = await axiosAdmin.get("/v1/admin-statistics");
-            console.log(response, "res");
-        } catch (error) {
-            console.log(error);
+            if (response.status === 200) {
+                dispatch(setStats(response.data));
+                toast.success("Stats fetched successfully!");
+            }
+        } catch (error: any) {
+            toast.error(error?.message);
         }
-    }
+    };
 
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {statsData.map((item, index) => (
-                        <StatsCard
-                            key={index}
-                            value={item.value}
-                            label={item.label}
-                            color={item.color}
-                            icon={item.icon}
-                        />))}
-                </div>
+                <StatsSection />
                 <div className="w-full h-full bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
                     <BarChart
                         Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]}

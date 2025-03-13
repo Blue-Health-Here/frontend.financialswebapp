@@ -1,4 +1,4 @@
-import { getUserRole } from "@/utils/helper";
+import { getUserRole } from "@/lib/getUserRole";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import React from "react";

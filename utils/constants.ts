@@ -32,11 +32,11 @@ export const pharmacySidebarItems = [
 ];
 
 // statistic card data
-export const statsData = [
-    { value: "55", label: "Categories", color: "text-custom-green", icon: "/statistics-Category.svg" },
-    { value: "10", label: "Pharmacies", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
-    { value: "$567,435", label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
-    { value: "75%", label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
+export const statsDataConstant = [
+    { value: 0, label: "Categories", color: "text-custom-green", icon: "/statistics-Category.svg" },
+    { value: 0, label: "Pharmacies", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
+    { value: "$0", label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
+    { value: "0%", label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
 ];
 
 //Admin Category Data

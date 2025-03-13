@@ -1,11 +1,5 @@
+import { StatsCardProps } from "@/utils/types";
 import Image from "next/image";
-
-interface StatsCardProps {
-    value: string;
-    icon: string;
-    label: string;
-    color: string;
-}
 
 export const StatsCard: React.FC<StatsCardProps> = ({ value, icon, label, color }) => {
     return (
