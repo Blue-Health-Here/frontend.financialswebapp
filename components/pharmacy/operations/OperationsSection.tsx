@@ -3,12 +3,20 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { operationalchecklists } from "@/utils/constants";
-import { IoSearch, IoDownload } from "react-icons/io5";
+import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
 import SelectField from "@/components/common/form/SelectField";
+import OperationsExpenseModal from "./OperationsExpenseModal";
+import { RootState } from '@/store/store'
+import { useDispatch, useSelector } from "react-redux";
+import { setIsAddOperationsExpense } from "@/store/features/pharmacy/operations/operationsExpenseSlice";
+
 
 const OperationsSection = () => {
+  const { isAddOperationsExpense } = useSelector((state: RootState) => state.operations)
+  const dispatch = useDispatch()
+
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
@@ -35,7 +43,7 @@ const OperationsSection = () => {
             </button>
             <Formik
               initialValues={{ category: "", search: "" }}
-              onSubmit={() => {}}
+              onSubmit={() => { }}
             >
               {({ isSubmitting }) => (
                 <Form className="flex min-w-64 text-grey gap-4">
@@ -75,10 +83,11 @@ const OperationsSection = () => {
               </div>
             </div>
             <div className="border-b border-[#F1F5F9] my-2"></div>
-            <Accordion key={index} items={checklist.list} />
+            <Accordion key={index} items={checklist.list} handleEditQuestion={() => { dispatch(setIsAddOperationsExpense(true)) }} />
           </div>
         ))}
       </div>
+      {isAddOperationsExpense && <OperationsExpenseModal />}
     </>
   );
 };

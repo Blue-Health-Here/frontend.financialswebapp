@@ -1,14 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { onBoardingchecklists } from "@/utils/constants";
 import { IoSearch, IoDownload } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
 import SelectField from "@/components/common/form/SelectField";
+import OnboardingExpenseModal from "./OnboardingExpenseModal";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 
 const OnboardingSection = () => {
+  const { isAddExpenseModal } = useSelector((state: RootState) => state.onboarding)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isAddExpenseModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isAddExpenseModal]);
+
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
@@ -35,7 +54,7 @@ const OnboardingSection = () => {
             </button>
             <Formik
               initialValues={{ category: "", search: "" }}
-              onSubmit={() => {}}
+              onSubmit={() => { }}
             >
               {({ isSubmitting }) => (
                 <Form className="flex min-w-64 text-grey gap-4">
@@ -75,10 +94,11 @@ const OnboardingSection = () => {
               </div>
             </div>
             <div className="border-b border-[#F1F5F9] my-2"></div>
-            <Accordion key={index} items={checklist.list} />
+            <Accordion key={index} items={checklist.list} handleEditQuestion={() => { dispatch(setIsAddExpenseModal(true)) }} />
           </div>
         ))}
       </div>
+      {isAddExpenseModal && <OnboardingExpenseModal />}
     </>
   );
 };
