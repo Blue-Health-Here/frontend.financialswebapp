@@ -12,3 +12,12 @@ export type StatsCardProps = {
     color: string;
 }
 
+export type PharmacyCardProps = {
+    pharmacy_id: string;
+    pharmacy_name: string;
+    expense: number;
+    courses: number;
+    total_assigned: number;
+    total_completed: number;
+    completion_percentage: number;
+}

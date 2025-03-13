@@ -3,37 +3,26 @@
 import React, { useEffect, useRef } from 'react'
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
-import { pharmacyData } from "@/utils/constants";
 import BarChart from "@/components/common/BarChart";
 import { IoSearch } from "react-icons/io5";
-import { axiosAdmin } from '@/lib/axiosAdmin';
-import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
-import { setStats } from '@/store/features/admin/dashboard/adminDashboardSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import StatsSection from './StatsSection';
+import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
+import { RootState } from '@/store/store';
+import { PharmacyCardProps } from '@/utils/types';
 
 const DashboardSection = () => {
     const dispatch = useDispatch();
+    const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
     const hasFetched = useRef(false);
 
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllStats();
+            fetchAllStats(dispatch);
+            fetchAllPharmacies(dispatch);
         }
     }, []);
-
-    const fetchAllStats = async () => {
-        try {
-            const response = await axiosAdmin.get("/v1/admin-statistics");
-            if (response.status === 200) {
-                dispatch(setStats(response.data));
-                toast.success("Stats fetched successfully!");
-            }
-        } catch (error: any) {
-            toast.error(error?.message);
-        }
-    };
 
     return (
         <>
@@ -71,7 +60,7 @@ const DashboardSection = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {pharmacyData.map((pharmacy, index) => (
+                    {pharmacies.length > 0 && pharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
                         <PharmacyCard key={index} pharmacy={pharmacy} />
                     ))}
                 </div>

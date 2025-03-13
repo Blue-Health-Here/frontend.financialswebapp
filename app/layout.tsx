@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className="bg-background text-foreground">
         <ThemeProvider>{children}</ThemeProvider>
-        <Toaster />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );
