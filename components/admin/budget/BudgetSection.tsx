@@ -23,7 +23,7 @@ const BudgetSection = () => {
     const { isAddExpense } = useSelector((state: RootState) => state.expense)
     return (
         <>
-            <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
+            <h3 className="text-themeGrey text-lg md:text-xl font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6">
                 <div className="h-full col-span-1 md:col-span-1 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
                     {budgetStatsData.map((item, index) => (
@@ -44,12 +44,12 @@ const BudgetSection = () => {
                             Others: [40, 50, 60, 70, 40, 40, 100, 110, 40, 50, 80],
                         }}
                         barColors={["#0C1737", "#152961", "#354E96", "#7889B9"]}
-                        barThickness={width > 1400 ? 50 : width > 1200 ? 40 : 30}
+                        barThickness={width > 1400 ? 40 : width > 1200 ? 30 : width > 600 ? 20 : 10}
                         yAxisTitle="Expenses"
                         pointStyle="circle"
                         showTopValues={true}
                         stepSize={40}
-                        borderRadius={8}
+                        borderRadius={width > 1400 ? 8 : width > 1200 ? 7 : width > 600 ? 6 : 5}
                         yTitleColor="black"
                         xLabelColor="black"
                         yLabelColor="black"
@@ -58,7 +58,7 @@ const BudgetSection = () => {
             </div>
 
             <div className="mt-6 px-6 py-8 space-y-4 bg-white shadow-lg rounded-lg">
-                <h2 className="text-xl font-semibold">Expense Categories</h2>
+                <h2 className="text-lg md:text-xl font-semibold">Expense Categories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {expenseCategories.map((category, index) => (
                         <ExpenseCategoryCard key={index} category={category} />
@@ -68,16 +68,16 @@ const BudgetSection = () => {
 
             <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
 
-                <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-semibold">Expense</h1>
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                    <h1 className="text-lg md:text-xl font-semibold">Expense</h1>
                     <div className="flex gap-x-4 items-center">
                         <FileDownloadField title='Reports' />
                     </div>
                 </div>
                 <div className="flex items-center justify-between flex-wrap gap-4 py-6">
                     <div className="flex items-center space-x-3">
-                        <h4 className="text-[16px] text-gray-700">Add Expense</h4>
-                        <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary"
+                        <h4 className="text-xs sm:text-sm md:text-[16px] text-gray-700">Add Expense</h4>
+                        <SubmitButton className="group w-6 h-6 md:w-7 md:h-7 p-1 bg-secondary hover:bg-primary"
                             onClick={() => { dispatch(setIsAddExpense(true)) }}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
