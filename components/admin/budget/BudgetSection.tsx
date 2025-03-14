@@ -48,6 +48,8 @@ const BudgetSection = () => {
                         pointStyle="circle"
                         showTopValues={true}
                         stepSize={40}
+                        barThickness = {width > 1400 ? 40 : width > 1200 ? 30 : width > 600 ? 20 : 10}
+                        topValueSize = {width > 1400 ? 12 : width > 1200 ? 11 : width > 600 ? 10 : 8}
                         borderRadius={width > 1400 ? 8 : width > 1200 ? 7 : width > 600 ? 6 : 3}
                         yTitleColor="black"
                         xLabelColor="black"
