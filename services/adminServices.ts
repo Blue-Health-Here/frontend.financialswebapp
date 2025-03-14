@@ -43,8 +43,8 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
  */
 export const fetchAllCourses = async (dispatch: AppDispatch) => {
     try {
+        dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/courses");
-        console.log(response, "courses listing api");
         if (response.status === 200) {
             dispatch(setCourses(response.data));
             toast.success("Courses fetched successfully!");

@@ -12,6 +12,7 @@ import { SubmitButton } from "@/components/submit-button";
 import { useEffect, useRef } from "react";
 import { fetchAllCourses } from "@/services/adminServices";
 import { CourseProps } from "@/utils/types";
+import { setIsLoading } from "@/store/features/global/globalSlice";
 
 const CoursesSection = () => {
     const { isAddCourse, courses } = useSelector((state: RootState) => state.course);
@@ -25,7 +26,9 @@ const CoursesSection = () => {
     useEffect(() => {
         if (!isFetched.current) {
             isFetched.current = true;
-            fetchAllCourses(dispatch);
+            fetchAllCourses(dispatch).then(() => {
+                dispatch(setIsLoading(false));
+            });
         }
     }, []);
     
