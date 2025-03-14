@@ -10,6 +10,7 @@ import StatsSection from './StatsSection';
 import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
 import { RootState } from '@/store/store';
 import { PharmacyCardProps } from '@/utils/types';
+import { setIsLoading } from '@/store/features/global/globalSlice';
 
 const DashboardSection = () => {
     const dispatch = useDispatch();
@@ -19,8 +20,11 @@ const DashboardSection = () => {
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllStats(dispatch);
-            fetchAllPharmacies(dispatch);
+            fetchAllStats(dispatch).then(() => {
+                fetchAllPharmacies(dispatch).then(() => {
+                    dispatch(setIsLoading(false));
+                });
+            });
         }
     }, []);
 
