@@ -8,6 +8,7 @@ import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import FileUploadField from "@/components/common/form/FileUploadField";
+import MultiSelectField from "@/components/common/form/MultiSelectField";
 
 const AddCourseModal = () => {
     const dispatch = useDispatch();
@@ -20,31 +21,51 @@ const AddCourseModal = () => {
             <div className="bg-white w-96 h-full">
                 <HeaderModal title="Add New Course" onClose={handleClose} />
                 <div className="p-6">
-                    <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
-                        <Form className="flex flex-col gap-y-4">
-                            <InputField label="Course Title" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />
-                            <InputField label="Course Description" className="placeholder:text-themeLight" name="description" placeholder="Enter Description" />
-                            <SelectField
-                                label="Pharmacy"
-                                name="pharmacy"
-                                options={[
-                                    { value: "Pharmacy1", label: "Pharmacy1" },
-                                    { value: "Pharmacy2", label: "Pharmacy2" },
-                                ]}
-                            />
-                            <RadioField
-                                label=""
-                                name="uploadType"
-                                options={[
-                                    { value: "link", label: "Link" },
-                                    { value: "uploadFile", label: "Upload File" },
-                                ]}
-                            />
-                            <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
-                            <FileUploadField title="Upload" name="file" id="" />
-
-                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
-                        </Form>
+                    <Formik 
+                        initialValues={{
+                            title: "",
+                            description: "",
+                            pharmacy_ids: [],
+                            uploadType: "",
+                            link: "",
+                            file: ""
+                        }} 
+                        onSubmit={() => { }}
+                    >
+                        {({ values }) => {
+                            return (
+                                <Form className="flex flex-col gap-y-4">
+                                    <InputField label="Course Title" className="placeholder:text-themeLight" name="title" placeholder="Enter Question" />
+                                    <InputField label="Course Description" className="placeholder:text-themeLight" name="description" placeholder="Enter Description" />
+                                    <MultiSelectField
+                                        label="Pharmacy"
+                                        name="pharmacy_ids"
+                                        isMulti
+                                        options={[
+                                            { value: "all", label: "All" },
+                                            { value: 1, label: "Pharmacy 1" },
+                                            { value: 2, label: "Pharmacy 2" },
+                                            { value: 3, label: "Pharmacy 3" },
+                                        ]}
+                                        placeholder="Select Pharmacy"
+                                    />
+                                    <RadioField
+                                        label=""
+                                        name="uploadType"
+                                        options={[
+                                            { value: "link", label: "Link" },
+                                            { value: "uploadFile", label: "Upload File" },
+                                        ]}
+                                    />
+                                    {values.uploadType === "link" ? (
+                                        <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
+                                    ) : (
+                                        <FileUploadField title="Upload" name="file" id="" />
+                                    )}
+                                    <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                                </Form>
+                            )
+                        }}
                     </Formik>
                 </div>
             </div>

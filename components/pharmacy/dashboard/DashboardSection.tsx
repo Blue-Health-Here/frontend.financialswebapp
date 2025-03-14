@@ -2,21 +2,31 @@
 
 import React from 'react'
 import { Input } from "@/components/ui/input";
-import { onBoardingchecklists, pharmacyData, statsData } from "@/utils/constants";
+import { onBoardingchecklists, pharmacyData, statsDataConstant } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
 import { IoSearch } from "react-icons/io5";
 import Accordion from '@/components/common/Accordion';
 import ExpenseChart from '@/components/common/Linechart';
 import { Form, Formik } from 'formik';
 import SelectField from '@/components/common/form/SelectField';
+import { setIsAddQuestion } from '@/store/features/admin/pharmacy/adminPharmacySlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import AddNewQuestionModal from '@/components/admin/pharmacies/AddNewQuestionModal';
 
 const DashboardSection = () => {
+    const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy)
+    const dispatch = useDispatch()
+
+    const handleEditQuestion = () => {
+        dispatch(setIsAddQuestion(true))
+    }
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {statsData.map((item, index) => (
+                    {statsDataConstant.map((item, index) => (
                         <StatsCard
                             key={index}
                             value={item.value}
@@ -77,10 +87,11 @@ const DashboardSection = () => {
                             </div>
                         </div>
                         <div className="border-b border-[#F1F5F9] my-2"></div>
-                        <Accordion key={index} items={checklist.list} />
+                        <Accordion key={index} items={checklist.list} handleEditQuestion={handleEditQuestion} />
                     </div>
                 ))}
             </div>
+            {isAddQuestion && <AddNewQuestionModal />}
         </>
     )
 }
