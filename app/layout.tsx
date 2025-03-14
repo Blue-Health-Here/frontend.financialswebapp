@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ThemeProvider from "./ThemeProvider";
 import { Montserrat } from "next/font/google"
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={montserrat.variable}>
       <body className="bg-background text-foreground">
         <ThemeProvider>{children}</ThemeProvider>
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

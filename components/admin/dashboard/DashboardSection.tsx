@@ -1,44 +1,34 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
-import { pharmacyData, statsData } from "@/utils/constants";
-import { StatsCard } from "@/components/common/StatsCard";
 import BarChart from "@/components/common/BarChart";
 import { IoSearch } from "react-icons/io5";
-import { axiosAdmin } from '@/lib/axiosAdmin';
+import { useDispatch, useSelector } from 'react-redux';
+import StatsSection from './StatsSection';
+import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
+import { RootState } from '@/store/store';
+import { PharmacyCardProps } from '@/utils/types';
 
 const DashboardSection = () => {
-    const [stats, setStats] = useState([]);
-    useEffect(() => {
-        console.log("admin dashboard")
-        fetchAllStats();
-    }, []);
+    const dispatch = useDispatch();
+    const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+    const hasFetched = useRef(false);
 
-    const fetchAllStats = async () => {
-        try {
-            const response = await axiosAdmin.get("/v1/admin-statistics");
-            console.log(response, "res");
-        } catch (error) {
-            console.log(error);
+    useEffect(() => {
+        if (!hasFetched.current) {
+            hasFetched.current = true;
+            fetchAllStats(dispatch);
+            fetchAllPharmacies(dispatch);
         }
-    }
+    }, []);
 
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {statsData.map((item, index) => (
-                        <StatsCard
-                            key={index}
-                            value={item.value}
-                            label={item.label}
-                            color={item.color}
-                            icon={item.icon}
-                        />))}
-                </div>
+                <StatsSection />
                 <div className="w-full h-full bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
                     <BarChart
                         Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]}
@@ -70,7 +60,7 @@ const DashboardSection = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {pharmacyData.map((pharmacy, index) => (
+                    {pharmacies.length > 0 && pharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
                         <PharmacyCard key={index} pharmacy={pharmacy} />
                     ))}
                 </div>

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Input } from "@/components/ui/input";
-import { onBoardingchecklists, pharmacyData, statsData } from "@/utils/constants";
+import { onBoardingchecklists, pharmacyData, statsDataConstant } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
 import { IoSearch } from "react-icons/io5";
 import Accordion from '@/components/common/Accordion';
@@ -13,25 +13,20 @@ import { setIsAddQuestion } from '@/store/features/admin/pharmacy/adminPharmacyS
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddNewQuestionModal from '@/components/admin/pharmacies/AddNewQuestionModal';
-import { useEffect } from 'react';
-
-
-
 
 const DashboardSection = () => {
     const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy)
     const dispatch = useDispatch()
 
-     const handleEditQuestion = () => {
-            dispatch(setIsAddQuestion(true))
-        }
-          
+    const handleEditQuestion = () => {
+        dispatch(setIsAddQuestion(true))
+    }
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {statsData.map((item, index) => (
+                    {statsDataConstant.map((item, index) => (
                         <StatsCard
                             key={index}
                             value={item.value}
@@ -96,7 +91,7 @@ const DashboardSection = () => {
                     </div>
                 ))}
             </div>
-            {isAddQuestion && <AddNewQuestionModal/>}
+            {isAddQuestion && <AddNewQuestionModal />}
         </>
     )
 }
