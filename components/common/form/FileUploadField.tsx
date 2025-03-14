@@ -59,10 +59,10 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                     ))}
                 </div>
             )}
-<div className="flex justify-center md:justify-start">
+         <div className="flex justify-center md:justify-start">
             {variant === "button" ? (
                 // Button-style upload
-                <SubmitButton type="button" className={`relative p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
+                <SubmitButton type="button" className={`w-full relative p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
                     <input
                         type="file"
                         multiple={isMultiSelect}
@@ -70,8 +70,8 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                         name={name}
                         className="absolute left-0 right-0 top-0 bottom-0 opacity-0 cursor-pointer"
                     />
-                    <MdOutlineFileUpload className="w-5 h-5 text-primary" />
-                    <p className="ml-2">{title}</p>
+                    <MdOutlineFileUpload className="w-4 h-4 md:w-5 md:h-5 text-primary" />
+                    <p className="ml-2 text-xs md:text-sm">{title}</p>
                 </SubmitButton>
             ) : (
                 // Dropzone-style upload

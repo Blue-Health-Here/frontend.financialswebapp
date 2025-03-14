@@ -3,7 +3,6 @@ import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
-import SelectField from "@/components/common/form/SelectField";
 import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
@@ -18,9 +17,9 @@ const AddCourseModal = () => {
 
     return (
         <Modal>
-            <div className="bg-white w-96 h-full">
+            <div className="bg-white">
                 <HeaderModal title="Add New Course" onClose={handleClose} />
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                     <Formik 
                         initialValues={{
                             title: "",
