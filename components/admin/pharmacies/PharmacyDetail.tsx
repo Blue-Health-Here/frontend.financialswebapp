@@ -92,18 +92,42 @@ const PharmacyDetail = () => {
               sizes="(max-width: 767px) 128px, 300px"
             />
             <div className="space-y-3 text-black w-full">
-              <h2 className="text-sm sm:text-lg lg:text-xl font-bold">{pharmacy.name}</h2>
-                    <p className="text-xs sm:text-sm md:text-[16px] w-full font-medium">Total Expense <span className="text-xs sm:text-sm md:text-[16px] font-medium float-right">${pharmacy.expense}</span></p>
+              <h2 className="text-sm sm:text-lg lg:text-xl font-bold">
+                {pharmacy.name}
+              </h2>
+              
+              <div className="flex justify-between flex-wrap gap-4">
+                <p className="text-xs sm:text-sm md:text-[16px] font-medium">
+                  Total Expense
+                </p>
+                <span className="text-xs sm:text-sm md:text-[16px] font-medium">
+                  ${pharmacy.expense}
+                </span>
+              </div>
 
-                    <p className="text-xs font-semibold">Courses Completed <span className="text-xs sm:text-sm md:text-[12px] font-semibold float-right">{pharmacy.courses}</span></p>
+              <div className="flex justify-between flex-wrap gap-4">
+                <p className="text-xs font-semibold">Courses Completed</p>
+                <span className="text-xs sm:text-sm md:text-[12px] font-semibold">
+                  {pharmacy.courses}
+                </span>
+              </div>
 
-
-                    <div className="w-full">
-                        <p className="text-[12px] font-semibold">Onboarding Checklist Progress <span className="text-[12px] font-semibold float-right">{pharmacy.progress}%</span></p>
-                        <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
-                            <div className="bg-primary h-[4px] rounded-full" style={{ width: `${pharmacy.progress}%` }}></div>
-                        </div>
-                    </div>
+              <div className="w-full">
+                <div className="flex justify-between flex-wrap gap-4">
+                  <p className="text-[12px] font-semibold">
+                    Onboarding Checklist Progress
+                  </p>{" "}
+                  <span className="text-[12px] font-semibold">
+                    {pharmacy.progress}%
+                  </span>
+                </div>{" "}
+                <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
+                  <div
+                    className="bg-primary h-[4px] rounded-full"
+                    style={{ width: `${pharmacy.progress}%` }}
+                  ></div>
+                </div>
+              </div>
             </div>
           </div>
 
