@@ -18,16 +18,16 @@ const CategoriesSection = () => {
     const dispatch = useDispatch();
 
     return (
-        <div className="flex">
+        <div className="flex flex-col md:flex-row ">
             {/*Secondary Sidebar */}
-            <aside className=" max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] pt-8 pb-8 pl-4 pr-4 fixed left-[250px] xl:left-[318px] top-20 h-auto z-[999]">
-                <h3 className="text-themeGrey pb-4 font-medium">Categories</h3>
+            <aside className=" md:w-[250px] xl:w-[300px] pb-4 md:py-8 px-4 md:fixed  lg:left-[250px] xl:left-[318px] md:top-20 md:h-auto ">
+                <h3 className="text-themeGrey text-lg md:text-xl pb-4 font-medium">Categories</h3>
                 <ul className="space-y-3">
                     {Object.keys(categoryData).map((category) => (
                         <li
                             key={category}
                             onClick={() => setSelectedCategory(category)}
-                            className={`px-4 py-2 rounded-md cursor-pointer text-blue-700 font-semibold ${selectedCategory === category
+                            className={`px-4 py-2  rounded-md cursor-pointer text-xs sm:text-sm md:text-[16px] text-primary font-semibold ${selectedCategory === category
                                 ? "bg-secondary "
                                 : "hover:bg-secondary"
                                 }`}
@@ -38,10 +38,10 @@ const CategoriesSection = () => {
                 </ul>
             </aside>
 
-            <main className="flex-1 pt-10 ml-[250px] xl:ml-[300px]">
+            <main className="flex-1 md:pt-10 md:ml-[250px] xl:ml-[300px]">
                 <div className="bg-white shadow-lg rounded-lg p-6">
-                    <div className="flex items-center justify-between pb-6">
-                        <h1 className="text-xl font-semibold">{selectedCategory}</h1>
+                    <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
+                        <h1 className="text-lg md:text-xl font-semibold">{selectedCategory}</h1>
                         <SubmitButton className="bg-secondary hover:text-white">
                             Save Changes
                         </SubmitButton>
@@ -49,8 +49,8 @@ const CategoriesSection = () => {
 
                     <div className="flex justify-between items-center pb-6">
                         <div className="flex items-center space-x-3">
-                            <h4 className="text-[16px] text-grey">Add Categories</h4>
-                            <Button className="group w-7 h-7 p-1 text-white bg-secondary hover:text-white" onClick={() => dispatch(setIsAddCategory(true))}>
+                            <h4 className="text-xs sm:text-sm md:text-[16px]  text-grey">Add Categories</h4>
+                            <Button className="group w-6 h-6 md:w-7 md:h-7 p-1 text-white bg-secondary hover:text-white" onClick={() => dispatch(setIsAddCategory(true))}>
                                 <FaPlus className=" text-black group-hover:text-white" size={12} />
                             </Button>
                         </div>

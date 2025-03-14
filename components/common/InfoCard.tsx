@@ -14,10 +14,10 @@ const InfoCard = ({ name }: { name: string }) => {
 
     return (
         <div className="flex items-center justify-between bg-white p-4 border rounded-lg shadow-sm w-full">
-            <span className="font-medium">{name}</span>
+            <span className="text-xs sm:text-sm mdtext-[16px] font-medium">{name}</span>
             <div className="flex space-x-3 cursor-pointer">
-                <Image src={deleteIcon} alt="" width={20} height={20} onClick={handleDelete} />
-                <Image src={editIcon} alt="" width={20} height={20} />
+                <Image src={deleteIcon} alt="" width={15} height={15} className="md:w-[20px] md:h-[20px]"onClick={handleDelete} />
+                <Image src={editIcon} alt="" width={15} height={15} className="md:w-[20px] md:h-[20px]" />
             </div>
             {isCloseModal && <DeleteModal title={name.toUpperCase()} content={`<p className="text-base">
                     <span>Are you sure you want to delete this ${name}?</span> <br />

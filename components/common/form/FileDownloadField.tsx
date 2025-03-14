@@ -13,7 +13,7 @@ const FileDownloadField = ({ title, className }: FileDownloadFieldProps) => {
                 type="file"
                 className="absolute left-0 right-0 top-0 bottom-0 opacity-0"
             />
-            <MdOutlineFileDownload className="w-5 h-5 text-primary" /> <p className="ml-2">{title}</p>
+            <MdOutlineFileDownload className="w-4 h-4 md:w-5 md:h-5 text-primary" /> <p className="ml-2 text-xs md:text-sm">{title}</p>
         </SubmitButton>)
 }
 

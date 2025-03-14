@@ -36,13 +36,13 @@ const ProfileSection = () => {
         <div>
 
             <div className="mt-6 p-6 bg-white shadow-lg rounded-lg">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-semibold">Account</h1>
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                    <h1 className="text-lg md:text-xl font-semibold">Account</h1>
                     <SubmitButton className="bg-secondary text-primary hover:text-white">
                         Save Changes
                     </SubmitButton>
                 </div>
-                <div className="flex gap-x-8 pt-8">
+                <div className="flex flex-col-reverse md:flex-row gap-4 gap-x-8 pt-8">
                     <div className="w-full space-y-4">
                         <div>
                             <Label className="text-[12px] text-grey">Full Name</Label>
@@ -83,7 +83,7 @@ const ProfileSection = () => {
                                 </button>
                             </div>
                         </div>
-                        <p className="text-[12px] text-[#A1A5B7] mt-4 text-center whitespace-nowrap font-semibold">
+                        <p className="text-[10px] sm:text-xs text-[#A1A5B7] mt-4 text-center whitespace-nowrap font-semibold">
                             Allowed file types: png, jpg, jpeg.
                         </p>
                         <input

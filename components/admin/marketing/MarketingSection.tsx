@@ -22,7 +22,7 @@ const MarketingSection = () => {
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                 <div className="flex items-center justify-between gap-3">
-                    <h1>Marketing Material</h1><SubmitButton onClick={handleAddMarketing} className="w-7 h-7 p-1 text-white"><FaPlus className="text-white" size={12} /></SubmitButton>
+                    <h1 className='text-lg md:text-2xl'>Marketing Material</h1><SubmitButton onClick={handleAddMarketing} className="w-7 h-7 p-1 text-white"><FaPlus className="text-white" size={12} /></SubmitButton>
                 </div>
                 <div className="relative w-[390px] sm:max-w-md">
                     <Input name="email" placeholder="Search Marketing Material" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
