@@ -75,7 +75,7 @@ const ChecklistSection = () => {
             <div className="flex flex-col gap-6">
                 {checklists.map((checklist, index) => (
                     <div className="w-full" key={index}>
-                        <h1 className="text-lg mb-4">{checklist.name + " Checklist"}</h1>
+                        <h1 className="text-sm sm:text-[16px] md:text-lg mb-4">{checklist.name + " Checklist"}</h1>
                         <Accordion key={index} items={checklist.list} handleEditQuestion={handleEditQuestion} />
                     </div>
                 ))}

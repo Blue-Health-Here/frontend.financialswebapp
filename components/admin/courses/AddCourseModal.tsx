@@ -17,9 +17,9 @@ const AddCourseModal = () => {
 
     return (
         <Modal>
-            <div className="bg-white w-96 h-full">
+            <div className="bg-white">
                 <HeaderModal title="Add New Course" onClose={handleClose} />
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                     <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
                         <Form className="flex flex-col gap-y-4">
                             <InputField label="Course Title" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />

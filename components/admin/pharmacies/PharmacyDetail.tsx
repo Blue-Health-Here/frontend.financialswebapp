@@ -61,20 +61,20 @@ const PharmacyDetail = () => {
 
   return (
     <>
-      <div className="px-6 py-8 bg-white shadow-lg rounded-lg">
+      <div className="px-5 md:px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
           <div className="flex gap-x-2 items-center text-grey">
             <div
               onClick={() => router.back()}
               className="flex gap-x-2 items-center"
             >
-              <SubmitButton className="bg-white hover:bg-inherit text-black border p-1 md:p-2">
-                <IoIosArrowBack className="text-lg md:text-[20px]" />
+              <SubmitButton className="bg-white hover:bg-inherit text-black border h-6 w-6 sm:h-[38px] sm:w-[38px] p-1 md:p-2">
+                <IoIosArrowBack className="text-sm md:text-[20px]" />
               </SubmitButton>
               <GoHome className="cursor-pointer text-lg md:text-[20px]" />
               <p className="cursor-pointer text-xs md:text-sm">Pharmacies</p>
             </div>
-            <MdKeyboardArrowRight className="text-lg md:text-[20px]" />
+            <MdKeyboardArrowRight className="text-xl sm:text-2xl" />
             <p className="text-[#3F4254] text-xs md:text-sm">{pharmacy.name}</p>
           </div>
           <div className="flex gap-x-4 items-center">
@@ -176,7 +176,7 @@ const PharmacyDetail = () => {
       ))}
       <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-          <h1>Courses</h1>
+          <h1 className="text-lg md:text-2xl">Courses</h1>
           <div className="relative w-[390px] sm:max-w-md">
             <Input
               name="email"

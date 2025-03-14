@@ -16,7 +16,7 @@ const AddNewQuestionModal = () => {
     };
     return (
         <Modal>
-            <div className="bg-white w-96 h-full">
+            <div className="bg-white">
                 <HeaderModal title="Add New Question" onClose={handleClose} />
                 <div className="p-6">
                     <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
