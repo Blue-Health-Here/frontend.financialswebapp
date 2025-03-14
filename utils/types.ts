@@ -21,3 +21,11 @@ export type PharmacyCardProps = {
     total_completed: number;
     completion_percentage: number;
 }
+
+export type CourseProps = {
+    id: string;
+    title: string;
+    link: string | null;
+    filename: string;
+    description: string;
+};

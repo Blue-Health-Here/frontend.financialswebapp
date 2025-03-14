@@ -1,4 +1,5 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
+import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { AppDispatch } from "@/store/store";
@@ -28,6 +29,22 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
         if (response.status === 200) {
             dispatch(setPharmacies(response.data));
             toast.success("Pharmacies fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    }
+};
+
+/**
+ * Fetch all courses and update Redux store.
+ */
+export const fetchAllCourses = async (dispatch: AppDispatch) => {
+    try {
+        const response = await axiosAdmin.get("/v1/courses");
+        console.log(response, "courses listing api");
+        if (response.status === 200) {
+            dispatch(setCourses(response.data));
+            toast.success("Courses fetched successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");

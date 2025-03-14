@@ -22,8 +22,6 @@ const rootReducer = combineReducers({
 
     // Admin Reducers
     adminDashboard: adminDashboardReducer,
-
-    // Course Reducers
     course: adminCourseReducer,
     checklist: adminChecklistReducer,
     marketing: adminMarketingReducer,

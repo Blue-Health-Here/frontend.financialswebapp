@@ -9,16 +9,26 @@ import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";
-import { corses } from "@/utils/constants";
+import { useEffect, useRef } from "react";
+import { fetchAllCourses } from "@/services/adminServices";
+import { CourseProps } from "@/utils/types";
 
 const CoursesSection = () => {
-    const { isAddCourse } = useSelector((state: RootState) => state.course);
+    const { isAddCourse, courses } = useSelector((state: RootState) => state.course);
     const dispatch = useDispatch();
+    const isFetched = useRef(false);
 
     const handleAddCourse = () => {
         dispatch(setIsAddCourse(true))
     };
 
+    useEffect(() => {
+        if (!isFetched.current) {
+            isFetched.current = true;
+            fetchAllCourses(dispatch);
+        }
+    }, []);
+    
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
@@ -34,8 +44,8 @@ const CoursesSection = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {corses.map((course, index) => (
-                    <InfoCard key={index} courseName={course} />
+                {courses.length > 0 && courses.map((course: CourseProps, index: number) => (
+                    <InfoCard key={index} name={course?.title} />
                 ))}
             </div>
             {isAddCourse && <AddCourseModal />}
