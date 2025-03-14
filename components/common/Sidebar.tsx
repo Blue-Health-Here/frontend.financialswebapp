@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                             <li className={`flex items-center gap-x-3 p-3 rounded-lg cursor-pointer transition font-medium
                               ${isActive ? "bg-secondary" : "hover:bg-secondary"}`}>
                                 <Image src={item.icon} alt={`${item.name} Icon`} width={20} height={20} />
-                                <span>{item.name}</span>
+                                <span className='text-xs sm:text-sm md:text-[16px]'>{item.name}</span>
                             </li>
                         </Link>
                     )

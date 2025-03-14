@@ -8,16 +8,16 @@ export const PharmacyCard: React.FC<{ pharmacy: PharmacyCardProps }> = ({ pharma
             <div className="bg-white p-4 shadow-md rounded-lg min-h-[250px] flex flex-col">
                 <div className="flex flex-col gap-3">
                     <Image src="/Ellipse.png" alt="" className="rounded-full" width={48} height={48} />
-                    <h2 className="font-bold">{pharmacy.pharmacy_name}</h2>
+                    <h2 className="text-sm sm:text-lg md:text-xl font-semibold md:font-bold">{pharmacy.pharmacy_name}</h2>
                 </div>
                 <div className="mt-3 flex flex-col gap-y-4 text-black leading-3">
-                    <p className="text-[16px] font-medium">
+                    <p className="text-xs sm:text-sm md:text-[16px] font-medium">
                         Total Expense
-                        <span className="text-[16px] font-medium float-right">${pharmacy.expense}</span>
+                        <span className="text-xs sm:text-sm md:text-[16px] font-medium float-right">${pharmacy.expense}</span>
                     </p>
-                    <p className="text-[12px] font-semibold">
+                    <p className="text-xs font-semibold">
                         Courses Completed
-                        <span className="text-[12px] font-semibold float-right">{pharmacy.total_completed} / {pharmacy.courses | 0}</span>
+                        <span className="text-xs sm:text-sm md:text-[12px] font-semibold float-right">{pharmacy.total_completed} / {pharmacy.courses | 0}</span>
                     </p>
                     <div>
                         <p className="text-[12px] font-semibold">Onboarding Checklist Progress <span className="text-[12px] font-semibold float-right">{pharmacy.completion_percentage}%</span></p>
