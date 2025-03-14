@@ -15,7 +15,7 @@ const AddExpenseModal = () => {
 
     return (
         <Modal>
-            <div className="bg-white w-96 h-full">
+            <div className="bg-white  w-64 sm:w-96 h-full">
                 <HeaderModal title="Add New Expense" onClose={handleClose} />
                 <div className="p-6">
                     <Formik initialValues={{ name: "" }} onSubmit={() => { }}>

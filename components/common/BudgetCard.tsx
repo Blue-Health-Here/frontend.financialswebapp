@@ -22,17 +22,17 @@ export const BudgetCard = ({ budget, className }: any) => {
             </div>
 
             <div className="grid grid-cols-2 gap-y-2 text-black text-[14px] font-medium flex-grow">
-                <span className="text-left">Expense Category</span>
-                <span className="text-right text-grey">{budget.category}</span>
+                <span className="text-xs sm:text-sm text-left">Expense Category</span>
+                <span className="text-xs sm:text-sm text-right text-grey">{budget.category}</span>
 
-                <span className="text-left">Date</span>
-                <span className="text-right text-grey">{budget.date}</span>
+                <span className="text-xs sm:text-sm text-left">Date</span>
+                <span className="text-xs sm:text-sm text-right text-grey">{budget.date}</span>
 
-                <span className="text-left">Amount</span>
-                <span className="text-right text-grey">{budget.amount}</span>
+                <span className="text-xs sm:text-sm text-left">Amount</span>
+                <span className="text-xs sm:text-sm text-right text-grey">{budget.amount}</span>
             </div>
             {isCloseModal && <DeleteModal title="Expense"
-                content={`<p className="text-base">
+                content={`<p>
                 <span>Are you sure you want to delete this expense?</span> <br />
                 <span>You’ll not be able to recover it.</span>
             </p>`}

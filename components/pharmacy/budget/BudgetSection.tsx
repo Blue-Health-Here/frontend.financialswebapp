@@ -19,7 +19,7 @@ import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpen
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
     return (
         <>
@@ -76,14 +76,14 @@ const BudgetSection = () => {
                 </div>
                 <div className="flex items-center justify-between flex-wrap gap-4 py-6">
                     <div className="flex items-center space-x-3">
-                        <h4 className="text-[16px] text-gray-700">Add Expense</h4>
+                        <h4 className="text-[13px] sm:text-[16px] text-gray-700">Add Expense</h4>
                         <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary"
                             onClick={() => { dispatch(setIsAddExpense(true)) }}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
                     <div className="relative w-[390px] sm:max-w-md">
-                        <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
+                        <Input name="email" placeholder="Search Pharmacy" className="h-[42px] text-xs sm:text-sm border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                             <IoSearch className="w-5 h-5" />
                         </span>

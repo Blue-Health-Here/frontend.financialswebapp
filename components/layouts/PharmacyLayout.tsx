@@ -15,7 +15,7 @@ export default async function PharmacyLayout({
 
     const role = await getUserRole(session?.user);
     if (role !== "pharmacy") {
-      redirect("/not-found");
+    //   redirect("/not-found");
     }
 
     return (

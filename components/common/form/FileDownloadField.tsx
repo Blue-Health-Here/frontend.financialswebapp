@@ -8,7 +8,7 @@ interface FileDownloadFieldProps {
 
 const FileDownloadField = ({ title, className }: FileDownloadFieldProps) => {
     return (
-        <SubmitButton type="button" className={`w-full relative px-8 text-primary bg-secondary hover:bg-transparent ${className}`}>
+        <SubmitButton type="button" className={` w-full relative px-3 sm:px-8 text-primary bg-secondary hover:bg-transparent ${className}`}>
             <input
                 type="file"
                 className="absolute left-0 right-0 top-0 bottom-0 opacity-0"
