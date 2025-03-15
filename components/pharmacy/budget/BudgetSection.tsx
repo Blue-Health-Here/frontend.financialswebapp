@@ -58,7 +58,7 @@ const BudgetSection = () => {
             </div>
 
             <div className="mt-6 px-6 py-8 space-y-4 bg-white shadow-lg rounded-lg">
-                <h2 className="text-xl font-semibold">Expense Categories</h2>
+                <h2 className="text-lg sm:text-xl font-semibold">Expense Categories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {expenseCategories.map((category, index) => (
                         <ExpenseCategoryCard key={index} category={category} />
@@ -69,7 +69,7 @@ const BudgetSection = () => {
             <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
 
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-semibold">Expense</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold">Expense</h1>
                     <div className="flex gap-x-4 items-center">
                         <FileDownloadField title='Reports' />
                     </div>

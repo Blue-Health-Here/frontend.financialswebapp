@@ -4,7 +4,7 @@ const ExpenseCategoryCard = ({ category }: any) => {
     return (
         <div className="p-6 min-h-[135px] bg-white shadow-lg rounded-lg flex flex-col gap-4">
             <div className="flex justify-between items-center">
-                <p className="text-xl font-bold">{category.name}</p>
+                <p className="text-lg sm:text-xl font-bold">{category.name}</p>
                 <span className={`text-sm font-semibold flex items-center justify-center rounded-full sm:min-w-[60px] sm:min-h-[60px] min-w-[40px] min-h-[40px]   ${category.percentage >= 15 ? 'bg-[#FFE8E8] text-[#CD5052]' : 'bg-[#E8FFF3] text-[#50CD89] '}`}>
                     {category.percentage}%
                 </span>

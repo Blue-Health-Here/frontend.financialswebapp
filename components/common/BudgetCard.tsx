@@ -14,7 +14,7 @@ export const BudgetCard = ({ budget, className }: any) => {
     return (
         <div className={`bg-white p-6 shadow-md rounded-lg flex flex-col ${className}`}>
             <div className="flex justify-between items-center mb-3">
-                <h2 className="font-bold">{budget.name}</h2>
+                <h2 className="text-base  sm:text-[20px] font-bold">{budget.name}</h2>
                 <div className="flex gap-2">
                     <Image src="/delete-icon.svg" alt="Delete" width={20} height={20} onClick={handleDelete} />
                     <Image src="/edit-icon.svg" alt="Edit" width={20} height={20} />
