@@ -1,26 +1,10 @@
-import { createClient } from "./supabase/server";
-import { encodedRedirect } from "./utils";
+import { Stats } from "./types";
 
-export const getUserRole = async (user: any) => {
-    const supabase = await createClient();
-    const { error, data } = await supabase.rpc("get_user_role", {
-        user_id: user?.id,
-    });
-    
-    if (error) {
-        return encodedRedirect("error", "/sign-in", error.message);
-    }
-
-    let role = "";
-    switch (data) {
-        case "admin":
-            role = "admin";
-            break;
-        case "pharmacy":
-            role = "pharmacy";
-            break;
-        default:
-            break;
-    }
-    return role;
+export const assignStatsValues = (data: Stats) => {
+    return [
+        { value: data.categories, label: "Categories", color: "text-custom-green", icon: "/statistics-Category.svg" },
+        { value: data.pharmacies, label: "Pharmacies", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
+        { value: `$${Number(data.monthly_expenses).toLocaleString()}`, label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
+        { value: typeof data.tasks_completed === "string" && data.tasks_completed.includes('%') ? data.tasks_completed : `${data.tasks_completed}%`, label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
+    ];
 }

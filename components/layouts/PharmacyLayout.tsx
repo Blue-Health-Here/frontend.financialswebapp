@@ -2,8 +2,8 @@ import React from "react";
 import Sidebar from "../common/Sidebar";
 import Topbar from "../common/Topbar";
 import { createClient } from "@/utils/supabase/server";
-import { getUserRole } from "@/utils/helper";
 import { redirect } from "next/navigation";
+import { getUserRole } from "@/lib/getUserRole";
 
 export default async function PharmacyLayout({
     children,

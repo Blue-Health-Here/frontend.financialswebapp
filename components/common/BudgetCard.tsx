@@ -14,14 +14,14 @@ export const BudgetCard = ({ budget, className }: any) => {
     return (
         <div className={`bg-white p-6 shadow-md rounded-lg flex flex-col ${className}`}>
             <div className="flex justify-between items-center mb-3">
-                <h2 className="text-base  sm:text-[20px] font-bold">{budget.name}</h2>
+                <h2 className="text-sm sm:text-lg md:text-xl font-bold">{budget.name}</h2>
                 <div className="flex gap-2">
-                    <Image src="/delete-icon.svg" alt="Delete" width={20} height={20} onClick={handleDelete} />
-                    <Image src="/edit-icon.svg" alt="Edit" width={20} height={20} />
+                    <Image src="/delete-icon.svg" alt="Delete" width={15} height={15} className="md:w-[20px] md:h-[20px]" onClick={handleDelete} />
+                    <Image src="/edit-icon.svg" alt="Edit" width={15} height={15} className="md:w-[20px] md:h-[20px]" />
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-y-2 text-black text-[14px] font-medium flex-grow">
+            <div className="grid grid-cols-2 gap-y-2 text-black text-xs md:text-[14px] font-medium flex-grow">
                 <span className="text-xs sm:text-sm text-left">Expense Category</span>
                 <span className="text-xs sm:text-sm text-right text-grey">{budget.category}</span>
 

@@ -13,6 +13,7 @@ import {
 
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useEffect, useState } from "react";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
@@ -21,7 +22,6 @@ const BarChart = ({
     Ylabels,
     useGradient = false,
     barColors = [],
-    barThickness,
     yAxisTitle,
     pointStyle,
     showTopValues = true,
@@ -32,7 +32,10 @@ const BarChart = ({
     xLabelColor,
     showXLabels = true,
     tooltipOptions = {},
+    topValueSize,
+    barThickness
 }: any) => {
+
     const getGradient = (ctx: any, chartArea: any) => {
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
         gradient.addColorStop(0, "#0C1737");
@@ -82,7 +85,7 @@ const BarChart = ({
                 color: "black",
                 anchor: "end",
                 align: "top",
-                font: { size: 12 },
+                font: { size: topValueSize },
                 formatter: (value, context) => {
                     const datasetIndex = context.datasetIndex;
                     const dataIndex = context.dataIndex;
