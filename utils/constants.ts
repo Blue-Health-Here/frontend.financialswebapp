@@ -10,6 +10,16 @@ export const pharmacyData = [
     { id: 6, name: "Pharmacy MNO-6", expense: "1100.00", courses: "2 / 5", progress: 40, image: "/Ellipse.png" },
 ];
 
+export const pharmacyBudgetDetail = [
+    { id: 1, name: "Pharmacy XYZ-1", expense: "1500.00", revenue: "3000.00", profit: 50, image: "/Ellipse.png" },
+    { id: 2, name: "Pharmacy ABC-2", expense: "1200.00", revenue: "3000.00", profit: 60, image: "/Ellipse.png" },
+    { id: 3, name: "Pharmacy DEF-3", expense: "1800.00", revenue: "3000.00", profit: 80, image: "/Ellipse.png" },
+    { id: 4, name: "Pharmacy GHI-4", expense: "1300.00", revenue: "3000.00", profit: 30, image: "/Ellipse.png" },
+    { id: 5, name: "Pharmacy JKL-5", expense: "1400.00", revenue: "3000.00", profit: 70, image: "/Ellipse.png" },
+    { id: 6, name: "Pharmacy MNO-6", expense: "1100.00", revenue: "3000.00", profit: 40, image: "/Ellipse.png" },
+];
+
+
 // Side bar data 
 export const adminSidebarItems = [
     { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/admin/dashboard" },
