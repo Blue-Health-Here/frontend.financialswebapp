@@ -71,7 +71,7 @@ const ProfileSection = () => {
 
                     <div className="flex flex-col items-center w-auto">
                         <div className="relative">
-                            <div className='w-[120px] h-[120px] overflow-hidden rounded-md'>
+                            <div className='w-full h-full relative overflow-hidden rounded-md'>
                                 <Image
                                     src={profile || '/default-profile.png'}
                                     alt="Profile"
