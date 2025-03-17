@@ -1,7 +1,7 @@
 "use client";
 import { adminSidebarItems, pharmacySidebarItems } from '@/utils/constants'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,11 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
     const sidebarItems = role === 'admin' ? adminSidebarItems : pharmacySidebarItems
     const pathName = usePathname()
     const dispatch = useDispatch();
+    useEffect(() => {
+            if (window.innerWidth < 1024) {
+                dispatch(setIsSidebarOpen(false));
+            }
+    }, [pathName, dispatch]);
     const asideClass = isSidebarOpen ? "max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] block bg-primary text-white shadow-lg pt-8 pb-8 pl-4 pr-4 fixed left-0 top-0 h-full z-[99]"
         : "max-w-[250px] min-w-[250px] xl:min-w-[300px] xl:max-w-[300px] hidden lg:block bg-primary text-white shadow-lg pt-8 pb-8 pl-4 pr-4 fixed left-0 top-0 h-full z-[99]";
     return (

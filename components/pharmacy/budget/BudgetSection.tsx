@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import { budgetData, budgetStatsData, expenseCategories, pharmacyData } from "@/utils/constants";
+import { budgetData, budgetStatsData, expenseCategories, fullDatasets, fullLabels, pharmacyData } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -21,6 +21,38 @@ const BudgetSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch()
     const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
+    
+      let labels, datasets;
+    
+      if (width > 1400) {
+        labels = fullLabels;
+        datasets = fullDatasets;
+      } else if (width > 1200) {
+        labels = fullLabels.slice(0, 9);
+        datasets = {
+          Utility: fullDatasets.Utility.slice(0, 9),
+          Salary: fullDatasets.Salary.slice(0, 9),
+          Rent: fullDatasets.Rent.slice(0, 9),
+          Others: fullDatasets.Others.slice(0, 9),
+        };
+      } else if (width > 600) {
+        labels = fullLabels.slice(0, 6);
+        datasets = {
+          Utility: fullDatasets.Utility.slice(0, 6),
+          Salary: fullDatasets.Salary.slice(0, 6),
+          Rent: fullDatasets.Rent.slice(0, 6),
+          Others: fullDatasets.Others.slice(0, 6),
+        };
+      } else {
+        labels = fullLabels.slice(0, 5);
+        datasets = {
+          Utility: fullDatasets.Utility.slice(0, 5),
+          Salary: fullDatasets.Salary.slice(0, 5),
+          Rent: fullDatasets.Rent.slice(0, 3),
+          Others: fullDatasets.Others.slice(0, 5),
+        };
+      }
+    
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
@@ -34,22 +66,19 @@ const BudgetSection = () => {
                             label={item.label}
                             color={item.color} />))}
                 </div>
-                <div className="w-full col-span-1 md:col-span-1 lg:col-span-7 xl:col-span-8 bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
+                <div className="w-full h-[300px] md:h-full col-span-1 md:col-span-1 lg:col-span-7 xl:col-span-8 bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
                     <BarChart
-                        Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"]}
-                        Ylabels={{
-                            Utility: [40, 20, 110, 50, 40, 60, 60, 70, 80, 40, 100],
-                            Salary: [50, 30, 90, 40, 90, 100, 60, 70, 40, 80, 100, 30],
-                            Rent: [30, 40, 50, 80, 70, 40, 90, 100, 80, 70, 60],
-                            Others: [40, 50, 60, 70, 40, 40, 100, 110, 40, 50, 80],
-                        }}
+                        Xlabels={labels}
+                        Ylabels={datasets}
                         barColors={["#0C1737", "#152961", "#354E96", "#7889B9"]}
-                        barThickness={width > 1400 ? 50 : width > 1200 ? 40 : 30}
+                        barThickness = {width > 1400 ? 40 : width > 1200 ? 30 : width > 600 ? 20 : 10}
+                        topValueSize = {width > 1400 ? 12 : width > 1200 ? 11 : width > 600 ? 10 : 8}
+                        borderRadius={width > 1400 ? 8 : width > 1200 ? 7 : width > 600 ? 6 : 3}
+
                         yAxisTitle="Expenses"
                         pointStyle="circle"
                         showTopValues={true}
                         stepSize={40}
-                        borderRadius={8}
                         yTitleColor="black"
                         xLabelColor="black"
                         yLabelColor="black"

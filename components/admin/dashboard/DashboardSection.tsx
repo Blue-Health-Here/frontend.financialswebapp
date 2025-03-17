@@ -11,8 +11,10 @@ import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
 import { RootState } from '@/store/store';
 import { PharmacyCardProps } from '@/utils/types';
 import { setIsLoading } from '@/store/features/global/globalSlice';
+import useWindowSize from '@/hooks/useWindowSize';
 
 const DashboardSection = () => {
+    const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
     const hasFetched = useRef(false);
@@ -27,6 +29,23 @@ const DashboardSection = () => {
             });
         }
     }, []);
+    const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
+    const fullDatasets = [80, 100, 220, 180, 80, 120, 120, 140, 160]
+    let labels, datasets;
+
+    if (width > 1400) {
+      labels = fullLabels;
+      datasets = fullDatasets;
+    } else if (width > 1200) {
+      labels = fullLabels.slice(0, 9);
+      datasets = fullDatasets.slice(0, 9);
+    } else if (width > 600) {
+      labels = fullLabels.slice(0, 7);
+      datasets = fullDatasets.slice(0, 7);
+    } else {
+      labels = fullLabels.slice(0, 5);
+      datasets = fullDatasets.slice(0, 5);
+    }
 
     return (
         <>
@@ -35,10 +54,8 @@ const DashboardSection = () => {
                 <StatsSection />
                 <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
                     <BarChart
-                        Xlabels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]}
-                        Ylabels={{
-                            pharmacy: [80, 100, 220, 180, 80, 120, 120, 140, 160],
-                        }}
+                        Xlabels={labels}
+                        Ylabels={{ pharmacy: datasets }}
                         useGradient={false}
                         barColors={["#1E3A8A"]}
                         barThickness={8}
