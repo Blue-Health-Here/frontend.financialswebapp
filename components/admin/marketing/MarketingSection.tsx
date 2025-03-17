@@ -11,12 +11,33 @@ import AddMarketingModal from './AddMarketingModal';
 import { setIsAddMarketing } from '@/store/features/admin/marketing/adminMarketingSlice';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
+import { useState,useEffect,useRef } from 'react';
+import { setIsLoading } from '@/store/features/global/globalSlice';
+import { fetchAllMarketingMaterials } from '@/services/adminServices';
+import { MarketingMaterialCardProps } from '@/utils/types';
 
 const MarketingSection = () => {
     const { isAddMarketing } = useSelector((state: RootState) => state.marketing)
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    
+    console.log(isAddMarketing);
     const dispatch = useDispatch()
+    const hasFetched = useRef(false);
+
+    useEffect(() => {
+            if (!hasFetched.current) {
+                hasFetched.current = true;
+                fetchAllMarketingMaterials(dispatch).then(() => {
+                    dispatch(setIsLoading(false));
+                });
+            }
+        }, []);
+
+
     const handleAddMarketing = () => {
-        dispatch(setIsAddMarketing(true))
+        setIsModalOpen(true); 
     }
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -32,11 +53,12 @@ const MarketingSection = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {marketinMaterial.map((marketing, index) => (
-                    <InfoCard key={index} courseName={marketing} />
+                {isAddMarketing.length > 0 && isAddMarketing.map((marketing: MarketingMaterialCardProps, index:number) => (
+                    <InfoCard key={index} courseName={marketing.title} />
                 ))}
             </div>
-            {isAddMarketing && <AddMarketingModal />}
+            {
+            isModalOpen && <AddMarketingModal />}
         </div>
     )
 }

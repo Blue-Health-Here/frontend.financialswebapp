@@ -13,6 +13,7 @@ import { setIsLoading } from '@/store/features/global/globalSlice';
 const PharmaciesSection = () => {
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+    console.log(pharmacies);
     const hasFetched = useRef(false);
 
     useEffect(() => {

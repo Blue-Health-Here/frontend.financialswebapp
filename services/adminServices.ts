@@ -4,6 +4,7 @@ import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlic
 import { setIsLoading } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
+import { setIsAddMarketing } from "@/store/features/admin/marketing/adminMarketingSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -31,6 +32,22 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
         if (response.status === 200) {
             dispatch(setPharmacies(response.data));
             toast.success("Pharmacies fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    }
+};
+
+/**
+ * Fetch all marketing materials and update Redux store.
+ */
+export const fetchAllMarketingMaterials = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-marketing");
+        if (response.status === 200) {
+            dispatch(setIsAddMarketing(response.data));
+            toast.success("Marketing Materials fetched successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
