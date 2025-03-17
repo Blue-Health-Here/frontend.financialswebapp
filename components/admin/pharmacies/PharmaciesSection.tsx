@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchAllPharmacies } from '@/services/adminServices';
 import { PharmacyCardProps } from '@/utils/types';
+import { setIsLoading } from '@/store/features/global/globalSlice';
 
 const PharmaciesSection = () => {
     const dispatch = useDispatch();
@@ -17,7 +18,9 @@ const PharmaciesSection = () => {
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllPharmacies(dispatch);
+            fetchAllPharmacies(dispatch).then(() => {
+                dispatch(setIsLoading(false));
+            });
         }
     }, []);
 
