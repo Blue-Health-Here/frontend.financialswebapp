@@ -19,7 +19,7 @@ import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpen
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
     return (
         <>
@@ -58,7 +58,7 @@ const BudgetSection = () => {
             </div>
 
             <div className="mt-6 px-6 py-8 space-y-4 bg-white shadow-lg rounded-lg">
-                <h2 className="text-xl font-semibold">Expense Categories</h2>
+                <h2 className="text-lg sm:text-xl font-semibold">Expense Categories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {expenseCategories.map((category, index) => (
                         <ExpenseCategoryCard key={index} category={category} />
@@ -69,21 +69,21 @@ const BudgetSection = () => {
             <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
 
                 <div className="flex items-center justify-between">
-                    <h1 className="text-xl font-semibold">Expense</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold">Expense</h1>
                     <div className="flex gap-x-4 items-center">
                         <FileDownloadField title='Reports' />
                     </div>
                 </div>
                 <div className="flex items-center justify-between flex-wrap gap-4 py-6">
                     <div className="flex items-center space-x-3">
-                        <h4 className="text-[16px] text-gray-700">Add Expense</h4>
+                        <h4 className="text-[13px] sm:text-[16px] text-gray-700">Add Expense</h4>
                         <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary"
                             onClick={() => { dispatch(setIsAddExpense(true)) }}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
                     <div className="relative w-[390px] sm:max-w-md">
-                        <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
+                        <Input name="email" placeholder="Search Pharmacy" className="h-[42px] text-xs sm:text-sm border-none shadow-lg rounded-lg font-medium" />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                             <IoSearch className="w-5 h-5" />
                         </span>

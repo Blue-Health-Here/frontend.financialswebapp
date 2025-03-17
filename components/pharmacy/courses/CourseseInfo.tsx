@@ -38,7 +38,7 @@ const CourseInfo = () => {
       </p>
       <button
         className="mt-2 bg-[#1E3A8A] text-white px-4 py-2 rounded-md transition w-full flex items-center justify-center gap-2"
-        onClick={(e) => e.stopPropagation()} // Prevents toggling when clicking the button
+        onClick={(e) => e.stopPropagation()} 
       >
         <svg
           width="17"
