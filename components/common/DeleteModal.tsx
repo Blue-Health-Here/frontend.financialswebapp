@@ -3,11 +3,11 @@ import { Button } from "../ui/button";
 import AlertModal from "./AlertModal";
 
 type DeleteModalProps = {
-    title: string;
-    content?: string;
-    handleClose?: () => void;
-    handleSuccess?: () => void;
-}
+  title: string;
+  content?: string;
+  handleClose?: () => void;
+  handleSuccess?: () => void;
+};
 
 const DeleteModal: React.FC<DeleteModalProps> = ({ title, content, handleClose, handleSuccess }) => {
     return (

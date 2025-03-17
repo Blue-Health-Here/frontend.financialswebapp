@@ -13,69 +13,107 @@ import { RootState } from "@/store/store";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 
 const OnboardingSection = () => {
-  const { isAddExpenseModal } = useSelector((state: RootState) => state.onboarding)
-  const dispatch = useDispatch()
+  const { isAddExpenseModal } = useSelector(
+    (state: RootState) => state.onboarding
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAddExpenseModal) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isAddExpenseModal]);
 
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
-        <div className="flex justify-between items-center gap-4">
-          <h1 className="text-2xl font-semibold flex-1 text-nowrap">
+        <div className="flex flex-col md:flex-col lg:flex-row gap-4">
+          {/* Onboarding Checklist Title */}
+          <h1
+            className=" text-xl sm:text-2xl font-semibold flex-1 text-nowrap 
+             md:text-xl lg:text-2xl"
+          >
             {onBoardingchecklists[0].name}
           </h1>
 
-          <div className="flex items-center gap-4">
-            <button className="border-none shadow-lg rounded-md font-semibold min-w-40 h-10 bg-[#93C5FD] hover:bg-blue-400 transition-all flex items-center gap-x-2 justify-center text-[#1E3A8A] text-md">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
-                  fill="#1E3A8A"
-                />
-              </svg>
-              Report
-            </button>
+          {/* Container for Button & Form */}
+          <div className="flex flex-col sm:flex-col-reverse md:flex-row gap-4">
+            {/* Formik Form */}
             <Formik
               initialValues={{ category: "", search: "" }}
-              onSubmit={() => { }}
+              onSubmit={() => {}}
             >
               {({ isSubmitting }) => (
-                <Form className="flex min-w-64 text-grey gap-4">
+                <Form className="flex flex-col sm:flex-col md:flex-row lg:flex-row gap-4">
+                  {/* Dropdown */}
+
+                  {/* Report Button (moved after dropdowns for small screens) */}
+                  <button
+                    className="hidden border-none shadow-lg rounded-md font-semibold 
+            min-w-40 h-10 text-md 
+            sm:min-w-32 sm:h-8 sm:text-sm 
+            md:min-w-36 md:h-9 md:text-sm 
+            bg-[#93C5FD] hover:bg-blue-400 transition-all 
+            sm:flex items-center gap-x-2 justify-center text-[#1E3A8A]"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
+                        fill="#1E3A8A"
+                      />
+                    </svg>
+                    Report
+                  </button>
                   <SelectField
-                    className="border-none shadow-lg rounded-lg font-medium min-w-48 h-10"
+                    className="border-none shadow-lg rounded-lg font-medium 
+            min-w-48 h-10 
+            sm:min-w-36 sm:h-8 
+            md:min-w-40 md:h-9"
                     name="category"
                     options={[
                       { value: "Al Categories", label: "Al Categories" },
                       { value: "operational", label: "Operational" },
                     ]}
                   />
+
+                  {/* Search Input */}
                   <div className="relative sm:max-w-md">
                     <Input
                       name="search"
                       placeholder="Search Checklist"
-                      className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
+                      className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs 
+              min-w-48 h-10 
+              sm:min-w-36 sm:h-8 
+              md:min-w-40 md:h-9"
                     />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                       <IoSearch size={18} />
                     </span>
                   </div>
+
+                  {/* Report Button (moved after dropdowns for small screens) */}
+                  <button
+                    className="sm:hidden border-none shadow-lg rounded-md font-semibold 
+            min-w-40 h-10 text-md 
+            sm:min-w-32 sm:h-8 sm:text-sm 
+            md:min-w-36 md:h-9 md:text-sm 
+            bg-[#93C5FD] hover:bg-blue-400 transition-all 
+            flex items-center gap-x-2 justify-center text-[#1E3A8A]"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
+                        fill="#1E3A8A"
+                      />
+                    </svg>
+                    Report
+                  </button>
                 </Form>
               )}
             </Formik>
@@ -94,7 +132,13 @@ const OnboardingSection = () => {
               </div>
             </div>
             <div className="border-b border-[#F1F5F9] my-2"></div>
-            <Accordion key={index} items={checklist.list} handleEditQuestion={() => { dispatch(setIsAddExpenseModal(true)) }} />
+            <Accordion
+              key={index}
+              items={checklist.list}
+              handleEditQuestion={() => {
+                dispatch(setIsAddExpenseModal(true));
+              }}
+            />
           </div>
         ))}
       </div>
