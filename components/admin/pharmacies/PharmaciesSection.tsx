@@ -18,9 +18,7 @@ const PharmaciesSection = () => {
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllPharmacies(dispatch).then(() => {
-                dispatch(setIsLoading(false));
-            });
+            fetchAllPharmacies(dispatch);
         }
     }, []);
 

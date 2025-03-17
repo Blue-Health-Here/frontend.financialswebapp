@@ -4,6 +4,7 @@ import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setIsLoading } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
+import { AddNewCourseFormValues } from "@/utils/types";
 import toast from "react-hot-toast";
 
 /**
@@ -19,6 +20,8 @@ export const fetchAllStats = async (dispatch: AppDispatch) => {
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
     }
 };
 
@@ -35,6 +38,8 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
     }
 };
 
@@ -51,5 +56,25 @@ export const fetchAllCourses = async (dispatch: AppDispatch) => {
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * create new course and update Redux store.
+ */
+export const createNewCourse = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/courses", data);
+        if (response.status === 200) {
+            fetchAllCourses(dispatch);
+            toast.success("Course created successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
     }
 };

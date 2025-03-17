@@ -26,9 +26,7 @@ const CoursesSection = () => {
     useEffect(() => {
         if (!isFetched.current) {
             isFetched.current = true;
-            fetchAllCourses(dispatch).then(() => {
-                dispatch(setIsLoading(false));
-            });
+            fetchAllCourses(dispatch);
         }
     }, []);
     
