@@ -232,3 +232,12 @@ export const operationalchecklists = [
         ]
     },
 ];
+
+
+export const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"];
+export const fullDatasets = {
+  Utility: [40, 20, 110, 50, 40, 60, 60, 70, 80, 40, 100],
+  Salary: [50, 30, 90, 40, 90, 100, 60, 70, 40, 80, 100, 30],
+  Rent: [30, 40, 50, 80, 70, 40, 90, 100, 80, 70, 60],
+  Others: [40, 50, 60, 70, 40, 40, 100, 110, 40, 50, 80],
+};

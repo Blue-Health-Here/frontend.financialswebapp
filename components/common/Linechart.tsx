@@ -98,7 +98,7 @@ const ExpenseChart = () => {
     };
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <div className=" w-full p-6 h-60 md:h-full">
             <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} />
         </div>
     );

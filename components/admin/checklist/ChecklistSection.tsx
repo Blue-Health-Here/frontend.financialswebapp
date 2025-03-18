@@ -44,9 +44,10 @@ const ChecklistSection = () => {
                     onSubmit={() => { }}
                 >
                     {({ isSubmitting }) => (
-                        <Form className="flex min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
+                        <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                             <SelectField
                                 className="border-none shadow-lg rounded-lg font-medium min-w-48"
+                                parentClassName="flex-1"
                                 name="type"
                                 options={[
                                     { value: "all", label: "All Types" },
@@ -56,13 +57,14 @@ const ChecklistSection = () => {
                             />
                             <SelectField
                                 className="border-none shadow-lg rounded-lg font-medium min-w-48"
+                                parentClassName="flex-1"
                                 name="category"
                                 options={[
                                     { value: "on-boarding", label: "On boarding" },
                                     { value: "operational", label: "Operational" },
                                 ]}
                             />
-                            <div className="relative min-w-48">
+                            <div className="relative min-w-48 flex-1">
                                 <Input name="search" placeholder="Search Checklist" className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
                                 <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                                     <IoSearch size={18} />
