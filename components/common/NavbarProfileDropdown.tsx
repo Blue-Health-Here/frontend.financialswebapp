@@ -11,7 +11,7 @@ const NavbarProfileDropdown: React.FC<NavbarProfileDropdownProps> = ({ role }) =
     const pathname = usePathname();
     const sidebarItems = role === 'admin' ? adminSidebarItems : pharmacySidebarItems
     return (
-        <div className="absolute right-0 top-full p-4 w-48 md:w-60 bg-primary rounded-lg shadow-lg">
+        <div className="absolute md:right-0 -right-16 top-full p-4 w-52 md:w-64 bg-primary rounded-lg shadow-lg">
             {sidebarItems.map((item, index) => {
                 const isActive = pathname === item.path
                 return (
