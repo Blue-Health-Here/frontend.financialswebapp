@@ -8,24 +8,24 @@ interface SelectFieldProps {
     name: string;
     options: { value: string; label: string }[];
     className?: string;
-    ref?: any;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ className, ref, label, options, ...props }) => {
-    const [field, meta] = useField(props);
+const SelectField: React.FC<SelectFieldProps> = ({ className, label, name, options, ...props }) => {
+    const [field, meta] = useField(name); // Explicitly pass 'name' instead of 'props'
 
     return (
         <div>
-            {label && <Label size="xs" htmlFor={props.name}>{label}</Label>}
+            {label && <Label size="xs" htmlFor={name}>{label}</Label>}
             <select
+                id={name}
                 className={cn(
-                    "flex h-10 w-full text-xs rounded-md placeholder:text-themeLight border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-                    className,
+                    "flex h-10 w-full text-xs rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                    className
                 )}
-                ref={ref}
                 {...props}
                 {...field}
             >
+                <option value="">Select an option</option> {/* Added empty default option */}
                 {options.map(option => (
                     <option key={option.value} value={option.value}>
                         {option.label}

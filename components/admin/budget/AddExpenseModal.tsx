@@ -6,9 +6,11 @@ import SelectField from "@/components/common/form/SelectField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import { setIsAddExpense } from "@/store/features/admin/expense/adminExpenseSlice";
+import MultiDateField from "@/components/common/form/MultiDateField";
 
 const AddExpenseModal = () => {
     const dispatch = useDispatch();
+
     const handleClose = () => {
         dispatch(setIsAddExpense(false));
     };
@@ -18,9 +20,12 @@ const AddExpenseModal = () => {
             <div className="bg-white">
                 <HeaderModal title="Add New Expense" onClose={handleClose} />
                 <div className="p-6">
-                    <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+                    <Formik
+                        initialValues={{ title: "", category: "", date: [], amount: "" }}
+                        onSubmit={(values) => console.log(values)}
+                    >
                         <Form className="flex flex-col gap-y-4">
-                            <InputField label="Expense Title" className="placeholder:text-themeLight" name="title" placeholder="Enter Expense" />
+                            <InputField label="Expense Title" name="title" placeholder="Enter Expense" />
                             <SelectField
                                 label="Expense Category"
                                 name="category"
@@ -29,9 +34,11 @@ const AddExpenseModal = () => {
                                     { value: "On-boarding", label: "On Boarding" },
                                 ]}
                             />
-                            <InputField label="Date" className="placeholder:text-themeLight block" name="date" type="date" />
-                            <InputField label="Expense Amount" className="placeholder:text-themeLight" name="amount" placeholder="Enter Amount" />
-                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                            <MultiDateField label="Select Dates" name="date" />
+                            <InputField label="Expense Amount" name="amount" placeholder="Enter Amount" />
+                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">
+                                Save
+                            </SubmitButton>
                         </Form>
                     </Formik>
                 </div>
