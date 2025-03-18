@@ -30,12 +30,12 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
             <h1 className="text-xl text-center font-semibold">LOGO</h1>
             <ul className="mt-16 flex flex-col gap-y-2 text-[15px]">
                 {sidebarItems.map((item, index) => {
-                    const isActive = pathName === item.path
+                    const isActive = pathName.startsWith(item.path)
                     return (
                         <Link href={item.path} key={index}>
                             <li className={`flex items-center gap-x-3 p-3 h-9 md:h-11 rounded-lg cursor-pointer transition font-medium
                               ${isActive ? "bg-secondary" : "hover:bg-secondary"}`}>
-                                <Image src={item.icon} alt={`${item.name} Icon`} width={item.icon === '/sidebar-checklist.svg' ? 14 : 20}  height={item.icon === '/sidebar-checklist.svg' ? 14 : 20} />
+                                <Image src={item.icon} alt={`${item.name} Icon`} width={20}  height={20} className={item.icon === '/sidebar-checklist.svg' ? 'max-h-5' : ''}/>
                                 <span className='text-xs sm:text-sm md:text-[16px]'>{item.name}</span>
                             </li>
                         </Link>

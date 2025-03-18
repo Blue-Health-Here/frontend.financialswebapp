@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SubmitButton } from "@/components/submit-button";
 import { IoIosArrowBack } from "react-icons/io";
 import { GoHome } from "react-icons/go";
@@ -19,19 +19,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import AddNewQuestionModal from "./AddNewQuestionModal";
+import { fetchAllPharmacies } from "@/services/adminServices";
+import { setIsLoading } from "@/store/features/global/globalSlice";
 
 const PharmacyDetail = () => {
   const [courses, setCourses] = useState(courseData);
   const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy);
+  const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
-  const id = params.id;
-
-  const pharmacy = pharmacyData.find((pharmacy) => pharmacy.id === Number(id));
+  const id = params?.pharmacy_id;
+  const hasFetched = useRef(false);
+  const pharmacy = pharmacies.find(
+    (pharmacy: any) => pharmacy.pharmacy_id === id
+  );
   if (!pharmacy) {
     return <p>Pharmacy not found.</p>;
   }
+
+  useEffect(() => {
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchAllPharmacies(dispatch).then(() => {
+        dispatch(setIsLoading(false));
+      });
+    }
+  }, []);
 
   const toggleSelect = (id: number) => {
     setCourses((prevCourses) =>
@@ -75,7 +89,9 @@ const PharmacyDetail = () => {
               <p className="cursor-pointer text-xs md:text-sm">Pharmacies</p>
             </div>
             <MdKeyboardArrowRight className="text-xl sm:text-2xl" />
-            <p className="text-[#3F4254] text-xs md:text-sm">{pharmacy.name}</p>
+            <p className="text-[#3F4254] text-xs md:text-sm">
+              {pharmacy.pharmacy_name}
+            </p>
           </div>
           <div className="flex gap-x-4 items-center">
             <FileDownloadField title="Reports" />
@@ -93,9 +109,9 @@ const PharmacyDetail = () => {
             />
             <div className="space-y-3 text-black w-full">
               <h2 className="text-sm sm:text-lg lg:text-xl font-bold">
-                {pharmacy.name}
+                {pharmacy.pharmacy_name}
               </h2>
-              
+
               <div className="flex justify-between flex-wrap gap-4">
                 <p className="text-xs sm:text-sm md:text-[16px] font-medium">
                   Total Expense
@@ -108,7 +124,7 @@ const PharmacyDetail = () => {
               <div className="flex justify-between flex-wrap gap-4">
                 <p className="text-xs font-semibold">Courses Completed</p>
                 <span className="text-xs sm:text-sm md:text-[12px] font-semibold">
-                  {pharmacy.courses}
+                  {pharmacy.total_completed} / {pharmacy.courses | 0}
                 </span>
               </div>
 
@@ -118,13 +134,13 @@ const PharmacyDetail = () => {
                     Onboarding Checklist Progress
                   </p>{" "}
                   <span className="text-[12px] font-semibold">
-                    {pharmacy.progress}%
+                    {pharmacy.completion_percentage}%
                   </span>
                 </div>{" "}
                 <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
                   <div
                     className="bg-primary h-[4px] rounded-full"
-                    style={{ width: `${pharmacy.progress}%` }}
+                    style={{ width: `${pharmacy.completion_percentage}%` }}
                   ></div>
                 </div>
               </div>

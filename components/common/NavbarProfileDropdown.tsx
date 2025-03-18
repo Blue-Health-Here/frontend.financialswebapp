@@ -18,7 +18,7 @@ const NavbarProfileDropdown: React.FC<NavbarProfileDropdownProps> = ({ role }) =
                     <Link href={item.path} key={index}>
                         <li className={`flex items-center gap-x-2 mb-1 p-2 text-white rounded-md text-sm cursor-pointer transition
                                         ${isActive ? "bg-secondary text-white" : "hover:bg-secondary hover:text-white"}`}>
-                            <Image src={item.icon} alt={`${item.name} Icon`} width={item.icon === "/sidebar-checklist.svg" ? 13 : 15} height={item.icon === "/sidebar-checklist.svg" ? 13 : 15} />
+                            <Image src={item.icon} alt={`${item.name} Icon`} width={15} height={15} className={item.icon === '/sidebar-checklist.svg' ? 'max-h-4' : ''} />
                             <span className="text-xs sm:text-sm md:text-[16px]">{item.name}</span>
                         </li>
                     </Link>
