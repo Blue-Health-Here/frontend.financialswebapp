@@ -72,7 +72,7 @@ const AddCourseModal = () => {
         if (values.pharmacy_ids[0] === "all") {
             payload.is_all = true;
         } else {
-            payload.pharmacy_ids = values.pharmacy_ids.join(",");
+            payload.pharmacy_ids = values.pharmacy_ids;
         }
     
         if (values.uploadType == 1) {
