@@ -1,49 +1,42 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
 import InfoCard from "@/components/common/InfoCard";
-import { marketinMaterial } from '@/utils/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import AddMarketingModal from './AddMarketingModal';
-import { setIsAddMarketing } from '@/store/features/admin/marketing/adminMarketingSlice';
-import { SubmitButton } from '@/components/submit-button';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import AddMarketingModal from "./AddMarketingModal";
+import { setIsAddMarketing } from "@/store/features/admin/marketing/adminMarketingSlice";
+import { SubmitButton } from "@/components/submit-button";
 import { FaPlus } from "react-icons/fa";
-import { useState,useEffect,useRef } from 'react';
-import { setIsLoading } from '@/store/features/global/globalSlice';
-import { fetchAllMarketingMaterials } from '@/services/adminServices';
-import { MarketingMaterialCardProps } from '@/utils/types';
+import { fetchAllMarketingMaterials } from "@/services/adminServices";
+import { MarketingMaterialCardProps } from "@/utils/types";
 
 const MarketingSection = () => {
-    const { isAddMarketing } = useSelector((state: RootState) => state.marketing)
-    
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    
-    
-    console.log(isAddMarketing);
-    const dispatch = useDispatch()
+    const { isAddMarketing, marketingMaterials } = useSelector((state: RootState) => state.marketing);
+    const dispatch = useDispatch();
     const hasFetched = useRef(false);
 
     useEffect(() => {
-            if (!hasFetched.current) {
-                hasFetched.current = true;
-                fetchAllMarketingMaterials(dispatch).then(() => {
-                    dispatch(setIsLoading(false));
-                });
-            }
-        }, []);
-
+        if (!hasFetched.current) {
+            hasFetched.current = true;
+            fetchAllMarketingMaterials(dispatch);
+        }
+    }, [dispatch]);
 
     const handleAddMarketing = () => {
-        setIsModalOpen(true); 
-    }
+        dispatch(setIsAddMarketing(true)); 
+    };
+
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                 <div className="flex items-center justify-between gap-3">
-                    <h1 className='text-lg md:text-2xl'>Marketing Material</h1><SubmitButton onClick={handleAddMarketing} className="w-7 h-7 p-1 text-white"><FaPlus className="text-white" size={12} /></SubmitButton>
+                    <h1 className='text-lg md:text-2xl'>Marketing Material</h1>
+                    <SubmitButton onClick={handleAddMarketing} className="w-7 h-7 p-1 text-white">
+                        <FaPlus className="text-white" size={12} />
+                    </SubmitButton>
                 </div>
                 <div className="relative w-[390px] sm:max-w-md">
                     <Input name="email" placeholder="Search Marketing Material" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
@@ -53,14 +46,13 @@ const MarketingSection = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {isAddMarketing.length > 0 && isAddMarketing.map((marketing: MarketingMaterialCardProps, index:number) => (
+                {marketingMaterials.length > 0 && marketingMaterials.map((marketing: MarketingMaterialCardProps, index: number) => (
                     <InfoCard key={index} courseName={marketing.title} />
                 ))}
             </div>
-            {
-            isModalOpen && <AddMarketingModal />}
+            {isAddMarketing && <AddMarketingModal />} 
         </div>
-    )
-}
+    );
+};
 
-export default MarketingSection
+export default MarketingSection;

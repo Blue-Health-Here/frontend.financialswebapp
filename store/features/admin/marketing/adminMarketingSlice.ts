@@ -1,18 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isAddMarketing: false
-}
+    isAddMarketing: false,
+    marketingMaterials: []
+};
 
 const adminMarketingSlice = createSlice({
     name: 'marketing',
     initialState,
     reducers: {
+        setMarketingMaterials: (state, action) => {
+            state.marketingMaterials = action.payload;
+        },
         setIsAddMarketing: (state, action) => {
-            state.isAddMarketing = action.payload
+            state.isAddMarketing = action.payload;
         }
     }
-})
+});
 
-export const { setIsAddMarketing } = adminMarketingSlice.actions
-export default adminMarketingSlice.reducer
+export const { setIsAddMarketing, setMarketingMaterials } = adminMarketingSlice.actions;
+export default adminMarketingSlice.reducer;
