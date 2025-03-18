@@ -6,7 +6,13 @@ import editIcon from "../../public/edit-icon.svg"
 import DeleteModal from "./DeleteModal";
 import { useState } from "react";
 
-const InfoCard = ({ name }: { name: string }) => {
+interface InfoCardProps { 
+    name: string; 
+    item?: any;
+    handleEdit?: Function 
+};
+
+const InfoCard: React.FC<InfoCardProps> = ({ name, item, handleEdit }) => {
     const [isCloseModal, setIsCloseModal] = useState(false);
     const handleDelete = () => {
         setIsCloseModal(true);
@@ -17,7 +23,7 @@ const InfoCard = ({ name }: { name: string }) => {
             <span className="text-xs sm:text-sm mdtext-[16px] font-medium">{name}</span>
             <div className="flex space-x-3 cursor-pointer">
                 <Image src={deleteIcon} alt="" width={15} height={15} className="md:w-[20px] md:h-[20px]"onClick={handleDelete} />
-                <Image src={editIcon} alt="" width={15} height={15} className="md:w-[20px] md:h-[20px]" />
+                <Image src={editIcon} alt="" width={15} height={15} className="md:w-[20px] md:h-[20px]" onClick={() => handleEdit && handleEdit(item)} />
             </div>
             {isCloseModal && <DeleteModal title={name.toUpperCase()} content={`<p className="text-base">
                     <span>Are you sure you want to delete this ${name}?</span> <br />

@@ -13,7 +13,8 @@ interface FileUploadFieldProps {
     isMultiSelect?: boolean;
     description?: string;
     variant?: "button" | "dropzone";
-    id?: string
+    id?: string;
+    onChange?: Function
 }
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
@@ -24,7 +25,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     description,
     isMultiSelect = false,
     variant = "button",
-    id
+    id, onChange
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
@@ -37,6 +38,9 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         } else {
             setPreview(files.length > 0 ? [files[0]] : []);
             helpers.setValue(files.length > 0 ? files[0] : null);
+        }
+        if (onChange) {
+            onChange(event);
         }
     };
 

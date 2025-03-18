@@ -40,3 +40,9 @@ export interface AddNewCourseFormValues {
     link?: string;
     file?: File | null;
 }
+
+export interface UploadedFileProps {
+    file_url?: string;
+    filename?: string;
+    path?: string
+}

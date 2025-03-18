@@ -5,13 +5,13 @@ import InfoCard from "../../common/InfoCard";
 import AddCourseModal from "./AddCourseModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
+import { setCourseDetails, setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";
 import { useEffect, useRef } from "react";
 import { fetchAllCourses } from "@/services/adminServices";
-import { CourseProps } from "@/utils/types";
+import { AddNewCourseFormValues, CourseProps } from "@/utils/types";
 import { setIsLoading } from "@/store/features/global/globalSlice";
 
 const CoursesSection = () => {
@@ -20,7 +20,13 @@ const CoursesSection = () => {
     const isFetched = useRef(false);
 
     const handleAddCourse = () => {
-        dispatch(setIsAddCourse(true))
+        dispatch(setIsAddCourse(true));
+        dispatch(setCourseDetails(null));
+    };
+
+    const handleEditCourse = (data: AddNewCourseFormValues) => {
+        dispatch(setIsAddCourse(true));
+        dispatch(setCourseDetails(data));
     };
 
     useEffect(() => {
@@ -46,7 +52,7 @@ const CoursesSection = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {courses.length > 0 && courses.map((course: CourseProps, index: number) => (
-                    <InfoCard key={index} name={course?.title} />
+                    <InfoCard key={index} item={course} name={course?.title} handleEdit={(item: any) => handleEditCourse(item)} />
                 ))}
             </div>
             {isAddCourse && <AddCourseModal />}
