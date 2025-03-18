@@ -19,8 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import AddNewQuestionModal from "./AddNewQuestionModal";
-import { fetchAllPharmacies } from "@/services/adminServices";
-import { setIsLoading } from "@/store/features/global/globalSlice";
 
 const PharmacyDetail = () => {
   const [courses, setCourses] = useState(courseData);
@@ -30,22 +28,12 @@ const PharmacyDetail = () => {
   const router = useRouter();
   const params = useParams();
   const id = params?.pharmacy_id;
-  const hasFetched = useRef(false);
   const pharmacy = pharmacies.find(
     (pharmacy: any) => pharmacy.pharmacy_id === id
   );
   if (!pharmacy) {
     return <p>Pharmacy not found.</p>;
   }
-
-  useEffect(() => {
-    if (!hasFetched.current) {
-      hasFetched.current = true;
-      fetchAllPharmacies(dispatch).then(() => {
-        dispatch(setIsLoading(false));
-      });
-    }
-  }, []);
 
   const toggleSelect = (id: number) => {
     setCourses((prevCourses) =>
