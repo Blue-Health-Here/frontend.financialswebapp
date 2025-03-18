@@ -6,7 +6,7 @@ export const PharmacyCard: React.FC<{ pharmacy: PharmacyCardProps }> = ({
   pharmacy,
 }) => {
   return (
-    <Link href={`/admin/pharmacies/${pharmacy.pharmacy_id}`}>
+    <Link href={`/admin/budget/${pharmacy.pharmacy_id}`}>
       <div className="bg-white p-4 shadow-md rounded-lg min-h-[250px] flex flex-col">
         <div className="flex flex-col gap-3">
           <Image
