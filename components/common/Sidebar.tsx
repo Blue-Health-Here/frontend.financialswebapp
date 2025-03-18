@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
                         <Link href={item.path} key={index}>
                             <li className={`flex items-center gap-x-3 p-3 h-9 md:h-11 rounded-lg cursor-pointer transition font-medium
                               ${isActive ? "bg-secondary" : "hover:bg-secondary"}`}>
-                                <Image src={item.icon} alt={`${item.name} Icon`} width={20} height={20} className='md:w-[20px] md:h-[20px]' />
+                                <Image src={item.icon} alt={`${item.name} Icon`} width={item.icon === '/sidebar-checklist.svg' ? 14 : 20}  height={item.icon === '/sidebar-checklist.svg' ? 14 : 20} />
                                 <span className='text-xs sm:text-sm md:text-[16px]'>{item.name}</span>
                             </li>
                         </Link>
