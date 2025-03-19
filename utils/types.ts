@@ -23,7 +23,7 @@ export type PharmacyCardProps = {
 }
 
 export type CourseProps = {
-    id: string;
+    course_id: string;
     title: string;
     link: string | null;
     filename: string;

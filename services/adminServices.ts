@@ -118,3 +118,21 @@ export const postCoursesUploadFile = async (dispatch: AppDispatch, data: any) =>
         dispatch(setIsLoading(false));
     }
 };
+
+/**
+ * delete course and update Redux store.
+ */
+export const deleteCourse = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/courses?course_id="+id);
+        if (response?.data?.success) {
+            fetchAllCourses(dispatch);
+            toast.success("Course deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

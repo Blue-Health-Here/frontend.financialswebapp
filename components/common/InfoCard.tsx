@@ -7,16 +7,24 @@ import DeleteModal from "./DeleteModal";
 import { useState } from "react";
 
 interface InfoCardProps { 
+    id?: string; 
     name: string; 
     item?: any;
     handleEdit?: Function 
+    handleDeleteModal?: (id?: string) => void 
 };
 
-const InfoCard: React.FC<InfoCardProps> = ({ name, item, handleEdit }) => {
+const InfoCard: React.FC<InfoCardProps> = ({ id, name, item, handleEdit, handleDeleteModal }) => {
     const [isCloseModal, setIsCloseModal] = useState(false);
     const handleDelete = () => {
         setIsCloseModal(true);
     };
+
+    const handleSuccess = () => {
+        if (handleDeleteModal) handleDeleteModal(id);
+        setIsCloseModal(false);
+        return undefined;
+    }
 
     return (
         <div className="flex items-center justify-between bg-white p-4 border rounded-lg shadow-sm w-full">
@@ -28,7 +36,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ name, item, handleEdit }) => {
             {isCloseModal && <DeleteModal title={name.toUpperCase()} content={`<p className="text-base">
                     <span>Are you sure you want to delete this ${name}?</span> <br />
                     <span>You'll not be able to recover it.</span>
-                </p>`} handleClose={() => setIsCloseModal(false)} handleSuccess={() => console.log("handle success")} />}
+                </p>`} handleClose={() => setIsCloseModal(false)} handleSuccess={handleSuccess} />}
         </div>
     );
 };

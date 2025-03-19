@@ -10,9 +10,9 @@ import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";
 import { useEffect, useRef } from "react";
-import { fetchAllCourses } from "@/services/adminServices";
+import { deleteCourse, fetchAllCourses } from "@/services/adminServices";
 import { AddNewCourseFormValues, CourseProps } from "@/utils/types";
-import { setIsLoading } from "@/store/features/global/globalSlice";
+import TextMessage from "@/components/common/TextMessage";
 
 const CoursesSection = () => {
     const { isAddCourse, courses } = useSelector((state: RootState) => state.course);
@@ -35,6 +35,10 @@ const CoursesSection = () => {
             fetchAllCourses(dispatch);
         }
     }, []);
+
+    const handleDeleteCourse = (id?: string) => {
+        deleteCourse(dispatch, id);
+    };
     
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -51,9 +55,11 @@ const CoursesSection = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courses.length > 0 && courses.map((course: CourseProps, index: number) => (
-                    <InfoCard key={index} item={course} name={course?.title} handleEdit={(item: any) => handleEditCourse(item)} />
-                ))}
+                {courses.length > 0 ? courses.map((course: CourseProps, index: number) => (
+                    <InfoCard id={course?.course_id} key={index} item={course} name={course?.title} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCourse(item)} />
+                )) : (
+                    <TextMessage text="Courses not found." />
+                )}
             </div>
             {isAddCourse && <AddCourseModal />}
         </div>

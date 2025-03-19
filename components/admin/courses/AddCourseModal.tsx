@@ -13,10 +13,8 @@ import { addNewCourseValidationSchema } from "@/utils/validationSchema";
 import { useEffect, useState } from "react";
 import { createNewCourse, fetchAllPharmacies, postCoursesUploadFile, updateCourse } from "@/services/adminServices";
 import { RootState } from "@/store/store";
-import { AddNewCourseFormValues, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
+import { PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
-import { MdOutlineFileUpload } from "react-icons/md";
-import FilePreview from "@/components/common/FilePreview";
 
 const AddCourseModal = () => {
     const [initialVals, setInitialVals] = useState<any>(addNewCourseInitialVals);
@@ -30,17 +28,21 @@ const AddCourseModal = () => {
 
     useEffect(() => {
         if (courseDetails) {
-            // console.log(courseDetails, "courseDetails")
+            // console.log(courseDetails, "courseDetails");
             setInitialVals({
                 course_id: courseDetails?.course_id,
                 title: courseDetails.title,
                 description: courseDetails.description,
                 uploadType: courseDetails?.link ? 1 : 2,
                 pharmacy_ids: courseDetails?.pharmacy_ids,
-                link: courseDetails.link,
+                ...(courseDetails?.link ? ({ link: courseDetails?.link}) : ({ link: courseDetails?.link })),
                 file: { file_url: courseDetails?.file_url, filename: courseDetails?.filename, path: "" }
             });
-            setUploadedFile({ file_url: courseDetails?.file_url, filename: courseDetails?.filename, path: "" });
+            if (courseDetails?.file_url && courseDetails?.filename) {
+                setUploadedFile({ file_url: courseDetails?.file_url, filename: courseDetails?.filename, path: "" });
+            } else {
+                setUploadedFile(null);
+            }
         } else {
             setInitialVals(addNewCourseInitialVals);
             setUploadedFile(null);
@@ -48,7 +50,7 @@ const AddCourseModal = () => {
         fetchAllPharmacies(dispatch);
     }, []);
 
-    const handleFileUpload = async (event: any, setFieldValue: (field: string, value: any) => void) => {
+    const handleFileUpload = async (event: any, setValue: (value: any) => void) => {
         try {
             const formData = new FormData();
             formData.append("file", event.target.files[0]);
@@ -56,7 +58,7 @@ const AddCourseModal = () => {
             
             if (response?.success) {
                 setUploadedFile(response.data);
-                setFieldValue("file", response.data); // Set Formik field with uploaded file URL
+                setValue(response.data); // Set Formik field with uploaded file
             }
         } catch (error: any) {
             toast.error(error?.message || "Something went wrong!!");
@@ -97,7 +99,7 @@ const AddCourseModal = () => {
     return (
         <Modal>
             <div className="bg-white">
-                <HeaderModal title="Add New Course" onClose={handleClose} />
+                <HeaderModal title={`${courseDetails ? "Edit" : "Add New"} Course`} onClose={handleClose} />
                 <div className="p-4 sm:p-6">
                     <Formik 
                         initialValues={initialVals} 
@@ -105,7 +107,7 @@ const AddCourseModal = () => {
                         enableReinitialize={true}
                         onSubmit={handleSubmit}
                     >
-                        {({ values, errors, setFieldValue }) => {
+                        {({ values }) => {
                             return (
                                 <Form className="flex flex-col gap-y-4">
                                     <InputField label="Course Title" className="placeholder:text-themeLight" name="title" placeholder="Enter Question" />
@@ -133,28 +135,17 @@ const AddCourseModal = () => {
                                     {values.uploadType == 1 ? (
                                         <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
                                     ) : (
-                                        <div>
-                                            {uploadedFile ? (
-                                                <FilePreview file={{ name: uploadedFile.filename }} handleDelete={() => { 
-                                                    setUploadedFile(null);
-                                                    setFieldValue("file", ""); // Clear file field in Formik
-                                                }} />
-                                            ) : (
-                                                <SubmitButton type="button" className="w-full relative p-0 text-primary bg-white hover:bg-white border border-secondary">
-                                                    <input 
-                                                        type="file" 
-                                                        name="file" 
-                                                        onChange={(event) => handleFileUpload(event, setFieldValue)} 
-                                                        className="absolute left-0 right-0 top-0 bottom-0 opacity-0 cursor-pointer" 
-                                                    />
-                                                    <MdOutlineFileUpload className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                                                    <p className="ml-2 text-xs md:text-sm">Upload</p>
-                                                </SubmitButton>
-                                            )}
-                                            {errors?.file && <p className="text-red-500 text-xs mt-1 font-semibold">{errors?.file}</p>}
-                                        </div>
+                                        <FileUploadField
+                                            name="file"
+                                            title="Upload"
+                                            uploadedFile={uploadedFile}
+                                            setUploadedFile={setUploadedFile}
+                                            handleFileUpload={(e, setValue) => handleFileUpload(e, setValue)}
+                                        />
                                     )}
-                                    <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                                    <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">
+                                        {courseDetails ? "Update" : "Save"}
+                                    </SubmitButton>
                                 </Form>
                             )
                         }}
