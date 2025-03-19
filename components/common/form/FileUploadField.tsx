@@ -16,9 +16,9 @@ interface FileUploadFieldProps {
     variant?: "button" | "dropzone";
     id?: string;
     onChange?: Function;
-    uploadedFile: UploadedFileProps | null;
-    setUploadedFile: (file: UploadedFileProps | null) => void;
-    handleFileUpload: (event: any, setValue: (value: any) => void) => void;
+    uploadedFile?: UploadedFileProps | null;
+    setUploadedFile?: (file: UploadedFileProps | null) => void;
+    handleFileUpload?: (event: any, setValue: (value: any) => void) => void;
 }
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
@@ -68,7 +68,9 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 <FilePreview
                     file={{ name: uploadedFile.filename }}
                     handleDelete={() => {
-                        setUploadedFile(null);
+                        if (setUploadedFile) {
+                            setUploadedFile(null);
+                        }
                         helpers.setValue("");
                     }}
                 />
