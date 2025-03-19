@@ -33,7 +33,7 @@ const MarketingSection = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {marketinMaterial.map((marketing, index) => (
-                    <InfoCard key={index} courseName={marketing} />
+                    <InfoCard key={index} name={marketing} />
                 ))}
             </div>
             {isAddMarketing && <AddMarketingModal />}

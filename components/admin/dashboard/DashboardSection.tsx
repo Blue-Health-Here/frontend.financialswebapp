@@ -22,11 +22,8 @@ const DashboardSection = () => {
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllStats(dispatch).then(() => {
-                fetchAllPharmacies(dispatch).then(() => {
-                    dispatch(setIsLoading(false));
-                });
-            });
+            fetchAllStats(dispatch);
+            fetchAllPharmacies(dispatch);
         }
     }, []);
     const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
