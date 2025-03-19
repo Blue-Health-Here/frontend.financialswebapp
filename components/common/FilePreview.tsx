@@ -4,8 +4,8 @@ import { MdOutlineFileDownload } from 'react-icons/md'
 
 
 interface FilePreviewProps {
-    file: File;
-    handleDelete: () => void;
+    file?: any;
+    handleDelete?: () => void;
 }
 
 const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, }) => {

@@ -24,13 +24,13 @@ const DashboardSection = () => {
   return (
     <>
       <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-fr">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:auto-rows-fr">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {statsDataConstant.map((item, index) => (
             <StatsCard key={index} value={item.value} label={item.label} color={item.color} icon={item.icon} />
           ))}
         </div>
-        <div className="bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
+        <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
           <ExpenseChart />
         </div>
       </div>

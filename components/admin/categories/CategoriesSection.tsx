@@ -59,7 +59,7 @@ const CategoriesSection = () => {
                     {/* Category List */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {categoryData[selectedCategory]?.map((category, index) => (
-                            <InfoCard key={index} courseName={category} />
+                            <InfoCard key={index} name={category} />
                         ))}
 
                     </div>

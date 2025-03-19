@@ -25,15 +25,13 @@ const MultiSelectField: React.FC<MultiSelectFieldProps & React.ComponentProps<ty
 }) => {
     const [field, meta, helpers] = useField(name);
 
-    const allValues = options.filter(option => option.value !== "all").map(option => option.value);
-
     const handleChange = (selectedOptions: OptionType[]) => {
         const values = selectedOptions.map(option => option.value);
 
         if (values.includes("all")) {
-            helpers.setValue(allValues);
+            helpers.setValue(["all"]); // If "All" is selected, keep only "All"
         } else {
-            helpers.setValue(values);
+            helpers.setValue(values); // Normal selection
         }
     };
 
@@ -41,37 +39,32 @@ const MultiSelectField: React.FC<MultiSelectFieldProps & React.ComponentProps<ty
         <div>
             {label && <Label size="xs" className="text-grey" htmlFor={name}>{label}</Label>}
             <Select
+                isMulti
                 className={cn(
-                    "flex w-full rounded-md placeholder:text-themeLight !border !border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50",
+                    "flex w-full rounded-md placeholder:text-themeLight !border !border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                     className,
                 )}
-                {...field}
                 {...props}
                 options={options}
-                // value={options.filter(option => field.value.includes(option.value))}
-                value={options.find(option => option.value === field.value)}
+                value={options.filter(option => field.value?.includes(option.value))}
                 onChange={(selected) => handleChange(selected as OptionType[])}
                 onBlur={() => helpers.setTouched(true)}
                 styles={{
-                    control: (base, state) => ({
+                    control: (base) => ({
                         ...base,
                         borderWidth: 0,
                         width: "100%",
                         borderRadius: 6,
-                        "&:hover": {
-                            borderWidth: 0,
-                            borderColor: "hsl(0 0% 89.8%)"
-                        },
                     }),
                     placeholder: (base) => ({
                         ...base,
-                        color: "#B9B9C3", // Change placeholder color
-                        fontSize: "14px", // Optional: Adjust font size
+                        color: "#B9B9C3",
+                        fontSize: "14px",
                     }),
                 }}
             />
             {meta.touched && meta.error ? (
-                <div style={{ color: "red", fontSize: "12px" }}>{meta.error}</div>
+                <div className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</div>
             ) : null}
         </div>
     );
