@@ -6,7 +6,6 @@ import SelectField from "@/components/common/form/SelectField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import { setIsAddExpense } from "@/store/features/admin/expense/adminExpenseSlice";
-import MultiDateField from "@/components/common/form/MultiDateField";
 
 const AddExpenseModal = () => {
     const dispatch = useDispatch();
@@ -34,7 +33,7 @@ const AddExpenseModal = () => {
                                     { value: "On-boarding", label: "On Boarding" },
                                 ]}
                             />
-                            <MultiDateField label="Select Dates" name="date" />
+                            <InputField label="Date" className="placeholder:text-themeLight block" name="date" type="date" />
                             <InputField label="Expense Amount" name="amount" placeholder="Enter Amount" />
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">
                                 Save

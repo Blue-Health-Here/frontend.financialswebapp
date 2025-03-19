@@ -19,7 +19,7 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({ className, label, name 
         if (newDate && !selectedDates.includes(newDate)) {
             const updatedDates = [...selectedDates, newDate];
             setSelectedDates(updatedDates);
-            helpers.setValue(updatedDates); // Update Formik state
+            helpers.setValue(updatedDates); 
         }
     };
 
@@ -31,23 +31,26 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({ className, label, name 
 
     return (
         <div>
-            {label && <Label className="text-grey">{label}</Label>}
+            {label && <Label className="text-xs text-grey">{label}</Label>}
+            <div className="relative">
             <input
                 type="date"
                 className={cn(
-                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                    "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-xs focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                     className
                 )}
                 onChange={handleDateChange}
             />
+
+            </div>
             
-            {/* Show selected dates title only if there are selected dates */}
+            
             {selectedDates.length > 0 && (
                 <div className="mt-3">
-                    <h4 className="text-md text-gray-500">Selected Dates</h4>
+                    <h4 className="text-xs text-gray-500">Selected Dates</h4>
                     <div className="mt-1 flex flex-col space-y-2">
                         {selectedDates.map((date) => (
-                            <div key={date} className="flex items-center justify-between  text-sm px-3 py-2 rounded-md border border-gray-300">
+                            <div key={date} className="flex items-center justify-between  text-xs px-3 py-2 rounded-md border border-gray-300">
                                 {date}
                                 <button type="button" onClick={() => removeDate(date)} className="ml-2 text-black-500">
                                     <X size={14} />
