@@ -2,7 +2,7 @@ import React from "react";
 import { useField } from "formik";
 import { Label } from "../../ui/label";
 import { cn } from "@/lib/utils";
-
+ 
 interface SelectFieldProps {
     label?: string;
     name: string;
@@ -12,22 +12,21 @@ interface SelectFieldProps {
     ref?: any;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, ref, label, name, options, ...props }) => {
+const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, ref, label, options, ...props }) => {
     const [field, meta] = useField(props);
-
+ 
     return (
         <div className={parentClassName}>
-            {label && <Label size="xs" htmlFor={name}>{label}</Label>}
+            {label && <Label size="xs" htmlFor={props.name}>{label}</Label>}
             <select
-                id={name}
                 className={cn(
-                    "flex h-10 w-full text-xs rounded-md border border-input bg-background px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-                    className
+                    "flex h-10 w-full text-xs rounded-md placeholder:text-themeLight border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+                    className,
                 )}
+                ref={ref}
                 {...props}
                 {...field}
             >
-                <option value="">Select an option</option> {/* Added empty default option */}
                 {options.map(option => (
                     <option key={option.value} value={option.value}>
                         {option.label}
@@ -40,5 +39,5 @@ const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, r
         </div>
     );
 };
-
+ 
 export default SelectField;
