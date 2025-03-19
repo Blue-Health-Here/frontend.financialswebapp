@@ -33,7 +33,9 @@ const BarChart = ({
     showXLabels = true,
     tooltipOptions = {},
     topValueSize,
-    barThickness
+    barThickness,
+    xStacked=false,
+    yStacked=false,
 }: any) => {
 
     const getGradient = (ctx: any, chartArea: any) => {
@@ -47,12 +49,16 @@ const BarChart = ({
     };
 
     const data = {
+        type: 'bar',
         labels: Xlabels,
         datasets: Object.keys(Ylabels).map((key, index) => ({
             label: key.charAt(0).toUpperCase() + key.slice(1),
             data: Ylabels[key],
             barThickness: barThickness,
             borderRadius: borderRadius,
+            categoryPercentage: 0.8, 
+            borderAlign:'inner',
+           
             backgroundColor: (ctx: any) =>
                 useGradient && ctx.chart.chartArea ? getGradient(ctx.chart.ctx, ctx.chart.chartArea) : barColors[index] || "#999",
         })),
@@ -60,6 +66,7 @@ const BarChart = ({
 
     const options: ChartOptions<"bar"> = {
         responsive: true,
+    
         maintainAspectRatio: false,
         plugins: {
             legend: {
@@ -93,19 +100,21 @@ const BarChart = ({
                     return datasetIndex === data.datasets.length - 1 ? `$${total}` : "";
                 },
             },
+          
         },
 
         scales: {
             x: {
-                stacked: true,
-                grid: { display: false },
+                stacked: xStacked,
+                offset: true,
+                grid: { display: false, offset: true, },
                 ticks: {
                     display: showXLabels,
                     color: xLabelColor
                 },
             },
             y: {
-                stacked: true,
+                stacked: yStacked,
                 beginAtZero: true,
                 grid: { drawOnChartArea: true },
                 title: {

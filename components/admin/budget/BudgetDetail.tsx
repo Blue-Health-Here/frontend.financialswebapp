@@ -88,6 +88,8 @@ const BudgetDetail = () => {
                         yTitleColor="black"
                         xLabelColor="black"
                         yLabelColor="black"
+                        xStacked={true}
+                        yStacked={true}
                     />
                 </div>
             </div>

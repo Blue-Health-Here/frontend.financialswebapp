@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 // Pharmacy card data 
 export const pharmacyData = [
