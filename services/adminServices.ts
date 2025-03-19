@@ -2,7 +2,7 @@ import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-import { setIsLoading } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 
@@ -129,6 +129,46 @@ export const deleteCourse = async (dispatch: AppDispatch, id?: string) => {
         if (response?.data?.success) {
             fetchAllCourses(dispatch);
             toast.success("Course deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * get profile data and update Redux store.
+ */
+export const fetchProfileData = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-profile");
+        if (response?.status === 200) {
+            dispatch(setProfileData(response?.data[0]));
+            toast.success("Profile fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * post profile update and update Redux store.
+ */
+export const postProfileUpdate = async (dispatch: AppDispatch, formData?: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-profile", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            fetchProfileData(dispatch);
+            toast.success("Profile updated successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");

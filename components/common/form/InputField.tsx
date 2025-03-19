@@ -11,6 +11,7 @@ interface InputFieldProps {
     className?: string;
     ref?: any;
     Icon?: React.ComponentType<{ className?: string }>;
+    disabled?: boolean
 }
 
 const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ...props }) => {
