@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import { IoSearch } from "react-icons/io5";
@@ -10,6 +10,8 @@ import { fetchAllPharmacies } from "@/services/adminServices";
 import { PharmacyCardProps } from "@/utils/types";
 
 const PharmaciesSection = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
   const hasFetched = useRef(false);
@@ -17,9 +19,20 @@ const PharmaciesSection = () => {
   useEffect(() => {
     if (!hasFetched.current) {
       hasFetched.current = true;
-      fetchAllPharmacies(dispatch);
+      fetchAllPharmacies(dispatch).finally(() => setLoading(false));
     }
   }, []);
+
+      const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          setSearchQuery(e.target.value);
+      };
+  
+      const filteredPharmacies = pharmacies.filter((pharmacy: PharmacyCardProps) => {
+          const nameMatches = pharmacy.pharmacy_name.toLowerCase().includes(searchQuery.toLowerCase());
+          const expenseMatches = pharmacy.expense !== null && pharmacy.expense.toString().includes(searchQuery);
+          return nameMatches || expenseMatches;
+      });
+  
 
   return (
     <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -27,7 +40,9 @@ const PharmaciesSection = () => {
         <h1 className="text-lg md:text-2xl">Pharmacies</h1>
         <div className="relative w-[390px] sm:max-w-md">
           <Input
-            name="email"
+            name="search"
+            value={searchQuery}
+            onChange={handleSearchChange}
             placeholder="Search Pharmacy"
             className="h-[42px] border-none shadow-lg rounded-lg font-medium"
           />
@@ -37,10 +52,17 @@ const PharmaciesSection = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pharmacies.length > 0 &&
-          pharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
-            <PharmacyCard key={index} pharmacy={pharmacy} />
-          ))}
+          {loading ? (
+                                <p>Loading pharmacies...</p>
+                            ) : (
+                                filteredPharmacies.length > 0 ? (
+                                    filteredPharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
+                                        <PharmacyCard key={index} pharmacy={pharmacy} />
+                                    ))
+                                ) : (
+                                    <p>No pharmacies match your search criteria.</p>
+                                )
+                            )}
       </div>
     </div>
   );
