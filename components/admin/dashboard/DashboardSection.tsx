@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { PharmacyCard } from "@/components/common/PharmacyCard";
 import BarChart from "@/components/common/BarChart";
@@ -10,10 +10,11 @@ import StatsSection from './StatsSection';
 import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
 import { RootState } from '@/store/store';
 import { PharmacyCardProps } from '@/utils/types';
-import { setIsLoading } from '@/store/features/global/globalSlice';
 import useWindowSize from '@/hooks/useWindowSize';
 
 const DashboardSection = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(true);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
@@ -23,25 +24,36 @@ const DashboardSection = () => {
         if (!hasFetched.current) {
             hasFetched.current = true;
             fetchAllStats(dispatch);
-            fetchAllPharmacies(dispatch);
+            fetchAllPharmacies(dispatch).finally(() => setLoading(false));
         }
     }, []);
+    
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const filteredPharmacies = pharmacies.filter((pharmacy: PharmacyCardProps) => {
+        const nameMatches = pharmacy.pharmacy_name.toLowerCase().includes(searchQuery.toLowerCase());
+        const expenseMatches = pharmacy.expense !== null && pharmacy.expense.toString().includes(searchQuery);
+        return nameMatches || expenseMatches;
+    });
+
     const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
     const fullDatasets = [80, 100, 220, 180, 80, 120, 120, 140, 160]
     let labels, datasets;
 
     if (width > 1400) {
-      labels = fullLabels;
-      datasets = fullDatasets;
+        labels = fullLabels;
+        datasets = fullDatasets;
     } else if (width > 1200) {
-      labels = fullLabels.slice(0, 9);
-      datasets = fullDatasets.slice(0, 9);
+        labels = fullLabels.slice(0, 9);
+        datasets = fullDatasets.slice(0, 9);
     } else if (width > 600) {
-      labels = fullLabels.slice(0, 7);
-      datasets = fullDatasets.slice(0, 7);
+        labels = fullLabels.slice(0, 7);
+        datasets = fullDatasets.slice(0, 7);
     } else {
-      labels = fullLabels.slice(0, 5);
-      datasets = fullDatasets.slice(0, 5);
+        labels = fullLabels.slice(0, 5);
+        datasets = fullDatasets.slice(0, 5);
     }
 
     return (
@@ -71,20 +83,34 @@ const DashboardSection = () => {
                 <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                     <h1 className='text-lg md:text-2xl'>Pharmacies</h1>
                     <div className="relative w-[390px] sm:max-w-md">
-                        <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
+                        <Input
+                            name="search"
+                            placeholder="Search Pharmacy"
+                            className="h-[42px] border-none shadow-lg rounded-lg font-medium"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                        />
                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                             <IoSearch className="md:w-5 md:h-5" />
                         </span>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {pharmacies.length > 0 && pharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
-                        <PharmacyCard key={index} pharmacy={pharmacy} />
-                    ))}
+                    {loading ? (
+                        <p>Loading pharmacies...</p>
+                    ) : (
+                        filteredPharmacies.length > 0 ? (
+                            filteredPharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
+                                <PharmacyCard key={index} pharmacy={pharmacy} />
+                            ))
+                        ) : (
+                            <p>No pharmacies match your search criteria.</p>
+                        )
+                    )}
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default DashboardSection
