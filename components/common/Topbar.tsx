@@ -22,6 +22,7 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
+    const { profileData } = useSelector((state: RootState) => state.global);
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const { isLoading } = useSelector((state: RootState) => state.global);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -87,7 +88,9 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
                                     <span className="text-grey text-sm font-medium">{user?.user_metadata?.name}</span>
                                     <p className="text-themeLight text-sm">{capitalize(role)}</p>
                                 </div>
-                                <Image src={profileImage} alt="" />
+                                <div className='border rounded-full object-cover shadow-sm overflow-hidden w-9 h-9 flex items-center justify-center'>
+                                    <Image src={profileData?.image_url ?? user?.user_metadata?.image_url ?? profileImage} alt="" className='object-cover shadow-sm w-full h-full' width={30} height={30} />
+                                </div>
                             </button>
                             {isDropdownOpen && (
                                 <NavbarProfileDropdown role={role} />
