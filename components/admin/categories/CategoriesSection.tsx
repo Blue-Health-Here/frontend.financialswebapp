@@ -1,8 +1,7 @@
 "use client";
-import React from 'react'
+
+import React, { useEffect } from 'react'
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { IoSearch } from "react-icons/io5";
 import InfoCard from "@/components/common/InfoCard";
 import { Button } from "@/components/ui/button";
 import { categoryData } from "@/utils/constants";
@@ -12,10 +11,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsAddCategory } from '@/store/features/admin/category/adminCategorySlice';
 import { RootState } from '@/store/store';
 import AddCategoryModal from './AddCategoryModal';
+import { deleteCategory, fetchAllCategories } from '@/services/adminServices';
+import { capitalize } from '@/utils/helperClient';
+import { CategoryProps } from '@/utils/types';
+import TextMessage from '@/components/common/TextMessage';
+
 const CategoriesSection = () => {
-    const [selectedCategory, setSelectedCategory] = useState("Onboarding");
-    const { isAddCategory } = useSelector((state: RootState) => state.category);
+    const [selectedCategory, setSelectedCategory] = useState("onboarding");
+    const { isAddCategory, categories } = useSelector((state: RootState) => state.category);
     const dispatch = useDispatch();
+    
+    useEffect(() => {
+        fetchAllCategories(dispatch, selectedCategory);
+    }, [selectedCategory, dispatch]);
+
+    const handleDeleteCourse = (id: string) => {
+        deleteCategory(dispatch, id,selectedCategory);
+    };
 
     return (
         <div className="flex flex-col md:flex-row ">
@@ -32,7 +44,7 @@ const CategoriesSection = () => {
                                 : "hover:bg-secondary"
                                 }`}
                         >
-                            {category}
+                            {capitalize(category)}
                         </li>
                     ))}
                 </ul>
@@ -41,7 +53,7 @@ const CategoriesSection = () => {
             <main className="flex-1 md:pt-10 md:ml-[250px] xl:ml-[300px]">
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-                        <h1 className="text-lg md:text-xl font-semibold">{selectedCategory}</h1>
+                        <h1 className="text-lg md:text-xl font-semibold">{capitalize(selectedCategory)}</h1>
                         <SubmitButton className="bg-secondary hover:text-white">
                             Save Changes
                         </SubmitButton>
@@ -58,14 +70,13 @@ const CategoriesSection = () => {
 
                     {/* Category List */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {categoryData[selectedCategory]?.map((category, index) => (
-                            <InfoCard key={index} name={category} />
-                        ))}
-
+                        {categories.length > 0 ? categories?.map((category: CategoryProps, index: number) => (
+                            <InfoCard id={category.id} key={index} name={category.name} handleDeleteModal={handleDeleteCourse}/>
+                        )) : <TextMessage text="Categories not found." />}
                     </div>
                 </div>
             </main>
-            {isAddCategory && <AddCategoryModal />}
+            {isAddCategory && <AddCategoryModal categoryType={selectedCategory}/>}
         </div>
     )
 }

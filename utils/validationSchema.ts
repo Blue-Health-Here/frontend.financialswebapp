@@ -43,3 +43,7 @@ export const addNewCourseValidationSchema = Yup.object().shape({
             : schema.notRequired().nullable()
     ),
 });
+
+export const addNewCategoryValidationSchema = Yup.object().shape({
+    name: Yup.string().required("Category Name is required"),
+});

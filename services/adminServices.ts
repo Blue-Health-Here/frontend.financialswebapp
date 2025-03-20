@@ -1,4 +1,5 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
+import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
@@ -169,6 +170,61 @@ export const postProfileUpdate = async (dispatch: AppDispatch, formData?: any) =
         if (response?.data?.success) {
             fetchProfileData(dispatch);
             toast.success("Profile updated successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * fetch all Categories and update Redux store.
+ */
+export const fetchAllCategories = async (dispatch: AppDispatch, type: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-categories?type="+type);
+        if (response.status === 200) {
+            dispatch(setSelectCategories(response.data));
+            toast.success("Categories fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * create new category and update Redux store.
+ */
+export const createNewCategory= async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-categories", data);
+        if (response.data?.success) {
+            fetchAllCategories(dispatch, data.category_type);
+            toast.success("Category created successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * delete category and update Redux store.
+ */
+export const deleteCategory = async (dispatch: AppDispatch, id: string, type: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-categories?id="+id);
+        if (response?.data?.success) {
+            fetchAllCategories(dispatch, type);
+            toast.success("Category deleted successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
