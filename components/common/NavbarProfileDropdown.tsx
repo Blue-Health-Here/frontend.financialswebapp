@@ -11,14 +11,14 @@ const NavbarProfileDropdown: React.FC<NavbarProfileDropdownProps> = ({ role }) =
     const pathname = usePathname();
     const sidebarItems = role === 'admin' ? adminSidebarItems : pharmacySidebarItems
     return (
-        <div className="absolute right-0 top-full p-4 w-48 md:w-60 bg-primary rounded-lg shadow-lg">
+        <div className="absolute md:right-0 -right-16 top-full p-4 w-52 md:w-64 bg-primary rounded-lg shadow-lg">
             {sidebarItems.map((item, index) => {
                 const isActive = pathname === item.path
                 return (
                     <Link href={item.path} key={index}>
                         <li className={`flex items-center gap-x-2 mb-1 p-2 text-white rounded-md text-sm cursor-pointer transition
                                         ${isActive ? "bg-secondary text-white" : "hover:bg-secondary hover:text-white"}`}>
-                            <Image src={item.icon} alt={`${item.name} Icon`} width={15} height={15} />
+                            <Image src={item.icon} alt={`${item.name} Icon`} width={15} height={15} className={item.icon === '/sidebar-checklist.svg' ? 'max-h-4' : ''} />
                             <span className="text-xs sm:text-sm md:text-[16px]">{item.name}</span>
                         </li>
                     </Link>

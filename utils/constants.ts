@@ -10,6 +10,16 @@ export const pharmacyData = [
     { id: 6, name: "Pharmacy MNO-6", expense: "1100.00", courses: "2 / 5", progress: 40, image: "/Ellipse.png" },
 ];
 
+export const pharmacyBudgetDetail = [
+    { id: 1, name: "Pharmacy XYZ-1", expense: "1500.00", revenue: "3000.00", profit: 50, image: "/Ellipse.png" },
+    { id: 2, name: "Pharmacy ABC-2", expense: "1200.00", revenue: "3000.00", profit: 60, image: "/Ellipse.png" },
+    { id: 3, name: "Pharmacy DEF-3", expense: "1800.00", revenue: "3000.00", profit: 80, image: "/Ellipse.png" },
+    { id: 4, name: "Pharmacy GHI-4", expense: "1300.00", revenue: "3000.00", profit: 30, image: "/Ellipse.png" },
+    { id: 5, name: "Pharmacy JKL-5", expense: "1400.00", revenue: "3000.00", profit: 70, image: "/Ellipse.png" },
+    { id: 6, name: "Pharmacy MNO-6", expense: "1100.00", revenue: "3000.00", profit: 40, image: "/Ellipse.png" },
+];
+
+
 // Side bar data 
 export const adminSidebarItems = [
     { name: "Dashboard", icon: "/sidebar-Dashboard-home.svg", path: "/admin/dashboard" },
@@ -223,3 +233,12 @@ export const operationalchecklists = [
         ]
     },
 ];
+
+
+export const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"];
+export const fullDatasets = {
+  Utility: [40, 20, 110, 50, 40, 60, 60, 70, 80, 40, 100],
+  Salary: [50, 30, 90, 40, 90, 100, 60, 70, 40, 80, 100, 30],
+  Rent: [30, 40, 50, 80, 70, 40, 90, 100, 80, 70, 60],
+  Others: [40, 50, 60, 70, 40, 40, 100, 110, 40, 50, 80],
+};

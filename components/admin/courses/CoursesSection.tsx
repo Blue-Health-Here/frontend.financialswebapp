@@ -5,20 +5,41 @@ import InfoCard from "../../common/InfoCard";
 import AddCourseModal from "./AddCourseModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
+import { setCourseDetails, setIsAddCourse } from "@/store/features/admin/course/adminCourseSlice";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from "@/components/submit-button";
-import { corses } from "@/utils/constants";
+import { useEffect, useRef } from "react";
+import { deleteCourse, fetchAllCourses } from "@/services/adminServices";
+import { AddNewCourseFormValues, CourseProps } from "@/utils/types";
+import TextMessage from "@/components/common/TextMessage";
 
 const CoursesSection = () => {
-    const { isAddCourse } = useSelector((state: RootState) => state.course);
+    const { isAddCourse, courses } = useSelector((state: RootState) => state.course);
     const dispatch = useDispatch();
+    const isFetched = useRef(false);
 
     const handleAddCourse = () => {
-        dispatch(setIsAddCourse(true))
+        dispatch(setIsAddCourse(true));
+        dispatch(setCourseDetails(null));
     };
 
+    const handleEditCourse = (data: AddNewCourseFormValues) => {
+        dispatch(setIsAddCourse(true));
+        dispatch(setCourseDetails(data));
+    };
+
+    useEffect(() => {
+        if (!isFetched.current) {
+            isFetched.current = true;
+            fetchAllCourses(dispatch);
+        }
+    }, []);
+
+    const handleDeleteCourse = (id?: string) => {
+        deleteCourse(dispatch, id);
+    };
+    
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
@@ -34,9 +55,11 @@ const CoursesSection = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {corses.map((course, index) => (
-                    <InfoCard key={index} courseName={course} />
-                ))}
+                {courses.length > 0 ? courses.map((course: CourseProps, index: number) => (
+                    <InfoCard id={course?.course_id} key={index} item={course} name={course?.title} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCourse(item)} />
+                )) : (
+                    <TextMessage text="Courses not found." />
+                )}
             </div>
             {isAddCourse && <AddCourseModal />}
         </div>

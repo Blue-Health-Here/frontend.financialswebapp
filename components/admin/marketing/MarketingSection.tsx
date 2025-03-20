@@ -47,7 +47,7 @@ const MarketingSection = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {marketingMaterials.length > 0 && marketingMaterials.map((marketing: MarketingMaterialCardProps, index: number) => (
-                    <InfoCard key={index} courseName={marketing.title} />
+                    <InfoCard key={index} name={marketing.title} />
                 ))}
             </div>
             {isAddMarketing && <AddMarketingModal />} 

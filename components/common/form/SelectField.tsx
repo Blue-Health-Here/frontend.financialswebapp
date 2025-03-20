@@ -8,14 +8,15 @@ interface SelectFieldProps {
     name: string;
     options: { value: string; label: string }[];
     className?: string;
+    parentClassName?: string;
     ref?: any;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ className, ref, label, options, ...props }) => {
+const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, ref, label, options, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
-        <div>
+        <div className={parentClassName}>
             {label && <Label size="xs" htmlFor={props.name}>{label}</Label>}
             <select
                 className={cn(
@@ -33,7 +34,7 @@ const SelectField: React.FC<SelectFieldProps> = ({ className, ref, label, option
                 ))}
             </select>
             {meta.touched && meta.error && (
-                <p className="text-red-500 text-sm">{meta.error}</p>
+                <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
             )}
         </div>
     );

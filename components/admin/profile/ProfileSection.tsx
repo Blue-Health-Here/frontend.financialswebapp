@@ -1,101 +1,127 @@
 "use client"
-import React, { useRef, useState } from 'react'
-import { Input } from "@/components/ui/input";
+
+import React, { useEffect, useRef, useState } from 'react'
 import Image from "next/image";
 import { Pencil, X } from "lucide-react";
-import { Label } from "@/components/ui/label";
 import { SubmitButton } from '@/components/submit-button';
 import UpdatePasswordSection from '@/components/common/UpdatePasswordSection';
+import { Field, Form, Formik } from 'formik';
+import InputField from '@/components/common/form/InputField';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { fetchProfileData, postProfileUpdate } from '@/services/adminServices';
+
 const ProfileSection = () => {
-    const [profile, setProfile] = useState(null);
+    const [initialVals, setInitialVals] = useState<{ name?: string; email?: string; file?: File | null | string }>({ name: "", email: "", file: "" })
+    const { user } = useSelector((state: RootState) => state.auth);
+    const { profileData } = useSelector((state: RootState) => state.global);
+    const [profileImg, setProfileImg] = useState(null);
     const fileInputRef: any = useRef(null);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        fetchProfileData(dispatch);
+    }, []);
+
+    useEffect(() => {
+        console.log(user, profileData, "user");
+        if (user && user?.user_metadata) {
+            setInitialVals({
+                ...initialVals,
+                email: user?.user_metadata?.email,
+            });
+        }
+        if (profileData) {
+            setInitialVals({
+                ...initialVals,
+                name: profileData?.name
+            });
+        }
+    }, [profileData]);
 
     const handleFileChange = (e: any) => {
         const file = e.target.files[0];
         if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
-            const reader: any = new FileReader();
-            reader.onloadend = () => {
-                setProfile(reader.result);
-            };
-            reader.readAsDataURL(file);
-
+            // const reader: any = new FileReader();
+            // reader.onloadend = () => {
+            //     setProfileImg(reader.result);
+            // };
+            // reader.readAsDataURL(file);
+            setProfileImg(file)
         } else {
             alert('Please select a valid image file (png, jpg, jpeg).');
         }
     };
 
-    const handleEditClick = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleRemoveClick = () => {
-        setProfile(null)
+    const handleSubmit = (values: any) => {
+        const formData = new FormData();
+        formData.append("name", values.name);
+        if (profileImg) {
+            formData.append("file", profileImg);
+        }
+        postProfileUpdate(dispatch, formData);
     };
 
     return (
         <div>
-
-            <div className="mt-6 p-6 bg-white shadow-lg rounded-lg">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                    <h1 className="text-lg md:text-xl font-semibold">Account</h1>
-                    <SubmitButton className="bg-secondary text-primary hover:text-white">
-                        Save Changes
-                    </SubmitButton>
-                </div>
-                <div className="flex flex-col-reverse md:flex-row gap-4 gap-x-8 pt-8">
-                    <div className="w-full space-y-4">
-                        <div>
-                            <Label className="text-[12px] text-grey">Full Name</Label>
-                            <Input type="text" placeholder="Full Name" className="placeholder:text-[#4E4E4E]" />
-                        </div>
-                        <div>
-                            <Label className="text-[12px] text-grey">Email</Label>
-                            <Input
-                                type="email"
-                                placeholder="johndoe@gmail.com"
-                                className="bg-gray-200 placeholder:text-[#4E4E4E]"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col items-center w-auto">
-                        <div className="relative">
-                            <div className='w-[120px] h-[120px] overflow-hidden rounded-md'>
-                                <Image
-                                    src={profile || '/default-profile.png'}
-                                    alt="Profile"
-                                    width={120}
-                                    height={120}
-                                    className="rounded-md object-cover"
-                                /></div>
-                            <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                                <button
-                                    className="p-1 bg-white rounded-md shadow-lg"
-                                    onClick={handleRemoveClick}
-                                >
-                                    <X size={14} className="text-gray-600" />
-                                </button>
-                                <button
-                                    className="p-1 bg-white rounded-md shadow-lg"
-                                    onClick={handleEditClick}
-                                >
-                                    <Pencil size={14} className="text-gray-600" />
-                                </button>
+            <Formik 
+                initialValues={initialVals} 
+                enableReinitialize={true}
+                onSubmit={handleSubmit}
+            >
+                {({ values }) => {
+                    return (
+                        <Form className="mt-6 p-6 bg-white shadow-lg rounded-lg">
+                            <div className="flex items-center justify-between flex-wrap gap-4">
+                                <h1 className="text-lg md:text-xl font-semibold">Account</h1>
+                                <SubmitButton type='submit' className="bg-secondary text-primary hover:text-white">
+                                    Save Changes
+                                </SubmitButton>
                             </div>
-                        </div>
-                        <p className="text-[10px] sm:text-xs text-[#A1A5B7] mt-4 text-center whitespace-nowrap font-semibold">
-                            Allowed file types: png, jpg, jpeg.
-                        </p>
-                        <input
-                            type="file"
-                            accept="image/png, image/jpeg"
-                            ref={fileInputRef}
-                            className="hidden"
-                            onChange={handleFileChange}
-                        />
-                    </div>
-                </div>
-            </div>
+                            <div className="flex flex-col-reverse md:flex-row gap-4 gap-x-8 pt-8">
+                                <div className="w-full space-y-4">
+                                    <InputField type='text' label="Full Name" className="placeholder:text-[#4E4E4E]" name="name" placeholder="Full Name" />
+                                    <InputField type='email' label="Email" disabled={true} className="bg-gray-200 placeholder:text-[#4E4E4E]" name="email" placeholder="johndoe@gmail.com" />
+                                </div>
+
+                                <div className="flex flex-col items-center w-auto">
+                                    <div className="relative">
+                                        <div className='w-[120px] h-[120px] overflow-hidden rounded-md'>
+                                            <Image
+                                                src={profileImg ? URL.createObjectURL(profileImg) : profileData?.image_url ?? '/default-profile.png'}
+                                                alt="Profile img"
+                                                width={120}
+                                                height={120}
+                                                className="rounded-md object-cover w-full h-full"
+                                            /></div>
+                                        <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                                            <button
+                                                type='button'
+                                                className="p-1 bg-white rounded-md shadow-lg"
+                                                onClick={() => setProfileImg(null)}
+                                            >
+                                                <X size={14} className="text-gray-600" />
+                                            </button>
+                                            <button
+                                                type='button'
+                                                className="p-1 bg-white rounded-md shadow-lg"
+                                                onClick={() => fileInputRef.current.click()}
+                                            >
+                                                <Pencil size={14} className="text-gray-600" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p className="text-[10px] sm:text-xs text-[#A1A5B7] mt-4 text-center whitespace-nowrap font-semibold">
+                                        Allowed file types: png, jpg, jpeg.
+                                    </p>
+                                    <Field name='file' type="file" accept="image/png, image/jpeg"
+                                        ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+                                </div>
+                            </div>
+                        </Form>
+                    )
+                }}
+            </Formik>
             <UpdatePasswordSection />
         </div>
     )

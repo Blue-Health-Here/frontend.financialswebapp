@@ -4,7 +4,7 @@ import { Label } from "../../ui/label";
 import { cn } from "@/lib/utils";
 
 interface RadioOption {
-    value: string;
+    value: string | number;
     label: string;
 }
 
@@ -36,7 +36,7 @@ const RadioField: React.FC<RadioFieldProps> = ({ className, ref, label, options,
                             {...field}
                             {...props}
                             value={option.value}
-                            checked={field.value === option.value}
+                            checked={field.value == option.value}
                         />
                         <Label
                             size="xs"
@@ -49,7 +49,7 @@ const RadioField: React.FC<RadioFieldProps> = ({ className, ref, label, options,
                 ))}
             </div>
             {meta.touched && meta.error && (
-                <p className="text-red-500 text-sm">{meta.error}</p>
+                <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
             )}
         </div>
     );

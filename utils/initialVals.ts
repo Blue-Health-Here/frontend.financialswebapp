@@ -13,3 +13,12 @@ export const signInInitialVals = {
 export const forgotPassInitialVals = {
     email: "",
 };
+
+export const addNewCourseInitialVals = {
+    title: "",
+    description: "",
+    pharmacy_ids: [],
+    uploadType: 1,
+    link: "",
+    file: ""
+}

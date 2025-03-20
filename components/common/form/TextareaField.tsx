@@ -27,7 +27,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({ className, ref, label, ..
                 {...field}
             />
             {meta.touched && meta.error && (
-                <p className="text-red-500 text-sm">{meta.error}</p>
+                <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
             )}
         </div>
     );
