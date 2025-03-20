@@ -10,6 +10,7 @@ import TextareaField from "@/components/common/form/TextareaField";
 import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { Label } from "@/components/ui/label";
+import MultiDateField from "@/components/common/form/MultiDateField";
 
 
 const AddNewQuestionModal = () => {
@@ -50,16 +51,8 @@ const AddNewQuestionModal = () => {
                             ]}
                         />
                         <InputField label="Action Items" className="placeholder:text-themeLight" name="pharmacyExpense" />
-                        <SelectField
-                            label="Key Follow-up dates"
-                            name="Key Follow-up dates"
-                            options={[
-                                { value: "Selected Date(s)", label: "Selected Date(s)" },
-                                { value: "2 Jan 2024", label: "2 Jan 2024" },
-                                { value: "3 Jan 2024", label: "3 Jan 2024" },
-                                { value: "4 Jan 2024", label: "4 Jan 2024" }
-                            ]}
-                        />
+                        <MultiDateField label="Key Follow-up dates" name="date" />
+                       
                         {selectedDates.length > 0 && (
                             <div>
                                 <Label size="xs">Selected Dates(s)</Label>
