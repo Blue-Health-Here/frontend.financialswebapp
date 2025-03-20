@@ -71,7 +71,7 @@ const ProfileSection = () => {
             >
                 {({ values }) => {
                     return (
-                        <Form className="mt-6 p-6 bg-white shadow-lg rounded-lg">
+                        <Form className="p-6 bg-white shadow-lg rounded-lg">
                             <div className="flex items-center justify-between flex-wrap gap-4">
                                 <h1 className="text-lg md:text-xl font-semibold">Account</h1>
                                 <SubmitButton type='submit' className="bg-secondary text-primary hover:text-white">

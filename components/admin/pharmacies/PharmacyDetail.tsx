@@ -193,7 +193,7 @@ const PharmacyDetail = () => {
           key={index}
         >
           <div className="flex flex-col gap-6">
-            <h1 className="text-lg mb-4">{checklist.name + " Checklist"}</h1>
+            <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">{checklist.name + " Checklist"}</h2>
             <Accordion
               key={index}
               items={checklist.list}
@@ -204,7 +204,7 @@ const PharmacyDetail = () => {
       ))}
       <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-          <h1 className="text-lg md:text-2xl">Courses</h1>
+          <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">Courses</h2>
           <div className="relative w-[390px] sm:max-w-md">
             <Input
               name="email"
