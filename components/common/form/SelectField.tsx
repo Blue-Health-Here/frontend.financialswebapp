@@ -2,7 +2,7 @@ import React from "react";
 import { useField } from "formik";
 import { Label } from "../../ui/label";
 import { cn } from "@/lib/utils";
-
+ 
 interface SelectFieldProps {
     label?: string;
     name: string;
@@ -14,7 +14,7 @@ interface SelectFieldProps {
 
 const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, ref, label, options, ...props }) => {
     const [field, meta] = useField(props);
-
+ 
     return (
         <div className={parentClassName}>
             {label && <Label size="xs" htmlFor={props.name}>{label}</Label>}
@@ -39,5 +39,5 @@ const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, r
         </div>
     );
 };
-
+ 
 export default SelectField;

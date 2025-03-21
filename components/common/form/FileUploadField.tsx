@@ -60,10 +60,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 
     return (
         <div>
-            <div className="flex justify-center md:justify-start">
-                {label && <Label size="xs" className="text-[#6E6B7B]" htmlFor={name}>{label}</Label>}
-            </div>
-
+            {label && <Label size="xs" className="text-grey" htmlFor={name}>{label}</Label>}
             {uploadedFile ? (
                 <FilePreview
                     file={{ name: uploadedFile.filename }}
@@ -74,14 +71,15 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                         helpers.setValue("");
                     }}
                 />
-            ) : preview.length > 0 ? (
-                <div className={`grid ${isMultiSelect ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "grid-cols-1"}`}>
-                    {preview.map((file, index) => (
-                        <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
-                    ))}
-                </div>
             ) : (
-                <div className="flex justify-center md:justify-start flex-col">
+                <div className="flex justify-center md:justify-start flex-col gap-2">
+                    {preview.length > 0 && (
+                        <div className={`grid ${isMultiSelect ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "grid-cols-1"}`}>
+                            {preview.map((file, index) => (
+                                <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
+                            ))}
+                        </div>
+                    )}
                     {variant === "button" ? (
                         <>
                             <SubmitButton type="button" className={`w-full relative p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
