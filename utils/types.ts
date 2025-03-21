@@ -22,6 +22,27 @@ export type PharmacyCardProps = {
     completion_percentage: number;
 }
 
+export type MarketingMaterialCardProps ={
+    description : string;
+    file_url: string | null;
+    filename: string | null;
+    link:string;
+    marketing_id:string
+    pharmacy_ids:string[];
+    title: string
+}
+
+// Define TypeScript interface for form values
+export interface AddNewMarketingMaterialsFormValues {
+    title: string;
+    description: string;
+    is_all?: Boolean;
+    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
+    uploadType?: 1 | 2 | "";
+    link?: string;
+    file?: File | null;
+}
+
 export type CourseProps = {
     course_id: string;
     title: string;
