@@ -22,3 +22,8 @@ export const addNewCourseInitialVals = {
     link: "",
     file: ""
 }
+
+export const addNewCategoryInitialVals = {
+    name: "",
+    category_type: ""
+}
