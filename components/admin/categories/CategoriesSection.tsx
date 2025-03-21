@@ -20,11 +20,13 @@ import { IoSearch } from "react-icons/io5";
 
 const CategoriesSection = () => {
     const [selectedCategory, setSelectedCategory] = useState("onboarding");
+    const [searchCategory, setSearchCategory] = useState("");
     const { isAddCategory, categories } = useSelector((state: RootState) => state.category);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     
     useEffect(() => {
-        fetchAllCategories(dispatch, selectedCategory);
+        fetchAllCategories(dispatch, selectedCategory).finally(() => setLoading(false));
     }, [selectedCategory, dispatch]);
 
     const handleDeleteCourse = (id: string) => {
@@ -40,6 +42,11 @@ const CategoriesSection = () => {
         dispatch(setIsAddCategory(true));
         dispatch(setCategoryDetails(data));
     };
+
+    const filterCategories = categories.filter((category: CategoryProps) => {
+        const nameMatches = category.name.toLowerCase().includes(searchCategory.toLowerCase());
+        return nameMatches;
+     });
 
     return (
         <div className="flex flex-col md:flex-row ">
@@ -67,7 +74,13 @@ const CategoriesSection = () => {
                     <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                         <h1 className="text-lg md:text-xl font-semibold">{capitalize(selectedCategory)}</h1>
               <div className="relative w-full md:w-48">
-                  <Input name="search" placeholder="Search Checklist" className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
+                  <Input 
+                  name="search"
+                  onChange={(e) => setSearchCategory(e.target.value)}
+                  value={searchCategory}
+                  placeholder="Search Category" 
+                  className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
+                   />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                         <IoSearch size={18} />
                      </span>
@@ -85,9 +98,11 @@ const CategoriesSection = () => {
 
                     {/* Category List */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {categories.length > 0 ? categories?.map((category: CategoryProps, index: number) => (
-                            <InfoCard id={category.id} key={index} name={category.name} item={category} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCategory(item)}/>
-                        )) : <TextMessage text="Categories not found." />}
+                    {loading ? (
+                                <TextMessage text="Loading pharmacies..."/>
+                            ) :(filterCategories.length > 0 ? filterCategories?.map((category: CategoryProps, index: number) => (
+                                <InfoCard id={category.id} key={index} name={category.name} item={category} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCategory(item)}/>
+                            )) : <TextMessage text="Categories not found." />)}
                     </div>
                 </div>
             </main>
@@ -96,4 +111,5 @@ const CategoriesSection = () => {
     )
 }
 
-export default CategoriesSection
+
+export default CategoriesSection;
