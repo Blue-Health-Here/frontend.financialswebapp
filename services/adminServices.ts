@@ -195,3 +195,54 @@ export const fetchAllMarketingMaterials = async (dispatch: AppDispatch) => {
         dispatch(setIsLoading(false));
     }
 };
+
+/**
+ * create new course and update Redux store.
+ */
+export const createNewMarketingMaterials = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-marketing", data);
+        if (response.data?.success) {
+            fetchAllMarketingMaterials(dispatch);
+            toast.success("Marketing Material created successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+export const updateMarketingMaterials = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        console.log("Edit marketing material:","/v1/admin-marketing?marketing_id="+data?.marketing_id, data )
+        const response = await axiosAdmin.put("/v1/admin-marketing?marketing_id="+data?.marketing_id, data);
+        if (response.data?.success) {
+            fetchAllMarketingMaterials(dispatch);
+            toast.success("Marketing Material updated successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+export const deleteMarketingMaterials = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        console.log("Deleting marketing material:", "/v1/admin-marketing?marketing_id="+id);
+        const response = await axiosAdmin.delete("/v1/admin-marketing?market_id="+id);
+        if (response?.data?.success) {
+            fetchAllMarketingMaterials(dispatch);
+            toast.success("Marketing Material deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+

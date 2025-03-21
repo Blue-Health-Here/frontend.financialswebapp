@@ -32,6 +32,17 @@ export type MarketingMaterialCardProps ={
     title: string
 }
 
+// Define TypeScript interface for form values
+export interface AddNewMarketingMaterialsFormValues {
+    title: string;
+    description: string;
+    is_all?: Boolean;
+    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
+    uploadType?: 1 | 2 | "";
+    link?: string;
+    file?: File | null;
+}
+
 export type CourseProps = {
     course_id: string;
     title: string;

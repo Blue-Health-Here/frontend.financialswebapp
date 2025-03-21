@@ -22,3 +22,12 @@ export const addNewCourseInitialVals = {
     link: "",
     file: ""
 }
+
+export const addNewMarketingMaterialsInitialVals = {
+    title: "",
+    description: "",
+    pharmacy_ids: [],
+    uploadType: 1,
+    link: "",
+    file: ""
+}
