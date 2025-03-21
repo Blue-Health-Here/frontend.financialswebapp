@@ -8,7 +8,7 @@ import { categoryData } from "@/utils/constants";
 import { FaPlus } from "react-icons/fa";
 import { SubmitButton } from '@/components/submit-button';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddCategory } from '@/store/features/admin/category/adminCategorySlice';
+import { setCategoryDetails, setIsAddCategory } from '@/store/features/admin/category/adminCategorySlice';
 import { RootState } from '@/store/store';
 import AddCategoryModal from './AddCategoryModal';
 import { deleteCategory, fetchAllCategories } from '@/services/adminServices';
@@ -27,6 +27,16 @@ const CategoriesSection = () => {
 
     const handleDeleteCourse = (id: string) => {
         deleteCategory(dispatch, id,selectedCategory);
+    };
+
+    const handleAddCategory = () => {
+        dispatch(setIsAddCategory(true));
+        dispatch(setCategoryDetails(null));
+    };
+
+    const handleEditCategory = (data:CategoryProps) => {
+        dispatch(setIsAddCategory(true));
+        dispatch(setCategoryDetails(data));
     };
 
     return (
@@ -62,7 +72,7 @@ const CategoriesSection = () => {
                     <div className="flex justify-between items-center pb-6">
                         <div className="flex items-center space-x-3">
                             <h4 className="text-xs sm:text-sm md:text-[16px]  text-grey">Add Categories</h4>
-                            <Button className="group w-6 h-6 md:w-7 md:h-7 p-1 text-white bg-secondary hover:text-white" onClick={() => dispatch(setIsAddCategory(true))}>
+                            <Button className="group w-6 h-6 md:w-7 md:h-7 p-1 text-white bg-secondary hover:text-white" onClick={handleAddCategory}>
                                 <FaPlus className=" text-black group-hover:text-white" size={12} />
                             </Button>
                         </div>
@@ -71,7 +81,7 @@ const CategoriesSection = () => {
                     {/* Category List */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {categories.length > 0 ? categories?.map((category: CategoryProps, index: number) => (
-                            <InfoCard id={category.id} key={index} name={category.name} handleDeleteModal={handleDeleteCourse}/>
+                            <InfoCard id={category.id} key={index} name={category.name} item={category} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCategory(item)}/>
                         )) : <TextMessage text="Categories not found." />}
                     </div>
                 </div>
