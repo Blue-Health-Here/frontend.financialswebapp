@@ -43,6 +43,7 @@ export const addNewCourseValidationSchema = Yup.object().shape({
             : schema.notRequired().nullable()
     ),
 });
+
 export const addNewMarketingMaterialsValidationSchema = Yup.object().shape({
     title: Yup.string().required("Marketing Materials title is required"),
     description: Yup.string().required("Marketing Materials description is required"),
@@ -63,4 +64,8 @@ export const addNewMarketingMaterialsValidationSchema = Yup.object().shape({
             ? schema.required("File is required")
             : schema.notRequired().nullable()
     ),
+});
+
+export const addNewCategoryValidationSchema = Yup.object().shape({
+    name: Yup.string().required("Category Name is required"),
 });

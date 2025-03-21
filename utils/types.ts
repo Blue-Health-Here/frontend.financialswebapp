@@ -67,3 +67,9 @@ export interface UploadedFileProps {
     filename?: string;
     path?: string
 }
+
+export type CategoryProps = {
+    category_type: string;
+    id: string;
+    name: string;
+};

@@ -7,11 +7,11 @@ import DeleteModal from "./DeleteModal";
 import { useState } from "react";
 
 interface InfoCardProps { 
-    id?: string; 
+    id: string; 
     name: string; 
     item?: any;
     handleEdit?: Function 
-    handleDeleteModal?: (id?: string) => void 
+    handleDeleteModal?: (id: string) => void 
 };
 
 const InfoCard: React.FC<InfoCardProps> = ({ id, name, item, handleEdit, handleDeleteModal }) => {

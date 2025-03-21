@@ -1,4 +1,5 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
+import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
@@ -69,7 +70,7 @@ export const createNewCourse = async (dispatch: AppDispatch, data: any) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/courses", data);
         if (response.data?.success) {
-            fetchAllCourses(dispatch);
+            await fetchAllCourses(dispatch);
             toast.success("Course created successfully!");
         }
     } catch (error: any) {
@@ -87,7 +88,7 @@ export const updateCourse = async (dispatch: AppDispatch, data: any) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.put("/v1/courses?course_id="+data?.course_id, data);
         if (response.data?.success) {
-            fetchAllCourses(dispatch);
+            await fetchAllCourses(dispatch);
             toast.success("Course updated successfully!");
         }
     } catch (error: any) {
@@ -128,7 +129,7 @@ export const deleteCourse = async (dispatch: AppDispatch, id?: string) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.delete("/v1/courses?course_id="+id);
         if (response?.data?.success) {
-            fetchAllCourses(dispatch);
+            await fetchAllCourses(dispatch);
             toast.success("Course deleted successfully!");
         }
     } catch (error: any) {
@@ -168,7 +169,7 @@ export const postProfileUpdate = async (dispatch: AppDispatch, formData?: any) =
             },
         });
         if (response?.data?.success) {
-            fetchProfileData(dispatch);
+            await fetchProfileData(dispatch);
             toast.success("Profile updated successfully!");
         }
     } catch (error: any) {
@@ -179,7 +180,7 @@ export const postProfileUpdate = async (dispatch: AppDispatch, formData?: any) =
 };
 
 /**
- * Fetch all marketing materials and update Redux store.
+ * fetch all marketing materials and update Redux store.
  */
 export const fetchAllMarketingMaterials = async (dispatch: AppDispatch) => {
     try {
@@ -197,14 +198,14 @@ export const fetchAllMarketingMaterials = async (dispatch: AppDispatch) => {
 };
 
 /**
- * create new course and update Redux store.
+ * create new marketing materials and update Redux store.
  */
 export const createNewMarketingMaterials = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/admin-marketing", data);
         if (response.data?.success) {
-            fetchAllMarketingMaterials(dispatch);
+            await fetchAllMarketingMaterials(dispatch);
             toast.success("Marketing Material created successfully!");
         }
     } catch (error: any) {
@@ -214,13 +215,15 @@ export const createNewMarketingMaterials = async (dispatch: AppDispatch, data: a
     }
 };
 
+/**
+ * update marketing materials and update Redux store.
+ */
 export const updateMarketingMaterials = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
-        console.log("Edit marketing material:","/v1/admin-marketing?marketing_id="+data?.marketing_id, data )
         const response = await axiosAdmin.put("/v1/admin-marketing?marketing_id="+data?.marketing_id, data);
         if (response.data?.success) {
-            fetchAllMarketingMaterials(dispatch);
+            await fetchAllMarketingMaterials(dispatch);
             toast.success("Marketing Material updated successfully!");
         }
     } catch (error: any) {
@@ -230,14 +233,89 @@ export const updateMarketingMaterials = async (dispatch: AppDispatch, data: any)
     }
 };
 
+/**
+ * delete marketing materials and update Redux store.
+ */
 export const deleteMarketingMaterials = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
-        console.log("Deleting marketing material:", "/v1/admin-marketing?marketing_id="+id);
         const response = await axiosAdmin.delete("/v1/admin-marketing?market_id="+id);
         if (response?.data?.success) {
-            fetchAllMarketingMaterials(dispatch);
+            await fetchAllMarketingMaterials(dispatch);
             toast.success("Marketing Material deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * fetch all Categories and update Redux store.
+ */
+export const fetchAllCategories = async (dispatch: AppDispatch, type: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-categories?type="+type);
+        if (response.status === 200) {
+            dispatch(setSelectCategories(response.data));
+            toast.success("Categories fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * create new category and update Redux store.
+ */
+export const createNewCategory = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-categories", data);
+        if (response.data?.success) {
+            await fetchAllCategories(dispatch, data.category_type);
+            toast.success("Category created successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * delete category and update Redux store.
+ */
+export const deleteCategory = async (dispatch: AppDispatch, id: string, type: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-categories?id="+id);
+        if (response?.data?.success) {
+            await fetchAllCategories(dispatch, type);
+            toast.success("Category deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * update category and update Redux store.
+ */
+export const updateCategory = async (dispatch: AppDispatch, data: any,) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.put("/v1/admin-categories?category_id="+data?.category_id, data);
+        if (response.data?.success) {
+            await fetchAllCategories(dispatch,data.category_type);
+            toast.success("Category Update successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");

@@ -31,3 +31,8 @@ export const addNewMarketingMaterialsInitialVals = {
     link: "",
     file: ""
 }
+
+export const addNewCategoryInitialVals = {
+    name: "",
+    category_type: ""
+}
