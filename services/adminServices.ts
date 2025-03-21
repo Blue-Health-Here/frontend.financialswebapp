@@ -234,6 +234,29 @@ export const updateMarketingMaterials = async (dispatch: AppDispatch, data: any)
 };
 
 /**
+ * post marketing materials upload file and update Redux store.
+ */
+export const postMarketingUploadFile = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-marketing-upload-file", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Marketing material file uploaded successfully!");
+            return { ...response?.data };
+        }
+        return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
  * delete marketing materials and update Redux store.
  */
 export const deleteMarketingMaterials = async (dispatch: AppDispatch, id?: string) => {

@@ -9,7 +9,7 @@ import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import FileUploadField from "@/components/common/form/FileUploadField";
 import { setIsAddMarketing } from '@/store/features/admin/marketing/adminMarketingSlice';
-import { createNewMarketingMaterials, updateMarketingMaterials, fetchAllPharmacies, postCoursesUploadFile } from '@/services/adminServices';
+import { createNewMarketingMaterials, updateMarketingMaterials, postMarketingUploadFile } from '@/services/adminServices';
 import { addNewMarketingMaterialsInitialVals } from '@/utils/initialVals';
 import { addNewMarketingMaterialsValidationSchema } from "@/utils/validationSchema";
 import { RootState } from "@/store/store";
@@ -54,7 +54,7 @@ const AddMarketingModal = () => {
         try {
             const formData = new FormData();
             formData.append("file", event.target.files[0]);
-            const response = await postCoursesUploadFile(dispatch, formData);
+            const response = await postMarketingUploadFile(dispatch, formData);
 
             if (response?.success) {
                 setUploadedFile(response.data);
@@ -125,7 +125,7 @@ const AddMarketingModal = () => {
                                     placeholder="Select Pharmacy"
                                 />
                                 <RadioField
-                                    label="Upload Type"
+                                    label=""
                                     name="uploadType"
                                     options={[
                                         { value: 1, label: "Link" },
