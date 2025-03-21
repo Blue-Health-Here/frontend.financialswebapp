@@ -63,7 +63,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             {label && <Label size="xs" className="text-grey" htmlFor={name}>{label}</Label>}
             {uploadedFile ? (
                 <FilePreview
-                    file={{ name: uploadedFile.filename }}
+                    file={{ name: uploadedFile.filename, file_url: uploadedFile.file_url }}
                     handleDelete={() => {
                         if (setUploadedFile) {
                             setUploadedFile(null);
