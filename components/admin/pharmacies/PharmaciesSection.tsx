@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { fetchAllPharmacies } from "@/services/adminServices";
 import { PharmacyCardProps } from "@/utils/types";
+import TextMessage from "@/components/common/TextMessage";
 
 const PharmaciesSection = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,10 +23,6 @@ const PharmaciesSection = () => {
       fetchAllPharmacies(dispatch).finally(() => setLoading(false));
     }
   }, []);
-
-      const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          setSearchQuery(e.target.value);
-      };
   
       const filteredPharmacies = pharmacies.filter((pharmacy: PharmacyCardProps) => {
           const nameMatches = pharmacy.pharmacy_name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -42,7 +39,7 @@ const PharmaciesSection = () => {
           <Input
             name="search"
             value={searchQuery}
-            onChange={handleSearchChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search Pharmacy"
             className="h-[42px] border-none shadow-lg rounded-lg font-medium"
           />
@@ -53,14 +50,14 @@ const PharmaciesSection = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
-                                <p>Loading pharmacies...</p>
+                    <TextMessage text="Loading pharmacies..." />
                             ) : (
                                 filteredPharmacies.length > 0 ? (
                                     filteredPharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
                                         <PharmacyCard key={index} pharmacy={pharmacy} />
                                     ))
                                 ) : (
-                                    <p>No pharmacies match your search criteria.</p>
+                                    <TextMessage text="No pharmacies match your search criteria." />
                                 )
                             )}
       </div>
