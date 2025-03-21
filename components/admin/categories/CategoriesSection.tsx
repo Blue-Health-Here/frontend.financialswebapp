@@ -81,7 +81,7 @@ const CategoriesSection = () => {
                   name="search"
                   onChange={handleSearchCategory}
                   value={searchCategory}
-                  placeholder="Search Checklist" 
+                  placeholder="Search Category" 
                   className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
                    />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
@@ -105,7 +105,7 @@ const CategoriesSection = () => {
                                 <p>Loading pharmacies...</p>
                             ) :(filterCategories.length > 0 ? filterCategories?.map((category: CategoryProps, index: number) => (
                                 <InfoCard id={category.id} key={index} name={category.name} item={category} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCategory(item)}/>
-                            )) : <TextMessage text="No Category match your search criteria" />)}
+                            )) : <TextMessage text="Categories not found." />)}
                     </div>
                 </div>
             </main>
