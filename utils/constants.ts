@@ -39,6 +39,7 @@ export const pharmacySidebarItems = [
     { name: "Operations Checklist", icon: "/sidebar-operations-checklis.svg", path: "/pharmacy/operations" },
     { name: "Document Verification", icon: "/sidebar-docs-verification.svg", path: "/pharmacy/document" },
     { name: "Courses", icon: "/sidebar-courses.svg", path: "/pharmacy/courses" },
+    {name: "Marketing Materials", icon: "/sidebar-marketingMaterials.svg" ,path:"/pharmacy/marketing"},
     { name: "Profile", icon: "/sidebar-profile.svg", path: "/pharmacy/profile" }
 ];
 
