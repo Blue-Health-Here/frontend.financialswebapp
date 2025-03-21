@@ -6,7 +6,6 @@ import InfoCard from "@/components/common/InfoCard";
 import { Button } from "@/components/ui/button";
 import { categoryData } from "@/utils/constants";
 import { FaPlus } from "react-icons/fa";
-import { SubmitButton } from '@/components/submit-button';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryDetails, setIsAddCategory } from '@/store/features/admin/category/adminCategorySlice';
 import { RootState } from '@/store/store';
@@ -15,6 +14,9 @@ import { deleteCategory, fetchAllCategories } from '@/services/adminServices';
 import { capitalize } from '@/utils/helperClient';
 import { CategoryProps } from '@/utils/types';
 import TextMessage from '@/components/common/TextMessage';
+import { Input } from '@/components/ui/input';
+import { IoSearch } from "react-icons/io5";
+
 
 const CategoriesSection = () => {
     const [selectedCategory, setSelectedCategory] = useState("onboarding");
@@ -64,9 +66,12 @@ const CategoriesSection = () => {
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
                         <h1 className="text-lg md:text-xl font-semibold">{capitalize(selectedCategory)}</h1>
-                        <SubmitButton className="bg-secondary hover:text-white">
-                            Save Changes
-                        </SubmitButton>
+              <div className="relative w-full md:w-48">
+                  <Input name="search" placeholder="Search Checklist" className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
+                    <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
+                        <IoSearch size={18} />
+                     </span>
+                 </div>
                     </div>
 
                     <div className="flex justify-between items-center pb-6">
