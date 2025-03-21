@@ -6,6 +6,7 @@ import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlic
 import { setIsLoading, setProfileData } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
+import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -179,6 +180,101 @@ export const postProfileUpdate = async (dispatch: AppDispatch, formData?: any) =
 };
 
 /**
+ * fetch all marketing materials and update Redux store.
+ */
+export const fetchAllMarketingMaterials = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-marketing");
+        if (response.status === 200) {
+            dispatch(setMarketingMaterials(response.data));
+            toast.success("Marketing Materials fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * create new marketing materials and update Redux store.
+ */
+export const createNewMarketingMaterials = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-marketing", data);
+        if (response.data?.success) {
+            await fetchAllMarketingMaterials(dispatch);
+            toast.success("Marketing Material created successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * update marketing materials and update Redux store.
+ */
+export const updateMarketingMaterials = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.put("/v1/admin-marketing?marketing_id="+data?.marketing_id, data);
+        if (response.data?.success) {
+            await fetchAllMarketingMaterials(dispatch);
+            toast.success("Marketing Material updated successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * post marketing materials upload file and update Redux store.
+ */
+export const postMarketingUploadFile = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-marketing-upload-file", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Marketing material file uploaded successfully!");
+            return { ...response?.data };
+        }
+        return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * delete marketing materials and update Redux store.
+ */
+export const deleteMarketingMaterials = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-marketing?market_id="+id);
+        if (response?.data?.success) {
+            await fetchAllMarketingMaterials(dispatch);
+            toast.success("Marketing Material deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
  * fetch all Categories and update Redux store.
  */
 export const fetchAllCategories = async (dispatch: AppDispatch, type: string) => {
@@ -199,7 +295,7 @@ export const fetchAllCategories = async (dispatch: AppDispatch, type: string) =>
 /**
  * create new category and update Redux store.
  */
-export const createNewCategory= async (dispatch: AppDispatch, data: any) => {
+export const createNewCategory = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/admin-categories", data);
@@ -213,7 +309,6 @@ export const createNewCategory= async (dispatch: AppDispatch, data: any) => {
         dispatch(setIsLoading(false));
     }
 };
-
 
 /**
  * delete category and update Redux store.
