@@ -43,9 +43,6 @@ const CategoriesSection = () => {
         dispatch(setCategoryDetails(data));
     };
 
-    const handleSearchCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchCategory(e.target.value);
-    }
     const filterCategories = categories.filter((category: CategoryProps) => {
         const nameMatches = category.name.toLowerCase().includes(searchCategory.toLowerCase());
         return nameMatches;
@@ -79,7 +76,7 @@ const CategoriesSection = () => {
               <div className="relative w-full md:w-48">
                   <Input 
                   name="search"
-                  onChange={handleSearchCategory}
+                  onChange={(e) => setSearchCategory(e.target.value)}
                   value={searchCategory}
                   placeholder="Search Category" 
                   className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
@@ -102,7 +99,7 @@ const CategoriesSection = () => {
                     {/* Category List */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {loading ? (
-                                <p>Loading pharmacies...</p>
+                                <TextMessage text="Loading pharmacies..."/>
                             ) :(filterCategories.length > 0 ? filterCategories?.map((category: CategoryProps, index: number) => (
                                 <InfoCard id={category.id} key={index} name={category.name} item={category} handleDeleteModal={handleDeleteCourse} handleEdit={(item: any) => handleEditCategory(item)}/>
                             )) : <TextMessage text="Categories not found." />)}
