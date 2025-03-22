@@ -10,10 +10,44 @@ import { Field, Form, Formik } from 'formik';
 import FileUploadField from '@/components/common/form/FileUploadField';
 import DeleteAccountModal from './DeleteAccountModal';
 import InputField from '@/components/common/form/InputField';
+import { fetchProfileDataPharmacy } from '@/services/adminServices';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { UseSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { postProfileUpdatePharmacy } from '@/services/adminServices';
+
 const ProfileSection = () => {
+    const { profileData } = useSelector((state: RootState) => state.global);
     const [isCloseModal, setIsCloseModal] = useState(false);
     const [profile, setProfile] = useState(null);
     const fileInputRef: any = useRef(null);
+    const dispatch = useDispatch();
+    const [initialVals, setInitialVals] = useState({
+        pharmacy_name: "",
+        address: "",
+        email: "",
+        contact: "",
+        services_offered: ""
+    });
+
+    useEffect(() => {
+        fetchProfileDataPharmacy(dispatch);
+        }, []);
+    
+    useEffect(() => {
+        if (profileData) {
+            setInitialVals({
+                pharmacy_name: profileData?.pharmacy_name || "",
+                address: profileData?.address || "",
+                email: profileData?.email || "",
+                contact: profileData?.contact || "",
+                services_offered: profileData?.services_offered || ""
+            });
+            setProfile(profileData?.image_url ?? null);
+        }
+    }, [profileData]);
+
 
     const handleFileChange = (e: any) => {
         const file = e.target.files[0];
@@ -28,6 +62,22 @@ const ProfileSection = () => {
             alert('Please select a valid image file (png, jpg, jpeg).');
         }
     };
+    const handleSubmit = (values: any) => {
+        const formData = new FormData();
+        
+        // Append text fields
+        formData.append("name", values.pharmacy_name);
+        formData.append("address", values.address);
+        formData.append("email", values.email);
+        formData.append("contact", values.contact);
+        formData.append("services", values.services_offered);
+    
+        if (profile) {
+            formData.append("file", profile);
+        }
+        postProfileUpdatePharmacy(dispatch, formData);
+    };
+    
 
     const handleEditClick = () => {
         fileInputRef.current.click();
@@ -43,9 +93,9 @@ const ProfileSection = () => {
     return (
         <div>
             <Formik 
-                initialValues={{}}
+                initialValues={initialVals}
                 enableReinitialize={true}
-                onSubmit={() => {}}
+                onSubmit={handleSubmit}
             >
                 {({ values }) => {
                     return (
