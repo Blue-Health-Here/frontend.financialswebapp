@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { budgetData, budgetStatsData, expenseCategories, fullDatasets, fullLabels, pharmacyData } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
@@ -15,12 +15,13 @@ import FileDownloadField from '@/components/common/form/FileDownloadField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
-import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
+import { setIsAddExpense, setLoading } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
+import { fetchPharmacyStats } from '@/services/pharmacyService';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch()
-    const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
+    const { isAddExpense, expenseStats, loading } = useSelector((state: RootState) => state.pharmacyExpense);
     
       let labels, datasets;
     
@@ -52,6 +53,10 @@ const BudgetSection = () => {
           Others: fullDatasets.Others.slice(0, 5),
         };
       }
+console.log(expenseStats, 'expenseStats')
+      useEffect(() => {
+        fetchPharmacyStats(dispatch).finally(() => setLoading(false));
+      }, [])
     
     return (
         <>

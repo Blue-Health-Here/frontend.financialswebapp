@@ -63,7 +63,7 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({
       {label && <Label className="text-xs text-grey">{label}</Label>}
       <div className="relative w-full">
         <div
-          className="flex h-10 w-full rounded-md mb-2 border border-input bg-background px-3 py-2 text-xs items-center justify-between cursor-pointer"
+          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-xs items-center justify-between cursor-pointer"
           onClick={() => setOpenCalendar(!openCalendar)}
         >
           <span className="text-muted-foreground">Select a date</span>
