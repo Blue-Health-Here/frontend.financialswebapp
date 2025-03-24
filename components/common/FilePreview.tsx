@@ -15,32 +15,21 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, }) => {
 
 
     const fileDownload = async () => {
-        if (!file || !file.file_url) {
-            console.error("No file available for download.");
-            return;
-        }
-
         try {
-            const response = await axiosAdmin.get(file.file_url, {
-                responseType: "blob",
-            });
-
-            // getting file to avoid format errors
+            const response = await axiosAdmin.get(file.file_url, {responseType: "blob",});
             const contentType = response.headers["content-type"] || "application/octet-stream";
-
+    
             const blob = new Blob([response.data], { type: contentType });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
 
             link.href = url;
-            link.download = file.filename
-            document.body.appendChild(link);
+            link.download = file.name;
             link.click();
-            document.body.removeChild(link);
+
             window.URL.revokeObjectURL(url);
             toast.success("Download file Successfully.");
         } catch (error: any) {
-            console.error("Error during file download:", error);
             toast.error(error?.message || "Failed to download file.");
         }
     };
