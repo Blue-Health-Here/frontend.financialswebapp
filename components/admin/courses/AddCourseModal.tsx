@@ -136,6 +136,7 @@ const AddCourseModal = () => {
                                         <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
                                     ) : (
                                         <FileUploadField
+                                            module="course"
                                             name="file"
                                             title="Upload"
                                             uploadedFile={uploadedFile}

@@ -136,6 +136,7 @@ const AddMarketingModal = () => {
                                     <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
                                 ) : (
                                     <FileUploadField
+                                        module="marketing"
                                         name="file"
                                         title="Upload"
                                         uploadedFile={uploadedFile}
