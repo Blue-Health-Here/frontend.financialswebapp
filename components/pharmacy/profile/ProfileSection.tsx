@@ -1,15 +1,14 @@
 "use client"
 import React, { useRef, useState } from 'react'
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Pencil, X } from "lucide-react";
-import { Label } from "@/components/ui/label";
 import { SubmitButton } from '@/components/submit-button';
 import UpdatePasswordSection from '@/components/common/UpdatePasswordSection';
 import { Field, Form, Formik } from 'formik';
 import FileUploadField from '@/components/common/form/FileUploadField';
 import DeleteAccountModal from './DeleteAccountModal';
 import InputField from '@/components/common/form/InputField';
+import toast from 'react-hot-toast';
 const ProfileSection = () => {
     const [isCloseModal, setIsCloseModal] = useState(false);
     const [profile, setProfile] = useState(null);
@@ -25,7 +24,7 @@ const ProfileSection = () => {
             reader.readAsDataURL(file);
 
         } else {
-            alert('Please select a valid image file (png, jpg, jpeg).');
+            toast.error( 'Please select a valid image file (png, jpg, jpeg).');
         }
     };
 
