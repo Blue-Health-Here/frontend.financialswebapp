@@ -120,7 +120,7 @@ const ProfileSection = () => {
                                     <div className="relative">
                                         <div className='w-full h-full relative overflow-hidden rounded-md'>
                                             <Image
-                                                src={profile || '/default-profile.png'}
+                                                src={profile ? URL.createObjectURL(profile) : profileData?.image_url ?? '/default-profile.png'}
                                                 alt="Profile"
                                                 width={120}
                                                 height={120}
