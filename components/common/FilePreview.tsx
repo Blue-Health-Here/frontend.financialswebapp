@@ -28,7 +28,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, }) => {
             link.click();
 
             window.URL.revokeObjectURL(url);
-            toast.success("Download file Successfully.");
+            toast.success("File download Successfully.");
         } catch (error: any) {
             toast.error(error?.message || "Failed to download file.");
         }
