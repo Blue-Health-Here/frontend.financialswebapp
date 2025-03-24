@@ -5,8 +5,11 @@ import { SubmitButton } from "@/components/submit-button";
 import FilePreview from "../FilePreview";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { UploadedFileProps } from "@/utils/types";
+import { useDispatch } from "react-redux";
+import { deleteUploadedFile } from "@/services/deleteFile";
 
 interface FileUploadFieldProps {
+    module?: string;
     label?: string;
     name: string;
     className?: string;
@@ -16,12 +19,13 @@ interface FileUploadFieldProps {
     variant?: "button" | "dropzone";
     id?: string;
     onChange?: Function;
-    uploadedFile?: UploadedFileProps | null;
+    uploadedFile?: UploadedFileProps | null | any;
     setUploadedFile?: (file: UploadedFileProps | null) => void;
     handleFileUpload?: (event: any, setValue: (value: any) => void) => void;
 }
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
+    module,
     label,
     name,
     className = "",
@@ -36,7 +40,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
-
+    const dispatch = useDispatch(); 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (handleFileUpload) {
             handleFileUpload(event, helpers.setValue);
@@ -52,10 +56,16 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         }
     };
 
-    const handleDelete = (index: number) => {
-        const updatedFiles = preview.filter((_, i) => i !== index);
-        setPreview(updatedFiles);
-        helpers.setValue(updatedFiles.length > 0 ? updatedFiles : null);
+    const handleDelete = async (index?: number) => {
+        if (uploadedFile && module) {
+            await deleteUploadedFile(dispatch, module, uploadedFile.filename);
+            if (setUploadedFile) setUploadedFile(null);
+            helpers.setValue(null); 
+        } else {
+            const updatedFiles = preview.filter((_, i) => i !== index);
+            setPreview(updatedFiles);
+            helpers.setValue(updatedFiles.length > 0 ? updatedFiles : null);
+        }
     };
 
     return (
@@ -64,12 +74,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             {uploadedFile ? (
                 <FilePreview
                     file={{ name: uploadedFile.filename }}
-                    handleDelete={() => {
-                        if (setUploadedFile) {
-                            setUploadedFile(null);
-                        }
-                        helpers.setValue("");
-                    }}
+                    handleDelete={handleDelete}
                 />
             ) : (
                 <div className="flex justify-center md:justify-start flex-col gap-2">

@@ -99,7 +99,7 @@ export const updateCourse = async (dispatch: AppDispatch, data: any) => {
 };
 
 /**
- * post courses upload file and update Redux store.
+ * post courses uploaded file and update Redux store.
  */
 export const postCoursesUploadFile = async (dispatch: AppDispatch, data: any) => {
     try {
@@ -120,6 +120,24 @@ export const postCoursesUploadFile = async (dispatch: AppDispatch, data: any) =>
         dispatch(setIsLoading(false));
     }
 };
+
+/**
+ * delete courses uploaded file and update Redux store.
+ */
+export const deleteCourseUploadFile = async (dispatch: AppDispatch, filename: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-delete-course-file?filename="+filename);
+        if (response?.data?.success) {
+            toast.success("File deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
 
 /**
  * delete course and update Redux store.
@@ -249,6 +267,23 @@ export const postMarketingUploadFile = async (dispatch: AppDispatch, data: any) 
             return { ...response?.data };
         }
         return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * delete marketing materials uploaded file and update Redux store.
+ */
+export const deleteMarketingUploadFile = async (dispatch: AppDispatch, filename: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-delete-marketing-file?filename="+filename);
+        if (response?.data?.success) {
+            toast.success("File deleted successfully!");
+        }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
     } finally {
