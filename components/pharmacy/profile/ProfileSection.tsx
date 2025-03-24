@@ -10,12 +10,11 @@ import { Field, Form, Formik } from 'formik';
 import FileUploadField from '@/components/common/form/FileUploadField';
 import DeleteAccountModal from './DeleteAccountModal';
 import InputField from '@/components/common/form/InputField';
-import { fetchProfileDataPharmacy } from '@/services/adminServices';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { UseSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { postProfileUpdatePharmacy } from '@/services/adminServices';
+import { fetchProfileDataPharmacy,postProfileUpdatePharmacy } from '@/services/pharmacyServices';
 
 const ProfileSection = () => {
     const { profileData } = useSelector((state: RootState) => state.global);
