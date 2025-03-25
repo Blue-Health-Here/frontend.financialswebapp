@@ -15,13 +15,13 @@ import { addNewPharmacyExpenseValidationSchema } from "@/utils/validationSchema"
 import toast from "react-hot-toast";
 import { createNewPharmacyExpense, updatePharmacyExpense } from "@/services/pharmacyService";
 import { RootState } from "@/store/store";
+import SingleDateField from "@/components/common/form/SingleDateField";
 
 const AddExpenseModal = () => {
-    const [selectedDates, setSelectedDates] = useState<string[]>([]);
-        const [initialVals, setInitialVals] = useState<any>(addNewPharmacyExpenseInitialVals);
-            const { expenseDetails } = useSelector((state: RootState) => state.pharmacyExpense);
+    const [initialVals, setInitialVals] = useState<any>(addNewPharmacyExpenseInitialVals);
+        const { expenseDetails } = useSelector((state: RootState) => state.pharmacyExpense);
         
-        const expenseCategories = [
+    const expenseCategories = [
             {
                 id: "c716df4e-0cdf-491d-9725-2e6bef304e63",
                 name: "tech",
@@ -32,41 +32,29 @@ const AddExpenseModal = () => {
     const handleClose = () => {
         dispatch(setIsAddExpense(false));
     };
-    const handleRemoveDate = (dateToRemove: string) => {
-        setSelectedDates(selectedDates.filter(date => date !== dateToRemove));
-    };
-    
    
     
 
-        useEffect(() => {
-            if (expenseDetails) {   
-                
-        const expenseDateArray = expenseDetails.expense_date
-        ? [expenseDetails.expense_date]
-        : [];    
-                setInitialVals({
-                    title: expenseDetails.title,
-                    amount: expenseDetails.amount,
-                    expense_date: expenseDateArray,
-                    category_id: expenseDetails?.category_id,
-                    revenue:expenseDetails?.revenue,
-                    expense_id:expenseDetails.id
-                    
-                });
-                setSelectedDates(expenseDetails.expense_date ? [expenseDetails.expense_date] : []);
-            } 
-        }, [expenseDetails]);
+    useEffect(() => {
+        if (expenseDetails) {
+          setInitialVals({
+            title: expenseDetails.title,
+            amount: expenseDetails.amount,
+            expense_date: expenseDetails.expense_date,
+            category_id: expenseDetails.category_id,
+            revenue: expenseDetails.revenue,
+            expense_id: expenseDetails.id,
+          });
+        }
+      }, [expenseDetails]);      
 
 
   const handleSubmit = async (values: typeof addNewPharmacyExpenseInitialVals) => {
-    const formattedExpenseDate = values.expense_date.length > 0 
-    ? new Date(values.expense_date[0]).toISOString().split("T")[0] 
-    : null;
+
           const payload: any = {
               title: values.title,
               amount: values.amount,
-              expense_date: formattedExpenseDate,
+              expense_date: values.expense_date,
               category_id: values.category_id,
               revenue:values.revenue
           };
@@ -84,14 +72,7 @@ const AddExpenseModal = () => {
               toast.error(error?.message || "Something went wrong!!");
           }
       };
-      
-      const handleDateChange = (dates: string[]) => {
-        setSelectedDates(dates);
-        setInitialVals((prev: any) => ({
-            ...prev,
-            expense_date: dates, 
-        }));
-    };
+     
 
     return (
         <Modal>
@@ -118,22 +99,11 @@ const AddExpenseModal = () => {
                                     })),
                                 ]}
                             />
-                            <MultiDateField label="Key Follow-up dates" name="expense_date" onDateChange={handleDateChange}/>
-                        {selectedDates.length > 0 && (
-                            <div>
-                                <Label size="xs">Selected Dates(s)</Label>
-                                <div className="flex flex-col gap-2 mt-2">
-                                    {selectedDates.map((date, index) => (
-                                        <div key={index} className="flex gap-x-2">
-                                            <div className="flex h-10 w-full rounded-md  border border-input bg-background px-3 py-2 text-sm">
-                                                <span>{date}</span>
-                                            </div>
-                                            <button onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                            <SingleDateField
+                                label="Select a Date"
+                                name="expense_date"
+                                className="mb-4"
+                            />
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">{expenseDetails ? "Update" : "Save"}</SubmitButton>
                         </Form>
                     </Formik>
