@@ -5,7 +5,7 @@ import DeleteModal from "./DeleteModal";
 
 interface BudgetCardProps {
   budget: any;
-  id?: string;
+  id: string;
   categories: any;
   className?: string;
   item?: any;
@@ -30,7 +30,7 @@ export const BudgetCard = ({
     categories.find((cat: any) => cat.id === budget.category_id)?.name || "";
 
   const handleSuccess = () => {
-    if (handleDeleteModal && id) handleDeleteModal(id);
+    if (handleDeleteModal) handleDeleteModal(id);
     setIsCloseModal(false);
     return undefined;
   };

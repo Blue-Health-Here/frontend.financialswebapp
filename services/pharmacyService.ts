@@ -61,3 +61,21 @@ export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) =>
     }
 };
 
+
+/**
+ * delete  expense  and update Redux store.
+ */
+export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosPharmacy.delete("/v1/pharmacy-expense?expense_id="+id);
+        if (response?.data?.success) {
+            await fetchPharmacyExpense(dispatch);
+            toast.success("Expense deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
 import { setExpenseDetails, setIsAddExpense, setLoading } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
-import { fetchPharmacyExpense } from '@/services/pharmacyService';
+import { deletePharmacyExpense, fetchPharmacyExpense } from '@/services/pharmacyService';
 import TextMessage from '@/components/common/TextMessage';
 import { PharmacyExpenseProps } from '@/utils/types';
 
@@ -68,6 +68,11 @@ const BudgetSection = () => {
         dispatch(setIsAddExpense(true));
         dispatch(setExpenseDetails(null));
     };
+     const handleDeleteExpense = (id: string) => {
+        deletePharmacyExpense(dispatch, id);
+        };
+        console.log("expenseData",expenseData)
+    
     
     return (
         <>
@@ -140,7 +145,7 @@ const BudgetSection = () => {
                         <TextMessage text="Loading expense..."/>
                     ) : (
                         expenseData?.length > 0 ? expenseData?.map((budget: PharmacyExpenseProps, index: number) => (
-                            <BudgetCard key={index} budget={budget} categories={categories} handleEdit={() => handleEditCourse(budget)} />
+                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditCourse(budget)} />
                         )) : <TextMessage text="Expense not found." />
                     )}
                 </div>

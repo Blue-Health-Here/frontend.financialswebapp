@@ -80,4 +80,5 @@ export type PharmacyExpenseProps = {
     expense_date: string;
     category_id: string;
     revenue:number;
+    id:string
 };
