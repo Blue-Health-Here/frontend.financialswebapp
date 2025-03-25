@@ -1,5 +1,5 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
-import { setIsLoading, setProfileData, setLicenseData } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData} from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 
@@ -97,6 +97,65 @@ export const deletePharmacyLicense = async (dispatch: AppDispatch, id?: string) 
         if (response?.data?.success) {
             await fetchPharmacyLicense(dispatch);
             toast.success("License file deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * get pharmacy certifications data and update Redux store.
+ */
+export const fetchPharmacyCertifications = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-certification");
+        if (response?.status === 200) {
+            dispatch(setCertificationsData(response?.data));
+            toast.success("Certificate fetched successfully!");
+        }
+    } catch (error: any) {  
+        toast.error(error?.response?.data?.detail || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * post pharmacy certification upload file and update Redux store.
+ */
+export const postCertificationsUploadFile = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/pharmacy-certification", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Certification file uploaded successfully!");
+            return { ...response?.data };
+        }
+        return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * delete pharmacy certification and update Redux store.
+ */
+export const deletePharmacyCertification = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/pharmacy-certification?certification_id="+id);
+        if (response?.data?.success) {
+            await fetchPharmacyCertifications(dispatch);
+            toast.success("Certification file deleted successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");

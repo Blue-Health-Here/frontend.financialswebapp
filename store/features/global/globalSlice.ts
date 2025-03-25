@@ -4,7 +4,8 @@ const initialState = {
     isSidebarOpen: false,
     isLoading: false,
     profileData: null,
-    licenseData: []
+    licenseData: [],
+    certificationsData: [],
 
 };
 
@@ -23,10 +24,13 @@ const globalSlice = createSlice({
         },
         setLicenseData: (state, action) => {
             state.licenseData = action.payload;
-        }
+        },
+        setCertificationsData: (state, action) => {
+          state.certificationsData = action.payload;
+      }
     }
 });
 
-export const { setIsSidebarOpen, setIsLoading, setProfileData,setLicenseData } = globalSlice.actions;
+export const { setIsSidebarOpen, setIsLoading, setProfileData,setLicenseData, setCertificationsData} = globalSlice.actions;
 
 export default globalSlice.reducer;

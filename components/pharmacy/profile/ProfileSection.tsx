@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UseSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import {fetchProfileDataPharmacy,postProfileUpdatePharmacy,fetchPharmacyLicense, deletePharmacyLicense,
+import {fetchProfileDataPharmacy,postProfileUpdatePharmacy,fetchPharmacyLicense, deletePharmacyLicense, fetchPharmacyCertifications,postCertificationsUploadFile, deletePharmacyCertification
 } from "@/services/pharmacyServices";
 import { UploadedFileProps } from "@/utils/types";
 import { postLicenseUploadFile } from "@/services/pharmacyServices";
@@ -24,6 +24,7 @@ const ProfileSection = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null );
   const { profileData } = useSelector((state: RootState) => state.global);
   const { licenseData } = useSelector((state: RootState) => state.global);
+  const { certificationsData } = useSelector((state: RootState) => state.global);
   const [isCloseModal, setIsCloseModal] = useState(false);
   const [profile, setProfile] = useState(null);
   const fileInputRef: any = useRef(null);
@@ -43,11 +44,14 @@ const ProfileSection = () => {
     contact: "",
     services_offered: "",
     license: [],
+    certificate: []
   });
 
   useEffect(() => {
     fetchProfileDataPharmacy(dispatch);
     fetchPharmacyLicense(dispatch);
+    fetchPharmacyCertifications(dispatch);
+
   }, []);
   console.log(profileData);
   useEffect(() => {
@@ -59,6 +63,7 @@ const ProfileSection = () => {
         contact: profileData?.contact || "",
         services_offered: profileData?.services || "",
         license: licenseData?.license || [],
+        certificate:certificationsData?.certificate || []
       });
       setProfile(profileData?.image_url ?? null);
     }
@@ -93,24 +98,32 @@ const ProfileSection = () => {
 
   const handleFileUpload = async (
     event: any,
-    setValue: (value: any) => void
+    setValue: (value: any) => void,
+    fileType: "license" | "certification"
   ) => {
     try {
       const formData = new FormData();
       formData.append("file", event.target.files[0]);
-      const response = await postLicenseUploadFile(dispatch, formData);
-
+  
+      const uploadFunction =
+        fileType === "license" ? postLicenseUploadFile : postCertificationsUploadFile;
+  
+      const response = await uploadFunction(dispatch, formData);
+  
       if (response?.success) {
         console.log(response.data[0]);
         setUploadedFile(response.data);
-        setValue(response.data); // Set Formik field with uploaded file
-        fetchPharmacyLicense(dispatch);
+        setValue(response.data); 
+  
+        fileType === "license"
+          ? fetchPharmacyLicense(dispatch)
+          : fetchPharmacyCertifications(dispatch);
       }
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong!!");
     }
   };
-
+  
   const handleEditClick = () => {
     fileInputRef.current.click();
   };
@@ -122,22 +135,20 @@ const ProfileSection = () => {
     setIsCloseModal(true);
   };
 
-  const handleDeleteLicense = async (id: string) => {
+  const handleDeleteFile = async (id: string, fileType: "license" | "certification") => {
     try {
-      await deletePharmacyLicense(dispatch, id);
+      if (fileType === "license") {
+        await deletePharmacyLicense(dispatch, id);
+        fetchPharmacyLicense(dispatch); 
+      } else {
+        await deletePharmacyCertification(dispatch, id);
+        fetchPharmacyCertifications(dispatch); 
+      }
     } catch (error) {
-      console.error("Error deleting license:", error);
+      console.error(`Error deleting ${fileType}:`, error);
     }
   };
 
-  const handleDownloadFile = (fileUrl: string, filename: string) => {
-    const link = document.createElement("a");
-    link.href = fileUrl;
-    link.setAttribute("download", filename); // Set filename for download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div>
@@ -258,7 +269,6 @@ const ProfileSection = () => {
                           <button className="p-1 text-blue-500 hover:text-blue-700">
                             <img
                               src="/downloadFile.svg"
-                              onClick={() => handleDownloadFile(license.file_url, license.filename)}
                               alt="Download"
                               className="w-4 h-4"
                             />
@@ -266,7 +276,7 @@ const ProfileSection = () => {
                           <button className="p-1 text-red-500 hover:text-red-700">
                             <img
                               src="/delete-icon.svg"
-                              onClick={() => handleDeleteLicense(license.id)}
+                              onClick={() => handleDeleteFile(license.id, "license")}
                               alt="Delete"
                               className="w-4 h-4"
                             />
@@ -281,18 +291,50 @@ const ProfileSection = () => {
                     name="license"
                     isMultiSelect={true}
                     setUploadedFile={setUploadedFile}
-                    handleFileUpload={(e, setValue) =>
-                      handleFileUpload(e, setValue)
-                    }
+                    handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "license")}
+                    
                     className="w-60 border-primary mt-4"
                   />
                 </div>
 
+                <Label className=" font-semibold text-lg">Certifications</Label>
+
+                <div className="grid grid-cols-3 gap-4 mt-2">
+                    {certificationsData?.map((license:License) => (
+                      <div
+                        key={license.id}
+                        className="flex items-center justify-between p-2 rounded-md border border-grey-500"
+                      >
+                        <span className="text-sm truncate">
+                          {license.filename}
+                        </span>
+
+                        <div className="flex items-center space-x-2">
+                          <button className="p-1 text-blue-500 hover:text-blue-700">
+                            <img
+                              src="/downloadFile.svg"
+                              alt="Download"
+                              className="w-4 h-4"
+                            />
+                          </button>
+                          <button className="p-1 text-red-500 hover:text-red-700">
+                            <img
+                              src="/delete-icon.svg"
+                              onClick={() => handleDeleteFile(license.id, "certification")}
+                              alt="Delete"
+                              className="w-4 h-4"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 <FileUploadField
-                  label="Certifications"
                   title="Upload Certification"
                   name="certificate"
                   isMultiSelect={true}
+                  handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "certification")}
                   className="w-60 border-primary"
                 />
               </div>
