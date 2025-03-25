@@ -1,4 +1,4 @@
-import { getUserRole } from "@/utils/helper";
+import { getUserRole } from "@/lib/getUserRole";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -9,13 +9,10 @@ export default async function AuthLayout({
   children: React.ReactNode;
 }>) {
   const supabase = await createClient();
-  
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { session }, error } = await supabase.auth.getSession();
 
-  if (user) {
-    const role = await getUserRole(user);
+  if (session) {
+    const role = await getUserRole(session?.user);
     if (role === "admin") {
       redirect("/admin/dashboard");
     } else if (role === "pharmacy") {

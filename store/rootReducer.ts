@@ -1,18 +1,39 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
-import courseReducer from "./features/course/courseSlice";
-import checklistReducer from "./features/checklist/checklistSlice"
-import marketingReducer from "./features/marketing/marketingSlice"
-import categoryReducer from "./features/category/categorySlice"
-import expenseReducer from "./features/expense/expenseSlice";
+import globalReducer from "./features/global/globalSlice"
+
+// Admin Imports
+import adminDashboardReducer from "./features/admin/dashboard/adminDashboardSlice";
+import adminCourseReducer from "./features/admin/course/adminCourseSlice";
+import adminChecklistReducer from "./features/admin/checklist/adminChecklistSlice"
+import adminMarketingReducer from "./features/admin/marketing/adminMarketingSlice"
+import adminCategoryReducer from "./features/admin/category/adminCategorySlice"
+import adminExpenseReducer from "./features/admin/expense/adminExpenseSlice";
+import adminPharmacyReducer from "./features/admin/pharmacy/adminPharmacySlice";
+
+// Pharmacy Imports
+import pharmacyExpenseReducer from "./features/pharmacy/expense/pharmacyExpenseSlice";
+import operationsExpenseReducer from "./features/pharmacy/operations/operationsExpenseSlice"
+import pharmacyOnboardingExpenseReducer from "./features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice"
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    course: courseReducer,
-    checklist: checklistReducer,
-    marketing: marketingReducer,
-    category: categoryReducer,
-    expense: expenseReducer
+    global: globalReducer,
+
+    // Admin Reducers
+    adminDashboard: adminDashboardReducer,
+    course: adminCourseReducer,
+    checklist: adminChecklistReducer,
+    marketing: adminMarketingReducer,
+    category: adminCategoryReducer,
+    expense: adminExpenseReducer,
+    pharmacy: adminPharmacyReducer,
+
+    // Pharmacy Reducers
+    pharmacyExpense: pharmacyExpenseReducer,
+    operations: operationsExpenseReducer,
+    onboarding: pharmacyOnboardingExpenseReducer
+
 });
 
-export default rootReducer
+export default rootReducer;

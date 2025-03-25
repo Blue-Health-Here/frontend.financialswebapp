@@ -11,6 +11,7 @@ interface InputFieldProps {
     className?: string;
     ref?: any;
     Icon?: React.ComponentType<{ className?: string }>;
+    disabled?: boolean
 }
 
 const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ...props }) => {
@@ -18,7 +19,7 @@ const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ..
 
     return (
         <div>
-            {label && <Label size="xs" htmlFor={props.name}>{label}</Label>}
+            {label && <Label size="xs" className="text-grey" htmlFor={props.name}>{label}</Label>}
             <div className="relative">
                 <input
                     className={cn(
@@ -36,7 +37,7 @@ const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ..
                 )}
             </div>
             {meta.touched && meta.error && (
-                <p className="text-red-500 text-sm">{meta.error}</p>
+                <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
             )}
         </div>
     );

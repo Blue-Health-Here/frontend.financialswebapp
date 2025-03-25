@@ -112,3 +112,66 @@ input[type="radio"]:checked::before {
   display: inline-block;
   width: 100%;
 }
+
+
+
+
+
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.custom-checkbox span::after {
+  content: '';
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+span {
+  background-color: #0BD700;
+  border-color: #0BD700;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+span::after {
+  opacity: 1;
+}
+
+/* Change selected date background color to light blue */
+.react-datepicker__day--selected,
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--keyboard-selected {
+    background-color: #90CDF4 !important; /* Light blue */
+    color: #ffffff !important; /* White text */
+    border-radius: 6px;
+}
+
+/* Change highlighted dates */
+.react-datepicker__day--highlighted {
+    background-color: #BEE3F8 !important; /* Lighter blue */
+    color: #000 !important;
+}
+
+/* Hide default react-datepicker icon */
+.react-datepicker__input-container button {
+    display: none !important;
+}
