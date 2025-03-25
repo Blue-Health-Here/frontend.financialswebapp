@@ -73,3 +73,11 @@ export type CategoryProps = {
     id: string;
     name: string;
 };
+
+export type PharmacyExpenseProps = {
+    title: string  ;
+    amount: number;
+    expense_date: string;
+    category_id: string;
+    revenue:number;
+};

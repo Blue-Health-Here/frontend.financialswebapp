@@ -9,12 +9,15 @@ interface MultiDateFieldProps {
   label?: string;
   name: string;
   className?: string;
+  onDateChange:Function
 }
 
 const MultiDateField: React.FC<MultiDateFieldProps> = ({
   className,
   label,
   name,
+  onDateChange
+  
 }) => {
   const [field, meta, helpers] = useField(name);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -43,11 +46,11 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({
   }, [openCalendar]);
 
   const handleDateChange = (date: Date | null) => {
-    if (date && !selectedDates.find((d) => d.getTime() === date.getTime())) {
-      const updatedDates = [...selectedDates, date];
-      setSelectedDates(updatedDates);
-      helpers.setValue(updatedDates);
-    }
+if (date && !selectedDates.find((d) => d.getTime() === date.getTime())) {
+  const updatedDates = [...selectedDates, date];
+  setSelectedDates(updatedDates);
+  helpers.setValue(updatedDates);
+}
   };
 
   const removeDate = (date: Date) => {
@@ -85,7 +88,7 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({
           >
             <DatePicker
               selected={selectedDates[selectedDates.length - 1] || null}
-              onChange={handleDateChange}
+              onChange={handleDateChange || onDateChange}
               highlightDates={selectedDates}
               inline
             />

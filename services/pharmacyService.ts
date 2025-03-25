@@ -1,18 +1,18 @@
 import axiosPharmacy from "@/lib/axiosPharmacy";
 import { setIsLoading } from "@/store/features/global/globalSlice";
-import { setExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
+import { setexpenseData } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 
 /**
  * Fetch pharmacy stats and update Redux store.
  */
-export const fetchPharmacyStats = async (dispatch: AppDispatch) => {
+export const fetchPharmacyExpense = async (dispatch: AppDispatch) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosPharmacy.get("/v1/pharmacy-expense");
         if (response.status === 200) {
-            dispatch(setExpenseStats(response.data));
+            dispatch(setexpenseData(response.data));
             console.log(response.data, 'response.data')
             toast.success("Stats fetched successfully!");
         }
@@ -22,3 +22,42 @@ export const fetchPharmacyStats = async (dispatch: AppDispatch) => {
         dispatch(setIsLoading(false));
     }
 };
+
+
+/**
+ * create new expense and update Redux store.
+ */
+export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosPharmacy.post("/v1/pharmacy-expense", data);
+        if (response.data?.success) {
+            await fetchPharmacyExpense(dispatch);
+            toast.success("Expense created successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * update new expense  and update Redux store.
+ */
+export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosPharmacy.put("/v1/pharmacy-expense?expense_id="+data?.expense_id, data);
+        if (response.data?.success) {
+            await fetchPharmacyExpense(dispatch);
+            toast.success("Expense updated successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
