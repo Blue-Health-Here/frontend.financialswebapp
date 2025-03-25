@@ -1,5 +1,5 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
-import { setIsLoading, setProfileData } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData, setLicenseData } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 
@@ -12,7 +12,7 @@ export const fetchProfileDataPharmacy = async (dispatch: AppDispatch) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/pharmacy-profile");
         if (response?.status === 200) {
-            dispatch(setProfileData(response?.data[0]));
+            dispatch(setProfileData(response?.data));
             toast.success("Profile fetched successfully!");
         }
     } catch (error: any) {
@@ -37,6 +37,66 @@ export const postProfileUpdatePharmacy = async (dispatch: AppDispatch, formData?
         if (response?.data?.success) {
             await fetchProfileDataPharmacy(dispatch);
             toast.success("Profile updated successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * get pharmacy license data and update Redux store.
+ */
+export const fetchPharmacyLicense = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-license");
+        if (response?.status === 200) {
+            dispatch(setLicenseData(response?.data));
+            toast.success("License fetched successfully!");
+        }
+    } catch (error: any) {  
+        toast.error(error?.response?.data?.detail || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * post pharmacy license upload file and update Redux store.
+ */
+export const postLicenseUploadFile = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/pharmacy-license", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Course file uploaded successfully!");
+            return { ...response?.data };
+        }
+        return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * delete pharmacy license and update Redux store.
+ */
+export const deletePharmacyLicense = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/pharmacy-license?license_id="+id);
+        if (response?.data?.success) {
+            await fetchPharmacyLicense(dispatch);
+            toast.success("License file deleted successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
