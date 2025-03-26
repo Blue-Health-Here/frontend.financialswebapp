@@ -7,6 +7,7 @@ import { setIsLoading, setProfileData } from "@/store/features/global/globalSlic
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
+import { setExpenseData } from "@/store/features/admin/expense/adminExpenseSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -382,3 +383,20 @@ export const updateCategory = async (dispatch: AppDispatch, data: any,) => {
     }
 };
 
+/**
+ * fetch all pharmacies budgeting list and update Redux store.
+ */
+export const fetchBudgetingList = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-budget");
+        if (response.status === 200) {
+            dispatch(setExpenseData(response.data));
+            toast.success("Pharmacies budgeting list fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

@@ -73,3 +73,13 @@ export type CategoryProps = {
     id: string;
     name: string;
 };
+
+export interface BudgetDetailCardProps {
+    image_url: string;
+    pharmacy_id: string;
+    pharmacy_title: string;
+    profit: number;
+    total_expense: number;
+    total_revenue: number;
+  }
+  
