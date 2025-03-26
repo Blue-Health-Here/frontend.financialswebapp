@@ -6,7 +6,7 @@ import DeleteModal from "./DeleteModal";
 interface BudgetCardProps {
   budget: any;
   id: string;
-  categories: any;
+  categories?: any;
   className?: string;
   item?: any;
   handleEdit?: Function;

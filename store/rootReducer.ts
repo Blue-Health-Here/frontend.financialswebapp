@@ -15,7 +15,6 @@ import adminPharmacyReducer from "./features/admin/pharmacy/adminPharmacySlice";
 import pharmacyExpenseReducer from "./features/pharmacy/expense/pharmacyExpenseSlice";
 import operationsExpenseReducer from "./features/pharmacy/operations/operationsExpenseSlice"
 import pharmacyOnboardingExpenseReducer from "./features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice"
-import { expense } from "@/utils/constants";
 
 const rootReducer = combineReducers({
     auth: authReducer,
