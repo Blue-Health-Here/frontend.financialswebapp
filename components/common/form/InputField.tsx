@@ -19,7 +19,7 @@ const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ..
 
     return (
         <div>
-            {label && <Label size="xs" className="text-grey" htmlFor={props.name}>{label}</Label>}
+            {label && <Label size="xs" className="" htmlFor={props.name}>{label}</Label>}
             <div className="relative">
                 <input
                     className={cn(

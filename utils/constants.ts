@@ -102,6 +102,13 @@ export const expenseCategories = [
     { name: "Rent", budget: "10,000", actual: "8,000", percentage: 15 },
 ];
 
+export const categories = [
+   {
+      id: "c716df4e-0cdf-491d-9725-2e6bef304e63",
+      name: "tech",
+      category_type: "expense"
+   }]
+
 export const budgetStatsData = [
     { value: "$3000.00", label: "Revenue", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
     { value: "$2000.00", label: "Total monthly Expense", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },

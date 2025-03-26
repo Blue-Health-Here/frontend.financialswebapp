@@ -36,3 +36,11 @@ export const addNewCategoryInitialVals = {
     name: "",
     category_type: ""
 }
+
+  export const addNewPharmacyExpenseInitialVals = {
+    title: "",
+    amount: 0,
+    expense_date: "",
+    category_id: "",
+    revenue:0
+}
