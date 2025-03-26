@@ -17,9 +17,17 @@ const SingleDateField: React.FC<SingleDateFieldProps> = ({
   name,
 }) => {
   const [field, meta, helpers] = useField(name);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    field.value ? new Date(field.value) : null
+  );
   const [openCalendar, setOpenCalendar] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (field.value) {
+      setSelectedDate(new Date(field.value));
+    }
+  }, [field.value]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -44,7 +52,7 @@ const SingleDateField: React.FC<SingleDateFieldProps> = ({
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
-    helpers.setValue(date);
+    helpers.setValue(date ? date.toISOString().split("T")[0] : "");
   };
 
   return (
@@ -83,7 +91,7 @@ const SingleDateField: React.FC<SingleDateFieldProps> = ({
       </div>
 
       {meta.touched && meta.error && (
-        <p className="text-red-500 text-sm">{meta.error}</p>
+        <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
       )}
     </div>
   );

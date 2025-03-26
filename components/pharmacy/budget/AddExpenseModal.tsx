@@ -103,6 +103,7 @@ const AddExpenseModal = () => {
                                 label="Select a Date"
                                 name="expense_date"
                                 className="mb-4"
+                                
                             />
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">{expenseDetails ? "Update" : "Save"}</SubmitButton>
                         </Form>
