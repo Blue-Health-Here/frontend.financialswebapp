@@ -8,7 +8,7 @@ const persistConfig = {
     key: "root",
     storage,
     stateReconciler: autoMergeLevel2,
-    whitelist: ["auth"],
+    whitelist: ["auth", "expense", "pharmacy"],
 };
 
 const persistedReducer = persistReducer<any>(persistConfig, rootReducer);
