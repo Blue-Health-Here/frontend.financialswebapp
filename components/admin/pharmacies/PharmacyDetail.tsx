@@ -22,8 +22,7 @@ import AddNewQuestionModal from "./AddNewQuestionModal";
 
 const PharmacyDetail = () => {
   const [courses, setCourses] = useState(courseData);
-  const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy);
-  const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+  const { isAddQuestion,pharmacies } = useSelector((state: RootState) => state.pharmacy);
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
