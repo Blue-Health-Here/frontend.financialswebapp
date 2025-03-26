@@ -20,11 +20,11 @@ import { useParams } from 'next/navigation';
 
 const BudgetDetail = () => {
     const params = useParams();
-    const id = params.id;
+    const id = params?.pharmacy_id;
     const { width } = useWindowSize();
     const dispatch = useDispatch();
-    const { isAddExpense } = useSelector((state: RootState) => state.expense)
-    const pharmacyBudget = pharmacyBudgetDetail.find((pharmacyBudget) => pharmacyBudget.id === Number(id));
+    const { isAddExpense , expenseData} = useSelector((state: RootState) => state.expense)
+    const pharmacyBudget = expenseData.find((pharmacyBudget:any) => pharmacyBudget.pharmacy_id === id);
     if (!pharmacyBudget) {
         return <p>Pharmacy not found.</p>;
     }
