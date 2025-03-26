@@ -28,7 +28,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const dispatch = useDispatch();
     const { user } = session ?? {};
-
+    
     // Function to toggle the dropdown
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -85,7 +85,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
                         <div className="flex gap-x-4 items-center relative" ref={dropdownRef}>
                             <button className='flex gap-x-3 items-center' onClick={toggleDropdown}>
                                 <div className="text-right hidden md:block">
-                                    <span className="text-grey text-sm font-medium">{user?.user_metadata?.name}</span>
+                                    <span className="text-grey text-sm font-medium">{profileData?.name ?? user?.user_metadata?.name}</span>
                                     <p className="text-themeLight text-sm">{capitalize(role)}</p>
                                 </div>
                                 <div className='border rounded-full object-cover shadow-sm overflow-hidden w-9 h-9 flex items-center justify-center'>

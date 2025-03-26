@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
 import { setExpenseDetails, setIsAddExpense, setLoading } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
-import { deletePharmacyExpense, fetchPharmacyExpense } from '@/services/pharmacyService';
+import { deletePharmacyExpense, fetchPharmacyExpense } from '@/services/pharmacyServices';
 import TextMessage from '@/components/common/TextMessage';
 import { PharmacyExpenseProps } from '@/utils/types';
 

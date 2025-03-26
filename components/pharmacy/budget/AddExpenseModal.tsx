@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { addNewPharmacyExpenseInitialVals } from "@/utils/initialVals";
 import { addNewPharmacyExpenseValidationSchema } from "@/utils/validationSchema";
 import toast from "react-hot-toast";
-import { createNewPharmacyExpense, updatePharmacyExpense } from "@/services/pharmacyService";
+import { createNewPharmacyExpense, updatePharmacyExpense } from "@/services/pharmacyServices";
 import { RootState } from "@/store/store";
 import SingleDateField from "@/components/common/form/SingleDateField";
 

@@ -82,3 +82,9 @@ export type PharmacyExpenseProps = {
     revenue:number;
     id:string
 };
+
+export interface License {
+    id: string;
+    filename: string;
+    file_url: string;
+}

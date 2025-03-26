@@ -9,7 +9,7 @@ import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import FileUploadField from "@/components/common/form/FileUploadField";
 import { setIsAddMarketing } from '@/store/features/admin/marketing/adminMarketingSlice';
-import { createNewMarketingMaterials, updateMarketingMaterials, postMarketingUploadFile } from '@/services/adminServices';
+import { createNewMarketingMaterials, updateMarketingMaterials, postMarketingUploadFile, fetchAllPharmacies } from '@/services/adminServices';
 import { addNewMarketingMaterialsInitialVals } from '@/utils/initialVals';
 import { addNewMarketingMaterialsValidationSchema } from "@/utils/validationSchema";
 import { RootState } from "@/store/store";
@@ -46,9 +46,12 @@ const AddMarketingModal = () => {
                 filename: marketingMaterialsDetails.filename,
                 path: ""
             } : null);
+        } else {
+            setInitialVals(addNewMarketingMaterialsInitialVals);
+            setUploadedFile(null);
         }
-    }, [marketingMaterialsDetails]); // Ensure it updates when details change
-    
+        fetchAllPharmacies(dispatch);
+    }, []);
 
     const handleFileUpload = async (event: any, setValue: (value: any) => void) => {
         try {
@@ -136,6 +139,7 @@ const AddMarketingModal = () => {
                                     <InputField label="Add Link" className="placeholder:text-themeLight" name="link" placeholder="Enter Link" />
                                 ) : (
                                     <FileUploadField
+                                        module="marketing"
                                         name="file"
                                         title="Upload"
                                         uploadedFile={uploadedFile}
