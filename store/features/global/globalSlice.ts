@@ -3,7 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isSidebarOpen: false,
     isLoading: false,
-    profileData: null
+    profileData: null,
+    licenseData: [],
+    certificationsData: [],
+
 };
 
 const globalSlice = createSlice({
@@ -18,10 +21,16 @@ const globalSlice = createSlice({
         },
         setProfileData: (state, action) => {
             state.profileData = action.payload;
-        }
+        },
+        setLicenseData: (state, action) => {
+            state.licenseData = action.payload;
+        },
+        setCertificationsData: (state, action) => {
+          state.certificationsData = action.payload;
+      }
     }
 });
 
-export const { setIsSidebarOpen, setIsLoading, setProfileData } = globalSlice.actions;
+export const { setIsSidebarOpen, setIsLoading, setProfileData,setLicenseData, setCertificationsData} = globalSlice.actions;
 
 export default globalSlice.reducer;
