@@ -14,29 +14,25 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UseSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import {fetchProfileDataPharmacy,postProfileUpdatePharmacy,fetchPharmacyLicense, deletePharmacyLicense, fetchPharmacyCertifications,postCertificationsUploadFile, deletePharmacyCertification
+import {
+  fetchProfileDataPharmacy, postProfileUpdatePharmacy, fetchPharmacyLicense, deletePharmacyLicense, fetchPharmacyCertifications, postCertificationsUploadFile, deletePharmacyCertification
 } from "@/services/pharmacyServices";
-import { UploadedFileProps } from "@/utils/types";
+import { License, UploadedFileProps } from "@/utils/types";
 import { postLicenseUploadFile } from "@/services/pharmacyServices";
 import toast from "react-hot-toast";
+import TextMessage from "@/components/common/TextMessage";
 
 const ProfileSection = () => {
-  const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null );
+  const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
   const { profileData } = useSelector((state: RootState) => state.global);
   const { licenseData } = useSelector((state: RootState) => state.global);
   const { certificationsData } = useSelector((state: RootState) => state.global);
   const [isCloseModal, setIsCloseModal] = useState(false);
   const [profile, setProfile] = useState(null);
   const fileInputRef: any = useRef(null);
+  const hasFetched: any = useRef(false);
   const dispatch = useDispatch();
 
-  interface License {
-    id: string;
-    filename: string;
-    file_url: string;
-  }
-
-  console.log(licenseData);
   const [initialVals, setInitialVals] = useState({
     pharmacy_name: "",
     address: "",
@@ -48,12 +44,17 @@ const ProfileSection = () => {
   });
 
   useEffect(() => {
-    fetchProfileDataPharmacy(dispatch);
-    fetchPharmacyLicense(dispatch);
-    fetchPharmacyCertifications(dispatch);
-
+    const fetchData = async () => {
+      await fetchProfileDataPharmacy(dispatch);
+      await fetchPharmacyLicense(dispatch);
+      await fetchPharmacyCertifications(dispatch);
+    }
+    if (!hasFetched.current) {
+      fetchData();
+      hasFetched.current = true;
+    }
   }, []);
-  console.log(profileData);
+
   useEffect(() => {
     if (profileData) {
       setInitialVals({
@@ -63,25 +64,21 @@ const ProfileSection = () => {
         contact: profileData?.contact || "",
         services_offered: profileData?.services || "",
         license: licenseData?.license || [],
-        certificate:certificationsData?.certificate || []
+        certificate: certificationsData?.certificate || []
       });
-      setProfile(profileData?.image_url ?? null);
     }
   }, [profileData]);
 
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
-      const reader: any = new FileReader();
-      reader.onloadend = () => {
-        setProfile(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setProfile(file);
     } else {
       toast.error("Please select a valid image file (png, jpg, jpeg).");
     }
   };
-  const handleSubmit = (values: any) => {
+
+  const handleSubmit = async (values: any) => {
     const formData = new FormData();
 
     formData.append("name", values.pharmacy_name);
@@ -93,28 +90,23 @@ const ProfileSection = () => {
     if (profile) {
       formData.append("file", profile);
     }
-    postProfileUpdatePharmacy(dispatch, formData);
+    await postProfileUpdatePharmacy(dispatch, formData);
   };
 
-  const handleFileUpload = async (
-    event: any,
-    setValue: (value: any) => void,
-    fileType: "license" | "certification"
-  ) => {
+  const handleFileUpload = async ( event: any, setValue: (value: any) => void, fileType: "license" | "certification" ) => {
     try {
       const formData = new FormData();
       formData.append("file", event.target.files[0]);
-  
+
       const uploadFunction =
         fileType === "license" ? postLicenseUploadFile : postCertificationsUploadFile;
-  
+
       const response = await uploadFunction(dispatch, formData);
-  
+
       if (response?.success) {
-        console.log(response.data[0]);
         setUploadedFile(response.data);
-        setValue(response.data); 
-  
+        setValue(response.data);
+
         fileType === "license"
           ? fetchPharmacyLicense(dispatch)
           : fetchPharmacyCertifications(dispatch);
@@ -123,7 +115,7 @@ const ProfileSection = () => {
       toast.error(error?.message || "Something went wrong!!");
     }
   };
-  
+
   const handleEditClick = () => {
     fileInputRef.current.click();
   };
@@ -131,6 +123,7 @@ const ProfileSection = () => {
   const handleRemoveClick = () => {
     setProfile(null);
   };
+
   const handleDelete = () => {
     setIsCloseModal(true);
   };
@@ -139,10 +132,10 @@ const ProfileSection = () => {
     try {
       if (fileType === "license") {
         await deletePharmacyLicense(dispatch, id);
-        fetchPharmacyLicense(dispatch); 
+        fetchPharmacyLicense(dispatch);
       } else {
         await deletePharmacyCertification(dispatch, id);
-        fetchPharmacyCertifications(dispatch); 
+        fetchPharmacyCertifications(dispatch);
       }
     } catch (error) {
       console.error(`Error deleting ${fileType}:`, error);
@@ -218,12 +211,14 @@ const ProfileSection = () => {
                     </div>
                     <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
                       <button
+                        type="button"
                         className="p-1 bg-white rounded-md shadow-lg"
                         onClick={handleRemoveClick}
                       >
                         <X size={14} className="text-gray-600" />
                       </button>
                       <button
+                        type="button"
                         className="p-1 bg-white rounded-md shadow-lg"
                         onClick={handleEditClick}
                       >
@@ -256,7 +251,7 @@ const ProfileSection = () => {
                   <Label className="font-semibold text-lg">Licensing</Label>
 
                   <div className="grid grid-cols-3 gap-4 mt-2">
-                    {licenseData?.map((license:License) => (
+                    {licenseData.length > 0 ? licenseData?.map((license: License) => (
                       <div
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
@@ -283,16 +278,16 @@ const ProfileSection = () => {
                           </button>
                         </div>
                       </div>
-                    ))}
+                    )) : <TextMessage text="License not found" />}
                   </div>
 
                   <FileUploadField
                     title="Upload License"
                     name="license"
-                    isMultiSelect={true}
+                    isMultiSelect={false}
                     setUploadedFile={setUploadedFile}
                     handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "license")}
-                    
+
                     className="w-60 border-primary mt-4"
                   />
                 </div>
@@ -300,40 +295,40 @@ const ProfileSection = () => {
                 <Label className=" font-semibold text-lg">Certifications</Label>
 
                 <div className="grid grid-cols-3 gap-4 mt-2">
-                    {certificationsData?.map((license:License) => (
-                      <div
-                        key={license.id}
-                        className="flex items-center justify-between p-2 rounded-md border border-grey-500"
-                      >
-                        <span className="text-sm truncate">
-                          {license.filename}
-                        </span>
+                  {certificationsData.length > 0 ? certificationsData?.map((license: License) => (
+                    <div
+                      key={license.id}
+                      className="flex items-center justify-between p-2 rounded-md border border-grey-500"
+                    >
+                      <span className="text-sm truncate">
+                        {license.filename}
+                      </span>
 
-                        <div className="flex items-center space-x-2">
-                          <button className="p-1 text-blue-500 hover:text-blue-700">
-                            <img
-                              src="/downloadFile.svg"
-                              alt="Download"
-                              className="w-4 h-4"
-                            />
-                          </button>
-                          <button className="p-1 text-red-500 hover:text-red-700">
-                            <img
-                              src="/delete-icon.svg"
-                              onClick={() => handleDeleteFile(license.id, "certification")}
-                              alt="Delete"
-                              className="w-4 h-4"
-                            />
-                          </button>
-                        </div>
+                      <div className="flex items-center space-x-2">
+                        <button className="p-1 text-blue-500 hover:text-blue-700">
+                          <img
+                            src="/downloadFile.svg"
+                            alt="Download"
+                            className="w-4 h-4"
+                          />
+                        </button>
+                        <button className="p-1 text-red-500 hover:text-red-700">
+                          <img
+                            src="/delete-icon.svg"
+                            onClick={() => handleDeleteFile(license.id, "certification")}
+                            alt="Delete"
+                            className="w-4 h-4"
+                          />
+                        </button>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  )) : <TextMessage text="Certification not found." />}
+                </div>
 
                 <FileUploadField
                   title="Upload Certification"
                   name="certificate"
-                  isMultiSelect={true}
+                  isMultiSelect={false}
                   handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "certification")}
                   className="w-60 border-primary"
                 />

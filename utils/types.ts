@@ -73,3 +73,9 @@ export type CategoryProps = {
     id: string;
     name: string;
 };
+
+export interface License {
+    id: string;
+    filename: string;
+    file_url: string;
+}

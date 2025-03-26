@@ -75,7 +75,7 @@ export const postLicenseUploadFile = async (dispatch: AppDispatch, data: any) =>
             },
         });
         if (response?.data?.success) {
-            toast.success("Course file uploaded successfully!");
+            toast.success("License file uploaded successfully!");
             return { ...response?.data };
         }
         return null;
