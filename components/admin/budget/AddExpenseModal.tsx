@@ -62,12 +62,10 @@ const AddExpenseModal = () => {
           };
   
           try {
-              console.log("Submitting Payload:", payload);
               if (expenseDetail) {
                   await updatePharmacyExpense(dispatch, { expense_id: expenseDetail?.id, ...payload });
               } else {
                   await createNewPharmacyExpense(dispatch, payload);
-                  console.log("Expense created successfully!");
               }
               handleClose();
           } catch (error: any) {

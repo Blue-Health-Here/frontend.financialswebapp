@@ -13,7 +13,6 @@ import { FiEye } from "react-icons/fi";
 
 const LoginForm: React.FC<any> = ({ message }) => {
     const handleSubmit = (values: typeof signInInitialVals) => {
-        console.log("Form submitted:", values);
         const formData = new FormData();
         formData.append("email", values.email);
         formData.append("password", values.password);

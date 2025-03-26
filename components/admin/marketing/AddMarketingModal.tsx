@@ -87,7 +87,6 @@ const AddMarketingModal = () => {
         }
 
         try {
-            console.log("Submitting Payload:", payload);
             if (marketingMaterialsDetails) {
                 await updateMarketingMaterials(dispatch, { marketing_id: marketingMaterialsDetails?.marketing_id, ...payload });
             } else {

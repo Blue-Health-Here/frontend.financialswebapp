@@ -27,7 +27,6 @@ const BudgetDetail = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { isAddExpense, expenseData, pharmacyList } = useSelector((state: RootState) => state.expense);
-    console.log(pharmacyId, pharmacyList, "pharmacyList");
 
     const [loading, setLoading] = useState(true);
 
