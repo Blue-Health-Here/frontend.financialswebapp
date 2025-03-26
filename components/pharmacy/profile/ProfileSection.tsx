@@ -78,7 +78,7 @@ const ProfileSection = () => {
       };
       reader.readAsDataURL(file);
     } else {
-      alert("Please select a valid image file (png, jpg, jpeg).");
+      toast.error("Please select a valid image file (png, jpg, jpeg).");
     }
   };
   const handleSubmit = (values: any) => {
