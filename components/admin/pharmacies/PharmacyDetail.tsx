@@ -30,9 +30,6 @@ const PharmacyDetail = () => {
   const pharmacy = pharmacies.find(
     (pharmacy: any) => pharmacy.pharmacy_id === id
   );
-  if (!pharmacy) {
-    return <p>Pharmacy not found.</p>;
-  }
 
   const toggleSelect = (id: number) => {
     setCourses((prevCourses) =>

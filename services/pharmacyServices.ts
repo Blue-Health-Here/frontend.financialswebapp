@@ -176,7 +176,6 @@ export const fetchPharmacyExpense = async (dispatch: AppDispatch) => {
         const response = await axiosAdmin.get("/v1/pharmacy-expense");
         if (response.status === 200) {
             dispatch(setexpenseData(response.data));
-            console.log(response.data, 'response.data')
             toast.success("Expense fetched successfully!");
         }
     } catch (error: any) {

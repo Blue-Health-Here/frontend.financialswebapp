@@ -11,7 +11,6 @@ import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 const ForgotPasswordForm: React.FC<any> = ({ message }) => {
     const handleSubmit = (values: typeof forgotPassInitialVals) => {
-        console.log("Form submitted:", values);
         const formData = new FormData();
         formData.append("email", values.email);
         forgotPasswordAction(formData);
