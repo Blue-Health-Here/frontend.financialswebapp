@@ -400,3 +400,22 @@ export const fetchBudgetingList = async (dispatch: AppDispatch) => {
         dispatch(setIsLoading(false));
     }
 };
+
+
+/**
+ * fetch expense Categories and update Redux store.
+ */
+export const fetchExpenseCategories = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-categories?type=expense");
+        if (response.status === 200) {
+            dispatch(setSelectCategories(response.data));
+            toast.success("Categories fetched successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

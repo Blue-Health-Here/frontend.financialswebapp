@@ -71,7 +71,6 @@ const BudgetSection = () => {
      const handleDeleteExpense = (id: string) => {
         deletePharmacyExpense(dispatch, id);
         };
-        console.log("expenseData",expenseData)
     
     
     return (
