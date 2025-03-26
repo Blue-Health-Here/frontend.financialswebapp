@@ -1,7 +1,7 @@
 "use client"
 
-import React from 'react'
-import { budgetData, budgetStatsData, expenseCategories, fullDatasets, fullLabels, pharmacyData } from "@/utils/constants";
+import React, { useEffect } from 'react'
+import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -15,12 +15,15 @@ import FileDownloadField from '@/components/common/form/FileDownloadField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
-import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
+import { setExpenseDetails, setIsAddExpense, setLoading } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
+import { deletePharmacyExpense, fetchPharmacyExpense } from '@/services/pharmacyServices';
+import TextMessage from '@/components/common/TextMessage';
+import { PharmacyExpenseProps } from '@/utils/types';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch()
-    const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
+    const { isAddExpense, expenseData, loading } = useSelector((state: RootState) => state.pharmacyExpense);
     
       let labels, datasets;
     
@@ -52,6 +55,24 @@ const BudgetSection = () => {
           Others: fullDatasets.Others.slice(0, 5),
         };
       }
+    useEffect(() => {
+        fetchPharmacyExpense(dispatch).finally(() => setLoading(false));
+    }, [])
+
+    const handleEditCourse = (data: PharmacyExpenseProps) => {
+        dispatch(setIsAddExpense(true))
+        dispatch(setExpenseDetails(data))
+    };
+
+    const handleAddExpense = () => {
+        dispatch(setIsAddExpense(true));
+        dispatch(setExpenseDetails(null));
+    };
+     const handleDeleteExpense = (id: string) => {
+        deletePharmacyExpense(dispatch, id);
+        };
+        console.log("expenseData",expenseData)
+    
     
     return (
         <>
@@ -107,7 +128,7 @@ const BudgetSection = () => {
                     <div className="flex items-center space-x-3">
                         <h4 className="text-[13px] sm:text-[16px] text-gray-700">Add Expense</h4>
                         <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary"
-                            onClick={() => { dispatch(setIsAddExpense(true)) }}>
+                            onClick={handleAddExpense}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
@@ -120,9 +141,13 @@ const BudgetSection = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {budgetData.map((budget, index) => (
-                        <BudgetCard key={index} budget={budget} />
-                    ))}
+                    {loading ? (
+                        <TextMessage text="Loading expense..."/>
+                    ) : (
+                        expenseData?.length > 0 ? expenseData?.map((budget: PharmacyExpenseProps, index: number) => (
+                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditCourse(budget)} />
+                        )) : <TextMessage text="Expense not found." />
+                    )}
                 </div>
             </div>
             {isAddExpense && <AddExpenseModal />}

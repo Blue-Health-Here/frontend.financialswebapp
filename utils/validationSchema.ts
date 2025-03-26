@@ -69,3 +69,12 @@ export const addNewMarketingMaterialsValidationSchema = Yup.object().shape({
 export const addNewCategoryValidationSchema = Yup.object().shape({
     name: Yup.string().required("Category Name is required"),
 });
+
+
+export const addNewPharmacyExpenseValidationSchema = Yup.object().shape({
+    title: Yup.string().required("Expense title is required"),
+    amount: Yup.number().typeError("Expense amount must be a number").required("Expense amount is required"),
+    expense_date: Yup.string().required("Date is required"),
+    category_id: Yup.string().required("Expense category selection is required"),
+    revenue:  Yup.number().typeError("Revenue must be a number").required("Revenue is required"),
+});

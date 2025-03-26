@@ -81,5 +81,19 @@ export interface BudgetDetailCardProps {
     profit: number;
     total_expense: number;
     total_revenue: number;
-  }
-  
+}
+
+export type PharmacyExpenseProps = {
+    title: string  ;
+    amount: number;
+    expense_date: string;
+    category_id: string;
+    revenue:number;
+    id:string
+};
+
+export interface License {
+    id: string;
+    filename: string;
+    file_url: string;
+}

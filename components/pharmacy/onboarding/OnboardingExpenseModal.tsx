@@ -35,8 +35,8 @@ const OnboardingExpenseModal = () => {
             <div className="p-6">
                 <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
                     <Form className="flex flex-col gap-y-4">
-                        <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
-                        <InputField label="Expense" className="placeholder:text-themeLight bg-[#D8D6DE]" name="expense" />
+                        {/* <TextareaField label="Question" className="placeholder:text-themeLight" name="question" /> */}
+                        <InputField label="Expense Title" className="placeholder:text-themeLight" placeholder="Enter Expense" name="title" />
                         <InputField label="Pharmacy Expense" className="placeholder:text-themeLight" name="pharmacyExpense" />
                         <TextareaField label="Note" name="note" />
 
@@ -52,7 +52,7 @@ const OnboardingExpenseModal = () => {
                             ]}
                         />
                         <InputField label="Action Items" className="placeholder:text-themeLight" name="pharmacyExpense" />
-                        <MultiDateField label="Key Follow-up dates" name="date" />
+                        <MultiDateField label="Date" name="date" />
                         {selectedDates.length > 0 && (
                             <div>
                                 <Label size="xs">Selected Dates(s)</Label>

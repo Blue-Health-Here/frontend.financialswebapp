@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
     // Pharmacy Reducers
     pharmacyExpense: pharmacyExpenseReducer,
     operations: operationsExpenseReducer,
-    onboarding: pharmacyOnboardingExpenseReducer
+    onboarding: pharmacyOnboardingExpenseReducer,
 
 });
 
