@@ -28,7 +28,6 @@ const ProfileSection = () => {
     }, []);
 
     useEffect(() => {
-        console.log(user, profileData, "user");
         if (user && user?.user_metadata) {
             setInitialVals({
                 ...initialVals,

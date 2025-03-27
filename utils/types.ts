@@ -97,3 +97,15 @@ export interface License {
     filename: string;
     file_url: string;
 }
+  
+
+ export interface AdminExpenseProps {
+    id: string;
+    title: string;
+    amount: number;
+    expense_date: string; 
+    category_id: string;
+    pharmacy_id: string;
+    revenue: number;
+  }
+  

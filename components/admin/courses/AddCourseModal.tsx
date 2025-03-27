@@ -28,7 +28,6 @@ const AddCourseModal = () => {
 
     useEffect(() => {
         if (courseDetails) {
-            // console.log(courseDetails, "courseDetails");
             setInitialVals({
                 course_id: courseDetails?.course_id,
                 title: courseDetails.title,
@@ -84,7 +83,6 @@ const AddCourseModal = () => {
         }
 
         try {
-            console.log("Submitting Payload:", payload);
             if (courseDetails) {
                 await updateCourse(dispatch, { course_id: courseDetails?.course_id, ...payload });
             } else {

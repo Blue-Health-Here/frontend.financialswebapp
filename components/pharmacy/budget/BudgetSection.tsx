@@ -27,39 +27,40 @@ const BudgetSection = () => {
     
       let labels, datasets;
     
-      if (width > 1400) {
+    if (width > 1400) {
         labels = fullLabels;
         datasets = fullDatasets;
-      } else if (width > 1200) {
+    } else if (width > 1200) {
         labels = fullLabels.slice(0, 9);
         datasets = {
-          Utility: fullDatasets.Utility.slice(0, 9),
-          Salary: fullDatasets.Salary.slice(0, 9),
-          Rent: fullDatasets.Rent.slice(0, 9),
-          Others: fullDatasets.Others.slice(0, 9),
+            Utility: fullDatasets.Utility.slice(0, 9),
+            Salary: fullDatasets.Salary.slice(0, 9),
+            Rent: fullDatasets.Rent.slice(0, 9),
+            Others: fullDatasets.Others.slice(0, 9),
         };
-      } else if (width > 600) {
+    } else if (width > 600) {
         labels = fullLabels.slice(0, 6);
         datasets = {
-          Utility: fullDatasets.Utility.slice(0, 6),
-          Salary: fullDatasets.Salary.slice(0, 6),
-          Rent: fullDatasets.Rent.slice(0, 6),
-          Others: fullDatasets.Others.slice(0, 6),
+            Utility: fullDatasets.Utility.slice(0, 6),
+            Salary: fullDatasets.Salary.slice(0, 6),
+            Rent: fullDatasets.Rent.slice(0, 6),
+            Others: fullDatasets.Others.slice(0, 6),
         };
-      } else {
+    } else {
         labels = fullLabels.slice(0, 5);
         datasets = {
-          Utility: fullDatasets.Utility.slice(0, 5),
-          Salary: fullDatasets.Salary.slice(0, 5),
-          Rent: fullDatasets.Rent.slice(0, 3),
-          Others: fullDatasets.Others.slice(0, 5),
+            Utility: fullDatasets.Utility.slice(0, 5),
+            Salary: fullDatasets.Salary.slice(0, 5),
+            Rent: fullDatasets.Rent.slice(0, 3),
+            Others: fullDatasets.Others.slice(0, 5),
         };
-      }
+    }
+    
     useEffect(() => {
         fetchPharmacyExpense(dispatch).finally(() => setLoading(false));
     }, [])
 
-    const handleEditCourse = (data: PharmacyExpenseProps) => {
+    const handleEditExpense = (data: PharmacyExpenseProps) => {
         dispatch(setIsAddExpense(true))
         dispatch(setExpenseDetails(data))
     };
@@ -68,10 +69,10 @@ const BudgetSection = () => {
         dispatch(setIsAddExpense(true));
         dispatch(setExpenseDetails(null));
     };
-     const handleDeleteExpense = (id: string) => {
+
+    const handleDeleteExpense = (id: string) => {
         deletePharmacyExpense(dispatch, id);
         };
-    
     
     return (
         <>
@@ -144,7 +145,7 @@ const BudgetSection = () => {
                         <TextMessage text="Loading expense..."/>
                     ) : (
                         expenseData?.length > 0 ? expenseData?.map((budget: PharmacyExpenseProps, index: number) => (
-                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditCourse(budget)} />
+                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
                         )) : <TextMessage text="Expense not found." />
                     )}
                 </div>
