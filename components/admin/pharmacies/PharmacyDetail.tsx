@@ -19,17 +19,105 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import AddNewQuestionModal from "./AddNewQuestionModal";
+import { UploadedFileProps } from "@/utils/types";
+import toast from "react-hot-toast";
+import { Label } from "@/components/ui/label";
+import {
+  fetchAdminLicense,
+  fetchAdminCertification,
+  postAdminLicenseUploadFile,
+  postAdminCertificationUploadFile,
+  deleteAdminLicense,deleteAdminCertification
+} from "@/services/adminServices";
+import { License } from "@/utils/types";
+import TextMessage from "@/components/common/TextMessage";
+
 
 const PharmacyDetail = () => {
+  const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>( null);
+  const { licenseData } = useSelector((state: RootState) => state.global);
+  const { certificationsData } = useSelector((state: RootState) => state.global);
   const [courses, setCourses] = useState(courseData);
-  const { isAddQuestion,pharmacies } = useSelector((state: RootState) => state.pharmacy);
+  const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy);
+  const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
-  const id = params?.pharmacy_id;
+  const hasFetched = useRef(false);
+  const id = Array.isArray(params?.pharmacy_id) ? params.pharmacy_id[0] : params?.pharmacy_id;
   const pharmacy = pharmacies.find(
     (pharmacy: any) => pharmacy.pharmacy_id === id
   );
+  if (!pharmacy) {
+    return <p>Pharmacy not found.</p>;
+  }
+
+  useEffect(() => {
+      if (!id) return;
+      const fetchData = async () => {
+        try {
+          await fetchAdminLicense(dispatch, id);
+          await fetchAdminCertification(dispatch, id);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      if (!hasFetched.current) {
+        hasFetched.current = true;
+        fetchData();
+      }
+  }, [id, dispatch]);
+  
+  const handleFileUpload = async (
+    event: any,
+    setValue: (value: any) => void,
+    fileType: "license" | "certification"
+  ) => {
+    try {
+      if (!id) {
+        toast.error("Pharmacy ID is missing!");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", event.target.files[0]);
+
+      const uploadFunction =
+        fileType === "license"
+          ? postAdminLicenseUploadFile
+          : postAdminCertificationUploadFile;
+
+      const response = await uploadFunction(dispatch, formData, id); 
+
+      if (response?.success) {
+        setUploadedFile(response.data[0]); 
+        setValue(response.data);
+
+        fileType === "license"
+          ? fetchAdminLicense(dispatch, id) 
+          : fetchAdminCertification(dispatch, id); 
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Something went wrong!!");
+    }
+  };
+
+    const handleDeleteFile = async (fileId: string, fileType: "license" | "certification") => {
+      try {
+        if (!id) return;
+    
+        if (fileType === "license") {
+          await deleteAdminLicense(dispatch, fileId);
+          fetchAdminLicense(dispatch, id); 
+        } else {
+          await deleteAdminCertification(dispatch, fileId);
+          fetchAdminCertification(dispatch, id);
+        }
+      } catch (error) {
+        console.error(`Error deleting ${fileType}:`, error);
+      }
+    };
+    
 
   const toggleSelect = (id: number) => {
     setCourses((prevCourses) =>
@@ -56,6 +144,8 @@ const PharmacyDetail = () => {
       document.body.style.overflow = "";
     };
   }, [isAddQuestion]);
+
+  console.log(licenseData, certificationsData, "dpoasi")
 
   return (
     <>
@@ -152,14 +242,50 @@ const PharmacyDetail = () => {
           >
             {() => (
               <Form>
-                <FileUploadField
-                  label="Licensing"
-                  title="Upload License"
-                  name="file"
-                  isMultiSelect={true}
-                  className="w-60 mb-6 border-primary"
-                  id=""
-                />
+                <div className="w-full">
+                  <Label className="font-semibold text-lg">Licensing</Label>
+
+                  <div className="grid grid-cols-3 gap-4 mt-2">
+                    {licenseData?.length > 0 ? licenseData?.map((license: License) => (
+                      <div
+                        key={license.id}
+                        className="flex items-center justify-between p-2 rounded-md border border-grey-500"
+                      >
+                        <span className="text-sm truncate">
+                          {license.filename}
+                        </span>
+
+                        <div className="flex items-center space-x-2">
+                          <button className="p-1 text-blue-500 hover:text-blue-700">
+                            <img
+                              src="/downloadFile.svg"
+                              alt="Download"
+                              className="w-4 h-4"
+                            />
+                          </button>
+                          <button className="p-1 text-red-500 hover:text-red-700">
+                            <img
+                              src="/delete-icon.svg"
+                              onClick={() => handleDeleteFile(license.id, "license")}
+                              alt="Delete"
+                              className="w-4 h-4"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    )) : <TextMessage text="License not found." />}
+                  </div>
+
+                  <FileUploadField
+                    title="Upload License"
+                    name="license"
+                    setUploadedFile={setUploadedFile}
+                    handleFileUpload={(e, setValue) =>
+                      handleFileUpload(e, setValue, "license")
+                    }
+                    className="w-60 border-primary mt-4 mb-4"
+                  />
+                </div>
               </Form>
             )}
           </Formik>
@@ -169,13 +295,46 @@ const PharmacyDetail = () => {
           >
             {() => (
               <Form className="w-full ">
+                <Label className=" font-semibold text-lg ">Certifications</Label>
+
+                <div className="grid grid-cols-3 gap-4 mt-2">
+                  {certificationsData?.length > 0 ? certificationsData?.map((license: License) => (
+                    <div
+                      key={license.id}
+                      className="flex items-center justify-between p-2 rounded-md border border-grey-500"
+                    >
+                      <span className="text-sm truncate">
+                        {license.filename}
+                      </span>
+
+                      <div className="flex items-center space-x-2">
+                        <button className="p-1 text-blue-500 hover:text-blue-700">
+                          <img
+                            src="/downloadFile.svg"
+                            alt="Download"
+                            className="w-4 h-4"
+                          />
+                        </button>
+                        <button className="p-1 text-red-500 hover:text-red-700">
+                          <img
+                            src="/delete-icon.svg"
+                            onClick={() => handleDeleteFile(license.id, "certification")}
+                            alt="Delete"
+                            className="w-4 h-4"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  )) : <TextMessage text="Certifications not found." />}
+                </div>
+
                 <FileUploadField
-                  label="Certifications"
                   title="Upload Certification"
-                  name="file"
-                  isMultiSelect={true}
-                  className="w-60 border-primary"
-                  id=""
+                  name="certificate"
+                  handleFileUpload={(e, setValue) =>
+                    handleFileUpload(e, setValue, "certification")
+                  }
+                  className="w-60 border-primary mt-4"
                 />
               </Form>
             )}
@@ -189,7 +348,9 @@ const PharmacyDetail = () => {
           key={index}
         >
           <div className="flex flex-col gap-6">
-            <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">{checklist.name + " Checklist"}</h2>
+            <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
+              {checklist.name + " Checklist"}
+            </h2>
             <Accordion
               key={index}
               items={checklist.list}
@@ -200,7 +361,9 @@ const PharmacyDetail = () => {
       ))}
       <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-          <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">Courses</h2>
+          <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
+            Courses
+          </h2>
           <div className="relative w-[390px] sm:max-w-md">
             <Input
               name="email"
