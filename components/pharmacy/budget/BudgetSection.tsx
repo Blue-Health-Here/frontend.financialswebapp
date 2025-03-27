@@ -72,8 +72,7 @@ const BudgetSection = () => {
 
     const handleDeleteExpense = (id: string) => {
         deletePharmacyExpense(dispatch, id);
-    };
-    
+        };
     
     return (
         <>

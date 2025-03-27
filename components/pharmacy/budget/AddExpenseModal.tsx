@@ -13,19 +13,18 @@ import toast from "react-hot-toast";
 import { createNewPharmacyExpense, updatePharmacyExpense } from "@/services/pharmacyServices";
 import { RootState } from "@/store/store";
 import SingleDateField from "@/components/common/form/SingleDateField";
+import { fetchExpenseCategories } from "@/services/globalService";
 
 const AddExpenseModal = () => {
     const [initialVals, setInitialVals] = useState<any>(addNewPharmacyExpenseInitialVals);
-        const { expenseDetails } = useSelector((state: RootState) => state.pharmacyExpense);
+    const { expenseDetails } = useSelector((state: RootState) => state.pharmacyExpense);
+    const { expenseCategories } = useSelector((state: RootState) => state.global);
+    const dispatch = useDispatch() 
         
-    const expenseCategories = [
-            {
-                id: "c716df4e-0cdf-491d-9725-2e6bef304e63",
-                name: "tech",
-                category_type: "expense"
-            }]
+    useEffect(() => {
+        fetchExpenseCategories(dispatch);
+    }, [, dispatch]);
     
-    const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(setIsAddExpense(false));
     };
@@ -88,7 +87,7 @@ const AddExpenseModal = () => {
                                 name="category_id"
                                 options={[
                                     { value: "select expense", label: "select expense" },
-                                    ...expenseCategories.map((category) => ({
+                                    ...expenseCategories?.map((category:any) => ({
                                         value: category.id,
                                         label: category.name,
                                     })),

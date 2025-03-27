@@ -11,24 +11,23 @@ import { addNewPharmacyExpenseValidationSchema } from "@/utils/validationSchema"
 import toast from "react-hot-toast";
 import { RootState } from "@/store/store";
 import SingleDateField from "@/components/common/form/SingleDateField";
-import { createNewPharmacyExpense, updatePharmacyExpense } from "@/services/adminServices";
 import { setIsAddExpense } from "@/store/features/admin/expense/adminExpenseSlice";
 import { useParams } from "next/navigation";
+import { fetchExpenseCategories } from "@/services/globalService";
+import { createNewAdminPharmacyExpense, updateAdminPharmacyExpense } from "@/services/adminServices";
 
 const AddExpenseModal = () => {
     const params = useParams();
     const pharmacyId = params?.pharmacy_id;
     const [initialVals, setInitialVals] = useState<any>(addNewPharmacyExpenseInitialVals);
     const { expenseDetail } = useSelector((state: RootState) => state.expense);
-        
-    const expenseCategories = [
-            {
-                id: "c716df4e-0cdf-491d-9725-2e6bef304e63",
-                name: "tech",
-                category_type: "expense"
-            }]
-    
-    const dispatch = useDispatch();
+    const { expenseCategories } = useSelector((state: RootState) => state.global);
+
+    const dispatch = useDispatch() 
+    useEffect(() => {
+        fetchExpenseCategories(dispatch);
+    }, [, dispatch]);
+
     const handleClose = () => {
         dispatch(setIsAddExpense(false));
     };
@@ -63,9 +62,9 @@ const AddExpenseModal = () => {
   
           try {
               if (expenseDetail) {
-                  await updatePharmacyExpense(dispatch, { expense_id: expenseDetail?.id, ...payload });
+                  await updateAdminPharmacyExpense(dispatch, { expense_id: expenseDetail?.id, ...payload });
               } else {
-                  await createNewPharmacyExpense(dispatch, payload);
+                  await createNewAdminPharmacyExpense(dispatch, payload);
               }
               handleClose();
           } catch (error: any) {
@@ -93,7 +92,7 @@ const AddExpenseModal = () => {
                                 name="category_id"
                                 options={[
                                     { value: "select expense", label: "select expense" },
-                                    ...expenseCategories.map((category) => ({
+                                    ...expenseCategories?.map((category:any) => ({
                                         value: category.id,
                                         label: category.name,
                                     })),

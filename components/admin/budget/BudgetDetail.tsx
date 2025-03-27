@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react'
-import { budgetData, budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels, pharmacyBudgetDetail } from "@/utils/constants";
+import React, { useEffect, useState } from 'react'
+import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels} from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -14,10 +14,10 @@ import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import AddExpenseModal from './AddExpenseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
+import { setAdminExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
 import { RootState } from '@/store/store';
 import { useParams } from 'next/navigation';
-import { deletePharmacyExpense, fetchAdminExpense } from '@/services/adminServices';
+import { deleteAdminPharmacyExpense, fetchAdminExpense } from '@/services/adminServices';
 import TextMessage from '@/components/common/TextMessage';
 import { AdminExpenseProps } from '@/utils/types';
 
@@ -26,7 +26,7 @@ const BudgetDetail = () => {
     const pharmacyId = params?.pharmacy_id;
     const { width } = useWindowSize();
     const dispatch = useDispatch();
-    const { isAddExpense, expenseData, pharmacyList } = useSelector((state: RootState) => state.expense);
+    const { isAddExpense, adminExpenseData, pharmacyList } = useSelector((state: RootState) => state.expense);
 
     const [loading, setLoading] = useState(true);
 
@@ -36,16 +36,16 @@ const BudgetDetail = () => {
       
     const handleEditExpense = (data: AdminExpenseProps) => {
         dispatch(setIsAddExpense(true))
-        dispatch(setExpenseDetail(data))
+        dispatch(setAdminExpenseDetail(data))
     };
 
     const handleAddExpense = () => {
         dispatch(setIsAddExpense(true));
-        dispatch(setExpenseDetail(null));
+        dispatch(setAdminExpenseDetail(null));
     };
 
      const handleDeleteExpense = (expenseId: string) => {
-        deletePharmacyExpense(dispatch, expenseId);
+        deleteAdminPharmacyExpense(dispatch, expenseId);
         fetchAdminExpense(dispatch, pharmacyId)
     };
 
@@ -149,7 +149,7 @@ const BudgetDetail = () => {
                 {loading ? (
                         <TextMessage text="Loading expense..."/>
                     ) : (
-                        expenseData?.length > 0 ? expenseData?.map((budget: AdminExpenseProps) => (
+                        adminExpenseData?.length > 0 ? adminExpenseData?.map((budget: AdminExpenseProps) => (
                             <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
                         )) : <TextMessage text="Expense not found." />
                     )}
