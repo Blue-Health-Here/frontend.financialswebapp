@@ -3,11 +3,11 @@ import { setSelectCategories } from "@/store/features/admin/category/adminCatego
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-import { setIsLoading, setProfileData } from "@/store/features/global/globalSlice";
+import { setCertificationsData, setIsLoading, setLicenseData, setProfileData } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -23,6 +23,7 @@ export const fetchAllStats = async (dispatch: AppDispatch) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setStats(null));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -45,6 +46,7 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setPharmacies([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -67,6 +69,7 @@ export const fetchAllCourses = async (dispatch: AppDispatch) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setCourses([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -178,12 +181,13 @@ export const fetchProfileData = async (dispatch: AppDispatch) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/admin-profile");
         if (response?.status === 200) {
-            dispatch(setProfileData(response?.data[0]));
+            dispatch(setProfileData(response?.data));
             toast.success("Profile fetched successfully!");
         }
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setProfileData(null));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -228,6 +232,7 @@ export const fetchAllMarketingMaterials = async (dispatch: AppDispatch) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setMarketingMaterials([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -344,6 +349,7 @@ export const fetchAllCategories = async (dispatch: AppDispatch, type: string) =>
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setSelectCategories([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -421,6 +427,7 @@ export const fetchBudgetingList = async (dispatch: AppDispatch) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setPharmacyList([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -437,12 +444,13 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/admin-expense?pharmacy_id="+id);
         if (response.status === 200) {
-            dispatch(setExpenseData(response.data));
+            dispatch(setAdminExpenseData(response.data));
             toast.success("Expense fetched successfully!");
         }
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setAdminExpenseData([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -455,7 +463,7 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
 /**
  * create new expense and update Redux store.
  */
-export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+export const createNewAdminPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/admin-expense", data);
@@ -470,11 +478,10 @@ export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any)
     }
 };
 
-
 /**
  * update new expense  and update Redux store.
  */
-export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+export const updateAdminPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.put("/v1/admin-expense?expense_id="+data?.expense_id, data);
@@ -493,7 +500,7 @@ export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) =>
 /**
  * delete  expense  and update Redux store.
  */
-export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
+export const deleteAdminPharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.delete("/v1/admin-expense?expense_id="+id);
@@ -521,6 +528,25 @@ export const fetchAdminExpenseStats = async (dispatch: AppDispatch, id: any) => 
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+        }
+    }
+}
+
+/**
+ * get padmin license data and update Redux store.
+ */
+export const fetchAdminLicense = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-pharmacy-license?pharmacy_id="+id);
+        if (response?.status === 200) {
+            dispatch(setLicenseData(response?.data));
+            toast.success("License fetched successfully!");
+        }
+    } catch (error: any) {  
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setLicenseData([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -528,3 +554,110 @@ export const fetchAdminExpenseStats = async (dispatch: AppDispatch, id: any) => 
         dispatch(setIsLoading(false));
     }
 };
+
+/**
+ * post admin license upload file and update Redux store.
+ */
+export const postAdminLicenseUploadFile = async (dispatch: AppDispatch, data: any,id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-pharmacy-license?pharmacy_id="+id, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("License file uploaded successfully!");
+            return { ...response?.data };
+        }
+        return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * delete admin license and update Redux store.
+ */
+export const deleteAdminLicense = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-pharmacy-license?license_id="+id);
+        if (response?.data?.success) {
+            await fetchAdminLicense(dispatch);
+            toast.success("License file deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * get admin certification data and update Redux store.
+ */
+export const fetchAdminCertification = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-pharmacy-certification?pharmacy_id="+id);
+        if (response?.status === 200) {
+            dispatch(setCertificationsData(response?.data));
+            toast.success("Certification fetched successfully!");
+        }
+    } catch (error: any) {  
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setCertificationsData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * post admin certification upload file and update Redux store.
+ */
+export const postAdminCertificationUploadFile = async (dispatch: AppDispatch, data: any,id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/admin-pharmacy-certification?pharmacy_id="+id, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Certification file uploaded successfully!");
+            return { ...response?.data };
+        }
+        return null;
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * delete admin certification and update Redux store.
+ */
+export const deleteAdminCertification = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete("/v1/admin-pharmacy-certification?certification_id="+id);
+        if (response?.data?.success) {
+            await fetchAdminCertification(dispatch);
+            toast.success("Certification file deleted successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+

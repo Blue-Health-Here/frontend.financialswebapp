@@ -74,7 +74,6 @@ const BudgetSection = () => {
         deletePharmacyExpense(dispatch, id);
     };
     
-    
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>

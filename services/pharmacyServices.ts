@@ -59,7 +59,12 @@ export const fetchPharmacyLicense = async (dispatch: AppDispatch) => {
             toast.success("License fetched successfully!");
         }
     } catch (error: any) {  
-        toast.error(error?.response?.data?.detail || "Something went wrong");
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setLicenseData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
     } finally {
         dispatch(setIsLoading(false));
     }
@@ -118,8 +123,13 @@ export const fetchPharmacyCertifications = async (dispatch: AppDispatch) => {
             dispatch(setCertificationsData(response?.data));
             toast.success("Certificate fetched successfully!");
         }
-    } catch (error: any) {  
-        toast.error(error?.response?.data?.detail || "Something went wrong");
+    } catch (error: any) {
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setCertificationsData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
     } finally {
         dispatch(setIsLoading(false));
     }
@@ -179,7 +189,12 @@ export const fetchPharmacyExpense = async (dispatch: AppDispatch) => {
             toast.success("Expense fetched successfully!");
         }
     } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setexpenseData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
     } finally {
         dispatch(setIsLoading(false));
     }

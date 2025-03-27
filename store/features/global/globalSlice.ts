@@ -6,6 +6,7 @@ const initialState = {
     profileData: null,
     licenseData: [],
     certificationsData: [],
+    expenseCategories:[]
 
 };
 
@@ -27,10 +28,13 @@ const globalSlice = createSlice({
         },
         setCertificationsData: (state, action) => {
           state.certificationsData = action.payload;
-      }
+      },
+      setExpenseCategories: (state, action) => {
+        state.expenseCategories = action.payload;
+    }
     }
 });
 
-export const { setIsSidebarOpen, setIsLoading, setProfileData,setLicenseData, setCertificationsData} = globalSlice.actions;
+export const { setIsSidebarOpen, setIsLoading, setProfileData,setLicenseData, setCertificationsData, setExpenseCategories} = globalSlice.actions;
 
 export default globalSlice.reducer;

@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isAddExpense: false,
-    expenseData: [],
     pharmacyList: [],
-    expenseDetail: null,
-    adminExpenseStats:[]
+    adminExpenseStats:[],
+    adminExpenseData: [],
+    adminExpenseDetail: null
 };
 
 const adminExpenseSlice = createSlice({
@@ -15,21 +15,21 @@ const adminExpenseSlice = createSlice({
         setIsAddExpense: (state, action) => {
             state.isAddExpense = action.payload;
         },
-        setExpenseData: (state, action) => {
-            state.expenseData = action.payload
+        setAdminExpenseData: (state, action) => {
+            state.adminExpenseData = action.payload
         },
         setPharmacyList: (state, action) => {
             state.pharmacyList = action.payload
         },
-        setExpenseDetail: (state, action) => {
-            state.expenseDetail = action.payload
+        setAdminExpenseDetail: (state, action) => {
+            state.adminExpenseDetail = action.payload
         },
         setAdminExpenseStats: (state, action) => {
-            state.expenseDetail = action.payload
+            state.adminExpenseStats = action.payload
         },
     }
 });
 
-export const { setIsAddExpense, setExpenseData, setPharmacyList, setExpenseDetail } = adminExpenseSlice.actions;
+export const { setIsAddExpense, setAdminExpenseData, setPharmacyList, setAdminExpenseDetail } = adminExpenseSlice.actions;
 
 export default adminExpenseSlice.reducer;

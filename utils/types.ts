@@ -3,14 +3,14 @@ export type Stats = {
     categories: number | string;
     monthly_expenses: number | string;
     tasks_completed: number | string;
-}
+};
 
 export type StatsCardProps = {
     value: string | number;
     icon: string;
     label: string;
     color: string;
-}
+};
 
 export type PharmacyCardProps = {
     pharmacy_id: string;
@@ -20,28 +20,7 @@ export type PharmacyCardProps = {
     total_assigned: number;
     total_completed: number;
     completion_percentage: number;
-}
-
-export type MarketingMaterialCardProps ={
-    description : string;
-    file_url: string | null;
-    filename: string | null;
-    link:string;
-    marketing_id:string
-    pharmacy_ids:string[];
-    title: string
-}
-
-// Define TypeScript interface for form values
-export interface AddNewMarketingMaterialsFormValues {
-    title: string;
-    description: string;
-    is_all?: Boolean;
-    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
-    uploadType?: 1 | 2 | "";
-    link?: string;
-    file?: File | null;
-}
+};
 
 export type CourseProps = {
     course_id: string;
@@ -51,27 +30,68 @@ export type CourseProps = {
     description: string;
 };
 
-// Define TypeScript interface for form values
 export interface AddNewCourseFormValues {
     title: string;
     description: string;
     is_all?: Boolean;
-    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
+    pharmacy_ids?: number[] | string[];
     uploadType?: 1 | 2 | "";
     link?: string;
     file?: File | null;
-}
+};
 
 export interface UploadedFileProps {
     file_url?: string;
     filename?: string;
     path?: string
-}
+};
 
 export type CategoryProps = {
     category_type: string;
     id: string;
     name: string;
+};
+
+export interface License {
+    id: string;
+    filename: string;
+    file_url: string;
+};
+
+export type MarketingMaterialCardProps ={
+    description : string;
+    file_url: string | null;
+    filename: string | null;
+    link:string;
+    marketing_id:string
+    pharmacy_ids:string[];
+    title: string
+};
+
+export interface AddNewMarketingMaterialsFormValues {
+    title: string;
+    description: string;
+    is_all?: Boolean;
+    pharmacy_ids?: number[] | string[];
+    uploadType?: 1 | 2 | "";
+    link?: string;
+    file?: File | null;
+};
+
+export interface AddNewCourseFormValues {
+    title: string;
+    description: string;
+    is_all?: Boolean;
+    pharmacy_ids?: number[] | string[];
+    uploadType?: 1 | 2 | "";
+    link?: string;
+    file?: File | null;
+};
+
+export interface UploadedFileProps {
+    file_url?: string;
+    filename?: string;
+    path?: string
 };
 
 export interface BudgetDetailCardProps {
@@ -81,7 +101,7 @@ export interface BudgetDetailCardProps {
     profit: number;
     total_expense: number;
     total_revenue: number;
-}
+};
 
 export type PharmacyExpenseProps = {
     title: string  ;
@@ -96,10 +116,9 @@ export interface License {
     id: string;
     filename: string;
     file_url: string;
-}
-  
+};
 
- export interface AdminExpenseProps {
+export interface AdminExpenseProps {
     id: string;
     title: string;
     amount: number;
@@ -107,20 +126,18 @@ export interface License {
     category_id: string;
     pharmacy_id: string;
     revenue: number;
-  }
-  
-  
+};
+
 export interface BudgetStatsCardProps {
     value?: number;
     icon: string;
     label?: string;
     color?: string;
-}
-
+};
 
 export type AdminBudgetStatsValues = {
     monthly_expense: number;
     total_revenue: number;
     total_profit: number;
-  };
-  
+};
+
