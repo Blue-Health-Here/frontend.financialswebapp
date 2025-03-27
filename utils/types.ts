@@ -109,3 +109,18 @@ export interface License {
     revenue: number;
   }
   
+  
+export interface BudgetStatsCardProps {
+    value?: number;
+    icon: string;
+    label?: string;
+    color?: string;
+}
+
+
+export type AdminBudgetStatsValues = {
+    monthly_expense: number;
+    total_revenue: number;
+    total_profit: number;
+  };
+  

@@ -14,7 +14,7 @@ import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import AddExpenseModal from './AddExpenseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAdminExpenseStats, setExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
+import { setExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
 import { RootState } from '@/store/store';
 import { useParams } from 'next/navigation';
 import { deletePharmacyExpense, fetchAdminExpense, fetchAdminExpenseStats } from '@/services/adminServices';

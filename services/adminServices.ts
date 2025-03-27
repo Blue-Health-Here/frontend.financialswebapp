@@ -506,3 +506,25 @@ export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) 
         dispatch(setIsLoading(false));
     }
 };
+
+/**
+ * Fetch all stats and update Redux store.
+ */
+export const fetchAdminExpenseStats = async (dispatch: AppDispatch, id: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-expense-stats?pharmacy_id="+id);
+        if (response.status === 200) {
+            dispatch(setStats(response.data));
+            toast.success("Stats fetched successfully!");
+        }
+    } catch (error: any) {
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

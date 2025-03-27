@@ -4,7 +4,8 @@ const initialState = {
     isAddExpense: false,
     expenseData: [],
     pharmacyList: [],
-    expenseDetail: null
+    expenseDetail: null,
+    adminExpenseStats:[]
 };
 
 const adminExpenseSlice = createSlice({
@@ -21,6 +22,9 @@ const adminExpenseSlice = createSlice({
             state.pharmacyList = action.payload
         },
         setExpenseDetail: (state, action) => {
+            state.expenseDetail = action.payload
+        },
+        setAdminExpenseStats: (state, action) => {
             state.expenseDetail = action.payload
         },
     }
