@@ -32,6 +32,7 @@ import {
   fetchAdminPharmacyDetails,
 } from "@/services/adminServices";
 import { License } from "@/utils/types";
+import TextMessage from "@/components/common/TextMessage";
 
 const PharmacyDetail = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
@@ -44,18 +45,12 @@ const PharmacyDetail = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
-  const id = Array.isArray(params?.pharmacy_id)? params.pharmacy_id[0]: params?.pharmacy_id;
-  const pharmacy = pharmacies.find(
-    (pharmacy: any) => pharmacy.pharmacy_id === id
-  );
-  if (!pharmacy) {
-    return <p>Pharmacy not found.</p>;
-  }
+  const hasFetched = useRef(false);
+  const id = Array.isArray(params?.pharmacy_id) ? params.pharmacy_id[0] : params?.pharmacy_id;
 
   useEffect(() => {
+    if (!id) return;
     const fetchData = async () => {
-      if (!id) return;
-
       try {
         await fetchAdminPharmacyDetails(dispatch, id);
         await fetchAdminLicense(dispatch, id);
@@ -64,11 +59,11 @@ const PharmacyDetail = () => {
         console.error("Error fetching data:", error);
       }
     };
-
-    fetchData();
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchData();
+    }
   }, [id, dispatch]);
-
-  console.log(pharmacyDetailsData);
 
   const handleFileUpload = async (
     event: any,
@@ -253,7 +248,7 @@ const PharmacyDetail = () => {
                   <Label className="font-semibold text-lg">Licensing</Label>
 
                   <div className="grid grid-cols-3 gap-4 mt-2">
-                    {licenseData?.map((license: License) => (
+                    {licenseData?.length > 0 ? licenseData?.map((license: License) => (
                       <div
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
@@ -282,7 +277,7 @@ const PharmacyDetail = () => {
                           </button>
                         </div>
                       </div>
-                    ))}
+                    )) : <TextMessage text="License not found." />}
                   </div>
 
                   <FileUploadField
@@ -309,7 +304,7 @@ const PharmacyDetail = () => {
                 </Label>
 
                 <div className="grid grid-cols-3 gap-4 mt-2">
-                  {certificationsData?.map((license: License) => (
+                  {certificationsData?.length > 0 ? certificationsData?.map((license: License) => (
                     <div
                       key={license.id}
                       className="flex items-center justify-between p-2 rounded-md border border-grey-500"
@@ -338,7 +333,7 @@ const PharmacyDetail = () => {
                         </button>
                       </div>
                     </div>
-                  ))}
+                  )) : <TextMessage text="Certifications not found." />}
                 </div>
 
                 <FileUploadField

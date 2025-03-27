@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react'
-import { budgetData, budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels, pharmacyBudgetDetail } from "@/utils/constants";
+import React, { useEffect, useState } from 'react'
+import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels} from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -14,38 +14,44 @@ import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import AddExpenseModal from './AddExpenseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
+import { assignAdminBudgetStatsValues } from '@/utils/helper';
+import { setAdminExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
 import { RootState } from '@/store/store';
 import { useParams } from 'next/navigation';
-import { deletePharmacyExpense, fetchAdminExpense } from '@/services/adminServices';
+import { deleteAdminPharmacyExpense, fetchAdminExpense, fetchAdminExpenseStats } from '@/services/adminServices';
 import TextMessage from '@/components/common/TextMessage';
-import { AdminExpenseProps } from '@/utils/types';
+import { AdminExpenseProps, BudgetStatsCardProps } from '@/utils/types';
 
 const BudgetDetail = () => {
     const params = useParams();
     const pharmacyId = params?.pharmacy_id;
     const { width } = useWindowSize();
     const dispatch = useDispatch();
-    const { isAddExpense, expenseData, pharmacyList } = useSelector((state: RootState) => state.expense);
-
+    const { isAddExpense, adminExpenseData, pharmacyList, adminExpenseStats } = useSelector((state: RootState) => state.expense);
     const [loading, setLoading] = useState(true);
+    const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
 
     useEffect(() => {
         fetchAdminExpense(dispatch, pharmacyId).finally(() => setLoading(false))
-    }, [])
+        fetchAdminExpenseStats(dispatch, pharmacyId).finally(() => setLoading(false))
+
+        if(adminExpenseStats){
+            setStatsUpdatedData(assignAdminBudgetStatsValues(adminExpenseStats))
+        }
+    }, []);
       
     const handleEditExpense = (data: AdminExpenseProps) => {
         dispatch(setIsAddExpense(true))
-        dispatch(setExpenseDetail(data))
+        dispatch(setAdminExpenseDetail(data))
     };
 
     const handleAddExpense = () => {
         dispatch(setIsAddExpense(true));
-        dispatch(setExpenseDetail(null));
+        dispatch(setAdminExpenseDetail(null));
     };
 
      const handleDeleteExpense = (expenseId: string) => {
-        deletePharmacyExpense(dispatch, expenseId);
+        deleteAdminPharmacyExpense(dispatch, expenseId);
         fetchAdminExpense(dispatch, pharmacyId)
     };
 
@@ -85,7 +91,7 @@ const BudgetDetail = () => {
             <h3 className="text-themeGrey text-lg md:text-xl font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6">
                 <div className="h-full col-span-1 md:col-span-1 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
-                    {budgetStatsData.map((item, index) => (
+                    {statsUpdatedData?.map((item, index) => (
                         <BudgetStatsCard
                             key={index}
                             icon={item.icon}
@@ -149,7 +155,7 @@ const BudgetDetail = () => {
                 {loading ? (
                         <TextMessage text="Loading expense..."/>
                     ) : (
-                        expenseData?.length > 0 ? expenseData?.map((budget: AdminExpenseProps) => (
+                        adminExpenseData?.length > 0 ? adminExpenseData?.map((budget: AdminExpenseProps) => (
                             <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
                         )) : <TextMessage text="Expense not found." />
                     )}
