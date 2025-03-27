@@ -22,27 +22,6 @@ export type PharmacyCardProps = {
     completion_percentage: number;
 }
 
-export type MarketingMaterialCardProps ={
-    description : string;
-    file_url: string | null;
-    filename: string | null;
-    link:string;
-    marketing_id:string
-    pharmacy_ids:string[];
-    title: string
-}
-
-// Define TypeScript interface for form values
-export interface AddNewMarketingMaterialsFormValues {
-    title: string;
-    description: string;
-    is_all?: Boolean;
-    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
-    uploadType?: 1 | 2 | "";
-    link?: string;
-    file?: File | null;
-}
-
 export type CourseProps = {
     course_id: string;
     title: string;
@@ -73,6 +52,50 @@ export type CategoryProps = {
     id: string;
     name: string;
 };
+
+export interface License {
+    id: string;
+    filename: string;
+    file_url: string;
+}
+
+export type MarketingMaterialCardProps ={
+    description : string;
+    file_url: string | null;
+    filename: string | null;
+    link:string;
+    marketing_id:string
+    pharmacy_ids:string[];
+    title: string
+}
+
+// Define TypeScript interface for form values
+export interface AddNewMarketingMaterialsFormValues {
+    title: string;
+    description: string;
+    is_all?: Boolean;
+    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
+    uploadType?: 1 | 2 | "";
+    link?: string;
+    file?: File | null;
+}
+
+// Define TypeScript interface for form values
+export interface AddNewCourseFormValues {
+    title: string;
+    description: string;
+    is_all?: Boolean;
+    pharmacy_ids?: number[] | string[]; // Assuming IDs are either numbers or strings
+    uploadType?: 1 | 2 | "";
+    link?: string;
+    file?: File | null;
+}
+
+export interface UploadedFileProps {
+    file_url?: string;
+    filename?: string;
+    path?: string
+}
 
 export interface BudgetDetailCardProps {
     image_url: string;
