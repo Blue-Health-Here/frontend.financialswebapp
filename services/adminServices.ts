@@ -7,7 +7,7 @@ import { setIsLoading, setProfileData } from "@/store/features/global/globalSlic
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -437,7 +437,7 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/admin-expense?pharmacy_id="+id);
         if (response.status === 200) {
-            dispatch(setExpenseData(response.data));
+            dispatch(setAdminExpenseData(response.data));
             toast.success("Expense fetched successfully!");
         }
     } catch (error: any) {
@@ -455,7 +455,7 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
 /**
  * create new expense and update Redux store.
  */
-export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+export const createNewAdminPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/admin-expense", data);
@@ -470,29 +470,10 @@ export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any)
     }
 };
 
-
-/**
- * fetch expense Categories and update Redux store.
- */
-export const fetchExpenseCategories = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/admin-categories?type=expense");
-        if (response.status === 200) {
-            dispatch(setSelectCategories(response.data));
-            toast.success("Categories fetched successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
-};
-
 /**
  * update new expense  and update Redux store.
  */
-export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+export const updateAdminPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.put("/v1/admin-expense?expense_id="+data?.expense_id, data);
@@ -511,7 +492,7 @@ export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) =>
 /**
  * delete  expense  and update Redux store.
  */
-export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
+export const deleteAdminPharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.delete("/v1/admin-expense?expense_id="+id);
