@@ -1,7 +1,7 @@
 "use client"
 
-import React from 'react'
-import { budgetData, budgetStatsData, expenseCategories, fullDatasets, fullLabels, pharmacyBudgetDetail } from "@/utils/constants";
+import React, { useEffect, useRef, useState } from 'react'
+import { budgetData, budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels, pharmacyBudgetDetail } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -14,20 +14,46 @@ import ExpenseCategoryCard from '@/components/common/ExpenseCategoryCard';
 import FileDownloadField from '@/components/common/form/FileDownloadField';
 import AddExpenseModal from './AddExpenseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
+import { setAdminExpenseStats, setExpenseDetail, setIsAddExpense } from '@/store/features/admin/expense/adminExpenseSlice';
 import { RootState } from '@/store/store';
 import { useParams } from 'next/navigation';
+import { deletePharmacyExpense, fetchAdminExpense, fetchAdminExpenseStats } from '@/services/adminServices';
+import TextMessage from '@/components/common/TextMessage';
+import { AdminExpenseProps, BudgetStatsCardProps } from '@/utils/types';
+import { assignAdminBudgetStatsValues } from '@/utils/helper';
 
 const BudgetDetail = () => {
     const params = useParams();
-    const id = params?.pharmacy_id;
+    const pharmacyId = params?.pharmacy_id;
     const { width } = useWindowSize();
     const dispatch = useDispatch();
-    const { isAddExpense , expenseData} = useSelector((state: RootState) => state.expense)
-    const pharmacyBudget = expenseData.find((pharmacyBudget:any) => pharmacyBudget.pharmacy_id === id);
-    if (!pharmacyBudget) {
-        return <p>Pharmacy not found.</p>;
-    }
+    const { isAddExpense, expenseData, adminExpenseStats } = useSelector((state: RootState) => state.expense);
+    const [loading, setLoading] = useState(true);
+    const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
+
+    useEffect(() => {
+        fetchAdminExpense(dispatch, pharmacyId).finally(() => setLoading(false))
+        fetchAdminExpenseStats(dispatch, pharmacyId).finally(() => setLoading(false))
+
+        if(adminExpenseStats){
+            setStatsUpdatedData(assignAdminBudgetStatsValues(adminExpenseStats))
+        }
+    }, [])
+      
+    const handleEditExpense = (data: AdminExpenseProps) => {
+        dispatch(setIsAddExpense(true))
+        dispatch(setExpenseDetail(data))
+    };
+
+    const handleAddExpense = () => {
+        dispatch(setIsAddExpense(true));
+        dispatch(setExpenseDetail(null));
+    };
+
+     const handleDeleteExpense = (expenseId: string) => {
+        deletePharmacyExpense(dispatch, expenseId);
+        fetchAdminExpense(dispatch, pharmacyId)
+    };
 
     let labels, datasets;
 
@@ -65,7 +91,7 @@ const BudgetDetail = () => {
             <h3 className="text-themeGrey text-lg md:text-xl font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6">
                 <div className="h-full col-span-1 md:col-span-1 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
-                    {budgetStatsData.map((item, index) => (
+                    {statsUpdatedData?.map((item, index) => (
                         <BudgetStatsCard
                             key={index}
                             icon={item.icon}
@@ -113,7 +139,7 @@ const BudgetDetail = () => {
                     <div className="flex items-center space-x-3">
                         <h4 className="text-xs sm:text-sm md:text-[16px] text-gray-700">Add Expense</h4>
                         <SubmitButton className="group w-6 h-6 md:w-7 md:h-7 p-1 bg-secondary hover:bg-primary"
-                            onClick={() => { dispatch(setIsAddExpense(true)) }}>
+                            onClick={handleAddExpense}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
@@ -126,9 +152,13 @@ const BudgetDetail = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {budgetData.map((budget, index) => (
-                        <BudgetCard key={index} budget={budget} id={`${index}`} />
-                    ))}
+                {loading ? (
+                        <TextMessage text="Loading expense..."/>
+                    ) : (
+                        expenseData?.length > 0 ? expenseData?.map((budget: AdminExpenseProps) => (
+                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
+                        )) : <TextMessage text="Expense not found." />
+                    )}
                 </div>
             </div>
             {isAddExpense && <AddExpenseModal />}

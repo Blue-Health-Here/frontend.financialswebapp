@@ -13,14 +13,11 @@ import { BudgetDetailCardProps } from '@/utils/types';
 
 const BudgetSection = () => {
   const [loading, setLoading] = useState(true);
-  const {expenseData} = useSelector((state: RootState) => state.expense)
-  const hasFetched = useRef(false)
+  const {pharmacyList} = useSelector((state: RootState) => state.expense)
   const dispatch = useDispatch();
   
   useEffect(() => {
-    if(!hasFetched.current){
       fetchBudgetingList(dispatch).finally(() => setLoading(false))
-    }
   }, [])
 
   return (
@@ -38,7 +35,7 @@ const BudgetSection = () => {
         {loading ? (
           <TextMessage text="Loading pharmacies..." />
               ) : (
-                expenseData.length > 0 ?( expenseData.map((budget: BudgetDetailCardProps, index: number) => (
+                pharmacyList.length > 0 ?( pharmacyList.map((budget: BudgetDetailCardProps, index: number) => (
                   <BudgetDetailCard key={index} budget={budget} />
                       ))
                 ) : (

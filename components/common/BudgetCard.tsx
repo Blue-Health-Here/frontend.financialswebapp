@@ -27,7 +27,7 @@ export const BudgetCard = ({
   };
 
   const categoryName =
-    categories.find((cat: any) => cat.id === budget.category_id)?.name || "";
+    categories?.find((cat: any) => cat.id === budget.category_id)?.name || "";
 
   const handleSuccess = () => {
     if (handleDeleteModal) handleDeleteModal(id);
