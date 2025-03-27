@@ -450,7 +450,7 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
-            dispatch(setExpenseData([]));
+            dispatch(setAdminExpenseData([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
