@@ -30,6 +30,6 @@ const adminExpenseSlice = createSlice({
     }
 });
 
-export const { setIsAddExpense, setAdminExpenseData, setPharmacyList, setAdminExpenseDetail } = adminExpenseSlice.actions;
+export const { setIsAddExpense, setAdminExpenseData, setPharmacyList, setAdminExpenseDetail, setAdminExpenseStats } = adminExpenseSlice.actions;
 
 export default adminExpenseSlice.reducer;

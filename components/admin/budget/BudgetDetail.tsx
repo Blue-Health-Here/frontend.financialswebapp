@@ -35,10 +35,13 @@ const BudgetDetail = () => {
         fetchAdminExpense(dispatch, pharmacyId).finally(() => setLoading(false))
         fetchAdminExpenseStats(dispatch, pharmacyId).finally(() => setLoading(false))
 
+    }, [])
+   
+    useEffect(() => {
         if(adminExpenseStats){
             setStatsUpdatedData(assignAdminBudgetStatsValues(adminExpenseStats))
         }
-    }, []);
+    }, [adminExpenseStats])
       
     const handleEditExpense = (data: AdminExpenseProps) => {
         dispatch(setIsAddExpense(true))
