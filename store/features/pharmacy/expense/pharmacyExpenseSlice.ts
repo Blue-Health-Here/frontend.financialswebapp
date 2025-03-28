@@ -5,6 +5,7 @@ const initialState = {
     expenseData: null,
     loading: false,
     expenseDetails: null,
+    pharmacyExpenseStats: []
 };
 
 const pharmacyExpenseSlice = createSlice({
@@ -23,9 +24,12 @@ const pharmacyExpenseSlice = createSlice({
         setExpenseDetails:(state, action) => {
             state.expenseDetails = action.payload;
         },
+        setPharmacyExpenseStats: (state, action) => {
+            state.pharmacyExpenseStats = action.payload
+        },
     }
 });
 
-export const { setIsAddExpense, setexpenseData, setLoading, setExpenseDetails } = pharmacyExpenseSlice.actions;
+export const { setIsAddExpense, setexpenseData, setLoading, setExpenseDetails, setPharmacyExpenseStats } = pharmacyExpenseSlice.actions;
 
 export default pharmacyExpenseSlice.reducer;

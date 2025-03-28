@@ -48,9 +48,6 @@ const PharmacyDetail = () => {
   const pharmacy = pharmacies.find(
     (pharmacy: any) => pharmacy.pharmacy_id === id
   );
-  if (!pharmacy) {
-    return <p>Pharmacy not found.</p>;
-  }
 
   useEffect(() => {
       if (!id) return;

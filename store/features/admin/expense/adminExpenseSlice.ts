@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isAddExpense: false,
-    adminExpenseData: [],
     pharmacyList: [],
+    adminExpenseStats:[],
+    adminExpenseData: [],
     adminExpenseDetail: null
 };
 
@@ -23,9 +24,12 @@ const adminExpenseSlice = createSlice({
         setAdminExpenseDetail: (state, action) => {
             state.adminExpenseDetail = action.payload
         },
+        setAdminExpenseStats: (state, action) => {
+            state.adminExpenseStats = action.payload
+        },
     }
 });
 
-export const { setIsAddExpense, setAdminExpenseData, setPharmacyList, setAdminExpenseDetail } = adminExpenseSlice.actions;
+export const { setIsAddExpense, setAdminExpenseData, setPharmacyList, setAdminExpenseDetail, setAdminExpenseStats } = adminExpenseSlice.actions;
 
 export default adminExpenseSlice.reducer;
