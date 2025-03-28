@@ -13,14 +13,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
-import { fetchPharmacyDashboardStats } from "@/services/pharmacyServices";
+import { fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 
 const DashboardSection = () => {
   const { pharmacyStatsData } = useSelector((state: RootState) => state.global);
-  const { isAddExpenseModal } = useSelector(
-    (state: RootState) => state.onboarding
-  );
+  const { expenseGraphData } = useSelector((state: RootState) => state.global);
+  const { isAddExpenseModal } = useSelector((state: RootState) => state.onboarding);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchPharmacyExpenseGraph(dispatch);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   useEffect(() => {
     if (!pharmacyStatsData) {
@@ -28,32 +39,32 @@ const DashboardSection = () => {
     }
   }, [dispatch, pharmacyStatsData]);
 
-  const statsData = [
-    {
-      value: 0,
-      label: "Categories",
-      color: "text-custom-green",
-      icon: "/statistics-Category.svg",
-    },
-    {
-      value: 0,
-      label: "Pharmacies",
-      color: "text-custom-purple",
-      icon: "/statistics-pharmacy.svg",
-    },
-    {
-      value: `$${pharmacyStatsData?.monthly_expense ?? 0}`,
-      label: "Total monthly expense",
-      color: "text-custom-orange",
-      icon: "/statistics-expense.svg",
-    },
-    {
-      value: pharmacyStatsData?.assigned_courses ?? 0,
-      label: "Total task completed",
-      color: "text-custom-red",
-      icon: "/statistics-task.svg",
-    },
-  ];
+  // const statsData = [
+  //   {
+  //     value: 0,
+  //     label: "Categories",
+  //     color: "text-custom-green",
+  //     icon: "/statistics-Category.svg",
+  //   },
+  //   {
+  //     value: 0,
+  //     label: "Pharmacies",
+  //     color: "text-custom-purple",
+  //     icon: "/statistics-pharmacy.svg",
+  //   },
+  //   {
+  //     value: `$${pharmacyStatsData?.monthly_expense ?? 0}`,
+  //     label: "Total monthly expense",
+  //     color: "text-custom-orange",
+  //     icon: "/statistics-expense.svg",
+  //   },
+  //   {
+  //     value: pharmacyStatsData?.assigned_courses ?? 0,
+  //     label: "Total task completed",
+  //     color: "text-custom-red",
+  //     icon: "/statistics-task.svg",
+  //   },
+  // ];
 
   useEffect(() => {
     if (isAddExpenseModal) {
@@ -71,7 +82,7 @@ const DashboardSection = () => {
       <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:auto-rows-fr">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {statsData.map((item, index) => (
+          {pharmacyStatsData.map((item: any, index: number) => (
             <StatsCard
               key={index}
               value={item.value}
@@ -82,7 +93,7 @@ const DashboardSection = () => {
           ))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
-          <ExpenseChart />
+          <ExpenseChart ExpenseData={expenseGraphData} />
         </div>
       </div>
       <>
@@ -100,7 +111,7 @@ const DashboardSection = () => {
             <div className="flex flex-col sm:flex-col-reverse md:flex-row gap-4">
               <Formik
                 initialValues={{ category: "", search: "" }}
-                onSubmit={() => {}}
+                onSubmit={() => { }}
               >
                 {({ isSubmitting }) => (
                   <Form className="flex flex-col sm:flex-col md:flex-row lg:flex-row gap-4">
