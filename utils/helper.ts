@@ -11,8 +11,8 @@ export const assignStatsValues = (data: Stats) => {
 
 export const assignAdminBudgetStatsValues = (data: AdminBudgetStatsValues) => {
     return [
-        { value: data.monthly_expense, label: "Total monthly Expense", color: "text-primary", icon: "/statistics-Category.svg" },
-        { value: data.total_revenue, label: "Revenue", color: "text-custom-orange", icon: "/statistics-pharmacy.svg" },
-        { value: data.total_profit, label: "Profit", color: "text-custom-green", icon: "/statistics-pharmacy.svg" },
+        { value: data.monthly_expense, label: "Total monthly Expense", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
+        { value: data.total_revenue, label: "Revenue", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
+        { value: data.total_profit, label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
     ];
 }

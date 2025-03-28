@@ -6,14 +6,15 @@ const initialState = {
     profileData: null,
     licenseData: [],
     certificationsData: [],
-    expenseCategories:[],
-    expenseGraphData: null
+    expenseCategories: [],
+    expenseGraphData: null,
+    pharmacyStatsData: null,
 
 };
 
 const globalSlice = createSlice({
-  name: 'global',
-    initialState, 
+    name: 'global',
+    initialState,
     reducers: {
         setIsSidebarOpen: (state, action) => {
             state.isSidebarOpen = action.payload;
@@ -28,17 +29,24 @@ const globalSlice = createSlice({
             state.licenseData = action.payload;
         },
         setCertificationsData: (state, action) => {
-          state.certificationsData = action.payload;
-      },
-      setExpenseCategories: (state, action) => {
-        state.expenseCategories = action.payload;
-    },
-    setExpenseGraphData: (state, action) => {
-        state.expenseGraphData = action.payload;
-    }
+            state.certificationsData = action.payload;
+        },
+        setExpenseCategories: (state, action) => {
+            state.expenseCategories = action.payload;
+        },
+        setExpenseGraphData: (state, action) => {
+            state.expenseGraphData = action.payload;
+        },
+        setPharmacyStatsData: (state, action) => {
+            state.pharmacyStatsData = action.payload;
+        }
     }
 });
 
-export const { setIsSidebarOpen, setIsLoading, setProfileData,setLicenseData, setCertificationsData, setExpenseCategories,setExpenseGraphData} = globalSlice.actions;
+export const { 
+    setIsSidebarOpen, setIsLoading, setProfileData, setLicenseData, 
+    setCertificationsData, setExpenseCategories, setPharmacyStatsData, 
+    setExpenseGraphData 
+} = globalSlice.actions;
 
 export default globalSlice.reducer;
