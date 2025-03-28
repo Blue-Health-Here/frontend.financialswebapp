@@ -3,11 +3,7 @@ import { setSelectCategories } from "@/store/features/admin/category/adminCatego
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-<<<<<<< HEAD
 import { setIsLoading, setProfileData,setLicenseData,setCertificationsData , setPharmacyDetailsData} from "@/store/features/global/globalSlice";
-=======
-import { setCertificationsData, setIsLoading, setLicenseData, setProfileData } from "@/store/features/global/globalSlice";
->>>>>>> origin/develop
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";

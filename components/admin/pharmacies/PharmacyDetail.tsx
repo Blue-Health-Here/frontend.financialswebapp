@@ -171,14 +171,17 @@ const PharmacyDetail = () => {
         </div>
         <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-y-10 md:gap-x-10 lg:gap-x-20 items-center">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <Image
-              src={pharmacyDetailsData?.image_url || "/Ellipse.png"}
-              alt="Profile Image"
-              width={300}
-              height={300}
-              sizes="(max-width: 767px) 128px, 300px"
-              onError={(e) => (e.currentTarget.src = "/Ellipse.png")}
-            />
+            <div className="rounded-full object-cover overflow-hidden">
+              <Image
+                src={pharmacyDetailsData?.image_url || "/Ellipse.png"}
+                alt="Profile Image"
+                width={300}
+                height={300}
+                sizes="(max-width: 767px) 128px, 300px"
+                className="rounded-full object-cover"
+                onError={(e) => (e.currentTarget.src = "/Ellipse.png")}
+              />
+            </div>
             <div className="space-y-3 text-black w-full">
               <h2 className="text-sm sm:text-lg lg:text-xl font-bold">
                 {pharmacyDetailsData?.pharmacy_name || "Loading..."}
