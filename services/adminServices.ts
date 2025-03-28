@@ -3,11 +3,11 @@ import { setSelectCategories } from "@/store/features/admin/category/adminCatego
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-import { setCertificationsData, setIsLoading, setLicenseData, setProfileData } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData,setLicenseData,setCertificationsData , setPharmacyDetailsData} from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -444,13 +444,13 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/admin-expense?pharmacy_id="+id);
         if (response.status === 200) {
-            dispatch(setExpenseData(response.data));
+            dispatch(setAdminExpenseData(response.data));
             toast.success("Expense fetched successfully!");
         }
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
-            dispatch(setExpenseData([]));
+            dispatch(setAdminExpenseData([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
@@ -463,7 +463,7 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id:any) => {
 /**
  * create new expense and update Redux store.
  */
-export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+export const createNewAdminPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/admin-expense", data);
@@ -478,11 +478,10 @@ export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any)
     }
 };
 
-
 /**
  * update new expense  and update Redux store.
  */
-export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) => {
+export const updateAdminPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.put("/v1/admin-expense?expense_id="+data?.expense_id, data);
@@ -501,7 +500,7 @@ export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) =>
 /**
  * delete  expense  and update Redux store.
  */
-export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
+export const deleteAdminPharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.delete("/v1/admin-expense?expense_id="+id);
@@ -515,6 +514,23 @@ export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) 
     }
 };
 
+/**
+ * Fetch all stats and update Redux store.
+ */
+export const fetchAdminExpenseStats = async (dispatch: AppDispatch, id: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/admin-expense-stats?pharmacy_id="+id);
+        if (response.status === 200) {
+            dispatch(setStats(response.data));
+            toast.success("Stats fetched successfully!");
+        }
+    } catch (error: any) {
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+        }
+    }
+}
 
 /**
  * get padmin license data and update Redux store.
@@ -645,3 +661,20 @@ export const deleteAdminCertification = async (dispatch: AppDispatch, id?: strin
     }
 };
 
+/**
+ * get admin pharmacy details data and update Redux store.
+ */
+export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-details?pharmacy_id="+id);
+        if (response?.status === 200) {
+            dispatch(setPharmacyDetailsData(response?.data));
+            toast.success("pharmacy details fetched successfully!");
+        }
+    } catch (error: any) {  
+        toast.error(error?.response?.data?.detail || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

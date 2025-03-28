@@ -110,9 +110,9 @@ export const categories = [
    }]
 
 export const budgetStatsData = [
-    { value: "$3000.00", label: "Revenue", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
-    { value: "$2000.00", label: "Total monthly Expense", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
-    { value: "$1000.00", label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
+    { value: 0, label: "Revenue", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
+    { value: 0, label: "Total monthly Expense", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
+    { value: 0, label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
 ];
 
 export const chartData = {

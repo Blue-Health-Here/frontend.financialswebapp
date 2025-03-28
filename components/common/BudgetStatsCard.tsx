@@ -1,12 +1,6 @@
 import React from 'react'
 import Image from "next/image";
-
-interface BudgetStatsCardProps {
-    value?: string;
-    icon: string;
-    label?: string;
-    color?: string;
-}
+import { BudgetStatsCardProps } from '@/utils/types';
 
 const BudgetStatsCard: React.FC<BudgetStatsCardProps> = ({ value, icon, label, color }) => {
     return (
