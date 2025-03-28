@@ -1,9 +1,8 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
-import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData} from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData, setPharmacyStatsData} from "@/store/features/global/globalSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-
 
 /**
  * get pharmacy profile data and update Redux store.
@@ -257,6 +256,28 @@ export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) 
 };
 
 /**
+ * get pharmacy dashboard stats data and update Redux store.
+ */
+export const fetchPharmacyDashboardStats = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-stats");
+        if (response?.status === 200) {
+            dispatch(setPharmacyStatsData(response?.data));
+            toast.success("Stats fetched successfully!");
+        }
+    } catch (error: any) {  
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setPharmacyStatsData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+/*
  * Fetch all stats and update Redux store.
  */
 export const fetchPharmacyExpenseStats = async (dispatch: AppDispatch) => {
