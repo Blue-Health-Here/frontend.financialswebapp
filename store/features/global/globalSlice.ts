@@ -4,12 +4,12 @@ const initialState = {
     isSidebarOpen: false,
     isLoading: false,
     profileData: null,
+    pharmacyDetailsData: null,
     licenseData: [],
     certificationsData: [],
     expenseCategories: [],
     expenseGraphData: null,
     pharmacyStatsData: null,
-
 };
 
 const globalSlice = createSlice({
@@ -39,14 +39,15 @@ const globalSlice = createSlice({
         },
         setPharmacyStatsData: (state, action) => {
             state.pharmacyStatsData = action.payload;
+        },
+        setPharmacyDetailsData: (state, action) => {
+            state.pharmacyDetailsData = action.payload;
         }
     }
 });
-
 export const { 
     setIsSidebarOpen, setIsLoading, setProfileData, setLicenseData, 
     setCertificationsData, setExpenseCategories, setPharmacyStatsData, 
-    setExpenseGraphData 
+    setExpenseGraphData, setPharmacyDetailsData 
 } = globalSlice.actions;
-
 export default globalSlice.reducer;

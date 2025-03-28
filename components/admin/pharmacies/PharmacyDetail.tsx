@@ -27,16 +27,18 @@ import {
   fetchAdminCertification,
   postAdminLicenseUploadFile,
   postAdminCertificationUploadFile,
-  deleteAdminLicense,deleteAdminCertification
+  deleteAdminLicense,
+  deleteAdminCertification,
+  fetchAdminPharmacyDetails,
 } from "@/services/adminServices";
 import { License } from "@/utils/types";
 import TextMessage from "@/components/common/TextMessage";
 
-
 const PharmacyDetail = () => {
-  const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>( null);
+  const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
   const { licenseData } = useSelector((state: RootState) => state.global);
   const { certificationsData } = useSelector((state: RootState) => state.global);
+  const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
   const [courses, setCourses] = useState(courseData);
   const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy);
   const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
@@ -45,26 +47,24 @@ const PharmacyDetail = () => {
   const params = useParams();
   const hasFetched = useRef(false);
   const id = Array.isArray(params?.pharmacy_id) ? params.pharmacy_id[0] : params?.pharmacy_id;
-  const pharmacy = pharmacies.find(
-    (pharmacy: any) => pharmacy.pharmacy_id === id
-  );
 
   useEffect(() => {
-      if (!id) return;
-      const fetchData = async () => {
-        try {
-          await fetchAdminLicense(dispatch, id);
-          await fetchAdminCertification(dispatch, id);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      if (!hasFetched.current) {
-        hasFetched.current = true;
-        fetchData();
+    if (!id) return;
+    const fetchData = async () => {
+      try {
+        await fetchAdminPharmacyDetails(dispatch, id);
+        await fetchAdminLicense(dispatch, id);
+        await fetchAdminCertification(dispatch, id);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
+    };
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchData();
+    }
   }, [id, dispatch]);
-  
+
   const handleFileUpload = async (
     event: any,
     setValue: (value: any) => void,
@@ -84,37 +84,39 @@ const PharmacyDetail = () => {
           ? postAdminLicenseUploadFile
           : postAdminCertificationUploadFile;
 
-      const response = await uploadFunction(dispatch, formData, id); 
+      const response = await uploadFunction(dispatch, formData, id);
 
       if (response?.success) {
-        setUploadedFile(response.data[0]); 
+        setUploadedFile(response.data[0]);
         setValue(response.data);
 
         fileType === "license"
-          ? fetchAdminLicense(dispatch, id) 
-          : fetchAdminCertification(dispatch, id); 
+          ? fetchAdminLicense(dispatch, id)
+          : fetchAdminCertification(dispatch, id);
       }
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong!!");
     }
   };
 
-    const handleDeleteFile = async (fileId: string, fileType: "license" | "certification") => {
-      try {
-        if (!id) return;
-    
-        if (fileType === "license") {
-          await deleteAdminLicense(dispatch, fileId);
-          fetchAdminLicense(dispatch, id); 
-        } else {
-          await deleteAdminCertification(dispatch, fileId);
-          fetchAdminCertification(dispatch, id);
-        }
-      } catch (error) {
-        console.error(`Error deleting ${fileType}:`, error);
+  const handleDeleteFile = async (
+    fileId: string,
+    fileType: "license" | "certification"
+  ) => {
+    try {
+      if (!id) return;
+
+      if (fileType === "license") {
+        await deleteAdminLicense(dispatch, fileId);
+        fetchAdminLicense(dispatch, id);
+      } else {
+        await deleteAdminCertification(dispatch, fileId);
+        fetchAdminCertification(dispatch, id);
       }
-    };
-    
+    } catch (error) {
+      console.error(`Error deleting ${fileType}:`, error);
+    }
+  };
 
   const toggleSelect = (id: number) => {
     setCourses((prevCourses) =>
@@ -142,8 +144,6 @@ const PharmacyDetail = () => {
     };
   }, [isAddQuestion]);
 
-  console.log(licenseData, certificationsData, "dpoasi")
-
   return (
     <>
       <div className="px-5 md:px-6 py-8 bg-white shadow-lg rounded-lg">
@@ -161,7 +161,7 @@ const PharmacyDetail = () => {
             </div>
             <MdKeyboardArrowRight className="text-xl sm:text-2xl" />
             <p className="text-[#3F4254] text-xs md:text-sm">
-              {pharmacy.pharmacy_name}
+              {pharmacyDetailsData?.pharmacy_name || "Loading..."}
             </p>
           </div>
           <div className="flex gap-x-4 items-center">
@@ -171,16 +171,20 @@ const PharmacyDetail = () => {
         </div>
         <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-y-10 md:gap-x-10 lg:gap-x-20 items-center">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <Image
-              src="/Ellipse.png"
-              alt="Profile Image"
-              width={300}
-              height={300}
-              sizes="(max-width: 767px) 128px, 300px"
-            />
+            <div className="rounded-full object-cover overflow-hidden">
+              <Image
+                src={pharmacyDetailsData?.image_url || "/Ellipse.png"}
+                alt="Profile Image"
+                width={300}
+                height={300}
+                sizes="(max-width: 767px) 128px, 300px"
+                className="rounded-full object-cover"
+                onError={(e) => (e.currentTarget.src = "/Ellipse.png")}
+              />
+            </div>
             <div className="space-y-3 text-black w-full">
               <h2 className="text-sm sm:text-lg lg:text-xl font-bold">
-                {pharmacy.pharmacy_name}
+                {pharmacyDetailsData?.pharmacy_name || "Loading..."}
               </h2>
 
               <div className="flex justify-between flex-wrap gap-4">
@@ -188,14 +192,14 @@ const PharmacyDetail = () => {
                   Total Expense
                 </p>
                 <span className="text-xs sm:text-sm md:text-[16px] font-medium">
-                  ${pharmacy.expense}
+                  ${pharmacyDetailsData?.expense ?? 0}
                 </span>
               </div>
 
               <div className="flex justify-between flex-wrap gap-4">
                 <p className="text-xs font-semibold">Courses Completed</p>
                 <span className="text-xs sm:text-sm md:text-[12px] font-semibold">
-                  {pharmacy.total_completed} / {pharmacy.courses | 0}
+                  {pharmacyDetailsData?.total_completed ?? 0}
                 </span>
               </div>
 
@@ -205,13 +209,15 @@ const PharmacyDetail = () => {
                     Onboarding Checklist Progress
                   </p>{" "}
                   <span className="text-[12px] font-semibold">
-                    {pharmacy.completion_percentage}%
+                    {pharmacyDetailsData?.completion_percentage ?? 0}%
                   </span>
                 </div>{" "}
                 <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
                   <div
                     className="bg-primary h-[4px] rounded-full"
-                    style={{ width: `${pharmacy.completion_percentage}%` }}
+                    style={{
+                      width: `${pharmacyDetailsData?.completion_percentage ?? 0}%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -220,14 +226,16 @@ const PharmacyDetail = () => {
 
           <div className="text-grey space-y-3">
             <p className=" text-xs md:text-sm">
-              <strong className="text-black">Address:</strong> Lorem ipsum dolor
-              sit amet consectetur, praesentium?
+              <strong className="text-black">Address:</strong>{" "}
+              {pharmacyDetailsData?.address ?? "N/A"}
             </p>
-            <p className=" text-xs md:text-sm">
-              <strong className="text-black">Email:</strong> JohnDoe@gmail.com
+            <p className="text-xs md:text-sm">
+              <strong className="text-black">Email:</strong>{" "}
+              {pharmacyDetailsData?.email ?? "N/A"}
             </p>
-            <p className=" text-xs md:text-sm">
-              <strong className="text-black">Contact:</strong> 123456789
+            <p className="text-xs md:text-sm">
+              <strong className="text-black">Contact:</strong>{" "}
+              {pharmacyDetailsData?.contact ?? "N/A"}
             </p>
           </div>
         </div>
@@ -263,7 +271,9 @@ const PharmacyDetail = () => {
                           <button className="p-1 text-red-500 hover:text-red-700">
                             <img
                               src="/delete-icon.svg"
-                              onClick={() => handleDeleteFile(license.id, "license")}
+                              onClick={() =>
+                                handleDeleteFile(license.id, "license")
+                              }
                               alt="Delete"
                               className="w-4 h-4"
                             />
@@ -292,7 +302,9 @@ const PharmacyDetail = () => {
           >
             {() => (
               <Form className="w-full ">
-                <Label className=" font-semibold text-lg ">Certifications</Label>
+                <Label className=" font-semibold text-lg ">
+                  Certifications
+                </Label>
 
                 <div className="grid grid-cols-3 gap-4 mt-2">
                   {certificationsData?.length > 0 ? certificationsData?.map((license: License) => (
@@ -315,7 +327,9 @@ const PharmacyDetail = () => {
                         <button className="p-1 text-red-500 hover:text-red-700">
                           <img
                             src="/delete-icon.svg"
-                            onClick={() => handleDeleteFile(license.id, "certification")}
+                            onClick={() =>
+                              handleDeleteFile(license.id, "certification")
+                            }
                             alt="Delete"
                             className="w-4 h-4"
                           />

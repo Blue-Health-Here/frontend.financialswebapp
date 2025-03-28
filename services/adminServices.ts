@@ -3,7 +3,7 @@ import { setSelectCategories } from "@/store/features/admin/category/adminCatego
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-import { setCertificationsData, setIsLoading, setLicenseData, setProfileData } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData,setLicenseData,setCertificationsData , setPharmacyDetailsData} from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
@@ -661,3 +661,20 @@ export const deleteAdminCertification = async (dispatch: AppDispatch, id?: strin
     }
 };
 
+/**
+ * get admin pharmacy details data and update Redux store.
+ */
+export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: string) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-details?pharmacy_id="+id);
+        if (response?.status === 200) {
+            dispatch(setPharmacyDetailsData(response?.data));
+            toast.success("pharmacy details fetched successfully!");
+        }
+    } catch (error: any) {  
+        toast.error(error?.response?.data?.detail || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
