@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
@@ -16,16 +16,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
 import { setExpenseDetails, setIsAddExpense, setLoading } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
-import { deletePharmacyExpense, fetchPharmacyExpense } from '@/services/pharmacyServices';
+import { deletePharmacyExpense, fetchPharmacyExpense, fetchPharmacyExpenseStats } from '@/services/pharmacyServices';
 import TextMessage from '@/components/common/TextMessage';
-import { PharmacyExpenseProps } from '@/utils/types';
+import { BudgetStatsCardProps, PharmacyExpenseProps } from '@/utils/types';
+import { assignAdminBudgetStatsValues } from '@/utils/helper';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch()
-    const { isAddExpense, expenseData, loading } = useSelector((state: RootState) => state.pharmacyExpense);
+    const { isAddExpense, expenseData, loading, pharmacyExpenseStats } = useSelector((state: RootState) => state.pharmacyExpense);
+    const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
     
-      let labels, datasets;
+    let labels, datasets;
     
     if (width > 1400) {
         labels = fullLabels;
@@ -58,11 +60,21 @@ const BudgetSection = () => {
     
     useEffect(() => {
         fetchPharmacyExpense(dispatch).finally(() => setLoading(false));
-    }, [])
+        fetchPharmacyExpenseStats(dispatch).finally(() => setLoading(false));
+    }, []);
+    
+    useEffect(() => {
+        console.log("pharmacyExpenseStats", pharmacyExpenseStats);
+        if (pharmacyExpenseStats?.length > 0) {
+            setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));
+        } else {
+            setStatsUpdatedData(budgetStatsData);
+        }
+    }, [pharmacyExpenseStats]);
 
     const handleEditExpense = (data: PharmacyExpenseProps) => {
-        dispatch(setIsAddExpense(true))
-        dispatch(setExpenseDetails(data))
+        dispatch(setIsAddExpense(true));
+        dispatch(setExpenseDetails(data));
     };
 
     const handleAddExpense = () => {
@@ -79,7 +91,7 @@ const BudgetSection = () => {
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6">
                 <div className="h-full col-span-1 md:col-span-1 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
-                    {budgetStatsData.map((item, index) => (
+                    {statsUpdatedData?.map((item, index) => (
                         <BudgetStatsCard
                             key={index}
                             icon={item.icon}

@@ -7,7 +7,7 @@ import { setCertificationsData, setIsLoading, setLicenseData, setProfileData } f
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 
 /**
  * Fetch all stats and update Redux store.
@@ -522,7 +522,7 @@ export const fetchAdminExpenseStats = async (dispatch: AppDispatch, id: any) => 
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.get("/v1/admin-expense-stats?pharmacy_id="+id);
         if (response.status === 200) {
-            dispatch(setStats(response.data));
+            dispatch(setAdminExpenseStats(response.data));
             toast.success("Stats fetched successfully!");
         }
     } catch (error: any) {
