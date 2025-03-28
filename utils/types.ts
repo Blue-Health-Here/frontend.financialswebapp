@@ -140,4 +140,11 @@ export type AdminBudgetStatsValues = {
     total_revenue: number;
     total_profit: number;
 };
+export interface Expense {
+    month: string;
+    total_expense: number;
+}
 
+export interface ExpenseChartProps {
+    ExpenseData: Expense[];
+}

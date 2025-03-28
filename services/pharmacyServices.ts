@@ -1,6 +1,6 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import axiosPharmacy from "@/lib/axiosPharmacy";
-import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData} from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData,setExpenseGraphData} from "@/store/features/global/globalSlice";
 import { setexpenseData } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
@@ -252,6 +252,29 @@ export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) 
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * Fetch pharmacy dashboard expense graph and update Redux store.
+ */
+export const fetchPharmacyExpenseGraph = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-expense-graph");
+        if (response.status === 200) {
+            dispatch(setExpenseGraphData(response.data));
+            toast.success("Expense Graph fetched successfully!");
+        }
+    } catch (error: any) {
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setExpenseGraphData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
     } finally {
         dispatch(setIsLoading(false));
     }

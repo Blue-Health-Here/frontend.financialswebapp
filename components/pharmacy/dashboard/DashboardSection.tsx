@@ -13,12 +13,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
-
+import { fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 const DashboardSection = () => {
+  const { expenseGraphData } = useSelector((state: RootState) => state.global);
   const { isAddExpenseModal } = useSelector(
       (state: RootState) => state.onboarding
     );
     const dispatch = useDispatch();
+
+     useEffect(() => {
+        const fetchData = async () => {
+          try {
+            await fetchPharmacyExpenseGraph(dispatch);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchData();
+      }, [ dispatch]);
   
     useEffect(() => {
       if (isAddExpenseModal) {
@@ -41,7 +54,7 @@ const DashboardSection = () => {
           ))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
-          <ExpenseChart />
+          <ExpenseChart ExpenseData={expenseGraphData}/>
         </div>
       </div>
       <>

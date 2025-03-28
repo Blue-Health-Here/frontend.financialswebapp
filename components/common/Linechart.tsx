@@ -3,10 +3,12 @@ import { useEffect, useRef } from "react";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle } from "chart.js";
 import { Line } from "react-chartjs-2";
 import customSubtitlePlugin from "./customSubtitlePlugin";
+import { ExpenseChartProps } from "@/utils/types";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle, customSubtitlePlugin);
 
-const ExpenseChart = () => {
+
+const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
     const chartRef = useRef<ChartJS<"line"> | null>(null);
 
     useEffect(() => {
@@ -30,11 +32,11 @@ const ExpenseChart = () => {
     }, []);
 
     const data = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: ExpenseData?.map((item) => item.month),
         datasets: [
             {
                 label: "Expense",
-                data: [15000, 28000, 20000, 35000, 25000, 38000],
+                data: ExpenseData?.map((item) => item.total_expense),
                 tension: 0.4,
                 borderWidth: 3,
                 pointRadius: 0,
