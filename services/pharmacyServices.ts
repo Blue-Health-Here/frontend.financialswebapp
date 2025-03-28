@@ -270,6 +270,7 @@ export const fetchPharmacyExpenseStats = async (dispatch: AppDispatch) => {
     } catch (error: any) {
         if(error?.status === 404){
             toast.success(error?.response?.data?.detail)
+            dispatch(setPharmacyExpenseStats([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }

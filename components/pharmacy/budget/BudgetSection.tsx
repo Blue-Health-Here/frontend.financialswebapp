@@ -27,7 +27,7 @@ const BudgetSection = () => {
     const { isAddExpense, expenseData, loading, pharmacyExpenseStats } = useSelector((state: RootState) => state.pharmacyExpense);
     const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
     
-      let labels, datasets;
+    let labels, datasets;
     
     if (width > 1400) {
         labels = fullLabels;
@@ -64,15 +64,17 @@ const BudgetSection = () => {
     }, []);
     
     useEffect(() => {
-        if (pharmacyExpenseStats) {
+        console.log("pharmacyExpenseStats", pharmacyExpenseStats);
+        if (pharmacyExpenseStats?.length > 0) {
             setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));
+        } else {
+            setStatsUpdatedData(budgetStatsData);
         }
-    }, [pharmacyExpenseStats]); 
-    
+    }, [pharmacyExpenseStats]);
 
     const handleEditExpense = (data: PharmacyExpenseProps) => {
-        dispatch(setIsAddExpense(true))
-        dispatch(setExpenseDetails(data))
+        dispatch(setIsAddExpense(true));
+        dispatch(setExpenseDetails(data));
     };
 
     const handleAddExpense = () => {
