@@ -14,6 +14,7 @@ import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 import { fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
+import TextMessage from "@/components/common/TextMessage";
 
 const DashboardSection = () => {
   const { pharmacyStatsData } = useSelector((state: RootState) => state.global);
@@ -82,15 +83,19 @@ const DashboardSection = () => {
       <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:auto-rows-fr">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {pharmacyStatsData.map((item: any, index: number) => (
-            <StatsCard
-              key={index}
-              value={item.value}
-              label={item.label}
-              color={item.color}
-              icon={item.icon}
-            />
-          ))}
+        {pharmacyStatsData && Array.isArray(pharmacyStatsData) ? (
+              pharmacyStatsData.map((item: any, index: number) => (
+                <StatsCard
+                  key={index}
+                  value={item.value}
+                  label={item.label}
+                  color={item.color}
+                  icon={item.icon}
+                />
+              ))
+            ) : (
+              <TextMessage text="No statistics available"/>
+            )}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
           <ExpenseChart ExpenseData={expenseGraphData} />
