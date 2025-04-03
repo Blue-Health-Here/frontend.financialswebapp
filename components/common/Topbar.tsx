@@ -22,6 +22,7 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
+    const [currentDate, setCurrentDate] = useState<string>("Loading...");
     const { profileData } = useSelector((state: RootState) => state.global);
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const { isLoading } = useSelector((state: RootState) => state.global);
@@ -52,14 +53,17 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
         };
     }, []);
 
-    const getCurrentDate = () => {
-        const date = new Date();
-        const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
-        let formattedDate = date.toLocaleDateString('en-GB', options);
+    useEffect(() => {
+        const getCurrentDate = () => {
+            const date = new Date();
+            const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
+            let formattedDate = date.toLocaleDateString('en-GB', options);
+            return formattedDate.replace(/(\d{2}) (\w{3})/, '$1, $2');
+        };
+    
+        setCurrentDate(getCurrentDate());
+    }, []); 
 
-        return formattedDate.replace(/(\d{2}) (\w{3})/, '$1, $2');
-    };
-    const currentDate = getCurrentDate();
     const handleNavbarToggler = () => {
         dispatch(setIsSidebarOpen(true));
     };
