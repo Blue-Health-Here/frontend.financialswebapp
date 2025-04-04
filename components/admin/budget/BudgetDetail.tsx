@@ -32,6 +32,18 @@ const BudgetDetail = () => {
     const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
 
     useEffect(() => {
+        if (isAddExpense) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isAddExpense]);
+
+    useEffect(() => {
         fetchAdminExpense(dispatch, pharmacyId).finally(() => setLoading(false))
         fetchAdminExpenseStats(dispatch, pharmacyId).finally(() => setLoading(false))
 
