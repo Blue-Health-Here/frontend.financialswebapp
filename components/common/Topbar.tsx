@@ -67,7 +67,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
     const handleNavbarToggler = () => {
         dispatch(setIsSidebarOpen(true));
     };
-
+    
     return (
         <>
             {isLoading && (

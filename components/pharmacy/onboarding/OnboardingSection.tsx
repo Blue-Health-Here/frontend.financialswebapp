@@ -11,6 +11,7 @@ import OnboardingExpenseModal from "./OnboardingExpenseModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
+import FileDownloadField from "@/components/common/form/FileDownloadField";
 
 const OnboardingSection = () => {
   const { isAddExpenseModal } = useSelector(
@@ -33,92 +34,40 @@ const OnboardingSection = () => {
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
-        <div className="flex flex-col md:flex-col lg:flex-row gap-4">
-          {/* Onboarding Checklist Title */}
-          <h1
-            className=" text-xl sm:text-2xl font-semibold flex-1 text-nowrap 
-             md:text-xl lg:text-2xl"
-          >
-            {onBoardingchecklists[0].name}
-          </h1>
-
-          {/* Container for Button & Form */}
-          <div className="flex flex-col sm:flex-col-reverse md:flex-row gap-4">
-            {/* Formik Form */}
+      <div className="py-4 flex items-center justify-between flex-wrap gap-4 pb-6">
+            <h1 className="text-lg md:text-2xl font-semibold flex-1 text-nowrap">
+              {onBoardingchecklists[0].name}
+            </h1>
             <Formik
               initialValues={{ category: "", search: "" }}
               onSubmit={() => {}}
             >
               {({ isSubmitting }) => (
-                <Form className="flex flex-col sm:flex-col md:flex-row lg:flex-row gap-4">
-                  {/* Dropdown */}
-
-                  {/* Report Button (moved after dropdowns for small screens) */}
-                  <button
-                    className="hidden border-none shadow-lg rounded-md font-semibold 
-            min-w-40 h-10 text-md 
-            sm:min-w-32 sm:h-8 sm:text-sm 
-            md:min-w-36 md:h-9 md:text-sm 
-            bg-[#93C5FD] hover:bg-blue-400 transition-all 
-            sm:flex items-center gap-x-2 justify-center text-[#1E3A8A]"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
-                        fill="#1E3A8A"
-                      />
-                    </svg>
-                    Report
-                  </button>
+                <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
+                  <FileDownloadField title="Reports" className="min-w-48" parentClassName="flex-1" />
                   <SelectField
-                    className="border-none shadow-lg rounded-lg font-medium 
-            min-w-48 h-10 
-            sm:min-w-36 sm:h-8 
-            md:min-w-40 md:h-9"
+                    className="border-none shadow-lg rounded-lg font-medium min-w-48"
+                    parentClassName="flex-1"
                     name="category"
                     options={[
                       { value: "Al Categories", label: "Al Categories" },
                       { value: "operational", label: "Operational" },
                     ]}
                   />
-
-                  {/* Search Input */}
-                  <div className="relative sm:max-w-md">
+                  <div className="relative min-w-48 flex-1">
                     <Input
                       name="search"
                       placeholder="Search Checklist"
-                      className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs 
-              min-w-48 h-10 
-              sm:min-w-36 sm:h-8 
-              md:min-w-40 md:h-9"
+                      className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
                     />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                       <IoSearch size={18} />
                     </span>
                   </div>
-
-                  {/* Report Button (moved after dropdowns for small screens) */}
-                  <button
-                    className="sm:hidden border-none shadow-lg rounded-md font-semibold 
-            min-w-40 h-10 text-md 
-            sm:min-w-32 sm:h-8 sm:text-sm 
-            md:min-w-36 md:h-9 md:text-sm 
-            bg-[#93C5FD] hover:bg-blue-400 transition-all 
-            flex items-center gap-x-2 justify-center text-[#1E3A8A]"
-                  >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M8 12L3 7L4.4 5.55L7 8.15V0H9V8.15L11.6 5.55L13 7L8 12ZM2 16C1.45 16 0.979333 15.8043 0.588 15.413C0.196666 15.0217 0.000666667 14.5507 0 14V11H2V14H14V11H16V14C16 14.55 15.8043 15.021 15.413 15.413C15.0217 15.805 14.5507 16.0007 14 16H2Z"
-                        fill="#1E3A8A"
-                      />
-                    </svg>
-                    Report
-                  </button>
                 </Form>
               )}
             </Formik>
           </div>
-        </div>
 
         {onBoardingchecklists.map((checklist, index) => (
           <div className="flex flex-col gap-6 mt-6" key={index}>

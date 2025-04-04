@@ -154,7 +154,7 @@ const ProfileSection = () => {
           return (
             <Form className="p-6 bg-white shadow-lg rounded-lg">
               <div className="flex items-center justify-between mb-4">
-                <h1 className="text-xl font-semibold">Account</h1>
+                <h1 className="text-lg md:text-xl font-semibold">Account</h1>
                 <SubmitButton
                   type="submit"
                   className="bg-secondary text-primary hover:text-white"
@@ -162,8 +162,8 @@ const ProfileSection = () => {
                   Save Changes
                 </SubmitButton>
               </div>
-              <div className="flex gap-x-8">
-                <div className="grid grid-cols-2 gap-x-4 w-full">
+              <div className="flex  flex-col-reverse md:flex-row gap-4 gap-x-8 pt-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                   <InputField
                     label="Pharmacy Name"
                     type="text"
@@ -248,9 +248,9 @@ const ProfileSection = () => {
                   name="services_offered"
                 />
                 <div className="w-full">
-                  <Label className="font-semibold text-lg">Licensing</Label>
+                  <Label className="text-grey text-xs">Licensing</Label>
 
-                  <div className="grid grid-cols-3 gap-4 mt-2">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                     {licenseData.length > 0 ? licenseData?.map((license: License) => (
                       <div
                         key={license.id}
@@ -288,13 +288,13 @@ const ProfileSection = () => {
                     setUploadedFile={setUploadedFile}
                     handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "license")}
 
-                    className="w-60 border-primary mt-4"
+                    className="sm:w-60 border-primary mt-4"
                   />
                 </div>
 
-                <Label className=" font-semibold text-lg">Certifications</Label>
+                <Label className="text-grey text-xs">Certifications</Label>
 
-                <div className="grid grid-cols-3 gap-4 mt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {certificationsData.length > 0 ? certificationsData?.map((license: License) => (
                     <div
                       key={license.id}
@@ -330,7 +330,7 @@ const ProfileSection = () => {
                   name="certificate"
                   isMultiSelect={false}
                   handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "certification")}
-                  className="w-60 border-primary"
+                  className="sm:w-60 border-primary"
                 />
               </div>
             </Form>
@@ -339,14 +339,14 @@ const ProfileSection = () => {
       </Formik>
       <UpdatePasswordSection />
       <div className="mt-6 p-6 space-y-4 bg-white shadow-lg rounded-lg">
-        <h2 className="text-xl font-semibold">Delete Account</h2>
-        <div className="flex justify-between items-center">
-          <p className="text-base text-[#7E8299]">
+        <h2 className="text-lg md:text-xl font-semibold">Delete Account</h2>
+        <div className="flex justify-between sm:flex-row flex-col gap-4 items-center">
+          <p className="text-sm md:text-base text-[#7E8299]">
             It’ll permanently delete your account..
           </p>
           <SubmitButton
             onClick={handleDelete}
-            className="bg-white border border-[#D02E2E] text-[#FF0000] hover:bg-transparent"
+            className="bg-white border w-full sm:w-32 border-[#D02E2E] text-[#FF0000] hover:bg-transparent"
           >
             Delete
           </SubmitButton>
