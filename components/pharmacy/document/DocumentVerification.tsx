@@ -12,7 +12,7 @@ const DocumentVerification = () => {
   return (
     <>
       <div className="px-6 py-8 bg-white shadow-lg rounded-lg">
-        <h1>Document Verification</h1>
+        <h1 className='text-lg md:text-2xl'>Document Verification</h1>
         <Formik
           initialValues={{ document835: null, bankStatement: null }}
           onSubmit={(values) => {}}
@@ -46,7 +46,7 @@ const DocumentVerification = () => {
         <div className="pb-6 px-6">
           {/* Title & Filters (Row on Desktop, Column on Small Screens) */}
           <div className="flex flex-col sm:flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <h1 className="">History</h1>
+            <h1 className="text-lg md:text-2xl">History</h1>
 
             {/* Filters (Move Below History on Small Screens Only) */}
             <Formik initialValues={{ type: "", category: "", search: "" }} onSubmit={() => {}}>
@@ -88,7 +88,7 @@ const DocumentVerification = () => {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-[#F3F2F7] uppercase text-center text-themeGrey text-sm border-b border-[#E9ECEF]">
+              <tr className="bg-[#F3F2F7] uppercase text-center text-themeGrey text-xs md:text-sm border-b border-[#E9ECEF]">
                 <th className="p-4">Serial No</th>
                 <th className="p-4">835 File</th>
                 <th className="p-4">835 AMT</th>
@@ -101,7 +101,7 @@ const DocumentVerification = () => {
 
             <tbody>
               {tableData.map((row, i) => (
-                <tr key={i} className="border-b text-center border-[#EBE9F1] bg-white">
+                <tr key={i} className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
                   <td className="p-4 text-grey font-medium">#{row.serial}</td>
                   <td className="p-4 text-grey">{row.file}</td>
                   <td className="p-4 font-medium">${row.amt}</td>

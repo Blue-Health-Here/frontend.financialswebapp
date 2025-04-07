@@ -10,26 +10,11 @@ ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip,
 
 const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
     const chartRef = useRef<ChartJS<"line"> | null>(null);
-
-    useEffect(() => {
-        if (chartRef.current) {
-            const chart = chartRef.current;
-            const ctx = chart.ctx;
-
-            if (ctx) {
-                const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
-                gradient.addColorStop(0, "#93C5FD");
-                gradient.addColorStop(0.5, "#1E3A8A");
-                gradient.addColorStop(1, "#1E3A8A");
-
-                chart.data.datasets[0].borderColor = gradient;
-                chart.data.datasets[0].borderWidth = 2;
-                chart.data.datasets[0].pointRadius = 0;
-                chart.data.datasets[0].backgroundColor = "transparent";
-                chart.update();
-            }
-        }
-    }, []);
+    const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+    const currentMonthExpense =
+        Array.isArray(ExpenseData) && ExpenseData.length > 0
+            ? ExpenseData.find((item) => item.month === currentMonth)?.total_expense || 0
+            : 0;
 
     const data = {
         labels: ExpenseData?.map((item) => item.month),
@@ -49,6 +34,7 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
         maintainAspectRatio: false,
         plugins: {
             legend: { display: false },
+            datalabels: { display: false },
             tooltip: {
                 callbacks: {
                     label: (tooltipItem: { raw: unknown }) => {
@@ -73,7 +59,8 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
             },
             subtitle: {
                 display: true,
-                text: '',
+                currentMonth,
+                currentExpense: currentMonthExpense,
                 align: 'center',
                 font: {
                     size: 18,
@@ -89,6 +76,7 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
         scales: {
             x: { grid: { display: false } },
             y: {
+                min: 0,
                 grid: { color: "rgba(200, 200, 200, 0.3)" },
                 ticks: {
                     callback: function (value: number) {
@@ -97,11 +85,32 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
                 },
             },
         },
+        // Adding the gradient in the beforeDraw hook
+        animation: {
+            onComplete: function () {
+                if (chartRef.current) {
+                    const chart = chartRef.current;
+                    const ctx = chart.ctx;
+                    if (ctx) {
+                        const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+                        gradient.addColorStop(0, "#93C5FD");
+                        gradient.addColorStop(0.5, "#1E3A8A");
+                        gradient.addColorStop(1, "#1E3A8A");
+        
+                        chart.data.datasets[0].borderColor = gradient;
+                        chart.data.datasets[0].borderWidth = 2;
+                        chart.data.datasets[0].pointRadius = 0;
+                        chart.data.datasets[0].backgroundColor = "transparent";
+                        chart.update();
+                    }
+                }
+            },
+        },
     };
 
     return (
         <div className=" w-full p-6 h-60 md:h-full">
-            <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} />
+            <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} height={400}/>
         </div>
     );
 };

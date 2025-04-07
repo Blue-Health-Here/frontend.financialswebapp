@@ -1,4 +1,5 @@
-import { AdminBudgetStatsValues, Stats } from "./types";
+import { pharmacyDashboardStatsData } from "./constants";
+import { AdminBudgetStatsValues, pharmacyDashboardStats, Stats } from "./types";
 
 export const assignStatsValues = (data: Stats) => {
     return [
@@ -16,3 +17,18 @@ export const assignAdminBudgetStatsValues = (data: AdminBudgetStatsValues) => {
         { value: data.total_profit, label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
     ];
 }
+
+export const assignPharmacyStatsValues = (data: pharmacyDashboardStats) => {
+    return pharmacyDashboardStatsData.map((item) => {
+        switch (item.label) {
+            case "Courses":
+                return { ...item, value: `${data.assigned_courses}` };
+            case "Total monthly expense":
+                return { ...item, value: `$${data.monthly_expense}` };
+            default:
+                return item; 
+        }
+    });
+};
+
+

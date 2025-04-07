@@ -104,11 +104,11 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                         </>
                     ) : (
                         // Dropzone-style upload
-                        <div className="flex justify-center items-center border-dashed border h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
+                        <div className="flex justify-center items-center border-dashed border h-[140px] md:h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
                             <label htmlFor={id} className="flex flex-col items-center cursor-pointer">
-                                <MdOutlineFileUpload className="w-10 h-10 text-[#969696]" />
-                                <h2 className="font-semibold">{title}</h2>
-                                {description && <p className="text-xs text-[#969696]">{description}</p>}
+                                <MdOutlineFileUpload className="w-7 h-7 md:w-10 md:h-10 text-[#969696]" />
+                                <h2 className="font-semibold text-sm sm:text-lg md:text-xl text-center">{title}</h2>
+                                {description && <p className="text-xs text-center text-[#969696]">{description}</p>}
                             </label>
                             <input
                                 id={id}

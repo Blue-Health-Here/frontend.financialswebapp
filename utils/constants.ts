@@ -51,6 +51,14 @@ export const statsDataConstant = [
     { value: "0%", label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
 ];
 
+// statistic card data
+export const pharmacyDashboardStatsData = [
+    { value: 0, label: "Courses", color: "text-custom-green", icon: "/statistics-Category.svg" },
+    { value: "0%", label: "Operations Checklist", color: "text-custom-purple", icon: "/statistics-pharmacy.svg" },
+    { value: "$0", label: "Total monthly expense", color: "text-custom-orange", icon: "/statistics-expense.svg" },
+    { value: "0%", label: "Onboarding Checklist", color: "text-custom-red", icon: "/statistics-task.svg" },
+];
+
 //Admin Category Data
 export const categoryData: Record<string, string[]> = {
     onboarding: ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7", "Category 8", "Category 9", "Category 10", "Category 11", "Category 12"],
