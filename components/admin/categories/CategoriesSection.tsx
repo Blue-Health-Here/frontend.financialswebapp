@@ -24,6 +24,19 @@ const CategoriesSection = () => {
     const { isAddCategory, categories } = useSelector((state: RootState) => state.category);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
+
+    
+        useEffect(() => {
+            if (isAddCategory) {
+                document.body.style.overflow = "hidden";
+            } else {
+                document.body.style.overflow = "";
+            }
+    
+            return () => {
+                document.body.style.overflow = "";
+            };
+        }, [isAddCategory]);
     
     useEffect(() => {
         fetchAllCategories(dispatch, selectedCategory).finally(() => setLoading(false));

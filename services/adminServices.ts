@@ -586,7 +586,6 @@ export const deleteAdminLicense = async (dispatch: AppDispatch, id?: string) => 
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.delete("/v1/admin-pharmacy-license?license_id="+id);
         if (response?.data?.success) {
-            await fetchAdminLicense(dispatch);
             toast.success("License file deleted successfully!");
         }
     } catch (error: any) {
@@ -651,7 +650,6 @@ export const deleteAdminCertification = async (dispatch: AppDispatch, id?: strin
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.delete("/v1/admin-pharmacy-certification?certification_id="+id);
         if (response?.data?.success) {
-            await fetchAdminCertification(dispatch);
             toast.success("Certification file deleted successfully!");
         }
     } catch (error: any) {

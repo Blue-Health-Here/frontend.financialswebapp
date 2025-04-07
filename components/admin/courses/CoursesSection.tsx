@@ -21,6 +21,18 @@ const CoursesSection = () => {
     const dispatch = useDispatch();
     const isFetched = useRef(false);
 
+    useEffect(() => {
+        if (isAddCourse) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isAddCourse]);
+
     const handleAddCourse = () => {
         dispatch(setIsAddCourse(true));
         dispatch(setCourseDetails(null));
