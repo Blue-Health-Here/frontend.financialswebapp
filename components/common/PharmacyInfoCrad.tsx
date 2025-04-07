@@ -1,67 +1,92 @@
 "use client";
 import React, { useState } from "react";
+import FileDownloadField from "./form/FileDownloadField";
+import axiosAdmin from "@/lib/axiosAdmin";
+import toast from "react-hot-toast";
 
-interface pharmacyInfoCardProps {
+interface PharmacyInfoCardProps {
   title: string;
   description: string;
-  onDownload?: () => void;
+  link?: string | null;
+  file_url?: string | null;
+  filename?: string ;
 }
-const PharmacyInfoCrad: React.FC<pharmacyInfoCardProps> = ({title, description, onDownload}) => {
-  const [checked, setChecked] = useState(false);
+
+const PharmacyInfoCard: React.FC<PharmacyInfoCardProps> = ({
+  title,
+  description,
+  link,
+  file_url,
+  filename
+}) => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCardClick = () => {
+    setIsChecked((prevChecked) => !prevChecked);
+  };
+
+  const handleCheckboxChange = (e: any) => {
+    setIsChecked(e.target.checked);
+  };
+
+  const handleDownloadClick  = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (link) {
+      window.open(link, "_blank");
+    } else if (file_url) {
+      try {
+        const response = await axiosAdmin.get(file_url, {responseType: "blob",});
+        const contentType = response.headers["content-type"] || "application/octet-stream";
+
+        const blob = new Blob([response.data], { type: contentType });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = filename || "default_filename";
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+        toast.success("File download Successfully.");
+    } catch (error: any) {
+        toast.error(error?.message || "Failed to download file.");
+    }
+    } else {
+      console.warn("No link or file_url provided.");
+    }
+  };
 
   return (
-    <label
-      className="bg-white shadow-lg rounded-sm p-6 block cursor-pointer"
-      onClick={() => setChecked(!checked)}
+    <div
+      className="bg-white p-7 shadow-md rounded-lg min-h-[125px] cursor-pointer"
+      onClick={handleCardClick}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-gray-800 font-semibold">{title}</span>
-        <div
-          className={`w-[17px] h-[17px] flex items-center justify-center border-2 rounded-full transition-all 
-          ${checked ? "bg-[#0BD700] border-[#0BD700]" : "bg-white border-gray-500"}`}
-        >
-          {checked && (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="white"
-              className="w-[14px] h-[14px]"
-            >
-              <path
-                fillRule="evenodd"
-                d="M20.707 5.293a1 1 0 0 1 0 1.414l-10 10a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L10 14.586l9.293-9.293a1 1 0 0 1 1.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
+      <div className="flex justify-between">
+        <div className="space-y-3">
+          <h3 className="text-gray-800 font-medium text-lg md:text-xl">{title}</h3>
+          <p className="text-grey text-sm mt-1">{description}</p>
         </div>
-      </div>
-      <p className="text-gray-600 text-sm mt-1">
-       {description}
-      </p>
-      <button
-        className="mt-2 bg-[#1E3A8A] text-white px-4 py-2 rounded-md transition w-full flex items-center justify-center gap-2"
-        onClick={(e) => {
-          e.stopPropagation();
-          onDownload?.();
-        }}
-      >
-        <svg
-          width="17"
-          height="17"
-          viewBox="0 0 17 17"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.16602 12.7334L3.16602 7.7334L4.56602 6.2834L7.16602 8.8834V0.733398H9.16602V8.8834L11.766 6.2834L13.166 7.7334L8.16602 12.7334ZM2.16602 16.7334C1.61602 16.7334 1.14535 16.5377 0.754015 16.1464C0.362682 15.7551 0.166682 15.2841 0.166016 14.7334V11.7334H2.16602V14.7334H14.166V11.7334H16.166V14.7334C16.166 15.2834 15.9703 15.7544 15.579 16.1464C15.1877 16.5384 14.7167 16.7341 14.166 16.7334H2.16602Z"
-            fill="white"
+        <label className="custom-checkbox" htmlFor={`checkbox-${title}`}>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+            onClick={(e) => e.stopPropagation()}
           />
-        </svg>
-        Download
-      </button>
-    </label>
+          <span></span>
+        </label>
+      </div>
+      <div className="flex justify-end mt-4" onClick={handleDownloadClick}>
+        <FileDownloadField
+          title="Download File"
+          iconcolor="text-white"
+          className="text-white bg-primary hover:bg-primary"
+        />
+      </div>
+    </div>
   );
 };
 
-export default PharmacyInfoCrad;
+export default PharmacyInfoCard;
+ 
