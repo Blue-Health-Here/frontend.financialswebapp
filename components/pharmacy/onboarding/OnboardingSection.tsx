@@ -34,10 +34,10 @@ const OnboardingSection = () => {
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
-      <div className="py-4 flex items-center justify-between flex-wrap gap-4 pb-6">
-            <h1 className="text-lg md:text-2xl font-semibold flex-1 text-nowrap">
-              {onBoardingchecklists[0].name}
-            </h1>
+      <div className="flex flex-col md:flex-col lg:flex-row gap-4">
+          <h1 className="text-lg md:text-xl font-semibold flex-1 text-nowrap lg:text-2xl">
+            {onBoardingchecklists[0].name}
+          </h1>
             <Formik
               initialValues={{ category: "", search: "" }}
               onSubmit={() => {}}

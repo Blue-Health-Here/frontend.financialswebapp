@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { onBoardingchecklists, statsDataConstant } from "@/utils/constants";
+import { onBoardingchecklists, pharmacyDashboardStatsData } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
 import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
@@ -13,16 +13,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
-import {
-  fetchPharmacyDashboardStats,
-  fetchPharmacyExpenseGraph,
-} from "@/services/pharmacyServices";
-import TextMessage from "@/components/common/TextMessage";
+import { fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
+import { StatsCardProps } from "@/utils/types";
+import { assignPharmacyStatsValues } from "@/utils/helper";
 
 const DashboardSection = () => {
   const { pharmacyStatsData } = useSelector((state: RootState) => state.global);
   const { expenseGraphData } = useSelector((state: RootState) => state.global);
+  const [statsUpdatedData, setStatsUpdatedData] = useState<StatsCardProps[]>(pharmacyDashboardStatsData);
   const { isAddExpenseModal } = useSelector(
     (state: RootState) => state.onboarding
   );
@@ -39,12 +38,19 @@ const DashboardSection = () => {
 
     fetchData();
   }, [dispatch]);
+  useEffect(() => {
+    fetchPharmacyDashboardStats(dispatch); 
+}, [dispatch]);
 
   useEffect(() => {
-    if (!pharmacyStatsData) {
-      fetchPharmacyDashboardStats(dispatch);
+    if (pharmacyStatsData) {
+        const mergedData = assignPharmacyStatsValues(pharmacyStatsData);
+        setStatsUpdatedData(mergedData);
+    } else {
+        setStatsUpdatedData(pharmacyDashboardStatsData);
     }
-  }, [dispatch, pharmacyStatsData]);
+}, [pharmacyStatsData]);
+
 
   // const statsData = [
   //   {
@@ -89,19 +95,14 @@ const DashboardSection = () => {
       <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:auto-rows-fr">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {pharmacyStatsData && Array.isArray(pharmacyStatsData) ? (
-            pharmacyStatsData.map((item: any, index: number) => (
-              <StatsCard
-                key={index}
-                value={item.value}
-                label={item.label}
-                color={item.color}
-                icon={item.icon}
-              />
-            ))
-          ) : (
-            <TextMessage text="No statistics available" />
-          )}
+               {statsUpdatedData.map((item, index) => (
+                <StatsCard
+                    key={index}
+                    value={item.value}
+                    label={item.label}
+                    color={item.color}
+                    icon={item.icon}
+                />))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
           <ExpenseChart ExpenseData={expenseGraphData} />
@@ -109,8 +110,8 @@ const DashboardSection = () => {
       </div>
       <>
         <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
-          <div className="py-4 flex items-center justify-between flex-wrap gap-4 pb-6">
-            <h1 className=" text-lg md:text-2xlfont-semibold flex-1 text-nowrap">
+        <div className="flex flex-col md:flex-col lg:flex-row gap-4">
+            <h1 className=" text-xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
               {onBoardingchecklists[0].name}
             </h1>
             <Formik
