@@ -4,14 +4,28 @@ import { Input } from "../../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { IoSearch } from "react-icons/io5";
-import CourseInfo from "./CourseseInfo";
-
+import { useEffect, useRef, useState } from "react";
+import { fetchAllPharmacyCourses } from "@/services/pharmacyServices";
+import TextMessage from "@/components/common/TextMessage";
+import { pharmacyCourseProps } from "@/utils/types";
+import PharmacyInfoCrad from "@/components/common/PharmacyInfoCrad";
 
 
 const CoursesPharmacy = () => {
-    const { isAddCourse } = useSelector((state: RootState) => state.course);
+    const { courses } = useSelector((state: RootState) => state.pharmacyCourse);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
-
+    const isFetched = useRef(false);
+    
+    
+    useEffect(() => {
+        if (!isFetched.current) {
+            isFetched.current = true;
+      fetchAllPharmacyCourses(dispatch).finally(() => setLoading(false));
+        }
+      
+    }, []);
+    console.log(courses, "courses pharmacy")
 
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -28,12 +42,21 @@ const CoursesPharmacy = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <CourseInfo/>
-                <CourseInfo/>
-                <CourseInfo/>
-                <CourseInfo/>
-                <CourseInfo/>
-                <CourseInfo/>
+                {loading ? (
+                    <TextMessage text="Loading courses..." />
+                ):
+                (courses.length > 0 ? courses.map((course: pharmacyCourseProps, index: number) => (
+                    <PharmacyInfoCrad
+                     key={index}
+                     title={course.title}
+                     description={course.description}
+                     onDownload={() => {
+                       console.log("Downloading", course.title);
+                     }}
+                   />
+                )) : (
+                    <TextMessage text="Courses not found." />
+                ))}
             </div>
             
         </div>

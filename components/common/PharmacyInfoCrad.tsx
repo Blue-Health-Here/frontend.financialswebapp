@@ -1,8 +1,12 @@
 "use client";
-
 import React, { useState } from "react";
 
-const MarketingInfo = () => {
+interface pharmacyInfoCardProps {
+  title: string;
+  description: string;
+  onDownload?: () => void;
+}
+const PharmacyInfoCrad: React.FC<pharmacyInfoCardProps> = ({title, description, onDownload}) => {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -11,7 +15,7 @@ const MarketingInfo = () => {
       onClick={() => setChecked(!checked)}
     >
       <div className="flex items-center justify-between">
-        <span className="text-gray-800 font-semibold">Marketing Material Title</span>
+        <span className="text-gray-800 font-semibold">{title}</span>
         <div
           className={`w-[17px] h-[17px] flex items-center justify-center border-2 rounded-full transition-all 
           ${checked ? "bg-[#0BD700] border-[#0BD700]" : "bg-white border-gray-500"}`}
@@ -33,12 +37,14 @@ const MarketingInfo = () => {
         </div>
       </div>
       <p className="text-gray-600 text-sm mt-1">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima deleniti
-        tempore adipisci pariatuur...
+       {description}
       </p>
       <button
         className="mt-2 bg-[#1E3A8A] text-white px-4 py-2 rounded-md transition w-full flex items-center justify-center gap-2"
-        onClick={(e) => e.stopPropagation()} // Prevents toggling when clicking the button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDownload?.();
+        }}
       >
         <svg
           width="17"
@@ -52,10 +58,10 @@ const MarketingInfo = () => {
             fill="white"
           />
         </svg>
-        Download File
+        Download
       </button>
     </label>
   );
 };
 
-export default MarketingInfo;
+export default PharmacyInfoCrad;

@@ -1,6 +1,8 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
+import { setPharmacyCourses } from "@/store/features/pharmacy/course/pharmacyCourseSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
+import { setPharmacyMarketingMaterials } from "@/store/features/pharmacy/marketing/pharmacyMarketingSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 
@@ -316,6 +318,54 @@ export const fetchPharmacyExpenseGraph = async (dispatch: AppDispatch) => {
        if(error?.status === 404){
            toast.success(error?.response?.data?.detail)
            dispatch(setExpenseGraphData([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * Fetch all courses and update Redux store.
+ */
+export const fetchAllPharmacyCourses = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-courses");
+        if (response.status === 200) {
+            dispatch(setPharmacyCourses(response.data));
+            toast.success("Courses fetched successfully!");
+        }
+    } catch (error: any) {
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setPharmacyCourses([]));
+        }else{
+            toast.error(error?.message || "Something went wrong");
+        }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * fetch all marketing materials and update Redux store.
+ */
+export const fetchAllPharmacyMarketingMaterials = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-marketing");
+        if (response.status === 200) {
+            dispatch(setPharmacyMarketingMaterials(response.data));
+            toast.success("Marketing Materials fetched successfully!");
+        }
+    } catch (error: any) {
+        if(error?.status === 404){
+            toast.success(error?.response?.data?.detail)
+            dispatch(setPharmacyMarketingMaterials([]));
         }else{
             toast.error(error?.message || "Something went wrong");
         }
