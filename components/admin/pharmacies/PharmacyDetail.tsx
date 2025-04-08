@@ -47,6 +47,8 @@ const PharmacyDetail = () => {
   const params = useParams();
   const hasFetched = useRef(false);
   const id = Array.isArray(params?.pharmacy_id) ? params.pharmacy_id[0] : params?.pharmacy_id;
+  
+  
 
   useEffect(() => {
     if (!id) return;
@@ -105,13 +107,13 @@ const PharmacyDetail = () => {
   ) => {
     try {
       if (!id) return;
-
       if (fileType === "license") {
         await deleteAdminLicense(dispatch, fileId);
-        fetchAdminLicense(dispatch, id);
+         fetchAdminLicense(dispatch, id);
       } else {
         await deleteAdminCertification(dispatch, fileId);
         fetchAdminCertification(dispatch, id);
+        
       }
     } catch (error) {
       console.error(`Error deleting ${fileType}:`, error);
@@ -250,22 +252,22 @@ const PharmacyDetail = () => {
                 <div className="w-full">
                   <Label className="font-semibold text-lg">Licensing</Label>
 
-                  <div className="grid grid-cols-3 gap-4 mt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
                     {licenseData?.length > 0 ? licenseData?.map((license: License) => (
                       <div
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                       >
-                        <span className="text-sm truncate">
+                        <span className="text-xs sm:text-sm truncate">
                           {license.filename}
                         </span>
 
                         <div className="flex items-center space-x-2">
-                          <button className="p-1 text-blue-500 hover:text-blue-700">
+                          <button className="sm:p-1 text-blue-500 hover:text-blue-700">
                             <img
                               src="/downloadFile.svg"
                               alt="Download"
-                              className="w-4 h-4"
+                              className="w-3 h-3 sm:w-4 sm:h-4"
                             />
                           </button>
                           <button className="p-1 text-red-500 hover:text-red-700">
@@ -275,7 +277,7 @@ const PharmacyDetail = () => {
                                 handleDeleteFile(license.id, "license")
                               }
                               alt="Delete"
-                              className="w-4 h-4"
+                              className="w-3 h-3 sm:w-4 sm:h-4"
                             />
                           </button>
                         </div>
@@ -306,13 +308,13 @@ const PharmacyDetail = () => {
                   Certifications
                 </Label>
 
-                <div className="grid grid-cols-3 gap-4 mt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
                   {certificationsData?.length > 0 ? certificationsData?.map((license: License) => (
                     <div
                       key={license.id}
                       className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                     >
-                      <span className="text-sm truncate">
+                      <span className="text-xs sm:text-sm truncate">
                         {license.filename}
                       </span>
 
@@ -321,7 +323,7 @@ const PharmacyDetail = () => {
                           <img
                             src="/downloadFile.svg"
                             alt="Download"
-                            className="w-4 h-4"
+                            className="w-3 h-3 sm:w-4 sm:h-4"
                           />
                         </button>
                         <button className="p-1 text-red-500 hover:text-red-700">
@@ -331,7 +333,7 @@ const PharmacyDetail = () => {
                               handleDeleteFile(license.id, "certification")
                             }
                             alt="Delete"
-                            className="w-4 h-4"
+                            className="w-3 h-3 sm:w-4 sm:h-4"
                           />
                         </button>
                       </div>

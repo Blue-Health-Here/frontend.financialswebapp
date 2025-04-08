@@ -3,11 +3,16 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> { }
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+    Icon?: React.ComponentType<{ className?: string }>;
+    onIconClick?: () => void; 
+   }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type,Icon, onIconClick, ...props }, ref) => {
     return (
+      <div className="relative">
+
       <input
         type={type}
         className={cn(
@@ -16,7 +21,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         ref={ref}
         {...props}
-      />
+        />
+        {Icon && (
+              <span 
+              onClick={onIconClick}
+              className="h-5 w-5 absolute right-3 top-[12.8px] text-gray-500 cursor-pointer">
+                  <Icon />
+              </span>
+          )}
+        </div>
     );
   },
 );

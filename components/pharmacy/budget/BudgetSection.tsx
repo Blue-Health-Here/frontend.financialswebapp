@@ -64,7 +64,6 @@ const BudgetSection = () => {
     }, []);
     
     useEffect(() => {
-        console.log("pharmacyExpenseStats", pharmacyExpenseStats);
         if (pharmacyExpenseStats?.length > 0) {
             setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));
         } else {
@@ -85,6 +84,18 @@ const BudgetSection = () => {
     const handleDeleteExpense = (id: string) => {
         deletePharmacyExpense(dispatch, id);
     };
+      useEffect(() => {
+        if (isAddExpense) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+    
+        return () => {
+          document.body.style.overflow = "";
+        };
+      }, [isAddExpense]);
+    
     
     return (
         <>
