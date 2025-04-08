@@ -50,9 +50,9 @@ const CoursesPharmacy = () => {
                      key={index}
                      title={course.title}
                      description={course.description}
-                     onDownload={() => {
-                       console.log("Downloading", course.title);
-                     }}
+                     link={course.link}
+                     file_url={course.file_url}
+                     filename={course.filename}
                    />
                 )) : (
                     <TextMessage text="Courses not found." />
