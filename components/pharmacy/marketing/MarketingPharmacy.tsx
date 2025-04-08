@@ -4,14 +4,25 @@ import { Input } from "../../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { IoSearch } from "react-icons/io5";
-import MarketingInfo from "./MarketingInfo";
-
+import { useEffect, useRef, useState } from "react";
+import { fetchAllPharmacyMarketingMaterials } from "@/services/pharmacyServices";
+import { pharmacyMarketingProps } from "@/utils/types";
+import TextMessage from "@/components/common/TextMessage";
+import PharmacyInfoCrad from "@/components/common/PharmacyInfoCrad";
 
 
 const MarketingPharmacy = () => {
-    const { isAddCourse } = useSelector((state: RootState) => state.course);
+    const { marketingMaterials } = useSelector((state: RootState) => state.pharmacyMarketing);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
-
+    const isFetched = useRef(false);
+    
+    useEffect(() => {
+        if (!isFetched.current) {
+            isFetched.current = true;
+        fetchAllPharmacyMarketingMaterials(dispatch).finally(() => setLoading(false));
+        }
+    }, [dispatch]);
 
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -28,12 +39,21 @@ const MarketingPharmacy = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <MarketingInfo/>
-                <MarketingInfo/>
-                <MarketingInfo/>
-                <MarketingInfo/>
-                <MarketingInfo/>
-                <MarketingInfo/>
+                {loading ? (
+                    <TextMessage text="Loading courses..." />
+                ):
+                (marketingMaterials.length > 0 ? marketingMaterials.map((course: pharmacyMarketingProps, index: number) => (
+                    <PharmacyInfoCrad
+                     key={index}
+                     title={course.title}
+                     description={course.description}
+                     link={course.link}
+                     file_url={course.file_url}
+                     filename={course.filename}
+                   />
+                )) : (
+                    <TextMessage text="Courses not found." />
+                ))}
             </div>
             
         </div>

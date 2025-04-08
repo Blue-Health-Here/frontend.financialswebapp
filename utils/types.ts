@@ -149,7 +149,32 @@ export interface ExpenseChartProps {
     ExpenseData: Expense[];
 }
 
+export type pharmacyCourseProps = {
+    course_id: string;
+    description: string;
+    file_url: string | null;
+    filename: string;
+    link: string | null;
+    status: string;
+    title: string;
+};
+export type pharmacyMarketingProps = {
+    marketing_id: string;
+    description: string;
+    file_url: string | null;
+    filename: string;
+    link: string | null;
+    status: string;
+    title: string;
+};
 export type pharmacyDashboardStats = {
     assigned_courses: number | string;
     monthly_expense: number | string;
 };
+
+export interface FileDownloadFieldProps {
+    title?: string;
+    className?: string;
+    parentClassName?: string;
+    iconcolor?: string;
+}
