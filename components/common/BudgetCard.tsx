@@ -77,7 +77,7 @@ export const BudgetCard = ({
         </div>
         <div className="flex justify-between">
           <span className="text-xs sm:text-sm">Amount</span>
-          <span className="text-xs sm:text-sm  text-grey">{budget.amount}</span>
+          <span className="text-xs sm:text-sm  text-grey">{budget.amount.toLocaleString()}</span>
         </div>
       </div>
       {isCloseModal && (

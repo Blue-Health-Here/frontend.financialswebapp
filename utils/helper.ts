@@ -12,9 +12,9 @@ export const assignStatsValues = (data: Stats) => {
 
 export const assignAdminBudgetStatsValues = (data: AdminBudgetStatsValues) => {
     return [
-        { value: data.monthly_expense, label: "Total monthly Expense", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
-        { value: data.total_revenue, label: "Revenue", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
-        { value: data.total_profit, label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
+        { value: data.monthly_expense?.toLocaleString(), label: "Total monthly Expense", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
+        { value: data.total_revenue?.toLocaleString(), label: "Revenue", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
+        { value: data.total_profit?.toLocaleString(), label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
     ];
 }
 
@@ -24,7 +24,7 @@ export const assignPharmacyStatsValues = (data: pharmacyDashboardStats) => {
             case "Courses":
                 return { ...item, value: `${data.assigned_courses}` };
             case "Total monthly expense":
-                return { ...item, value: `$${data.monthly_expense}` };
+                return { ...item, value: `$${Number(data.monthly_expense).toLocaleString()}` };
             default:
                 return item; 
         }

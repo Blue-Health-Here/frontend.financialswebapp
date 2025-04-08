@@ -27,7 +27,7 @@ export const PharmacyCard: React.FC<{ pharmacy: PharmacyCardProps }> = ({
               Total Expense
             </p>
             <span className="text-xs sm:text-sm md:text-[16px] font-medium">
-              ${pharmacy.expense}
+              ${pharmacy.expense.toLocaleString()}
             </span>
           </div>
 
