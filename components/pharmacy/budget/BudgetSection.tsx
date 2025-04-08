@@ -64,11 +64,9 @@ const BudgetSection = () => {
     }, []);
     
     useEffect(() => {
-        if (pharmacyExpenseStats?.length > 0) {
+        if (pharmacyExpenseStats) {
             setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));
-        } else {
-            setStatsUpdatedData(budgetStatsData);
-        }
+        } 
     }, [pharmacyExpenseStats]);
 
     const handleEditExpense = (data: PharmacyExpenseProps) => {
@@ -95,7 +93,7 @@ const BudgetSection = () => {
           document.body.style.overflow = "";
         };
       }, [isAddExpense]);
-    
+    console.log("expenseData", statsUpdatedData);
     
     return (
         <>

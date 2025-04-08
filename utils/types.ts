@@ -129,7 +129,7 @@ export interface AdminExpenseProps {
 };
 
 export interface BudgetStatsCardProps {
-    value?: number;
+    value?: number | string;
     icon: string;
     label?: string;
     color?: string;
