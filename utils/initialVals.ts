@@ -44,3 +44,8 @@ export const addNewCategoryInitialVals = {
     category_id: "",
     revenue:0
 }
+
+export const addNewPaymentReconciliationInitialVals = {
+    file_835: "",
+    file_pdf: "",
+  };

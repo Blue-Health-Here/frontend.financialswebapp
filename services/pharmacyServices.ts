@@ -373,3 +373,30 @@ export const fetchAllPharmacyMarketingMaterials = async (dispatch: AppDispatch) 
         dispatch(setIsLoading(false));
     }
 };
+
+
+
+/**
+ * create new payment reconciliation.
+ */
+
+export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/payment-reconciliation", data, {
+           
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Payment Reconciliation uploaded successfully!");
+            return { ...response?.data };
+        }else { 
+            toast.error("Failed to upload Payment Reconciliation.");        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};

@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import FileUploadField from '@/components/common/form/FileUploadField'
 import SelectField from '@/components/common/form/SelectField'
 import { SubmitButton } from '@/components/submit-button'
@@ -7,27 +7,51 @@ import { Form, Formik } from 'formik'
 import { IoSearch } from "react-icons/io5";
 import { Input } from '@/components/ui/input'
 import { tableData } from '@/utils/constants'
+import { addNewPaymentReconciliationInitialVals } from '@/utils/initialVals'
+import toast from 'react-hot-toast'
+import { createNewPaymentReconciliation } from '@/services/pharmacyServices'
+import { useDispatch } from 'react-redux'
+import { addNewPaymentReconciliationInitialchema } from '@/utils/validationSchema'
 
 const DocumentVerification = () => {
+
+      const dispatch = useDispatch()
+
+      const handleSubmit = async (values: typeof addNewPaymentReconciliationInitialVals) => {
+          console.log(values);   
+          const payload: any = {
+            file_835: values.file_835,
+            file_pdf: values.file_pdf,
+        };
+         
+        try {
+            console.log("Form submitted successfully", payload);
+            await createNewPaymentReconciliation(dispatch, payload);
+          }  catch (error: any) {
+            toast.error(error?.message || "Something went wrong!!");
+        }
+        };
+   
   return (
     <>
       <div className="px-6 py-8 bg-white shadow-lg rounded-lg">
         <h1 className='text-lg md:text-2xl'>Document Verification</h1>
         <Formik
-          initialValues={{ document835: null, bankStatement: null }}
-          onSubmit={(values) => {}}
-        >
+          initialValues={addNewPaymentReconciliationInitialVals}
+          onSubmit={handleSubmit}
+          validationSchema={addNewPaymentReconciliationInitialchema}
+          >
           <Form className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <FileUploadField
-              name="document835"
-              id="document835"
+              name="file_835"
+              id="file_835"
               title="Upload 835 File"
               description="Maximum size allowed is 25MB. Supported formats: pdf"
               variant="dropzone"
             />
             <FileUploadField
-              name="bankStatement"
-              id="bankStatement"
+              name="file_pdf"
+              id="file_pdf"
               title="Upload Bank Statement"
               description="Maximum size allowed is 25MB. Supported formats: pdf"
               variant="dropzone"
@@ -41,14 +65,10 @@ const DocumentVerification = () => {
         </Formik>
       </div>
 
-      {/* History Table */}
       <div className="mt-6 py-8 bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="pb-6 px-6">
-          {/* Title & Filters (Row on Desktop, Column on Small Screens) */}
           <div className="flex flex-col sm:flex-col md:flex-row md:items-center md:justify-between gap-4">
             <h1 className="text-lg md:text-2xl">History</h1>
-
-            {/* Filters (Move Below History on Small Screens Only) */}
             <Formik initialValues={{ type: "", category: "", search: "" }} onSubmit={() => {}}>
               {({ isSubmitting }) => (
                 <Form className="flex flex-col sm:flex-row md:flex-row gap-2 sm:gap-4 w-full md:w-auto">
