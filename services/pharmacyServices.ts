@@ -1,6 +1,7 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
 import { setPharmacyCourses } from "@/store/features/pharmacy/course/pharmacyCourseSlice";
+import { setDocumentVerificationDetails } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { setPharmacyMarketingMaterials } from "@/store/features/pharmacy/marketing/pharmacyMarketingSlice";
 import { AppDispatch } from "@/store/store";
@@ -389,11 +390,11 @@ export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data
                 "Content-Type": "multipart/form-data",
             },
         });
-        if (response?.data?.success) {
+        if (response?.data?.results) {
+            dispatch(setDocumentVerificationDetails(response?.data?.results));
             toast.success("Payment Reconciliation uploaded successfully!");
-            return { ...response?.data };
-        }else { 
-            toast.error("Failed to upload Payment Reconciliation.");        }
+            console.log("Payment Reconciliation uploaded successfully!", response);
+                }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
     } finally {

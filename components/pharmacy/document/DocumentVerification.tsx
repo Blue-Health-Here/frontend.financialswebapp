@@ -10,11 +10,13 @@ import { tableData } from '@/utils/constants'
 import { addNewPaymentReconciliationInitialVals } from '@/utils/initialVals'
 import toast from 'react-hot-toast'
 import { createNewPaymentReconciliation } from '@/services/pharmacyServices'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNewPaymentReconciliationInitialchema } from '@/utils/validationSchema'
+import { RootState } from '@/store/store'
 
 const DocumentVerification = () => {
-
+      const { DocumentVerificationDetails } = useSelector((state: RootState) => state.DocumentVerification);
+      console.log("DocumentVerificationDetails",DocumentVerificationDetails);
       const dispatch = useDispatch()
 
       const handleSubmit = async (values: typeof addNewPaymentReconciliationInitialVals) => {
