@@ -180,9 +180,13 @@ export interface FileDownloadFieldProps {
 }
 
 export interface PaymentReconciliationProps {
-payer_name: string;
-payment_date: string; 
-expected_total: number;
-bank_paid: number;
-status: "Cleared" | "Uncleared";
+    id: string;
+    payer_name: string;
+    payment_date: string; 
+    file_835: string;
+    file_pdf: string;
+    bank_amt: number;
+    "835_amt": number;
+    created_at: string;
+    status: string;
 }

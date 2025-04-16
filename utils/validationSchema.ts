@@ -85,13 +85,27 @@ export const addNewPaymentReconciliationInitialchema = Yup.object({
       .test('fileFormat', 'Only .835 file format is allowed', (value) => {
         if (!value) return false;
         const file = value as File;
-        return file.name.toLowerCase().endsWith('.835');
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        return extension === '835';
+      })
+      .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        return file.size <= 25 * 1024 * 1024;
       }),
+  
     file_pdf: Yup.mixed()
       .required('Bank Statement is required')
       .test('fileFormat', 'Only .pdf file format is allowed', (value) => {
         if (!value) return false;
         const file = value as File;
-        return file.name.toLowerCase().endsWith('.pdf');
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        return extension === 'pdf';
+      })
+      .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        return file.size <= 25 * 1024 * 1024;
       }),
   });
+  

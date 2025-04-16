@@ -389,10 +389,34 @@ export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data
             },
         });
         if (response?.data?.success) {
+            await fetchPaymentReconciliation(dispatch);
             toast.success("Payment Reconciliation uploaded successfully!");
         }
     } catch (error: any) {
         toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * Fetch pharmacy stats and update Redux store.
+ */
+export const fetchPaymentReconciliation = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/payment-reconciliation");
+        if (response.status === 200) {
+            dispatch(setDocVerificationDetails(response.data));
+            toast.success("Payment Reconciliation History fetched successfully!");
+        }
+    } catch (error: any) {
+        if (error?.status === 404) {
+            toast.success(error?.response?.data?.detail)
+            dispatch(setexpenseData([]));
+        } else {
+            toast.error(error?.message || "Something went wrong");
+        }
     } finally {
         dispatch(setIsLoading(false));
     }

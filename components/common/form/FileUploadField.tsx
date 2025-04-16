@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 import { Label } from "../../ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import FilePreview from "../FilePreview";
@@ -7,6 +7,8 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { UploadedFileProps } from "@/utils/types";
 import { useDispatch } from "react-redux";
 import { deleteUploadedFile } from "@/services/deleteFile";
+import { addNewPaymentReconciliationInitialchema } from "@/utils/validationSchema";
+import * as Yup from "yup";
 
 interface FileUploadFieldProps {
     module?: string;
@@ -41,11 +43,17 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
     const dispatch = useDispatch();
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (handleFileUpload) {
-            handleFileUpload(event, helpers.setValue);
-        } else {
-            const files = Array.from(event.currentTarget.files || []);
+    
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(event.currentTarget.files || []);
+        const file = isMultiSelect ? files : files[0];
+
+        helpers.setTouched(true, true);
+
+        try {
+            const schemaField: any = await Yup.reach(addNewPaymentReconciliationInitialchema, name);
+            await schemaField.validate(file);
+
             if (isMultiSelect) {
                 setPreview((prev) => [...prev, ...files]);
                 helpers.setValue([...(field.value || []), ...files]);
@@ -53,14 +61,18 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 setPreview(files.length > 0 ? [files[0]] : []);
                 helpers.setValue(files.length > 0 ? files[0] : null);
             }
+        } catch (err: any) {
+            setPreview([]);
+            helpers.setValue(null);
+            helpers.setError(err.message);
         }
     };
 
-      useEffect(() => {
+    useEffect(() => {
         if (!field.value) {
-          setPreview([]);
+            setPreview([]);
         }
-      }, [field.value]);
+    }, [field.value]);
       
     const handleDelete = async (index?: number) => {
         if (uploadedFile && module) {

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import FileUploadField from '@/components/common/form/FileUploadField'
 import SelectField from '@/components/common/form/SelectField'
 import { SubmitButton } from '@/components/submit-button'
@@ -9,22 +9,28 @@ import { IoSearch } from "react-icons/io5";
 import { Input } from '@/components/ui/input'
 import { uploadDocVerificationInitialVals } from '@/utils/initialVals'
 import toast from 'react-hot-toast'
-import { createNewPaymentReconciliation } from '@/services/pharmacyServices'
+import { createNewPaymentReconciliation, fetchPaymentReconciliation } from '@/services/pharmacyServices'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNewPaymentReconciliationInitialchema } from '@/utils/validationSchema'
 import { RootState } from '@/store/store'
 import { PaymentReconciliationProps } from '@/utils/types'
+import { setIsLoading } from '@/store/features/global/globalSlice'
 
 const DocumentVerification = () => {
   const { docVerificationDetails = [] } = useSelector((state: RootState) => state.DocumentVerification);
   const [initialVals, setInitialVals] = useState(uploadDocVerificationInitialVals)
   const [isClient, setIsClient] = useState(false)
   const dispatch = useDispatch()
+  const isFetched = useRef(false);
 
   // Avoid hydration mismatch by only rendering on client side
   useEffect(() => {
     setIsClient(true)
-  }, [])
+    if (!isFetched.current) {
+      fetchPaymentReconciliation(dispatch).finally(() => setIsLoading(false))
+      isFetched.current = true;
+    };
+  }, []);
 
   const handleSubmit = async (values: typeof initialVals, {resetForm}: {resetForm: () => void}) => {
     // console.log(values);
@@ -122,13 +128,14 @@ const DocumentVerification = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
+          <thead>
               <tr className="bg-[#F3F2F7] uppercase text-center text-themeGrey text-xs md:text-sm border-b border-[#E9ECEF]">
                 <th className="p-4">Serial No</th>
-                <th className="p-4">Payer Name</th>
+                <th className="p-4">835 File</th>
+                <th className="p-4">835 AMT</th>
+                <th className="p-4">Bank Statement</th>
+                <th className="p-4">Bank AMT</th>
                 <th className="p-4">Payment Date</th>
-                <th className="p-4">Expected Total</th>
-                <th className="p-4">Bank Paid</th>
                 <th className="p-4">Status</th>
               </tr>
             </thead>
@@ -138,9 +145,10 @@ const DocumentVerification = () => {
                 docVerificationDetails.map((item: PaymentReconciliationProps, index: number) => (
                   <tr key={index} className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
                     <td className="p-4 text-grey font-medium">#{index + 1}</td>
-                    <td className="p-4 text-grey">{item.payer_name}</td>
-                    <td className="p-4 font-medium">${item.expected_total.toFixed(2)}</td>
-                    <td className="p-4 text-grey">${item.bank_paid.toFixed(2)}</td>
+                    <td className="p-4 text-grey">{item.file_835}</td>
+                    <td className="p-4 font-medium">${item['835_amt']}</td>
+                    <td className="p-4 text-grey">${item.file_pdf}</td>
+                    <td className="p-4 text-grey">${item.bank_amt}</td>
                     <td className="p-4 font-medium">{item.payment_date}</td>
                     <td className="p-4">
                       <SubmitButton
