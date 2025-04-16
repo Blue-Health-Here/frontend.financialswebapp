@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import FileUploadField from '@/components/common/form/FileUploadField'
 import SelectField from '@/components/common/form/SelectField'
 import { SubmitButton } from '@/components/submit-button'
@@ -21,12 +21,16 @@ const DocumentVerification = () => {
   const [initialVals, setInitialVals] = useState(uploadDocVerificationInitialVals)
   const [isClient, setIsClient] = useState(false)
   const dispatch = useDispatch()
+  const isFetched = useRef(false);
 
   // Avoid hydration mismatch by only rendering on client side
   useEffect(() => {
     setIsClient(true)
-    fetchPaymentReconciliation(dispatch).finally(() => setIsLoading(false))
-  }, [])
+    if (!isFetched.current) {
+      fetchPaymentReconciliation(dispatch).finally(() => setIsLoading(false))
+      isFetched.current = true;
+    };
+  }, []);
 
   const handleSubmit = async (values: typeof initialVals, {resetForm}: {resetForm: () => void}) => {
     // console.log(values);
