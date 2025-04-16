@@ -13,6 +13,7 @@ import { createNewPaymentReconciliation } from '@/services/pharmacyServices'
 import { useDispatch, useSelector } from 'react-redux'
 import { addNewPaymentReconciliationInitialchema } from '@/utils/validationSchema'
 import { RootState } from '@/store/store'
+import { PaymentReconciliationProps } from '@/utils/types'
 
 const DocumentVerification = () => {
       const { DocumentVerificationDetails } = useSelector((state: RootState) => state.DocumentVerification);
@@ -109,40 +110,44 @@ const DocumentVerification = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-[#F3F2F7] uppercase text-center text-themeGrey text-xs md:text-sm border-b border-[#E9ECEF]">
-                <th className="p-4">Serial No</th>
-                <th className="p-4">835 File</th>
-                <th className="p-4">835 AMT</th>
-                <th className="p-4">Bank Statement</th>
-                <th className="p-4">Bank AMT</th>
-                <th className="p-4">Date & Time</th>
-                <th className="p-4">Status</th>
-              </tr>
-            </thead>
+          <thead>
+            <tr className="bg-[#F3F2F7] uppercase text-center text-themeGrey text-xs md:text-sm border-b border-[#E9ECEF]">
+              <th className="p-4">Serial No</th>
+              <th className="p-4">Payer Name</th>
+              <th className="p-4">Payment Date</th>
+              <th className="p-4">Expected Total</th> 
+              <th className="p-4">Bank Paid</th>
+              <th className="p-4">Status</th>
+            </tr>
+          </thead>
 
             <tbody>
-              {tableData.map((row, i) => (
-                <tr key={i} className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
-                  <td className="p-4 text-grey font-medium">#{row.serial}</td>
-                  <td className="p-4 text-grey">{row.file}</td>
-                  <td className="p-4 font-medium">${row.amt}</td>
-                  <td className="p-4 text-grey">{row.bankStatement}</td>
-                  <td className="p-4 font-medium">{row.bankAmt}</td>
-                  <td className="p-4 text-grey">{row.time}</td>
-                  <td className="p-4">
-                    <SubmitButton
-                      className={`rounded-full text-xs transition-all duration-200 
-                      ${row.status === "Cleared"
-                          ? "bg-[#28C76F1F] text-[#28C76F] hover:bg-[#28c76f3a]"
-                          : "bg-[#ff7d031f] text-[#FF9F43] hover:bg-[#ff7d0340]"
-                        }`}
-                    >
-                      {row.status}
-                    </SubmitButton>
-                  </td>
+              {DocumentVerificationDetails && DocumentVerificationDetails.length > 0 ? (
+                DocumentVerificationDetails.map((item: PaymentReconciliationProps, index:number) => (
+                  <tr key={index} className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
+                    <td className="p-4 text-grey font-medium">#{index+1}</td>
+                    <td className="p-4 text-grey">{item.payer_name}</td>
+                    <td className="p-4 font-medium">${item.expected_total.toFixed(2)}</td>
+                    <td className="p-4 text-grey">${item.bank_paid.toFixed(2)}</td>
+                    <td className="p-4 font-medium">{item.payment_date}</td>
+                    <td className="p-4">
+                      <SubmitButton
+                        className={`rounded-full text-xs transition-all duration-200 
+                        ${item.status === "Cleared"
+                            ? "bg-[#28C76F1F] text-[#28C76F] hover:bg-[#28c76f3a]"
+                            : "bg-[#ff7d031f] text-[#FF9F43] hover:bg-[#ff7d0340]"
+                          }`}
+                      >
+                        {item.status}
+                      </SubmitButton>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="p-4 text-center">No data available</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

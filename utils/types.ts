@@ -178,3 +178,11 @@ export interface FileDownloadFieldProps {
     parentClassName?: string;
     iconcolor?: string;
 }
+
+export interface PaymentReconciliationProps {
+payer_name: string;
+payment_date: string; 
+expected_total: number;
+bank_paid: number;
+status: "Cleared" | "Uncleared";
+}
