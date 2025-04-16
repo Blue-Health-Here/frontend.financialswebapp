@@ -188,4 +188,5 @@ export interface PaymentReconciliationProps {
     bank_amt: number;
     "835_amt": number;
     created_at: string;
+    status: string;
 }

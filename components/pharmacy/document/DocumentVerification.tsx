@@ -132,7 +132,7 @@ const DocumentVerification = () => {
                 <th className="p-4">Bank Statement</th>
                 <th className="p-4">Bank AMT</th>
                 <th className="p-4">Payment Date</th>
-                <th className="p-4">Payer Name</th>
+                <th className="p-4">Status</th>
               </tr>
             </thead>
 
@@ -146,9 +146,8 @@ const DocumentVerification = () => {
                     <td className="p-4 text-grey">${item.file_pdf}</td>
                     <td className="p-4 text-grey">${item.bank_amt}</td>
                     <td className="p-4 font-medium">{item.payment_date}</td>
-                    <td className="p-4 font-medium">{item.payer_name}</td>
                     <td className="p-4">
-                      {/* <SubmitButton
+                      <SubmitButton
                         className={`rounded-full text-xs transition-all duration-200 
                         ${item.status === "Cleared"
                             ? "bg-[#28C76F1F] text-[#28C76F] hover:bg-[#28c76f3a]"
@@ -156,7 +155,7 @@ const DocumentVerification = () => {
                           }`}
                       >
                         {item.status}
-                      </SubmitButton> */}
+                      </SubmitButton>
                     </td>
                   </tr>
                 ))
