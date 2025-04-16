@@ -388,8 +388,7 @@ export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data
                 "Content-Type": "multipart/form-data",
             },
         });
-        if (response?.data?.results) {
-            dispatch(setDocVerificationDetails(response?.data?.results));
+        if (response?.data?.success) {
             toast.success("Payment Reconciliation uploaded successfully!");
         }
     } catch (error: any) {

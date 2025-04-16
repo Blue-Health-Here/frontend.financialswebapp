@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from 'react'
 import FileUploadField from '@/components/common/form/FileUploadField'
 import SelectField from '@/components/common/form/SelectField'
@@ -6,7 +7,6 @@ import { SubmitButton } from '@/components/submit-button'
 import { Form, Formik } from 'formik'
 import { IoSearch } from "react-icons/io5";
 import { Input } from '@/components/ui/input'
-import { tableData } from '@/utils/constants'
 import { uploadDocVerificationInitialVals } from '@/utils/initialVals'
 import toast from 'react-hot-toast'
 import { createNewPaymentReconciliation } from '@/services/pharmacyServices'
@@ -26,8 +26,8 @@ const DocumentVerification = () => {
     setIsClient(true)
   }, [])
 
-  const handleSubmit = async (values: typeof initialVals) => {
-    console.log(values);
+  const handleSubmit = async (values: typeof initialVals, {resetForm}: {resetForm: () => void}) => {
+    // console.log(values);
     const payload: any = {
       file_835: values.file_835,
       file_pdf: values.file_pdf,
@@ -36,6 +36,7 @@ const DocumentVerification = () => {
     try {
       await createNewPaymentReconciliation(dispatch, payload);
       setInitialVals(uploadDocVerificationInitialVals);
+      resetForm();
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong!!");
     }

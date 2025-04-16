@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useField, useFormikContext } from "formik";
+import React, { useEffect, useState } from "react";
+import { useField } from "formik";
 import { Label } from "../../ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import FilePreview from "../FilePreview";
@@ -56,6 +56,12 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         }
     };
 
+      useEffect(() => {
+        if (!field.value) {
+          setPreview([]);
+        }
+      }, [field.value]);
+      
     const handleDelete = async (index?: number) => {
         if (uploadedFile && module) {
             await deleteUploadedFile(dispatch, module, uploadedFile.filename);
