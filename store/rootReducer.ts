@@ -15,7 +15,9 @@ import adminPharmacyReducer from "./features/admin/pharmacy/adminPharmacySlice";
 import pharmacyExpenseReducer from "./features/pharmacy/expense/pharmacyExpenseSlice";
 import operationsExpenseReducer from "./features/pharmacy/operations/operationsExpenseSlice"
 import pharmacyOnboardingExpenseReducer from "./features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice"
-
+import pharmacyCourseReducer from "./features/pharmacy/course/pharmacyCourseSlice"
+import pharmacyMarketingReducer from "./features/pharmacy/marketing/pharmacyMarketingSlice"
+import pharmacyDocumentVerificationReducer from "./features/pharmacy/document/DocumentVerificationSlice"
 const rootReducer = combineReducers({
     auth: authReducer,
     global: globalReducer,
@@ -32,7 +34,10 @@ const rootReducer = combineReducers({
     // Pharmacy Reducers
     pharmacyExpense: pharmacyExpenseReducer,
     operations: operationsExpenseReducer,
-    onboarding: pharmacyOnboardingExpenseReducer
+    onboarding: pharmacyOnboardingExpenseReducer,
+    pharmacyCourse: pharmacyCourseReducer,
+    pharmacyMarketing: pharmacyMarketingReducer,
+    DocumentVerification: pharmacyDocumentVerificationReducer,
 
 });
 

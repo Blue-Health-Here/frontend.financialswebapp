@@ -69,3 +69,43 @@ export const addNewMarketingMaterialsValidationSchema = Yup.object().shape({
 export const addNewCategoryValidationSchema = Yup.object().shape({
     name: Yup.string().required("Category Name is required"),
 });
+
+
+export const addNewPharmacyExpenseValidationSchema = Yup.object().shape({
+    title: Yup.string().required("Expense title is required"),
+    amount: Yup.number().typeError("Expense amount must be a number").required("Expense amount is required"),
+    expense_date: Yup.string().required("Date is required"),
+    category_id: Yup.string().required("Expense category selection is required"),
+    revenue:  Yup.number().typeError("Revenue must be a number").required("Revenue is required"),
+});
+
+export const addNewPaymentReconciliationInitialchema = Yup.object({
+    file_835: Yup.mixed()
+      .required('835 File is required')
+      .test('fileFormat', 'Only .835 file format is allowed', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        return extension === '835';
+      })
+      .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        return file.size <= 25 * 1024 * 1024;
+      }),
+  
+    file_pdf: Yup.mixed()
+      .required('Bank Statement is required')
+      .test('fileFormat', 'Only .pdf file format is allowed', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        const extension = file.name.split('.').pop()?.toLowerCase();
+        return extension === 'pdf';
+      })
+      .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        return file.size <= 25 * 1024 * 1024;
+      }),
+  });
+  

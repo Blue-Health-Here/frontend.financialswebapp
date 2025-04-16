@@ -3,38 +3,25 @@ import { useEffect, useRef } from "react";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle } from "chart.js";
 import { Line } from "react-chartjs-2";
 import customSubtitlePlugin from "./customSubtitlePlugin";
+import { ExpenseChartProps } from "@/utils/types";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle, customSubtitlePlugin);
 
-const ExpenseChart = () => {
+
+const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
     const chartRef = useRef<ChartJS<"line"> | null>(null);
-
-    useEffect(() => {
-        if (chartRef.current) {
-            const chart = chartRef.current;
-            const ctx = chart.ctx;
-
-            if (ctx) {
-                const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
-                gradient.addColorStop(0, "#93C5FD");
-                gradient.addColorStop(0.5, "#1E3A8A");
-                gradient.addColorStop(1, "#1E3A8A");
-
-                chart.data.datasets[0].borderColor = gradient;
-                chart.data.datasets[0].borderWidth = 2;
-                chart.data.datasets[0].pointRadius = 0;
-                chart.data.datasets[0].backgroundColor = "transparent";
-                chart.update();
-            }
-        }
-    }, []);
+    const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
+    const currentMonthExpense =
+        Array.isArray(ExpenseData) && ExpenseData.length > 0
+            ? ExpenseData.find((item) => item.month === currentMonth)?.total_expense || 0
+            : 0;
 
     const data = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: ExpenseData?.map((item) => item.month),
         datasets: [
             {
                 label: "Expense",
-                data: [15000, 28000, 20000, 35000, 25000, 38000],
+                data: ExpenseData?.map((item) => item.total_expense),
                 tension: 0.4,
                 borderWidth: 3,
                 pointRadius: 0,
@@ -47,6 +34,7 @@ const ExpenseChart = () => {
         maintainAspectRatio: false,
         plugins: {
             legend: { display: false },
+            datalabels: { display: false },
             tooltip: {
                 callbacks: {
                     label: (tooltipItem: { raw: unknown }) => {
@@ -71,7 +59,8 @@ const ExpenseChart = () => {
             },
             subtitle: {
                 display: true,
-                text: '',
+                currentMonth,
+                currentExpense: currentMonthExpense,
                 align: 'center',
                 font: {
                     size: 18,
@@ -87,6 +76,7 @@ const ExpenseChart = () => {
         scales: {
             x: { grid: { display: false } },
             y: {
+                min: 0,
                 grid: { color: "rgba(200, 200, 200, 0.3)" },
                 ticks: {
                     callback: function (value: number) {
@@ -95,11 +85,32 @@ const ExpenseChart = () => {
                 },
             },
         },
+        // Adding the gradient in the beforeDraw hook
+        animation: {
+            onComplete: function () {
+                if (chartRef.current) {
+                    const chart = chartRef.current;
+                    const ctx = chart.ctx;
+                    if (ctx) {
+                        const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+                        gradient.addColorStop(0, "#93C5FD");
+                        gradient.addColorStop(0.5, "#1E3A8A");
+                        gradient.addColorStop(1, "#1E3A8A");
+        
+                        chart.data.datasets[0].borderColor = gradient;
+                        chart.data.datasets[0].borderWidth = 2;
+                        chart.data.datasets[0].pointRadius = 0;
+                        chart.data.datasets[0].backgroundColor = "transparent";
+                        chart.update();
+                    }
+                }
+            },
+        },
     };
 
     return (
         <div className=" w-full p-6 h-60 md:h-full">
-            <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} />
+            <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} height={400}/>
         </div>
     );
 };

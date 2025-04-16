@@ -13,11 +13,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddQuestion, setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
 import EditQuestionModal from "./EditQuestionModal";
+import { useEffect } from "react";
 
 const ChecklistSection = () => {
     const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
     const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isAddQuestion || isEditQuestion) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+      
+        return () => {
+          document.body.style.overflow = "";
+        };
+      }, [isAddQuestion, isEditQuestion]);
 
     const handleAddQuestion = () => {
         dispatch(setIsAddQuestion(true))

@@ -1,12 +1,24 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
-import { pharmacyBudgetDetail } from '@/utils/constants';
 import { BudgetDetailCard } from './BudgetDetailCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { fetchBudgetingList } from '@/services/adminServices';
+import TextMessage from '@/components/common/TextMessage';
+import { BudgetDetailCardProps } from '@/utils/types';
 
 const BudgetSection = () => {
+  const [loading, setLoading] = useState(true);
+  const {pharmacyList} = useSelector((state: RootState) => state.expense)
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+      fetchBudgetingList(dispatch).finally(() => setLoading(false))
+  }, [])
+
   return (
     <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
       <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
@@ -19,9 +31,16 @@ const BudgetSection = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pharmacyBudgetDetail.map((pharmacy: any, index: number) => (
-          <BudgetDetailCard key={pharmacy.id} pharmacy={pharmacy} />
-        ))}
+        {loading ? (
+          <TextMessage text="Loading pharmacies..." />
+              ) : (
+                pharmacyList.length > 0 ?( pharmacyList.map((budget: BudgetDetailCardProps, index: number) => (
+                  <BudgetDetailCard key={index} budget={budget} />
+                      ))
+                ) : (
+                    <TextMessage text="No pharmacies match your search criteria." />
+                )
+            )}
       </div>
     </div>
   )

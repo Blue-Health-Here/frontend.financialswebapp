@@ -1,4 +1,5 @@
-import { Stats } from "./types";
+import { pharmacyDashboardStatsData } from "./constants";
+import { AdminBudgetStatsValues, pharmacyDashboardStats, Stats } from "./types";
 
 export const assignStatsValues = (data: Stats) => {
     return [
@@ -8,3 +9,26 @@ export const assignStatsValues = (data: Stats) => {
         { value: typeof data.tasks_completed === "string" && data.tasks_completed.includes('%') ? data.tasks_completed : `${data.tasks_completed}%`, label: "Total task completed", color: "text-custom-red", icon: "/statistics-task.svg" },
     ];
 }
+
+export const assignAdminBudgetStatsValues = (data: AdminBudgetStatsValues) => {
+    return [
+        { value: data.monthly_expense?.toLocaleString(), label: "Total monthly Expense", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
+        { value: data.total_revenue?.toLocaleString(), label: "Revenue", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
+        { value: data.total_profit?.toLocaleString(), label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
+    ];
+}
+
+export const assignPharmacyStatsValues = (data: pharmacyDashboardStats) => {
+    return pharmacyDashboardStatsData.map((item) => {
+        switch (item.label) {
+            case "Courses":
+                return { ...item, value: `${data.assigned_courses}` };
+            case "Total monthly expense":
+                return { ...item, value: `$${Number(data.monthly_expense).toLocaleString()}` };
+            default:
+                return item; 
+        }
+    });
+};
+
+

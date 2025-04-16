@@ -8,10 +8,14 @@ const customSubtitlePlugin = {
         if (subtitleOptions?.display) {
             ctx.save();
 
-            // Define the parts of the subtitle and their corresponding colors
+            // Get dynamic values from options
+            const currentMonth = subtitleOptions.currentMonth || "N/A";
+            const currentExpense = subtitleOptions.currentExpense || 0;
+
+            // Define the subtitle lines
             const lines = [
-                { text: 'This Month', color: '#6E6B7B' },
-                { text: '$86,589', color: '#1E3A8A' }
+                { text: `This Month (${currentMonth})`, color: "#6E6B7B" },
+                { text: `$${currentExpense.toLocaleString()}`, color: "#1E3A8A" }
             ];
 
             // Set common font properties

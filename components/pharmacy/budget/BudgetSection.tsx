@@ -1,7 +1,7 @@
 "use client"
 
-import React from 'react'
-import { budgetData, budgetStatsData, expenseCategories, fullDatasets, fullLabels, pharmacyData } from "@/utils/constants";
+import React, { useEffect, useState } from 'react'
+import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -15,50 +15,92 @@ import FileDownloadField from '@/components/common/form/FileDownloadField';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import AddExpenseModal from './AddExpenseModal';
-import { setIsAddExpense } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
+import { setExpenseDetails, setIsAddExpense, setLoading } from '@/store/features/pharmacy/expense/pharmacyExpenseSlice';
+import { deletePharmacyExpense, fetchPharmacyExpense, fetchPharmacyExpenseStats } from '@/services/pharmacyServices';
+import TextMessage from '@/components/common/TextMessage';
+import { BudgetStatsCardProps, PharmacyExpenseProps } from '@/utils/types';
+import { assignAdminBudgetStatsValues } from '@/utils/helper';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch()
-    const { isAddExpense } = useSelector((state: RootState) => state.pharmacyExpense);
+    const { isAddExpense, expenseData, loading, pharmacyExpenseStats } = useSelector((state: RootState) => state.pharmacyExpense);
+    const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
     
-      let labels, datasets;
+    let labels, datasets;
     
-      if (width > 1400) {
+    if (width > 1400) {
         labels = fullLabels;
         datasets = fullDatasets;
-      } else if (width > 1200) {
+    } else if (width > 1200) {
         labels = fullLabels.slice(0, 9);
         datasets = {
-          Utility: fullDatasets.Utility.slice(0, 9),
-          Salary: fullDatasets.Salary.slice(0, 9),
-          Rent: fullDatasets.Rent.slice(0, 9),
-          Others: fullDatasets.Others.slice(0, 9),
+            Utility: fullDatasets.Utility.slice(0, 9),
+            Salary: fullDatasets.Salary.slice(0, 9),
+            Rent: fullDatasets.Rent.slice(0, 9),
+            Others: fullDatasets.Others.slice(0, 9),
         };
-      } else if (width > 600) {
+    } else if (width > 600) {
         labels = fullLabels.slice(0, 6);
         datasets = {
-          Utility: fullDatasets.Utility.slice(0, 6),
-          Salary: fullDatasets.Salary.slice(0, 6),
-          Rent: fullDatasets.Rent.slice(0, 6),
-          Others: fullDatasets.Others.slice(0, 6),
+            Utility: fullDatasets.Utility.slice(0, 6),
+            Salary: fullDatasets.Salary.slice(0, 6),
+            Rent: fullDatasets.Rent.slice(0, 6),
+            Others: fullDatasets.Others.slice(0, 6),
         };
-      } else {
+    } else {
         labels = fullLabels.slice(0, 5);
         datasets = {
-          Utility: fullDatasets.Utility.slice(0, 5),
-          Salary: fullDatasets.Salary.slice(0, 5),
-          Rent: fullDatasets.Rent.slice(0, 3),
-          Others: fullDatasets.Others.slice(0, 5),
+            Utility: fullDatasets.Utility.slice(0, 5),
+            Salary: fullDatasets.Salary.slice(0, 5),
+            Rent: fullDatasets.Rent.slice(0, 3),
+            Others: fullDatasets.Others.slice(0, 5),
         };
-      }
+    }
+    
+    useEffect(() => {
+        fetchPharmacyExpense(dispatch).finally(() => setLoading(false));
+        fetchPharmacyExpenseStats(dispatch).finally(() => setLoading(false));
+    }, []);
+    
+    useEffect(() => {
+        if (pharmacyExpenseStats) {
+            setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));
+        } 
+    }, [pharmacyExpenseStats]);
+
+    const handleEditExpense = (data: PharmacyExpenseProps) => {
+        dispatch(setIsAddExpense(true));
+        dispatch(setExpenseDetails(data));
+    };
+
+    const handleAddExpense = () => {
+        dispatch(setIsAddExpense(true));
+        dispatch(setExpenseDetails(null));
+    };
+
+    const handleDeleteExpense = (id: string) => {
+        deletePharmacyExpense(dispatch, id);
+    };
+      useEffect(() => {
+        if (isAddExpense) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+    
+        return () => {
+          document.body.style.overflow = "";
+        };
+      }, [isAddExpense]);
+    console.log("expenseData", statsUpdatedData);
     
     return (
         <>
             <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6">
                 <div className="h-full col-span-1 md:col-span-1 lg:col-span-5 xl:col-span-4 flex justify-between flex-col gap-6">
-                    {budgetStatsData.map((item, index) => (
+                    {statsUpdatedData?.map((item, index) => (
                         <BudgetStatsCard
                             key={index}
                             icon={item.icon}
@@ -107,7 +149,7 @@ const BudgetSection = () => {
                     <div className="flex items-center space-x-3">
                         <h4 className="text-[13px] sm:text-[16px] text-gray-700">Add Expense</h4>
                         <SubmitButton className="group w-7 h-7 p-1 bg-secondary hover:bg-primary"
-                            onClick={() => { dispatch(setIsAddExpense(true)) }}>
+                            onClick={handleAddExpense}>
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
@@ -120,9 +162,13 @@ const BudgetSection = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {budgetData.map((budget, index) => (
-                        <BudgetCard key={index} budget={budget} />
-                    ))}
+                    {loading ? (
+                        <TextMessage text="Loading expense..."/>
+                    ) : (
+                        expenseData?.length > 0 ? expenseData?.map((budget: PharmacyExpenseProps, index: number) => (
+                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
+                        )) : <TextMessage text="Expense not found." />
+                    )}
                 </div>
             </div>
             {isAddExpense && <AddExpenseModal />}

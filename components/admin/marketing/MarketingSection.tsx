@@ -52,7 +52,6 @@ const MarketingSection = () => {
   const handleEditMarketingMaterials = (
     data: AddNewMarketingMaterialsFormValues
   ) => {
-    console.log(data);
     dispatch(setMarketingMaterialsDetails(data)); // Set selected data for editing
     dispatch(setIsAddMarketing(true)); // Open modal
   };

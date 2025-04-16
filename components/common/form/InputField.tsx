@@ -12,9 +12,10 @@ interface InputFieldProps {
     ref?: any;
     Icon?: React.ComponentType<{ className?: string }>;
     disabled?: boolean
+    onIconClick?: () => void;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ...props }) => {
+const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon,onIconClick, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
@@ -31,7 +32,9 @@ const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, ..
                     {...field}
                 />
                 {Icon && (
-                    <span className="h-5 w-5 absolute right-3 top-2.5 text-gray-500 cursor-pointer">
+                    <span 
+                    onClick={onIconClick}
+                    className="h-5 w-5 absolute right-3 top-[12.8px] text-gray-500 cursor-pointer">
                         <Icon />
                     </span>
                 )}

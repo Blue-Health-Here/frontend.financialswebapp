@@ -22,6 +22,7 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
+    const [currentDate, setCurrentDate] = useState<string>("Loading...");
     const { profileData } = useSelector((state: RootState) => state.global);
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const { isLoading } = useSelector((state: RootState) => state.global);
@@ -52,18 +53,21 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
         };
     }, []);
 
-    // const getCurrentDate = () => {
-    //     const date = new Date();
-    //     const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
-    //     let formattedDate = date.toLocaleDateString('en-GB', options);
-
-    //     return formattedDate.replace(/(\d{2}) (\w{3})/, '$1, $2');
-    // };
+    useEffect(() => {
+        const getCurrentDate = () => {
+            const date = new Date();
+            const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
+            let formattedDate = date.toLocaleDateString('en-GB', options);
+            return formattedDate.replace(/(\d{2}) (\w{3})/, '$1, $2');
+        };
+    
+        setCurrentDate(getCurrentDate());
+    }, []); 
 
     const handleNavbarToggler = () => {
         dispatch(setIsSidebarOpen(true));
     };
-
+    
     return (
         <>
             {isLoading && (
@@ -76,7 +80,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
             )}
             <div className="bg-bodyBG fixed top-0 left-0 lg:left-[250px] xl:left-[300px] right-0 px-6 py-4 z-50">
                 <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
-                    <p className="text-sm md:text-[18px] lg:text-[20px] xl:text-[21px] font-medium">Tuesday 11, Mar 25</p>
+                    <p className="text-sm md:text-[18px] lg:text-[20px] xl:text-[21px] font-medium">{currentDate}</p>
                     <div className="flex justify-end items-center gap-x-4 cursor-pointer">
                         <div className="relative hidden lg:block">
                             <IoNotificationsOutline className='w-6 h-6' />

@@ -21,11 +21,13 @@ const ProfileSection = () => {
     const dispatch = useDispatch();
     
     useEffect(() => {
-        fetchProfileData(dispatch);
+        const fetchData = async () => {
+            await fetchProfileData(dispatch);
+        };
+        fetchData();
     }, []);
 
     useEffect(() => {
-        console.log(user, profileData, "user");
         if (user && user?.user_metadata) {
             setInitialVals({
                 ...initialVals,
@@ -43,24 +45,19 @@ const ProfileSection = () => {
     const handleFileChange = (e: any) => {
         const file = e.target.files[0];
         if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
-            // const reader: any = new FileReader();
-            // reader.onloadend = () => {
-            //     setProfileImg(reader.result);
-            // };
-            // reader.readAsDataURL(file);
             setProfileImg(file)
         } else {
             toast.error('Please select a valid image file (png, jpg, jpeg).');
         }
     };
 
-    const handleSubmit = (values: any) => {
+    const handleSubmit = async (values: any) => {
         const formData = new FormData();
         formData.append("name", values.name);
         if (profileImg) {
             formData.append("file", profileImg);
         }
-        postProfileUpdate(dispatch, formData);
+        await postProfileUpdate(dispatch, formData);
     };
 
     return (

@@ -10,7 +10,6 @@ import { signUpAction } from "@/app/actions";
 
 const RegisterForm: React.FC<any> = ({ message }) => {
     const handleSubmit = (values: typeof signUpInitialVals) => {
-        console.log("Form submitted:", values);
         const formData = new FormData();
         formData.append("email", values.email);
         formData.append("password", values.password);

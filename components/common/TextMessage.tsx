@@ -6,7 +6,7 @@ interface TextMessageProps {
 
 const TextMessage: React.FC<TextMessageProps> = ({ text }) => {
     return (
-        <p dangerouslySetInnerHTML={{ __html: text }}></p>
+        <p className="text-xs md:text-sm" dangerouslySetInnerHTML={{ __html: text }}></p>
     )
 };
 

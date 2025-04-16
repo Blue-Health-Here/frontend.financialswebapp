@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useField } from "formik";
+import React, { useEffect, useState } from "react";
+import { useField, useFormikContext } from "formik";
 import { Label } from "../../ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import FilePreview from "../FilePreview";
@@ -7,6 +7,8 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { UploadedFileProps } from "@/utils/types";
 import { useDispatch } from "react-redux";
 import { deleteUploadedFile } from "@/services/deleteFile";
+import { addNewPaymentReconciliationInitialchema } from "@/utils/validationSchema";
+import * as Yup from "yup";
 
 interface FileUploadFieldProps {
     module?: string;
@@ -40,12 +42,18 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
-    const dispatch = useDispatch(); 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (handleFileUpload) {
-            handleFileUpload(event, helpers.setValue);
-        } else {
-            const files = Array.from(event.currentTarget.files || []);
+    const dispatch = useDispatch();
+    
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(event.currentTarget.files || []);
+        const file = isMultiSelect ? files : files[0];
+
+        helpers.setTouched(true, true);
+
+        try {
+            const schemaField: any = await Yup.reach(addNewPaymentReconciliationInitialchema, name);
+            await schemaField.validate(file);
+
             if (isMultiSelect) {
                 setPreview((prev) => [...prev, ...files]);
                 helpers.setValue([...(field.value || []), ...files]);
@@ -53,14 +61,24 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 setPreview(files.length > 0 ? [files[0]] : []);
                 helpers.setValue(files.length > 0 ? files[0] : null);
             }
+        } catch (err: any) {
+            setPreview([]);
+            helpers.setValue(null);
+            helpers.setError(err.message);
         }
     };
 
+    useEffect(() => {
+        if (!field.value) {
+            setPreview([]);
+        }
+    }, [field.value]);
+      
     const handleDelete = async (index?: number) => {
         if (uploadedFile && module) {
             await deleteUploadedFile(dispatch, module, uploadedFile.filename);
             if (setUploadedFile) setUploadedFile(null);
-            helpers.setValue(null); 
+            helpers.setValue(null);
         } else {
             const updatedFiles = preview.filter((_, i) => i !== index);
             setPreview(updatedFiles);
@@ -104,11 +122,11 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                         </>
                     ) : (
                         // Dropzone-style upload
-                        <div className="flex justify-center items-center border-dashed border h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
+                        <div className="flex justify-center items-center border-dashed border h-[140px] md:h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
                             <label htmlFor={id} className="flex flex-col items-center cursor-pointer">
-                                <MdOutlineFileUpload className="w-10 h-10 text-[#969696]" />
-                                <h2 className="font-semibold">{title}</h2>
-                                {description && <p className="text-xs text-[#969696]">{description}</p>}
+                                <MdOutlineFileUpload className="w-7 h-7 md:w-10 md:h-10 text-[#969696]" />
+                                <h2 className="font-semibold text-sm sm:text-lg md:text-xl text-center">{title}</h2>
+                                {description && <p className="text-xs text-center text-[#969696]">{description}</p>}
                             </label>
                             <input
                                 id={id}
@@ -118,7 +136,9 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                                 className="hidden"
                             />
                         </div>
-
+                    )}
+                    {meta.touched && meta.error && (
+                        <p className="text-red-500 text-center text-xs mt-1 font-semibold">{meta.error}</p>
                     )}
                 </div>
             )}
