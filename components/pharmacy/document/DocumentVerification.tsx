@@ -142,7 +142,9 @@ const DocumentVerification = () => {
 
             <tbody>
               {isClient && docVerificationDetails && docVerificationDetails.length > 0 ? (
-                docVerificationDetails.map((item: PaymentReconciliationProps, index: number) => (
+                [...docVerificationDetails].sort(
+                  (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                )?.map((item: PaymentReconciliationProps, index: number) => (
                   <tr key={index} className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
                     <td className="p-4 text-grey font-medium">#{index + 1}</td>
                     <td className="p-4 text-grey">{item.file_835}</td>
