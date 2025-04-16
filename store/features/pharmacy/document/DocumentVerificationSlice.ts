@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    DocumentVerificationDetails: []
+    docVerificationDetails: []
 };
 
 const DocumentVerificationSlice = createSlice({
     name: 'DocumentVerification',
     initialState,
     reducers: {
-      setDocumentVerificationDetails: (state, action) => {
-          state.DocumentVerificationDetails = action.payload;
+      setDocVerificationDetails: (state, action) => {
+          state.docVerificationDetails = action.payload;
       }
     }
 });
 
-export const { setDocumentVerificationDetails } = DocumentVerificationSlice.actions;
+export const { setDocVerificationDetails } = DocumentVerificationSlice.actions;
 
 export default DocumentVerificationSlice.reducer;

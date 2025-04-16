@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
 import { Label } from "../../ui/label";
 import { SubmitButton } from "@/components/submit-button";
 import FilePreview from "../FilePreview";
@@ -40,27 +40,27 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (handleFileUpload) {
-          handleFileUpload(event, helpers.setValue);
+            handleFileUpload(event, helpers.setValue);
         } else {
-          const files = Array.from(event.currentTarget.files || []);
-          if (isMultiSelect) {
-            setPreview((prev) => [...prev, ...files]);
-            helpers.setValue([...(field.value || []), ...files]);
-          } else {
-            setPreview(files.length > 0 ? [files[0]] : []);
-            helpers.setValue(files.length > 0 ? files[0] : null);
-          }
+            const files = Array.from(event.currentTarget.files || []);
+            if (isMultiSelect) {
+                setPreview((prev) => [...prev, ...files]);
+                helpers.setValue([...(field.value || []), ...files]);
+            } else {
+                setPreview(files.length > 0 ? [files[0]] : []);
+                helpers.setValue(files.length > 0 ? files[0] : null);
+            }
         }
-      };    
+    };
 
     const handleDelete = async (index?: number) => {
         if (uploadedFile && module) {
             await deleteUploadedFile(dispatch, module, uploadedFile.filename);
             if (setUploadedFile) setUploadedFile(null);
-            helpers.setValue(null); 
+            helpers.setValue(null);
         } else {
             const updatedFiles = preview.filter((_, i) => i !== index);
             setPreview(updatedFiles);
@@ -94,7 +94,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                                     onChange={handleFileChange}
                                     name={name}
                                     className="absolute left-0 right-0 top-0 bottom-0 opacity-0 cursor-pointer"
-                                    />
+                                />
                                 <MdOutlineFileUpload className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                                 <p className="ml-2 text-xs md:text-sm">{title}</p>
                             </SubmitButton>
@@ -119,9 +119,9 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                             />
                         </div>
                     )}
-                      {meta.touched && meta.error && (
-                         <p className="text-red-500 text-center text-xs mt-1 font-semibold">{meta.error}</p>
-                      )}
+                    {meta.touched && meta.error && (
+                        <p className="text-red-500 text-center text-xs mt-1 font-semibold">{meta.error}</p>
+                    )}
                 </div>
             )}
         </div>

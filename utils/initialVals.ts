@@ -45,7 +45,7 @@ export const addNewCategoryInitialVals = {
     revenue:0
 }
 
-export const addNewPaymentReconciliationInitialVals = {
+export const uploadDocVerificationInitialVals = {
     file_835: "",
     file_pdf: "",
-  };
+};
