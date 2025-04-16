@@ -1,6 +1,7 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
-import { setIsLoading, setProfileData, setLicenseData ,setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData, setLicenseData, setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
 import { setPharmacyCourses } from "@/store/features/pharmacy/course/pharmacyCourseSlice";
+import { setDocVerificationDetails } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { setPharmacyMarketingMaterials } from "@/store/features/pharmacy/marketing/pharmacyMarketingSlice";
 import { AppDispatch } from "@/store/store";
@@ -31,7 +32,7 @@ export const postProfileUpdatePharmacy = async (dispatch: AppDispatch, formData?
     try {
         dispatch(setIsLoading(true));
         const response = await axiosAdmin.post("/v1/pharmacy-profile", formData, {
-           
+
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -58,11 +59,11 @@ export const fetchPharmacyLicense = async (dispatch: AppDispatch) => {
             dispatch(setLicenseData(response?.data));
             toast.success("License fetched successfully!");
         }
-    } catch (error: any) {  
-        if(error?.status === 404){
+    } catch (error: any) {
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setLicenseData([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -100,7 +101,7 @@ export const postLicenseUploadFile = async (dispatch: AppDispatch, data: any) =>
 export const deletePharmacyLicense = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
-        const response = await axiosAdmin.delete("/v1/pharmacy-license?license_id="+id);
+        const response = await axiosAdmin.delete("/v1/pharmacy-license?license_id=" + id);
         if (response?.data?.success) {
             await fetchPharmacyLicense(dispatch);
             toast.success("License file deleted successfully!");
@@ -124,10 +125,10 @@ export const fetchPharmacyCertifications = async (dispatch: AppDispatch) => {
             toast.success("Certificate fetched successfully!");
         }
     } catch (error: any) {
-        if(error?.status === 404){
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setCertificationsData([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -164,7 +165,7 @@ export const postCertificationsUploadFile = async (dispatch: AppDispatch, data: 
 export const deletePharmacyCertification = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
-        const response = await axiosAdmin.delete("/v1/pharmacy-certification?certification_id="+id);
+        const response = await axiosAdmin.delete("/v1/pharmacy-certification?certification_id=" + id);
         if (response?.data?.success) {
             await fetchPharmacyCertifications(dispatch);
             toast.success("Certification file deleted successfully!");
@@ -189,10 +190,10 @@ export const fetchPharmacyExpense = async (dispatch: AppDispatch) => {
             toast.success("Expense fetched successfully!");
         }
     } catch (error: any) {
-        if(error?.status === 404){
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setexpenseData([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -226,7 +227,7 @@ export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any)
 export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) => {
     try {
         dispatch(setIsLoading(true));
-        const response = await axiosAdmin.put("/v1/pharmacy-expense?expense_id="+data?.expense_id, data);
+        const response = await axiosAdmin.put("/v1/pharmacy-expense?expense_id=" + data?.expense_id, data);
         if (response.data?.success) {
             await fetchPharmacyExpense(dispatch);
             toast.success("Expense updated successfully!");
@@ -245,7 +246,7 @@ export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) =>
 export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
     try {
         dispatch(setIsLoading(true));
-        const response = await axiosAdmin.delete("/v1/pharmacy-expense?expense_id="+id);
+        const response = await axiosAdmin.delete("/v1/pharmacy-expense?expense_id=" + id);
         if (response?.data?.success) {
             await fetchPharmacyExpense(dispatch);
             toast.success("Expense deleted successfully!");
@@ -268,11 +269,11 @@ export const fetchPharmacyDashboardStats = async (dispatch: AppDispatch) => {
             dispatch(setPharmacyStatsData(response?.data));
             toast.success("Stats fetched successfully!");
         }
-    } catch (error: any) {  
-        if(error?.status === 404){
+    } catch (error: any) {
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setPharmacyStatsData([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -292,10 +293,10 @@ export const fetchPharmacyExpenseStats = async (dispatch: AppDispatch) => {
             toast.success("Stats fetched successfully!");
         }
     } catch (error: any) {
-        if(error?.status === 404){
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setPharmacyExpenseStats([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -307,18 +308,18 @@ export const fetchPharmacyExpenseStats = async (dispatch: AppDispatch) => {
 * Fetch pharmacy dashboard expense graph and update Redux store.
 */
 export const fetchPharmacyExpenseGraph = async (dispatch: AppDispatch) => {
-   try {
-       dispatch(setIsLoading(true));
-       const response = await axiosAdmin.get("/v1/pharmacy-expense-graph");
-       if (response.status === 200) {
-           dispatch(setExpenseGraphData(response.data));
-           toast.success("Expense Graph fetched successfully!");
-       }
-   } catch (error: any) {
-       if(error?.status === 404){
-           toast.success(error?.response?.data?.detail)
-           dispatch(setExpenseGraphData([]));
-        }else{
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/pharmacy-expense-graph");
+        if (response.status === 200) {
+            dispatch(setExpenseGraphData(response.data));
+            toast.success("Expense Graph fetched successfully!");
+        }
+    } catch (error: any) {
+        if (error?.status === 404) {
+            toast.success(error?.response?.data?.detail)
+            dispatch(setExpenseGraphData([]));
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -339,10 +340,10 @@ export const fetchAllPharmacyCourses = async (dispatch: AppDispatch) => {
             toast.success("Courses fetched successfully!");
         }
     } catch (error: any) {
-        if(error?.status === 404){
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setPharmacyCourses([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
     } finally {
@@ -363,12 +364,35 @@ export const fetchAllPharmacyMarketingMaterials = async (dispatch: AppDispatch) 
             toast.success("Marketing Materials fetched successfully!");
         }
     } catch (error: any) {
-        if(error?.status === 404){
+        if (error?.status === 404) {
             toast.success(error?.response?.data?.detail)
             dispatch(setPharmacyMarketingMaterials([]));
-        }else{
+        } else {
             toast.error(error?.message || "Something went wrong");
         }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+
+/**
+ * create new payment reconciliation.
+ */
+
+export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/payment-reconciliation", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            toast.success("Payment Reconciliation uploaded successfully!");
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
     } finally {
         dispatch(setIsLoading(false));
     }

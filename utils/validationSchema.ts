@@ -78,3 +78,20 @@ export const addNewPharmacyExpenseValidationSchema = Yup.object().shape({
     category_id: Yup.string().required("Expense category selection is required"),
     revenue:  Yup.number().typeError("Revenue must be a number").required("Revenue is required"),
 });
+
+export const addNewPaymentReconciliationInitialchema = Yup.object({
+    file_835: Yup.mixed()
+      .required('835 File is required')
+      .test('fileFormat', 'Only .835 file format is allowed', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        return file.name.toLowerCase().endsWith('.835');
+      }),
+    file_pdf: Yup.mixed()
+      .required('Bank Statement is required')
+      .test('fileFormat', 'Only .pdf file format is allowed', (value) => {
+        if (!value) return false;
+        const file = value as File;
+        return file.name.toLowerCase().endsWith('.pdf');
+      }),
+  });

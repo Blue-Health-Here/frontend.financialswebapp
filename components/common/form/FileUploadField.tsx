@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useField } from "formik";
 import { Label } from "../../ui/label";
 import { SubmitButton } from "@/components/submit-button";
@@ -40,7 +40,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (handleFileUpload) {
             handleFileUpload(event, helpers.setValue);
@@ -56,11 +56,17 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
         }
     };
 
+      useEffect(() => {
+        if (!field.value) {
+          setPreview([]);
+        }
+      }, [field.value]);
+      
     const handleDelete = async (index?: number) => {
         if (uploadedFile && module) {
             await deleteUploadedFile(dispatch, module, uploadedFile.filename);
             if (setUploadedFile) setUploadedFile(null);
-            helpers.setValue(null); 
+            helpers.setValue(null);
         } else {
             const updatedFiles = preview.filter((_, i) => i !== index);
             setPreview(updatedFiles);
@@ -118,7 +124,9 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                                 className="hidden"
                             />
                         </div>
-
+                    )}
+                    {meta.touched && meta.error && (
+                        <p className="text-red-500 text-center text-xs mt-1 font-semibold">{meta.error}</p>
                     )}
                 </div>
             )}
