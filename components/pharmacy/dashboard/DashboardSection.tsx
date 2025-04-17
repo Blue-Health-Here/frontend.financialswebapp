@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { onBoardingchecklists, pharmacyDashboardStatsData } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
@@ -26,11 +26,18 @@ const DashboardSection = () => {
     (state: RootState) => state.onboarding
   );
   const dispatch = useDispatch();
+  const isFetchedData = useRef(false);
 
   useEffect(() => {
+    if (isFetchedData.current) return;
+
     const fetchData = async () => {
       try {
-        await fetchPharmacyExpenseGraph(dispatch);
+        await Promise.all([
+          fetchPharmacyExpenseGraph(dispatch),
+          fetchPharmacyDashboardStats(dispatch)
+        ]);
+        isFetchedData.current = true;
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -38,9 +45,6 @@ const DashboardSection = () => {
 
     fetchData();
   }, [dispatch]);
-  useEffect(() => {
-    fetchPharmacyDashboardStats(dispatch); 
-}, [dispatch]);
 
   useEffect(() => {
     if (pharmacyStatsData) {

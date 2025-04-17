@@ -42,13 +42,21 @@ const ProfileSection = () => {
     license: [],
     certificate: []
   });
+  
+  const fetchData = async () => {
+    try {
+      await Promise.all([
+        fetchProfileDataPharmacy(dispatch),
+        fetchPharmacyLicense(dispatch),
+        fetchPharmacyCertifications(dispatch)
+      ]);
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to fetch profile data");
+    }
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchProfileDataPharmacy(dispatch);
-      await fetchPharmacyLicense(dispatch);
-      await fetchPharmacyCertifications(dispatch);
-    }
+    if (hasFetched.current) return;
     if (!hasFetched.current) {
       fetchData();
       hasFetched.current = true;

@@ -23,14 +23,29 @@ const DocumentVerification = () => {
   const dispatch = useDispatch()
   const isFetched = useRef(false);
 
-  // Avoid hydration mismatch by only rendering on client side
+  // Handle client-side rendering separately from data fetching
   useEffect(() => {
     setIsClient(true)
-    if (!isFetched.current) {
-      fetchPaymentReconciliation(dispatch).finally(() => setIsLoading(false))
-      isFetched.current = true;
-    };
   }, []);
+  
+  // Use a more robust approach to prevent double fetching
+  useEffect(() => {
+    // Use module-level variable to strictly enforce single execution
+    if (typeof window !== 'undefined' && !isFetched.current) {
+      // Set flag immediately to prevent any possibility of double execution
+      isFetched.current = true;
+      
+      // Execute fetch operation
+      fetchPaymentReconciliation(dispatch)
+        .catch(error => console.error("Error fetching payment reconciliation:", error))
+        .finally(() => setIsLoading(false));
+    }
+    
+    // Cleanup function
+    return () => {
+      // No cleanup necessary, the ref ensures one-time execution
+    };
+  }, []); // Empty dependency array since we're using the ref for control
 
   const handleSubmit = async (values: typeof initialVals, {resetForm}: {resetForm: () => void}) => {
     // console.log(values);
