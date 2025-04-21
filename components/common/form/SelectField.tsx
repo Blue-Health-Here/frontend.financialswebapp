@@ -1,43 +1,66 @@
 import React from "react";
-import { useField } from "formik";
+import { useField, useFormikContext } from "formik";
+import Select from "react-select";
 import { Label } from "../../ui/label";
 import { cn } from "@/lib/utils";
- 
-interface SelectFieldProps {
-    label?: string;
-    name: string;
-    options: { value: string; label: string }[];
-    className?: string;
-    parentClassName?: string;
-    ref?: any;
+
+interface Option {
+  value: string;
+  label: string;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ className, parentClassName, ref, label, options, ...props }) => {
-    const [field, meta] = useField(props);
- 
-    return (
-        <div className={parentClassName}>
-            {label && <Label size="xs" htmlFor={props.name}>{label}</Label>}
-            <select
-                className={cn(
-                    "flex h-10 w-full text-xs rounded-md placeholder:text-themeLight border border-input bg-background px-3 py-2 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-                    className,
-                )}
-                ref={ref}
-                {...props}
-                {...field}
-            >
-                {options.map(option => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
-            {meta.touched && meta.error && (
-                <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
-            )}
-        </div>
-    );
+interface SelectFieldProps {
+  label?: string;
+  name: string;
+  options: Option[];
+  className?: string;
+  parentClassName?: string;
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({
+  label,
+  name,
+  options,
+  className,
+  parentClassName,
+}) => {
+  const [field, meta] = useField(name);
+  const { setFieldValue } = useFormikContext();
+
+  // Find the currently selected option
+  const selectedOption = options.find(option => option.value === field.value);
+
+  return (
+    <div className={parentClassName}>
+      {label && (
+        <Label size="xs" htmlFor={name}>
+          {label}
+        </Label>
+      )}
+
+      <Select
+        inputId={name}
+        name={name}
+        className={cn("text-xs", className)}
+        classNamePrefix="react-select"
+        value={selectedOption || null}
+        onChange={(option: Option | null) => setFieldValue(name, option?.value || "")}
+        options={options}
+        styles={{
+          control: (base) => ({
+            ...base,
+            minHeight: '2.5rem',
+            borderColor: meta.touched && meta.error ? '#f87171' : base.borderColor,
+            fontSize: '0.75rem',
+          }),
+        }}
+      />
+
+      {meta.touched && meta.error && (
+        <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
+      )}
+    </div>
+  );
 };
- 
+
 export default SelectField;

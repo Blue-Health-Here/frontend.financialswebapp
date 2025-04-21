@@ -48,4 +48,5 @@ export const addNewCategoryInitialVals = {
 export const uploadDocVerificationInitialVals = {
     file_835: "",
     file_pdf: "",
+    statement_id: ''
 };

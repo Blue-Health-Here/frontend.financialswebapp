@@ -1,7 +1,7 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setIsLoading, setProfileData, setLicenseData, setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
 import { setPharmacyCourses } from "@/store/features/pharmacy/course/pharmacyCourseSlice";
-import { setDocVerificationDetails } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
+import { setDocVerificationDetails, setUploadedBankStatements } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { setPharmacyMarketingMaterials } from "@/store/features/pharmacy/marketing/pharmacyMarketingSlice";
 import { AppDispatch } from "@/store/store";
@@ -380,10 +380,10 @@ export const fetchAllPharmacyMarketingMaterials = async (dispatch: AppDispatch) 
  * create new payment reconciliation.
  */
 
-export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data: any) => {
+export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data: any, statement_id?: string) => {
     try {
         dispatch(setIsLoading(true));
-        const response = await axiosAdmin.post("/v1/payment-reconciliation", data, {
+        const response = await axiosAdmin.post(`/v1/payment-reconciliation?statement_id=${statement_id}`, data, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -400,7 +400,7 @@ export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data
 };
 
 /**
- * Fetch pharmacy stats and update Redux store.
+ * Fetch payment reconciliation and update Redux store.
  */
 export const fetchPaymentReconciliation = async (dispatch: AppDispatch) => {
     try {
@@ -412,11 +412,57 @@ export const fetchPaymentReconciliation = async (dispatch: AppDispatch) => {
         }
     } catch (error: any) {
         if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setexpenseData([]));
+            toast.success(error?.response?.data?.detail);
+            dispatch(setDocVerificationDetails([]));
         } else {
             toast.error(error?.message || "Something went wrong");
         }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * Fetch bank statements and update Redux store.
+ */
+export const fetchBankStatements = async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.get("/v1/bank-statement");
+        if (response.status === 200) {
+            dispatch(setUploadedBankStatements(response.data));
+            toast.success("Bank Statements fetched successfully!");
+        }
+    } catch (error: any) {
+        if (error?.status === 404) {
+            toast.success(error?.response?.data?.detail);
+            dispatch(setUploadedBankStatements([]));
+        } else {
+            toast.error(error?.message || "Something went wrong");
+        }
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+
+/**
+ * post bank statement.
+ */
+
+export const postBankStatement = async (dispatch: AppDispatch, data: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.post("/v1/upload-statement", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        if (response?.data?.success) {
+            await fetchBankStatements(dispatch);
+            toast.success(response?.data?.message);
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
     } finally {
         dispatch(setIsLoading(false));
     }
