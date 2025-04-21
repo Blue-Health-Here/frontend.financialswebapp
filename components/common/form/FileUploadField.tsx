@@ -21,10 +21,11 @@ interface FileUploadFieldProps {
     variant?: "button" | "dropzone";
     id?: string;
     onChange?: Function;
+    type?: string;
     uploadedFile?: UploadedFileProps | null | any;
     setUploadedFile?: (file: UploadedFileProps | null) => void;
     handleFileUpload?: (event: any, setValue: (value: any) => void) => void;
-}
+};
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
     module,
@@ -37,23 +38,25 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     variant = "button",
     id,
     uploadedFile,
+    onChange,
+    type,
     setUploadedFile,
     handleFileUpload,
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
     const dispatch = useDispatch();
-    
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(event.currentTarget.files || []);
-        const file = isMultiSelect ? files : files[0];
-
-        helpers.setTouched(true, true);
-
-        try {
-            const schemaField: any = await Yup.reach(addNewPaymentReconciliationInitialchema, name);
-            await schemaField.validate(file);
-
+        if (onChange && type) {
+            return onChange(event, type);
+        } else if (onChange) {
+            return onChange(event, helpers.setValue, field.value);
+        }
+        
+        if (handleFileUpload) {
+            handleFileUpload(event, helpers.setValue);
+        } else {
+            const files = Array.from(event.currentTarget.files || []);
             if (isMultiSelect) {
                 setPreview((prev) => [...prev, ...files]);
                 helpers.setValue([...(field.value || []), ...files]);
@@ -61,10 +64,6 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 setPreview(files.length > 0 ? [files[0]] : []);
                 helpers.setValue(files.length > 0 ? files[0] : null);
             }
-        } catch (err: any) {
-            setPreview([]);
-            helpers.setValue(null);
-            helpers.setError(err.message);
         }
     };
 

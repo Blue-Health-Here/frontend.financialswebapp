@@ -131,7 +131,11 @@ export const postCoursesUploadFile = async (dispatch: AppDispatch, data: any) =>
         }
         return null;
     } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
+        if (error?.status === 409) {
+            toast.error(error?.response?.data?.detail);
+        } else {
+            toast.error(error?.message || "Something went wrong");
+        }
     } finally {
         dispatch(setIsLoading(false));
     }

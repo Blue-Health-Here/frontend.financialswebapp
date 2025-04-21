@@ -37,7 +37,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, }) => {
 
 
     return (
-        <div className="flex items-center justify-between bg-white px-4 py-2  border rounded-lg shadow-sm w-full">
+        <div className="flex items-center justify-between bg-white px-4 py-2.5 border rounded-lg shadow-sm w-full">
             <span className="text-sm cursor-pointer" onClick={fileDownload}>{file.name}</span>
             <div className="flex space-x-3 cursor-pointer">
                 <MdOutlineFileDownload className="text-grey" size={20} onClick={fileDownload} />
