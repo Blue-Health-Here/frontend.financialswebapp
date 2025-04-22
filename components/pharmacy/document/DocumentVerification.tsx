@@ -264,6 +264,7 @@ const DocumentVerification = () => {
                 <th className="p-4">Bank Statement</th>
                 <th className="p-4">Bank AMT</th>
                 <th className="p-4">Payment Date</th>
+                <th className="p-4">Created At</th>
                 <th className="p-4">Status</th>
               </tr>
             </thead>
@@ -280,6 +281,7 @@ const DocumentVerification = () => {
                     <td className="p-4 font-medium">${item['835_amt']}</td>
                     <td className="p-4 text-grey">${item.file_pdf}</td>
                     <td className="p-4 text-grey">${item.bank_amt}</td>
+                    <td className="p-4 font-medium">{item.payment_date}</td>
                     <td className="p-4 font-medium">{formatCreatedAt(item.created_at)}</td>
                     <td className="p-4">
                       <SubmitButton
