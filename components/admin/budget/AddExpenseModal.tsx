@@ -20,7 +20,7 @@ const AddExpenseModal = () => {
     const params = useParams();
     const pharmacyId = params?.pharmacy_id;
     const [initialVals, setInitialVals] = useState<any>(addNewPharmacyExpenseInitialVals);
-    const { expenseDetail } = useSelector((state: RootState) => state.expense);
+    const { adminExpenseDetail } = useSelector((state: RootState) => state.expense);
     const { expenseCategories } = useSelector((state: RootState) => state.global);
     const dispatch = useDispatch();
 
@@ -33,18 +33,19 @@ const AddExpenseModal = () => {
     };
 
     useEffect(() => {
-        if (expenseDetail) {
+        // console.log(adminExpenseDetail, "adminExpenseDetail");
+        if (adminExpenseDetail) {
             setInitialVals({
-                title: expenseDetail.title,
-                amount: expenseDetail.amount,
-                expense_date: expenseDetail.expense_date,
-                category_id: expenseDetail.category_id,
-                revenue: expenseDetail.revenue,
-                expense_id: expenseDetail.id,
-                pharmacy_id:expenseDetail.pharmacy_id
+                title: adminExpenseDetail.title,
+                amount: adminExpenseDetail.amount,
+                expense_date: adminExpenseDetail.expense_date,
+                category_id: adminExpenseDetail.category_id,
+                revenue: adminExpenseDetail.revenue,
+                expense_id: adminExpenseDetail.id,
+                pharmacy_id:adminExpenseDetail.pharmacy_id
             });
         }
-    }, [expenseDetail]);      
+    }, [adminExpenseDetail]);      
 
     const handleSubmit = async (values: typeof addNewPharmacyExpenseInitialVals) => {
         const payload: any = {
@@ -57,8 +58,8 @@ const AddExpenseModal = () => {
         };
   
         try {
-            if (expenseDetail) {
-                await updateAdminPharmacyExpense(dispatch, { expense_id: expenseDetail?.id, ...payload });
+            if (adminExpenseDetail) {
+                await updateAdminPharmacyExpense(dispatch, { expense_id: adminExpenseDetail?.id, ...payload });
             } else {
                 await createNewAdminPharmacyExpense(dispatch, payload);
             }
@@ -71,7 +72,7 @@ const AddExpenseModal = () => {
     return (
         <Modal>
             <div className="bg-white sm:w-96 h-full">
-                <HeaderModal title={`${expenseDetail ? "Edit" : "Add New"} Expense`} onClose={handleClose} />
+                <HeaderModal title={`${adminExpenseDetail ? "Edit" : "Add New"} Expense`} onClose={handleClose} />
                 <div className="p-6">
                     <Formik   
                      initialValues={initialVals} 
@@ -99,7 +100,7 @@ const AddExpenseModal = () => {
                                 className="mb-4"
                                 
                             />
-                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">{expenseDetail ? "Update" : "Save"}</SubmitButton>
+                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">{adminExpenseDetail ? "Update" : "Save"}</SubmitButton>
                         </Form>
                     </Formik>
                 </div>

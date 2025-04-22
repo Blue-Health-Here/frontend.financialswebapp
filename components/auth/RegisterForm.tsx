@@ -34,7 +34,7 @@ const RegisterForm: React.FC<any> = ({ message }) => {
                         {isSubmitting ? "Signing Up..." : "Sign Up"}
                     </SubmitButton>
                     
-                    <FormMessage message={message} />
+                    {message?.error !== "" && <FormMessage message={message} />}
                 </Form>
             )}
         </Formik>

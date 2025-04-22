@@ -19,15 +19,21 @@ const ProfileSection = () => {
     const [profileImg, setProfileImg] = useState(null);
     const fileInputRef: any = useRef(null);
     const dispatch = useDispatch();
+    const isFetched = useRef(false);
     
+    const fetchData = async () => {
+        await fetchProfileData(dispatch);
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            await fetchProfileData(dispatch);
-        };
-        fetchData();
+        if (!isFetched.current) {
+            fetchData();
+            isFetched.current = true;
+        }
     }, []);
 
     useEffect(() => {
+        // console.log(profileData, user, "dpsaoid")
         if (user && user?.user_metadata) {
             setInitialVals({
                 ...initialVals,
@@ -37,7 +43,8 @@ const ProfileSection = () => {
         if (profileData) {
             setInitialVals({
                 ...initialVals,
-                name: profileData?.name
+                name: profileData?.name,
+                email: profileData?.email
             });
         }
     }, [profileData]);

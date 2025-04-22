@@ -50,10 +50,10 @@ const BudgetDetail = () => {
     }, [])
    
     useEffect(() => {
-        if(adminExpenseStats){
+        if(adminExpenseStats?.length > 0){
             setStatsUpdatedData(assignAdminBudgetStatsValues(adminExpenseStats))
         }
-    }, [adminExpenseStats])
+    }, [adminExpenseStats]);
       
     const handleEditExpense = (data: AdminExpenseProps) => {
         dispatch(setIsAddExpense(true))
