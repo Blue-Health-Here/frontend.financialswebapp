@@ -2,10 +2,10 @@ import { useDispatch } from "react-redux";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
-import SelectField from "@/components/common/form/SelectField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import { setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
+import SelectField from "@/components/common/form/SelectField";
 
 const EditQuestionModal = () => {
     const dispatch = useDispatch();

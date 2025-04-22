@@ -15,7 +15,6 @@ export default function ThemeProvider({
     setIsClient(true);
   }, []);
 
-
   return (
     <Provider store={store}>
       {isClient ? (

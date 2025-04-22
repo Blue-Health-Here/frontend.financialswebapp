@@ -17,9 +17,7 @@ const SingleDateField: React.FC<SingleDateFieldProps> = ({
   name,
 }) => {
   const [field, meta, helpers] = useField(name);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(
-    field.value ? new Date(field.value) : null
-  );
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [openCalendar, setOpenCalendar] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
 

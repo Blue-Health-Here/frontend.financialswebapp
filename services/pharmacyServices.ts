@@ -467,3 +467,23 @@ export const postBankStatement = async (dispatch: AppDispatch, data: any) => {
         dispatch(setIsLoading(false));
     }
 };
+
+/**
+ * delete bank statement.
+ */
+
+export const deleteBankStatement = async (dispatch: AppDispatch, id: any) => {
+    try {
+        dispatch(setIsLoading(true));
+        const response = await axiosAdmin.delete(`/v1/bank-statement?statement_id=${id}`);
+        if (response?.data?.success) {
+            await fetchBankStatements(dispatch);
+            toast.success(response?.data?.message);
+        }
+    } catch (error: any) {
+        toast.error(error?.message || "Something went wrong");
+    } finally {
+        dispatch(setIsLoading(false));
+    }
+};
+

@@ -22,7 +22,8 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
-    const [currentDate, setCurrentDate] = useState<string>("Loading...");
+    // Use a default static value for initial render to avoid hydration issues
+    const [currentDate, setCurrentDate] = useState<string>("");
     const { profileData } = useSelector((state: RootState) => state.global);
     const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
     const { isLoading } = useSelector((state: RootState) => state.global);
@@ -54,6 +55,7 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
     }, []);
 
     useEffect(() => {
+        // Set date formatting only on the client side
         const getCurrentDate = () => {
             const date = new Date();
             const options: any = { weekday: 'long', day: '2-digit', month: 'short', year: '2-digit' };
