@@ -31,7 +31,13 @@ export const assignPharmacyStatsValues = (data: pharmacyDashboardStats) => {
     });
 };
 
+// This is a client-side only function
 export const formatCreatedAt = (dateString: string): string => {
+    // For server-side rendering, return a stable output
+    if (typeof window === 'undefined') {
+        return 'Recently';
+    }
+    
     const createdAt = new Date(dateString);
     const now = new Date();
     const diffInMs = now.getTime() - createdAt.getTime();
@@ -50,6 +56,13 @@ export const formatCreatedAt = (dateString: string): string => {
         return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
     }
 
-    return createdAt.toLocaleString(); // shows full date and time
+    // Use a consistent formatter for dates
+    return createdAt.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 }
 

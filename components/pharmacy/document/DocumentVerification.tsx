@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, Suspense } from 'react'
 import FileUploadField from '@/components/common/form/FileUploadField'
-import SelectField from '@/components/common/form/SelectField'
+import SelectBankStatementField from '@/components/common/form/SelectBankStatementField'
 import { SubmitButton } from '@/components/submit-button'
 import { Form, Formik } from 'formik'
 import { IoSearch } from "react-icons/io5";
@@ -18,6 +18,7 @@ import { setIsLoading } from '@/store/features/global/globalSlice'
 import FilePreview from '@/components/common/FilePreview'
 import * as Yup from "yup";
 import { formatCreatedAt } from '@/utils/helper'
+import SelectField from '@/components/common/form/SelectField'
 
 const DocumentVerification = () => {
   const { docVerificationDetails = [], bankStatements } = useSelector((state: RootState) => state.DocumentVerification);
@@ -62,9 +63,8 @@ const DocumentVerification = () => {
         formData.append('files_835', values.file_835[i]); // Do NOT use 'files_835[]' unless explicitly required
       }
     }
-
     try {
-      await createNewPaymentReconciliation(dispatch, formData, values.statement_id);
+      await createNewPaymentReconciliation(dispatch, formData, values.statement_id?.value);
       setInitialVals(uploadDocVerificationInitialVals);
       resetForm();
       set835UploadedFiles([]);
@@ -129,8 +129,9 @@ const DocumentVerification = () => {
 
   const handleDelete = async (index?: number, setValue?: any) => {
     const updatedFiles = uploaded835Files.filter((_, i) => i !== index);
+    console.log(updatedFiles);
     set835UploadedFiles(updatedFiles);
-    setValue("file_835", [...updatedFiles]);
+    setValue("file_835", updatedFiles?.length > 0 ? [...updatedFiles] : "");
   };
   
   const getDynamicValidationSchema = () => {
@@ -188,11 +189,10 @@ const DocumentVerification = () => {
                     onChange={handleChange}
                   />
                   {bankStatements?.length > 0 && (
-                    <SelectField
+                    <SelectBankStatementField
                       label=""
                       name="statement_id"
                       options={[
-                        { value: "", label: "Select Bank Statement" },
                         ...bankStatements?.map((category: any) => ({
                           value: category.id,
                           label: category.filename,
