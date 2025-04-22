@@ -48,7 +48,7 @@ export const BudgetCard = ({
             alt="Delete"
             width={15}
             height={15}
-            className="md:w-[20px] md:h-[20px]"
+            className="md:w-[20px] md:h-[20px] cursor-pointer"
             onClick={handleDelete}
           />
           <Image
@@ -56,7 +56,7 @@ export const BudgetCard = ({
             alt="Edit"
             width={15}
             height={15}
-            className="md:w-[20px] md:h-[20px]"
+            className="md:w-[20px] md:h-[20px] cursor-pointer"
             onClick={() => handleEdit && handleEdit(item)}
           />
         </div>

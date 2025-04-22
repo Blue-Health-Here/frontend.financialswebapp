@@ -9,7 +9,7 @@ interface PharmacyInfoCardProps {
   description: string;
   link?: string | null;
   file_url?: string | null;
-  filename?: string ;
+  filename?: string;
 }
 
 const PharmacyInfoCard: React.FC<PharmacyInfoCardProps> = ({
@@ -29,14 +29,15 @@ const PharmacyInfoCard: React.FC<PharmacyInfoCardProps> = ({
     setIsChecked(e.target.checked);
   };
 
-  const handleDownloadClick  = async (e: React.MouseEvent) => {
+  const handleDownloadClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log(e, "response");
 
     if (link) {
       window.open(link, "_blank");
     } else if (file_url) {
       try {
-        const response = await axiosAdmin.get(file_url, {responseType: "blob",});
+        const response = await axiosAdmin.get(file_url, { responseType: "blob", });
         const contentType = response.headers["content-type"] || "application/octet-stream";
 
         const blob = new Blob([response.data], { type: contentType });
@@ -49,9 +50,10 @@ const PharmacyInfoCard: React.FC<PharmacyInfoCardProps> = ({
 
         window.URL.revokeObjectURL(url);
         toast.success("File download Successfully.");
-    } catch (error: any) {
+      } catch (error: any) {
+        console.log(error, "Dsadasd");
         toast.error(error?.message || "Failed to download file.");
-    }
+      }
     } else {
       console.warn("No link or file_url provided.");
     }
@@ -89,4 +91,3 @@ const PharmacyInfoCard: React.FC<PharmacyInfoCardProps> = ({
 };
 
 export default PharmacyInfoCard;
- 

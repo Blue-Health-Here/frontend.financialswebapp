@@ -29,7 +29,7 @@ const ForgotPasswordForm: React.FC<any> = ({ message }) => {
                         {isSubmitting ? "Sending..." : "Send reset link"}
                     </SubmitButton>
 
-                    <FormMessage message={message} />
+                    {message?.error !== "" && <FormMessage message={message} />}
                     <Link className="text-[14px] text-black text-center flex gap-x-1 justify-center" href="/sign-in">
                         <IoIosArrowBack className="w-[18px] h-[18px]" /> <p> Back to login</p>
                     </Link>

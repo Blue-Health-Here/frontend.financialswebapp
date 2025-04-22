@@ -64,7 +64,7 @@ const BudgetSection = () => {
     }, []);
     
     useEffect(() => {
-        if (pharmacyExpenseStats) {
+        if (pharmacyExpenseStats?.length > 0) {
             setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));
         } 
     }, [pharmacyExpenseStats]);
