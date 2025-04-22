@@ -10,7 +10,7 @@ import FileUploadField from "@/components/common/form/FileUploadField";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { addNewCourseInitialVals } from "@/utils/initialVals";
 import { addNewCourseValidationSchema } from "@/utils/validationSchema";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createNewCourse, fetchAllPharmacies, postCoursesUploadFile, updateCourse } from "@/services/adminServices";
 import { RootState } from "@/store/store";
 import { PharmacyCardProps, UploadedFileProps } from "@/utils/types";
@@ -22,9 +22,18 @@ const AddCourseModal = () => {
     const { courseDetails } = useSelector((state: RootState) => state.course);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
     const dispatch = useDispatch();
+    const isFetchedCourses = useRef(false);
+
     const handleClose = () => {
         dispatch(setIsAddCourse(false));
     };
+
+    useEffect(() => {
+        if (!isFetchedCourses.current) {
+            fetchAllPharmacies(dispatch);
+            isFetchedCourses.current = true;
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         if (courseDetails) {
@@ -46,7 +55,6 @@ const AddCourseModal = () => {
             setInitialVals(addNewCourseInitialVals);
             setUploadedFile(null);
         }
-        fetchAllPharmacies(dispatch);
     }, []);
 
     const handleFileUpload = async (event: any, setValue: (value: any) => void) => {

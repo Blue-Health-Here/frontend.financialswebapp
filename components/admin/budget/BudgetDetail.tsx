@@ -24,7 +24,7 @@ import { AdminExpenseProps, BudgetStatsCardProps } from '@/utils/types';
 
 const BudgetDetail = () => {
     const params = useParams();
-    const pharmacyId = params?.pharmacy_id;
+    const pharmacyId: any = params?.pharmacy_id;
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { isAddExpense, adminExpenseData, pharmacyList, adminExpenseStats } = useSelector((state: RootState) => state.expense);
