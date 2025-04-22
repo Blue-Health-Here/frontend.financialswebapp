@@ -7,9 +7,9 @@ export const getUserRole = async (user: any) => {
         user_id: user?.id,
     });
     
-    if (error) {
-        return encodedRedirect("error", "/sign-in", error.message);
-    }
+    // if (error) {
+    //     return encodedRedirect("error", "/sign-in", error.message);
+    // }
 
     let role = "";
     switch (data) {
