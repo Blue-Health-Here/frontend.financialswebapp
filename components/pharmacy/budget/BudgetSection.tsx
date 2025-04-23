@@ -23,7 +23,7 @@ import { assignAdminBudgetStatsValues } from '@/utils/helper';
 
 const BudgetSection = () => {
     const { width } = useWindowSize();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const { isAddExpense, expenseData, loading, pharmacyExpenseStats } = useSelector((state: RootState) => state.pharmacyExpense);
     const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
     
@@ -59,10 +59,12 @@ const BudgetSection = () => {
     }
     
     useEffect(() => {
-        fetchPharmacyExpense(dispatch).finally(() => setLoading(false));
-        fetchPharmacyExpenseStats(dispatch).finally(() => setLoading(false));
+        Promise.all([
+            fetchPharmacyExpense(dispatch),
+            fetchPharmacyExpenseStats(dispatch)
+        ]).finally(() => setLoading(false));
     }, []);
-    
+
     useEffect(() => {
         if (pharmacyExpenseStats?.length > 0) {
             setStatsUpdatedData(assignAdminBudgetStatsValues(pharmacyExpenseStats));

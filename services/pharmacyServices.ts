@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
 
 interface ApiResponse<T = any> {
-  data?: T;
+  data?: T & { success?: boolean };
   status?: number;
   success?: boolean;
   message?: string;
@@ -96,9 +96,9 @@ const apiHandler = async <T = any>(
         response = await axiosAdmin.delete(url, config);
         break;
     }
-    
+    console.log(response, "res");
     // Handle success
-    if (response?.status === 200 || response?.success) {
+    if (response?.status === 200 || response?.data?.success) {
       if (successMessage) {
         toast.success(successMessage);
       }
