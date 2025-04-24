@@ -36,10 +36,6 @@ const ChecklistSection = () => {
         };
       }, [isAddQuestion, isEditQuestion]);
 
-    const handleAddQuestion = () => {
-        dispatch(setIsAddQuestion(true))
-    };
-
     const handleEditQuestion = () => {
         dispatch(setIsEditQuestion(true))
     }
@@ -51,25 +47,18 @@ const ChecklistSection = () => {
                 <div className="flex items-center justify-between gap-3">
                     <h1 className="text-lg md:text-2xl">Checklist</h1>
                 </div>
-            </div>
-            <div className="py-4 flex items-center justify-between flex-wrap gap-4 pb-6">
-                <h3 className="align-middle text-base flex items-center justify-center gap-2">
-                    <span className="text-xs sm:text-sm md:text-[16px] font-medium text-grey">Add new Question</span>
-                    <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1" onClick={handleAddQuestion}><FaPlus className="text-white  text-xs" /></SubmitButton>
-                </h3>
                 <Formik
                     initialValues={{ type: "", category: "", search: "" }}
                     onSubmit={() => { }}
                 >
                     {({ isSubmitting }) => (
-                        <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
+                        <Form className="flex md:min-w-64 flex-wrap text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                             <SelectField
                                 className="border-none shadow-lg rounded-lg font-medium min-w-48"
                                 parentClassName="flex-1"
                                 name="type"
                                 options={[
-                                    { value: "all", label: "All Types" },
-                                    { value: "on-boarding", label: "On boarding" },
+                                    { value: "onboarding", label: "Onboarding" },
                                     { value: "operational", label: "Operational" },
                                 ]}
                             />
@@ -78,7 +67,7 @@ const ChecklistSection = () => {
                                 parentClassName="flex-1"
                                 name="category"
                                 options={[
-                                    { value: "on-boarding", label: "On boarding" },
+                                    { value: "onboarding", label: "Onboarding" },
                                     { value: "operational", label: "Operational" },
                                 ]}
                             />
@@ -92,12 +81,14 @@ const ChecklistSection = () => {
                     )}
                 </Formik>
             </div>
-            <div className="flex flex-col gap-6">
+            {/* <div className="py-4 flex items-center justify-between flex-wrap gap-4 pb-6">
+            </div> */}
+            <div className="flex flex-col gap-6 py-4">
                 {checklists.map((checklist, index) => (
                     <div className="w-full" key={index}>
                         <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
-                        <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">{checklist.name + " Checklist"}</h2>
-                        <h3 className="align-middle text-base flex items-center justify-center gap-2">
+                            <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl">{checklist.name + " Checklist"}</h2>
+                            <h3 className="align-middle text-base flex items-center justify-center gap-2">
                                 <span className="text-xs sm:text-sm md:text-base font-medium text-grey">Add New Checklist</span>
                                 <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1"
                                     onClick={() => {
@@ -106,12 +97,19 @@ const ChecklistSection = () => {
                                     }}><FaPlus className="text-white  text-xs" />
                                 </SubmitButton>
                             </h3>
+                            <h3 className="align-middle text-base flex items-center justify-center gap-2">
+                                <span className="text-xs sm:text-sm md:text-[16px] font-medium text-grey">Add new Checklist Task</span>
+                                <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1" onClick={() => {
+                                    setSelectedChecklistType(checklist.name);
+                                    dispatch(setIsAddQuestion(true));
+                                }}><FaPlus className="text-white  text-xs" /></SubmitButton>
+                            </h3>
                         </div>
                         <Accordion key={index} items={checklist.list} handleEditQuestion={handleEditQuestion} />
                     </div>
                 ))}
             </div>
-            {isAddQuestion && <AddNewQuestionModal />}
+            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
             {isEditQuestion && <EditQuestionModal />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType}/>}
         </div>

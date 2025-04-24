@@ -21,29 +21,29 @@ const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedTyp
         name: "",
         checklistType: selectedType?.toLowerCase() || "",
     }
-  return (
-    <Modal>
-    <div className="bg-white">
-        <HeaderModal title="Add New Checklist" onClose={(handleClose)}/>
-        <div className="p-6">
-            <Formik initialValues={initialValues} onSubmit={() => {}}>
-                <Form className="flex flex-col gap-y-4">
-                    <InputField label="Name" className="placeholder:text-themeLight" name="name" placeholder="Enter Name" lableColor='text-black'/>
-                    <SelectField
-                        label="Checklist Type"
-                        name="checklistType"
-                        options={[
-                            { value: "onboarding", label: "Onboarding" },
-                            { value: "operational", label: "Operational" },
-                        ]}
-                    />
-                    <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
-                </Form>
-            </Formik>
-        </div>
-    </div>
-</Modal>
-  )
+    return (
+        <Modal>
+            <div className="bg-white">
+                <HeaderModal title="Add New Checklist" onClose={(handleClose)} />
+                <div className="p-6">
+                    <Formik initialValues={initialValues} onSubmit={() => { }}>
+                        <Form className="flex flex-col gap-y-4">
+                            <InputField label="Name" className="placeholder:text-themeLight" name="name" placeholder="Enter Name" lableColor='text-black' />
+                            <SelectField
+                                label="Checklist Type"
+                                name="checklistType"
+                                options={[
+                                    { value: "onboarding", label: "Onboarding" },
+                                    { value: "operational", label: "Operational" },
+                                ]}
+                            />
+                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                        </Form>
+                    </Formik>
+                </div>
+            </div>
+        </Modal>
+    )
 }
 
 export default AddNewChecklistModal
