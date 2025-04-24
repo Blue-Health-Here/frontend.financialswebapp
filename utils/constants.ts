@@ -83,7 +83,7 @@ export const accordionData = [
 
 export const checklists = [
     {
-        name: 'On boarding',
+        name: 'Onboarding',
         list: [
             { title: 'Pharmacy Policy & Procedures', content: ['Content for course 1 goes here.', 'Content for course 1 goes here.', 'Content for course 1 goes here.'] },
             { title: 'Pharmacy Policy & Procedures', content: ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Donec sodales scelerisque eleifend.', 'Nullam fermentum nunc nec.'] },

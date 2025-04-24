@@ -12,9 +12,10 @@ export default async function PharmacyLayout({
 }>) {
     const supabase = await createClient();
     const { data: { session }, error } = await supabase.auth.getSession();
-
+    const { data, error: errUser } = await supabase.auth.getUser();
+    // console.log(data, errUser, "dpasoidpoasd")
     const role = await getUserRole(session?.user);
-    if (role !== "pharmacy") {
+    if (role !== "pharmacy" && data?.user) {
       redirect("/not-found");
     }
 

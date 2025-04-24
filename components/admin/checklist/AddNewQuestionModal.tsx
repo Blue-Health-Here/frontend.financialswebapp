@@ -8,8 +8,11 @@ import { SubmitButton } from "@/components/submit-button";
 import { setIsAddQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
 import SelectField from "@/components/common/form/SelectField";
 
+interface AddNewQuestionModalProps {
+    selectedType?: string;
+}
 
-const AddNewQuestionModal = () => {
+const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType }) => {
     const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(setIsAddQuestion(false));
@@ -19,9 +22,15 @@ const AddNewQuestionModal = () => {
             <div className="bg-white">
                 <HeaderModal title="Add New Question" onClose={handleClose} />
                 <div className="p-6">
-                    <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+                    <Formik 
+                        initialValues={{ 
+                            name: "", 
+                            checklistType: selectedType?.toLowerCase() || "" 
+                        }} 
+                        onSubmit={() => { }}
+                    >
                         <Form className="flex flex-col gap-y-4">
-                            <InputField label="Question" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />
+                            <InputField label="Question" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" lableColor='text-black'/>
                             <SelectField
                                 label="Checklist Type"
                                 name="checklistType"
@@ -42,9 +51,8 @@ const AddNewQuestionModal = () => {
                                 label="Category"
                                 name="category"
                                 options={[
-                                    { value: "choose", label: "" },
                                     { value: "onboarding", label: "Onboarding" },
-                                    { value: "operations", label: "Operations" },
+                                    { value: "operational", label: "Operational" },
                                 ]}
                             />
                             <div className="flex gap-x-6">
