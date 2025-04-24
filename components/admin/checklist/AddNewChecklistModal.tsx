@@ -8,17 +8,25 @@ import { Form, Formik } from 'formik'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
-const AddNewChecklistModal = () => {
+interface AddNewChecklistModalProps {
+    selectedType?: string;
+}
+
+const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedType }) => {
     const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(setIsAddChecklist(false));
     };
+    const initialValues = {
+        name: "",
+        checklistType: selectedType?.toLowerCase() || "",
+    }
   return (
     <Modal>
     <div className="bg-white">
         <HeaderModal title="Add New Checklist" onClose={(handleClose)}/>
         <div className="p-6">
-            <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+            <Formik initialValues={initialValues} onSubmit={() => {}}>
                 <Form className="flex flex-col gap-y-4">
                     <InputField label="Name" className="placeholder:text-themeLight" name="name" placeholder="Enter Name" lableColor='text-black'/>
                     <SelectField
@@ -26,7 +34,7 @@ const AddNewChecklistModal = () => {
                         name="checklistType"
                         options={[
                             { value: "onboarding", label: "Onboarding" },
-                            { value: "operations", label: "Operations" },
+                            { value: "operational", label: "Operational" },
                         ]}
                     />
                     <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>

@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddChecklist, setIsAddQuestion, setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
 import EditQuestionModal from "./EditQuestionModal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
 
@@ -20,7 +20,8 @@ const ChecklistSection = () => {
     const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
     const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
-
+    const [selectedChecklistType, setSelectedChecklistType] = useState('');
+    
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -43,10 +44,7 @@ const ChecklistSection = () => {
         dispatch(setIsEditQuestion(true))
     }
 
-    const handleAddChecklist = () => {
-        dispatch(setIsAddChecklist(true))
-    };
-
+ 
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
@@ -95,20 +93,27 @@ const ChecklistSection = () => {
                 </Formik>
             </div>
             <div className="flex flex-col gap-6">
-                <h3 className="align-middle text-base flex items-center justify-end gap-2">
-                    <span className="text-xs sm:text-sm md:text-base font-medium text-grey">Add New Checklist</span>
-                    <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1" onClick={handleAddChecklist}><FaPlus className="text-white  text-xs" /></SubmitButton>
-                </h3>
                 {checklists.map((checklist, index) => (
                     <div className="w-full" key={index}>
-                        <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl mb-4">{checklist.name + " Checklist"}</h2>
+                        <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+                        <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">{checklist.name + " Checklist"}</h2>
+                        <h3 className="align-middle text-base flex items-center justify-center gap-2">
+                                <span className="text-xs sm:text-sm md:text-base font-medium text-grey">Add New Checklist</span>
+                                <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1"
+                                    onClick={() => {
+                                        setSelectedChecklistType(checklist.name);
+                                        dispatch(setIsAddChecklist(true));
+                                    }}><FaPlus className="text-white  text-xs" />
+                                </SubmitButton>
+                            </h3>
+                        </div>
                         <Accordion key={index} items={checklist.list} handleEditQuestion={handleEditQuestion} />
                     </div>
                 ))}
             </div>
             {isAddQuestion && <AddNewQuestionModal />}
             {isEditQuestion && <EditQuestionModal />}
-            {isAddChecklist && <AddNewChecklistModal/>}
+            {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType}/>}
         </div>
     );
 }
