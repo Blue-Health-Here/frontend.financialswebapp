@@ -13,14 +13,15 @@ interface InputFieldProps {
     Icon?: React.ComponentType<{ className?: string }>;
     disabled?: boolean
     onIconClick?: () => void;
+    lableColor?:string
 }
 
-const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon,onIconClick, ...props }) => {
+const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, onIconClick, lableColor = "text-grey ", ...props }) => {
     const [field, meta] = useField(props);
 
     return (
         <div>
-            {label && <Label size="xs" className="text-grey" htmlFor={props.name}>{label}</Label>}
+            {label && <Label size="xs" className={`${lableColor}`} htmlFor={props.name}>{label}</Label>}
             <div className="relative">
                 <input
                     className={cn(

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isAddQuestion: false,
-    isEditQuestion: false
+    isEditQuestion: false,
+    isAddChecklist: false,
 }
 
 const adminChecklistSlice = createSlice({
@@ -14,10 +15,13 @@ const adminChecklistSlice = createSlice({
         },
         setIsEditQuestion: (state, action) => {
             state.isEditQuestion = action.payload
-        }
+        },
+        setIsAddChecklist: (state, action) => {
+            state.isAddChecklist = action.payload
+        },
     }
 })
 
-export const { setIsAddQuestion, setIsEditQuestion } = adminChecklistSlice.actions
+export const { setIsAddQuestion, setIsEditQuestion,setIsAddChecklist } = adminChecklistSlice.actions
 
 export default adminChecklistSlice.reducer

@@ -21,7 +21,7 @@ const AddNewQuestionModal = () => {
                 <div className="p-6">
                     <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
                         <Form className="flex flex-col gap-y-4">
-                            <InputField label="Question" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" />
+                            <InputField label="Question" className="placeholder:text-themeLight" name="name" placeholder="Enter Question" lableColor='text-black'/>
                             <SelectField
                                 label="Checklist Type"
                                 name="checklistType"
