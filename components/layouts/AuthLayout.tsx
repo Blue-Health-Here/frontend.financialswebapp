@@ -10,8 +10,9 @@ export default async function AuthLayout({
 }>) {
   const supabase = await createClient();
   const { data: { session }, error } = await supabase.auth.getSession();
+  const user = await supabase.auth.getUser();
 
-  if (session && !error) {
+  if (session && !error && user?.data?.user) {
     const role = await getUserRole(session?.user);
     if (role === "admin") {
       redirect("/admin/dashboard");

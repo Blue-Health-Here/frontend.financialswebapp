@@ -39,7 +39,6 @@ export const updateSession = async (request: NextRequest) => {
     // https://supabase.com/docs/guides/auth/server-side/nextjs
     // const { error, data: { user } } = await supabase.auth.getUser();
     let { data: { session }, error } = await supabase.auth.getSession();
-    // console.log(session, error, "session middleware");
 
     if (!session?.access_token) {
       await supabase.auth.refreshSession();
@@ -55,6 +54,7 @@ export const updateSession = async (request: NextRequest) => {
     }
 
     if (request.nextUrl.pathname === "/" && session?.user !== null) {
+      console.log(session, error, "session middleware");
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
 
