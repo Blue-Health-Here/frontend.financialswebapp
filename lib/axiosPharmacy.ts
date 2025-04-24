@@ -8,7 +8,6 @@ export const axiosPharmacy: AxiosInstance = axios.create({
   },
 });
 
-// Optional: Add Authorization if required for client requests
 axiosPharmacy.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const state = store.getState();
