@@ -6,7 +6,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 interface AccordionProps {
-  items: ChecklistProps[];
+  items: any;
   handleEditQuestion?: () => void;
   handleEditChecklist?: Function
 }
@@ -27,13 +27,15 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
             onClick={() => onTitleClick(index)}
           >
             <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
-              {item.checklist_name}
-               <FiEdit 
-               onClick={(e) => {
-                 e.stopPropagation();
-                 handleEditChecklist && handleEditChecklist(item);
-               }}
-               />
+              {item.checklist_name || item.title}
+              {item.checklist_name && (
+                <FiEdit
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditChecklist && handleEditChecklist(item);
+                  }}
+                />
+              )}
             </h1>
             {activeIndex === index ? (
               <RiArrowDropDownLine className="text-2xl md:text-[34px]" />
@@ -45,9 +47,9 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
             className={`transition-all duration-300 ease-in-out ${activeIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
           >
             <div className="p-6 bg-white border-t border-gray-300">
-              {/* {Array.isArray(item.content) && item.content.length > 0 ? (
+              {Array.isArray(item?.content) && item?.content?.length > 0 ? (
                 <ul className="divide-y divide-gray-300">
-                  {item.content.map((text, idx) => (
+                  {item?.content?.map((text: any, idx: any) => (
                     <li key={idx} className="py-3">
                       <div className="flex items-start sm:items-center justify-between">
                         <div className="inline-flex gap-2 items-start sm:items-center flex-1">
@@ -75,15 +77,14 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                           />
                         </button>
                       </div>
-                    </li> */}
-                    <p>No data </p>
-                  {/* ))} */}
-                {/* </ul> */}
-              {/* ) : item.content ? (
+                    </li>
+                  ))}
+                </ul>
+              ) : item?.content ? (
                 <div className="flex items-start sm:items-center justify-between">
                   <div className="flex gap-2 items-start sm:items-center flex-1">
                     <p className="text-grey text-xs sm:text-sm md:text-[16px]">
-                      {item.content}
+                      {item?.content}
                     </p>
                   </div>
                   <button
@@ -99,8 +100,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                     />
                   </button>
                 </div>
-              ) 
-              : null} */}
+              ) : <p>No data </p>}
             </div>
           </div>
         </div>
