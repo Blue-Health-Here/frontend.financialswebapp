@@ -8,9 +8,10 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 interface AccordionProps {
   items: ChecklistProps[];
   handleEditQuestion?: () => void;
+  handleEditChecklist?: Function
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion }) => {
+const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const onTitleClick = (index: number) => {
@@ -26,7 +27,13 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion }) => {
             onClick={() => onTitleClick(index)}
           >
             <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
-              {item.checklist_name} <FiEdit />
+              {item.checklist_name}
+               <FiEdit 
+               onClick={(e) => {
+                 e.stopPropagation();
+                 handleEditChecklist && handleEditChecklist(item);
+               }}
+               />
             </h1>
             {activeIndex === index ? (
               <RiArrowDropDownLine className="text-2xl md:text-[34px]" />

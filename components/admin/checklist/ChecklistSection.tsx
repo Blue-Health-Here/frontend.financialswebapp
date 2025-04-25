@@ -9,7 +9,7 @@ import { IoSearch } from "react-icons/io5";
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddChecklist, setIsAddQuestion, setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
+import { setChecklistDetail, setIsAddChecklist, setIsAddQuestion, setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
 import EditQuestionModal from "./EditQuestionModal";
 import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
@@ -50,6 +50,12 @@ const ChecklistSection = () => {
          }
      }, []);
      
+    const handleEditChecklist = (data: ChecklistProps) => {
+        dispatch(setIsAddChecklist(true));
+        dispatch(setChecklistDetail(data));
+        console.log("data",data)
+    };
+
      
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -106,6 +112,7 @@ const ChecklistSection = () => {
                                         onClick={() => {
                                             setSelectedChecklistType(type);
                                             dispatch(setIsAddChecklist(true));
+                                            dispatch(setChecklistDetail(null));
                                         }}><FaPlus className="text-white  text-xs" />
                                     </SubmitButton>
                                 </h3>
@@ -117,7 +124,7 @@ const ChecklistSection = () => {
                                     }}><FaPlus className="text-white  text-xs" /></SubmitButton>
                                 </h3>
                             </div>
-                            <Accordion items={filteredChecklists} handleEditQuestion={handleEditQuestion} />
+                            <Accordion items={filteredChecklists} handleEditQuestion={handleEditQuestion} handleEditChecklist={(item: any) => handleEditChecklist(item)} />
                         </div>
                            )
                 })}
