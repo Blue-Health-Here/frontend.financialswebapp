@@ -5,7 +5,8 @@ const initialState = {
     isEditQuestion: false,
     isAddChecklist: false,
     checklists: [],
-    checklistDetail: null
+    checklistDetail: null,
+    tasklist: []
 }
 
 const adminChecklistSlice = createSlice({
@@ -27,9 +28,12 @@ const adminChecklistSlice = createSlice({
         setChecklistDetail: (state, action) => {
             state.checklistDetail = action.payload
         },
+        setTasklist: (state, action) => {
+            state.tasklist = action.payload
+        },
     }
 })
 
-export const { setIsAddQuestion, setIsEditQuestion,setIsAddChecklist, setChecklists, setChecklistDetail } = adminChecklistSlice.actions
+export const { setIsAddQuestion, setIsEditQuestion,setIsAddChecklist, setChecklists, setChecklistDetail, setTasklist } = adminChecklistSlice.actions
 
 export default adminChecklistSlice.reducer

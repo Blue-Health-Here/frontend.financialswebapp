@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
 import { ChecklistProps } from "@/utils/types";
-import { deleteChecklist, fetchAllChecklist } from "@/services/adminServices";
+import { deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
 const ChecklistSection = () => {
@@ -23,6 +23,7 @@ const ChecklistSection = () => {
     const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
     const checklists = useSelector((state: RootState) => state.checklist.checklists) as ChecklistProps[];
+    const tasklist = useSelector((state: RootState) => state.checklist.tasklist);
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
     const isFetched = useRef(false);
     const dispatch = useDispatch();
@@ -53,13 +54,16 @@ const ChecklistSection = () => {
     const handleEditChecklist = (data: ChecklistProps) => {
         dispatch(setIsAddChecklist(true));
         dispatch(setChecklistDetail(data));
-        console.log("data",data)
+    };
+
+    const handleChecklistSelect = (checklistId: string) => {
+        fetchAllTasklist(dispatch, checklistId);
     };
 
     const handleDeleteChecklist = (id?: string) => {
         deleteChecklist(dispatch, id);
     };
-     
+     console.log("tasklist",tasklist)
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
@@ -133,7 +137,8 @@ const ChecklistSection = () => {
                             items={filteredChecklists}
                             handleEditQuestion={handleEditQuestion} 
                             handleEditChecklist={(item: any) => handleEditChecklist(item)}
-                            handleDelete = {handleDeleteChecklist} />
+                            handleDelete = {handleDeleteChecklist} 
+                            onChecklistSelect={handleChecklistSelect} />
                         </div>
                            )
                 })}
