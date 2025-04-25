@@ -101,7 +101,9 @@ const ChecklistSection = () => {
             </div> */}
             <div className="flex flex-col gap-6 py-4">
                 {["onboarding", "operations"].map((type) => {
-                    const filteredChecklists = checklists.filter((checklist: ChecklistProps) => checklist.checklist_type === type);
+                       const filteredChecklists = checklists
+                       .filter((checklist: ChecklistProps) => checklist.checklist_type === type)
+                       .sort((a, b) => a.checklist_name.localeCompare(b.checklist_name));
                            return(
                             <div className="w-full" key={type}>
                             <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
