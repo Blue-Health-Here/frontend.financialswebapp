@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { FiDelete, FiEdit, FiTable, FiTrash, FiTrash2 } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import DeleteModal from "./DeleteModal";
 
 interface AccordionProps {
   items: any;
@@ -14,15 +15,14 @@ interface AccordionProps {
 
 const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isCloseModal, setIsCloseModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+
 
   const onTitleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
 
-  const handleSuccess = (id: string) => {
-    if (handleDelete) handleDelete(id);
-    return undefined;
-}
 
   return (
     <div className="w-full mx-auto">
@@ -46,9 +46,10 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                   <FiTrash2
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleSuccess(item.id);
+                      setSelectedItem(item);
+                      setIsCloseModal(true);
                     }}
-                    className="text-red-500 font"
+                   className={`${activeIndex === index ? "text-secondary" : "text-red-500 font"}`}
                   />
                 </>
               )}
@@ -121,6 +122,17 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
           </div>
         </div>
       ))}
+      {isCloseModal && <DeleteModal title={selectedItem.checklist_name.toUpperCase()} content={`<p className="text-base">
+         <span>Are you sure you want to delete this ${selectedItem.checklist_name}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
+        handleClose={() => {
+          setIsCloseModal(false);
+          setSelectedItem(null);
+        }}
+        handleSuccess={() => {
+          if (handleDelete) handleDelete(selectedItem.id);
+          setIsCloseModal(false);
+          setSelectedItem(null);
+        }} />}
     </div>
   );
 };
