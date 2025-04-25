@@ -1,7 +1,7 @@
 import { ChecklistProps } from "@/utils/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiEdit } from "react-icons/fi";
+import { FiDelete, FiEdit, FiTable, FiTrash, FiTrash2 } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
@@ -9,14 +9,20 @@ interface AccordionProps {
   items: any;
   handleEditQuestion?: () => void;
   handleEditChecklist?: Function
+  handleDelete?: (id: string) => void 
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist }) => {
+const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const onTitleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
+
+  const handleSuccess = (id: string) => {
+    if (handleDelete) handleDelete(id);
+    return undefined;
+}
 
   return (
     <div className="w-full mx-auto">
@@ -29,12 +35,22 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
             <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
               {item.checklist_name || item.title}
               {item.checklist_name && (
-                <FiEdit
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditChecklist && handleEditChecklist(item);
-                  }}
-                />
+                <>
+                  <FiEdit
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditChecklist && handleEditChecklist(item);
+                    }}
+                    className={`${activeIndex === index ? "text-white" : "text-primary"}`}
+                  />
+                  <FiTrash2
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSuccess(item.id);
+                    }}
+                    className="text-red-500 font"
+                  />
+                </>
               )}
             </h1>
             {activeIndex === index ? (
