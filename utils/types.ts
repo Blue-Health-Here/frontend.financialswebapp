@@ -190,3 +190,10 @@ export interface PaymentReconciliationProps {
     created_at: string;
     status: string;
 }
+
+export type ChecklistProps = {
+    id: string,
+    checklist_name: string,
+    checklist_type: string
+
+};

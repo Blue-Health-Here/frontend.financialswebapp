@@ -14,6 +14,7 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
+import { setChecklists } from "@/store/features/admin/checklist/adminChecklistSlice";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -422,6 +423,14 @@ export const createNewChecklist = async (dispatch: AppDispatch, data: any) => {
   return apiHandler(dispatch, 'post', '/v1/admin-checklist', {
     data,
     successMessage: "Checklist created successfully!",
-    // onSuccess: () => fetchAllCourses(dispatch)
+    onSuccess: () => fetchAllChecklist(dispatch)
+  });
+};
+
+export const fetchAllChecklist = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/admin-checklist', {
+    successMessage: "Checklist fetched successfully!",
+    onSuccess: (data) => dispatch(setChecklists(data)),
+    onError: () => dispatch(setCourses([]))
   });
 };
