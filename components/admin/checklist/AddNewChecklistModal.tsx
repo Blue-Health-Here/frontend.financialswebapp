@@ -53,7 +53,7 @@ const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedTyp
                                 name="checklist_type"
                                         options={[
                                     { value: "onboarding", label: "Onboarding" },
-                                    { value: "operational", label: "Operational" },
+                                    { value: "operations", label: "Operations" },
                                         ]}
                             />
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
