@@ -6,7 +6,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 interface AccordionProps {
-  items: ChecklistProps[];
+  items: any;
   handleEditQuestion?: () => void;
 }
 
