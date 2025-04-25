@@ -3,33 +3,50 @@ import SelectField from '@/components/common/form/SelectField'
 import HeaderModal from '@/components/common/HeaderModal'
 import Modal from '@/components/common/Modal'
 import { SubmitButton } from '@/components/submit-button'
-import { createNewChecklist } from '@/services/adminServices'
+import { createNewChecklist, updateChecklist } from '@/services/adminServices'
 import { setIsAddChecklist } from '@/store/features/admin/checklist/adminChecklistSlice'
+import { RootState } from '@/store/store'
 import { addNewChecklistValidationSchema } from '@/utils/validationSchema'
 import { Form, Formik } from 'formik'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface AddNewChecklistModalProps {
     selectedType?: string;
 }
 
 const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedType }) => {
+    const checklistDetail = useSelector((state: RootState) => state.checklist.checklistDetail);
     const [initialVals, setInitialVals] = useState<any>({checklist_name: "",checklist_type: selectedType?.toLowerCase()});
     const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(setIsAddChecklist(false));
     };
 
-    const handleSubmit = async (values: {checklist_name: string, checklist_type: string}) => {
+    useEffect(() => {
+        if (checklistDetail) {
+            setInitialVals({
+                checklist_id: checklistDetail?.id, 
+                checklist_name: checklistDetail.checklist_name,
+                checklist_type: checklistDetail.checklist_type
+            });
+        }
+    }, [checklistDetail]);  
+    
+
+    const handleSubmit = async (values: { checklist_name: string, checklist_type: string }) => {
         const payload: any = {
             checklist_name: values.checklist_name,
             checklist_type: values.checklist_type
         }
-        
+
         try {
-            await createNewChecklist(dispatch, payload);
+            if (checklistDetail) {
+                await updateChecklist(dispatch, { id: checklistDetail?.id, ...payload });
+            } else {
+                await createNewChecklist(dispatch, payload);
+            }
             handleClose();
         } catch (error: any) {
             toast.error(error?.message || "Something went wrong!!");
@@ -39,7 +56,7 @@ const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedTyp
     return (
         <Modal>
             <div className="bg-white">
-                <HeaderModal title="Add New Checklist" onClose={(handleClose)} />
+                <HeaderModal title={`${checklistDetail ? "Edit" : "Add New"} Checklist`} onClose={(handleClose)} />
                 <div className="p-6">
                     <Formik initialValues={initialVals}
                      validationSchema={addNewChecklistValidationSchema}
@@ -51,12 +68,15 @@ const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedTyp
                             <SelectField
                                 label="Checklist Type"
                                 name="checklist_type"
-                                        options={[
+                                options={[
                                     { value: "onboarding", label: "Onboarding" },
                                     { value: "operations", label: "Operations" },
-                                        ]}
+                                ]}
+                                isDisabled={!!checklistDetail}      
                             />
-                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">
+                                {checklistDetail ? "Update": "Save"}
+                            </SubmitButton>
                         </Form>
                     </Formik>
                 </div>

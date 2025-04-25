@@ -434,3 +434,12 @@ export const fetchAllChecklist = async (dispatch: AppDispatch) => {
     onError: () => dispatch(setCourses([]))
   });
 };
+
+export const updateChecklist = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'put', '/v1/admin-checklist', {
+    params: { checklist_id: data?.id },
+    data,
+    successMessage: "Checklist updated successfully!",
+    onSuccess: () => fetchAllChecklist(dispatch)
+  });
+};
