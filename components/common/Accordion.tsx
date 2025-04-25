@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
+import { FiEdit } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
@@ -26,8 +27,8 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion }) => {
             className={`flex justify-between items-center px-6 py-4 sm:py-2  md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => onTitleClick(index)}
           >
-            <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg">
-              {item.title}
+            <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
+              {item.title} <FiEdit />
             </h1>
             {activeIndex === index ? (
               <RiArrowDropDownLine className="text-2xl md:text-[34px]" />
