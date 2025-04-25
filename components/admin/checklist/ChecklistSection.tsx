@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
 import { ChecklistProps } from "@/utils/types";
-import { fetchAllChecklist } from "@/services/adminServices";
+import { deleteChecklist, fetchAllChecklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
 const ChecklistSection = () => {
@@ -56,6 +56,9 @@ const ChecklistSection = () => {
         console.log("data",data)
     };
 
+    const handleDeleteChecklist = (id?: string) => {
+        deleteChecklist(dispatch, id);
+    };
      
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -126,7 +129,11 @@ const ChecklistSection = () => {
                                     }}><FaPlus className="text-white  text-xs" /></SubmitButton>
                                 </h3>
                             </div>
-                            <Accordion items={filteredChecklists} handleEditQuestion={handleEditQuestion} handleEditChecklist={(item: any) => handleEditChecklist(item)} />
+                            <Accordion 
+                            items={filteredChecklists}
+                            handleEditQuestion={handleEditQuestion} 
+                            handleEditChecklist={(item: any) => handleEditChecklist(item)}
+                            handleDelete = {handleDeleteChecklist} />
                         </div>
                            )
                 })}

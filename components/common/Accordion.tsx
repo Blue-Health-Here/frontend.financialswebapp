@@ -1,22 +1,28 @@
 import { ChecklistProps } from "@/utils/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiEdit } from "react-icons/fi";
+import { FiDelete, FiEdit, FiTable, FiTrash, FiTrash2 } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import DeleteModal from "./DeleteModal";
 
 interface AccordionProps {
   items: any;
   handleEditQuestion?: () => void;
   handleEditChecklist?: Function
+  handleDelete?: (id: string) => void 
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist }) => {
+const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isCloseModal, setIsCloseModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+
 
   const onTitleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
+
 
   return (
     <div className="w-full mx-auto">
@@ -29,12 +35,23 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
             <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
               {item.checklist_name || item.title}
               {item.checklist_name && (
-                <FiEdit
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditChecklist && handleEditChecklist(item);
-                  }}
-                />
+                <>
+                  <FiEdit
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditChecklist && handleEditChecklist(item);
+                    }}
+                    className={`${activeIndex === index ? "text-white" : "text-primary"}`}
+                  />
+                  <FiTrash2
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedItem(item);
+                      setIsCloseModal(true);
+                    }}
+                   className={`${activeIndex === index ? "text-secondary" : "text-red-500 font"}`}
+                  />
+                </>
               )}
             </h1>
             {activeIndex === index ? (
@@ -105,6 +122,17 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
           </div>
         </div>
       ))}
+      {isCloseModal && <DeleteModal title={selectedItem.checklist_name.toUpperCase()} content={`<p className="text-base">
+         <span>Are you sure you want to delete this ${selectedItem.checklist_name}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
+        handleClose={() => {
+          setIsCloseModal(false);
+          setSelectedItem(null);
+        }}
+        handleSuccess={() => {
+          if (handleDelete) handleDelete(selectedItem.id);
+          setIsCloseModal(false);
+          setSelectedItem(null);
+        }} />}
     </div>
   );
 };

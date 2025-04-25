@@ -443,3 +443,11 @@ export const updateChecklist = async (dispatch: AppDispatch, data: any) => {
     onSuccess: () => fetchAllChecklist(dispatch)
   });
 };
+
+export const deleteChecklist = async (dispatch: AppDispatch, id?: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin-checklist', {
+    params: { checklist_id: id },
+    successMessage: "Checklist deleted successfully!",
+    onSuccess: () => fetchAllChecklist(dispatch)
+  });
+};
