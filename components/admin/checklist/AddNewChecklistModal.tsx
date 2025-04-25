@@ -5,7 +5,6 @@ import Modal from '@/components/common/Modal'
 import { SubmitButton } from '@/components/submit-button'
 import { createNewChecklist } from '@/services/adminServices'
 import { setIsAddChecklist } from '@/store/features/admin/checklist/adminChecklistSlice'
-import { addNewChecklistInitialVals } from '@/utils/initialVals'
 import { addNewChecklistValidationSchema } from '@/utils/validationSchema'
 import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
@@ -17,13 +16,13 @@ interface AddNewChecklistModalProps {
 }
 
 const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedType }) => {
-    const [initialVals, setInitialVals] = useState<any>(addNewChecklistInitialVals);
+    const [initialVals, setInitialVals] = useState<any>({checklist_name: "",checklist_type: selectedType?.toLowerCase()});
     const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(setIsAddChecklist(false));
     };
 
-    const handleSubmit = async (values: typeof addNewChecklistInitialVals) => {
+    const handleSubmit = async (values: {checklist_name: string, checklist_type: string}) => {
         const payload: any = {
             checklist_name: values.checklist_name,
             checklist_type: values.checklist_type
@@ -52,10 +51,10 @@ const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedTyp
                             <SelectField
                                 label="Checklist Type"
                                 name="checklist_type"
-                                options={[
+                                        options={[
                                     { value: "onboarding", label: "Onboarding" },
                                     { value: "operational", label: "Operational" },
-                                ]}
+                                        ]}
                             />
                             <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
                         </Form>

@@ -50,8 +50,3 @@ export const uploadDocVerificationInitialVals: any = {
     file_pdf: "",
     statement_id: ''
 };
-
-export const addNewChecklistInitialVals = {
-   checklist_name: "",
-   checklist_type: ""
-}

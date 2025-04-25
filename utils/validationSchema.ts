@@ -111,8 +111,6 @@ export const addNewPaymentReconciliationInitialchema = Yup.object({
   
   export const addNewChecklistValidationSchema = Yup.object().shape({
     checklist_name: Yup.string().required("Name is required"),
-    checklist_type: Yup.string()
-      .oneOf(["onboarding", "operational"], "Invalid type")
-      .required("Checklist type is required"),
-  });
+    checklist_type: Yup.string().required("Checklist type is required"),
+});
   
