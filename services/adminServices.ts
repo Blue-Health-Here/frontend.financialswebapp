@@ -414,3 +414,14 @@ export const deleteAdminCertification = async (dispatch: AppDispatch, id?: strin
     successMessage: "Certification file deleted successfully!"
   });
 };
+
+
+// ============= Checklist =============
+
+export const createNewChecklist = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'post', '/v1/admin-checklist', {
+    data,
+    successMessage: "Checklist created successfully!",
+    // onSuccess: () => fetchAllCourses(dispatch)
+  });
+};

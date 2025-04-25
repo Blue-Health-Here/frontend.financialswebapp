@@ -3,9 +3,13 @@ import SelectField from '@/components/common/form/SelectField'
 import HeaderModal from '@/components/common/HeaderModal'
 import Modal from '@/components/common/Modal'
 import { SubmitButton } from '@/components/submit-button'
+import { createNewChecklist } from '@/services/adminServices'
 import { setIsAddChecklist } from '@/store/features/admin/checklist/adminChecklistSlice'
+import { addNewChecklistInitialVals } from '@/utils/initialVals'
+import { addNewChecklistValidationSchema } from '@/utils/validationSchema'
 import { Form, Formik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 
 interface AddNewChecklistModalProps {
@@ -13,25 +17,41 @@ interface AddNewChecklistModalProps {
 }
 
 const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedType }) => {
+    const [initialVals, setInitialVals] = useState<any>(addNewChecklistInitialVals);
     const dispatch = useDispatch();
     const handleClose = () => {
         dispatch(setIsAddChecklist(false));
     };
-    const initialValues = {
-        name: "",
-        checklistType: selectedType?.toLowerCase() || "",
-    }
+
+    const handleSubmit = async (values: typeof addNewChecklistInitialVals) => {
+        const payload: any = {
+            checklist_name: values.checklist_name,
+            checklist_type: values.checklist_type
+        }
+        
+        try {
+            await createNewChecklist(dispatch, payload);
+            handleClose();
+        } catch (error: any) {
+            toast.error(error?.message || "Something went wrong!!");
+        }
+    };
+
     return (
         <Modal>
             <div className="bg-white">
                 <HeaderModal title="Add New Checklist" onClose={(handleClose)} />
                 <div className="p-6">
-                    <Formik initialValues={initialValues} onSubmit={() => { }}>
+                    <Formik initialValues={initialVals}
+                     validationSchema={addNewChecklistValidationSchema}
+                     enableReinitialize={true}
+                     onSubmit={handleSubmit}
+                     >
                         <Form className="flex flex-col gap-y-4">
-                            <InputField label="Name" className="placeholder:text-themeLight" name="name" placeholder="Enter Name" lableColor='text-black' />
+                            <InputField label="Name" className="placeholder:text-themeLight" name="checklist_name" placeholder="Enter Name" lableColor='text-black' />
                             <SelectField
                                 label="Checklist Type"
-                                name="checklistType"
+                                name="checklist_type"
                                 options={[
                                     { value: "onboarding", label: "Onboarding" },
                                     { value: "operational", label: "Operational" },
