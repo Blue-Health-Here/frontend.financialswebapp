@@ -14,7 +14,7 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-import { setChecklists, setTasklist } from "@/store/features/admin/checklist/adminChecklistSlice";
+import { setChecklists, setOperationalItems, setTasklist } from "@/store/features/admin/checklist/adminChecklistSlice";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -457,5 +457,21 @@ export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string) => {
     params: { checklist_id: id },
     onSuccess: (data) => dispatch(setTasklist(data)),
     successMessage: "Tasklist fetched successfully!",
+  });
+};
+
+export const createNewOperationalItem = async (dispatch: AppDispatch, name: string) => {
+  return apiHandler(dispatch, 'post', '/v1/operational-item', {
+    params: { name: name},
+    successMessage: "Operational item created successfully!",
+    onSuccess: () => fetchAllChecklist(dispatch)
+  });
+};
+
+export const fetchAllOperationalItems = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/operational-item', {
+    successMessage: "Operational items fetched successfully!",
+    onSuccess: (data) => dispatch(setOperationalItems(data)),
+    onError: () => dispatch(setCourses([]))
   });
 };

@@ -16,6 +16,7 @@ interface SelectFieldProps {
   className?: string;
   parentClassName?: string;
   isDisabled?: boolean;
+  placeholder?: string;
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -25,6 +26,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   className,
   parentClassName,
   isDisabled = false,
+  placeholder,
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
@@ -43,12 +45,13 @@ const SelectField: React.FC<SelectFieldProps> = ({
       <Select
         inputId={name}
         name={name}
-        className={cn("text-xs", className)}
+        className={cn("text-xs placeholder:text-themeLight placeholder:text-muted-foreground", className)}
         classNamePrefix="react-select"
         value={selectedOption || null}
         onChange={(option: Option | null) => setFieldValue(name, option?.value || "")}
         options={options}
         isDisabled={isDisabled}
+        placeholder={placeholder}
         styles={{
           control: (base) => ({
             ...base,
@@ -56,6 +59,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
             borderColor: meta.touched && meta.error ? '#f87171' : base.borderColor,
             fontSize: '0.75rem',
           }),
+          placeholder: (base) => ({
+            ...base,
+            color: "#B9B9C3",
+            fontSize: "14px",
+        }),
         }}
       />
 

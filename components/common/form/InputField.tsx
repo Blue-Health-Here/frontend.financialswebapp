@@ -14,9 +14,10 @@ interface InputFieldProps {
     disabled?: boolean
     onIconClick?: () => void;
     lableColor?:string
+    onChange?: (e: any) => void
 }
 
-const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, onIconClick, lableColor = "text-grey ", ...props }) => {
+const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, onIconClick, lableColor = "text-grey ", onChange, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
@@ -31,6 +32,11 @@ const InputField: React.FC<InputFieldProps> = ({ className, ref, label, Icon, on
                     ref={ref}
                     {...props}
                     {...field}
+                    onChange={(e) => {
+                        field.onChange(e);   
+                        onChange?.(e);      
+                      }}
+                      name={props.name}
                 />
                 {Icon && (
                     <span 
