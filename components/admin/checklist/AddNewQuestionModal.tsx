@@ -16,12 +16,10 @@ import FileUploadField from "@/components/common/form/FileUploadField";
 import { PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
+import { postAssignChecklistUploadDocs } from "@/services/adminServices";
+import toast from "react-hot-toast";
 
-interface AddNewQuestionModalProps {
-    selectedType?: string;
-}
-
-const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType }) => {
+const AddNewQuestionModal = () => {
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
@@ -41,54 +39,65 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
         setSelectedDates(selectedDates.filter(date => date !== dateToRemove));
     };
 
-        const handleFileUpload = async (event: any, setValue: (value: any) => void) => {
-            console.log(setValue)
-        };
-    
+    const handleFileUploadDocs = async (event: any, setValue: (value: any) => void) => {
+        try {
+            const formData = new FormData();
+            formData.append("file", event.target.files[0]);
+            const response = await postAssignChecklistUploadDocs(dispatch, formData);
+
+            if (response) {
+                setUploadedFile(response);
+                console.log(response);
+                setValue(response); // Set Formik field with uploaded file
+            }
+        } catch (error: any) {
+            toast.error(error?.message || "Something went wrong!!");
+        }
+    };
 
     return (
         <Modal>
-        <HeaderModal title="Edit Question" onClose={handleClose} />
-        <div className="p-6">
-            <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
-                <Form className="flex flex-col gap-y-4">
-                    <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
-                    <TextareaField label="Pharmacy Comments" name="note" />
-                    <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
-                    <FileUploadField
-                        label="Upload File"
-                        module="course"
-                        name="file"
-                        title="Upload"
-                        uploadedFile={uploadedFile}
-                        setUploadedFile={setUploadedFile}
-                        handleFileUpload={(e, setValue) => handleFileUpload(e, setValue)}
-                    />
-                    <SelectField
-                        label="Operational Item"
-                        name="operational_item"
-                        options={[
-                            { value: "Tier1", label: "Tier1" },
-                            { value: "Tier2", label: "Tier2" },
-                        ]}
-                    />
-                    <MultiDateField label="Key Follow-up dates" name="follow_up_dates" />
-                   
-                    {selectedDates.length > 0 && (
-                        <div>
-                            <Label size="xs">Selected Dates(s)</Label>
-                            <div className="flex flex-col gap-2 mt-2">
-                                {selectedDates.map((date, index) => (
-                                    <div key={index} className="flex gap-x-2">
-                                        <div className="flex h-10 w-full rounded-md  border border-input bg-background px-3 py-2 text-sm">
-                                            <span>{date}</span>
+            <HeaderModal title="Add Question" onClose={handleClose} />
+            <div className="p-6">
+                <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+                    <Form className="flex flex-col gap-y-4">
+                        <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
+                        <TextareaField label="Pharmacy Comments" name="note" />
+                        <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
+                        <FileUploadField
+                            label="Upload File"
+                            module="course"
+                            name="file"
+                            title="Upload"
+                            uploadedFile={uploadedFile}
+                            setUploadedFile={setUploadedFile}
+                            handleFileUpload={(e, setValue) => handleFileUploadDocs(e, setValue)}
+                        />
+                        <SelectField
+                            label="Operational Item"
+                            name="operational_item"
+                            options={[
+                                { value: "Tier1", label: "Tier1" },
+                                { value: "Tier2", label: "Tier2" },
+                            ]}
+                        />
+                        <MultiDateField label="Key Follow-up dates" name="follow_up_dates" />
+
+                        {selectedDates.length > 0 && (
+                            <div>
+                                <Label size="xs">Selected Dates(s)</Label>
+                                <div className="flex flex-col gap-2 mt-2">
+                                    {selectedDates.map((date, index) => (
+                                        <div key={index} className="flex gap-x-2">
+                                            <div className="flex h-10 w-full rounded-md  border border-input bg-background px-3 py-2 text-sm">
+                                                <span>{date}</span>
+                                            </div>
+                                            <button onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
                                         </div>
-                                        <button onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                         <MultiSelectField
                             label="Pharmacy"
                             name="pharmacy_ids"
@@ -106,7 +115,7 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
                     </Form>
                 </Formik>
             </div>
-    </Modal>
+        </Modal>
     )
 }
 
