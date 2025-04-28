@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
-      <body className="bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning={true} className={montserrat.variable}>
+      <body className="bg-background text-foreground" suppressHydrationWarning={true}>
         <ThemeProvider>{children}</ThemeProvider>
         <Toaster position="bottom-right" />
       </body>

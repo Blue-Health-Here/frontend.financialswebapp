@@ -45,7 +45,8 @@ export const addNewCategoryInitialVals = {
     revenue:0
 }
 
-export const uploadDocVerificationInitialVals = {
+export const uploadDocVerificationInitialVals: any = {
     file_835: "",
     file_pdf: "",
+    statement_id: ''
 };

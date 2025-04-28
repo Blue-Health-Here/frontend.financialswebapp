@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
-import SelectField from "@/components/common/form/SelectField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
@@ -11,6 +10,7 @@ import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { Label } from "@/components/ui/label";
 import MultiDateField from "@/components/common/form/MultiDateField";
+import SelectField from "@/components/common/form/SelectField";
 
 
 const AddNewQuestionModal = () => {
@@ -40,8 +40,6 @@ const AddNewQuestionModal = () => {
                         <InputField label="Expense" className="placeholder:text-themeLight" name="expense" />
                         <InputField label="Pharmacy Expense" className="placeholder:text-themeLight" name="pharmacyExpense" />
                         <TextareaField label="Note" name="note" />
-
-
                         <SelectField
                             label="Operational Item"
                             name="operationalItem"

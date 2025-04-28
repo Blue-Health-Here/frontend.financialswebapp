@@ -26,9 +26,43 @@ export const assignPharmacyStatsValues = (data: pharmacyDashboardStats) => {
             case "Total monthly expense":
                 return { ...item, value: `$${Number(data.monthly_expense).toLocaleString()}` };
             default:
-                return item; 
+                return item;
         }
     });
 };
 
+// This is a client-side only function
+export const formatCreatedAt = (dateString: string): string => {
+    // For server-side rendering, return a stable output
+    if (typeof window === 'undefined') {
+        return 'Recently';
+    }
+    
+    const createdAt = new Date(dateString);
+    const now = new Date();
+    const diffInMs = now.getTime() - createdAt.getTime();
+    const diffInSec = Math.floor(diffInMs / 1000);
+    const diffInMin = Math.floor(diffInSec / 60);
+    const diffInHours = Math.floor(diffInMin / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInDays === 0) {
+        if (diffInHours > 0) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        if (diffInMin > 0) return `${diffInMin} minute${diffInMin > 1 ? 's' : ''} ago`;
+        return `Just now`;
+    }
+
+    if (diffInDays <= 10) {
+        return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    }
+
+    // Use a consistent formatter for dates
+    return createdAt.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
 

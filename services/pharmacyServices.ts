@@ -1,423 +1,338 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setIsLoading, setProfileData, setLicenseData, setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
 import { setPharmacyCourses } from "@/store/features/pharmacy/course/pharmacyCourseSlice";
-import { setDocVerificationDetails } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
+import { setDocVerificationDetails, setUploadedBankStatements } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { setPharmacyMarketingMaterials } from "@/store/features/pharmacy/marketing/pharmacyMarketingSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
 
-/**
- * get pharmacy profile data and update Redux store.
- */
+// Type definitions
+type ApiMethod = 'get' | 'post' | 'put' | 'delete';
+
+interface ApiResponse<T = any> {
+  data?: T & { success?: boolean };
+  status?: number;
+  success?: boolean;
+  message?: string;
+}
+
+interface ErrorResponse {
+  message?: string;
+  status?: number;
+  response?: { data?: { detail?: string } };
+}
+
+interface FormDataPayload {
+  [key: string]: string | Blob | any;
+}
+
+interface ExpenseData {
+  expense_id?: string;
+  [key: string]: any;
+}
+
+// Generic API handler
+const apiHandler = async <T = any>(
+  dispatch: AppDispatch,
+  method: ApiMethod,
+  endpoint: string,
+  options: {
+    data?: any;
+    params?: Record<string, string | undefined>;
+    successMessage?: string;
+    errorMessage?: string;
+    onSuccess?: (data: T) => void;
+    onError?: (error: ErrorResponse) => void;
+    isFormData?: boolean;
+    refreshAction?: () => Promise<any>;
+  } = {}
+): Promise<T | null> => {
+  const {
+    data,
+    params,
+    successMessage,
+    errorMessage = "Something went wrong",
+    onSuccess,
+    onError,
+    isFormData = false,
+    refreshAction
+  } = options;
+
+  try {
+    dispatch(setIsLoading(true));
+    
+    // Build URL with query parameters if needed
+    let url = endpoint;
+    if (params) {
+      const queryParams = Object.entries(params)
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&');
+      
+      url = queryParams ? `${endpoint}?${queryParams}` : endpoint;
+    }
+    
+    // Configure request
+    const config: any = {};
+    if (isFormData) {
+      config.headers = { "Content-Type": "multipart/form-data" };
+    }
+    
+    // Make API call
+    let response: ApiResponse<T>;
+    
+    switch (method) {
+      case 'get':
+        response = await axiosAdmin.get(url, config);
+        break;
+      case 'post':
+        response = await axiosAdmin.post(url, data, config);
+        break;
+      case 'put':
+        response = await axiosAdmin.put(url, data, config);
+        break;
+      case 'delete':
+        response = await axiosAdmin.delete(url, config);
+        break;
+    }
+    console.log(response, "res");
+    // Handle success
+    if (response?.status === 200 || response?.data?.success) {
+      if (successMessage) {
+        toast.success(successMessage);
+      }
+      
+      if (refreshAction) {
+        await refreshAction();
+      }
+      
+      if (onSuccess && response.data) {
+        onSuccess(response.data);
+      }
+      
+      return response.data || null;
+    }
+    
+    return null;
+  } catch (error: any) {
+    // Handle 404 differently in some cases
+    if (error?.status === 404) {
+      if (error?.response?.data?.detail) {
+        toast.success(error.response.data.detail);
+      }
+      
+      if (onError) {
+        onError(error);
+      }
+    } else {
+      // Handle other errors
+      toast.error(error?.message || errorMessage);
+      
+      if (onError) {
+        onError(error);
+      }
+    }
+    
+    return null;
+  } finally {
+    dispatch(setIsLoading(false));
+  }
+};
+
+// ============= PROFILE SERVICES =============
+
 export const fetchProfileDataPharmacy = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-profile");
-        if (response?.status === 200) {
-            dispatch(setProfileData(response?.data));
-            toast.success("Profile fetched successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-profile', {
+    successMessage: "Profile fetched successfully!",
+    onSuccess: (data) => dispatch(setProfileData(data))
+  });
 };
 
-/**
- * post  pharmcy profile update and update Redux store.
- */
-export const postProfileUpdatePharmacy = async (dispatch: AppDispatch, formData?: any) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.post("/v1/pharmacy-profile", formData, {
-
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        if (response?.data?.success) {
-            await fetchProfileDataPharmacy(dispatch);
-            toast.success("Profile updated successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+export const postProfileUpdatePharmacy = async (dispatch: AppDispatch, formData: FormDataPayload) => {
+  return apiHandler(dispatch, 'post', '/v1/pharmacy-profile', {
+    data: formData,
+    isFormData: true,
+    successMessage: "Profile updated successfully!",
+    refreshAction: () => fetchProfileDataPharmacy(dispatch)
+  });
 };
 
-/**
- * get pharmacy license data and update Redux store.
- */
+// ============= LICENSE SERVICES =============
+
 export const fetchPharmacyLicense = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-license");
-        if (response?.status === 200) {
-            dispatch(setLicenseData(response?.data));
-            toast.success("License fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setLicenseData([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-license', {
+    successMessage: "License fetched successfully!",
+    onSuccess: (data) => dispatch(setLicenseData(data)),
+    onError: () => dispatch(setLicenseData([]))
+  });
 };
 
-/**
- * post pharmacy license upload file and update Redux store.
- */
-export const postLicenseUploadFile = async (dispatch: AppDispatch, data: any) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.post("/v1/pharmacy-license", data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        if (response?.data?.success) {
-            toast.success("License file uploaded successfully!");
-            return { ...response?.data };
-        }
-        return null;
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+export const postLicenseUploadFile = async (dispatch: AppDispatch, data: FormDataPayload) => {
+  return apiHandler(dispatch, 'post', '/v1/pharmacy-license', {
+    data,
+    isFormData: true,
+    successMessage: "License file uploaded successfully!"
+  });
 };
 
-
-/**
- * delete pharmacy license and update Redux store.
- */
 export const deletePharmacyLicense = async (dispatch: AppDispatch, id?: string) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.delete("/v1/pharmacy-license?license_id=" + id);
-        if (response?.data?.success) {
-            await fetchPharmacyLicense(dispatch);
-            toast.success("License file deleted successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'delete', '/v1/pharmacy-license', {
+    params: { license_id: id },
+    successMessage: "License file deleted successfully!",
+    refreshAction: () => fetchPharmacyLicense(dispatch)
+  });
 };
 
-/**
- * get pharmacy certifications data and update Redux store.
- */
+// ============= CERTIFICATION SERVICES =============
+
 export const fetchPharmacyCertifications = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-certification");
-        if (response?.status === 200) {
-            dispatch(setCertificationsData(response?.data));
-            toast.success("Certificate fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setCertificationsData([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-certification', {
+    successMessage: "Certificate fetched successfully!",
+    onSuccess: (data) => dispatch(setCertificationsData(data)),
+    onError: () => dispatch(setCertificationsData([]))
+  });
 };
 
-/**
- * post pharmacy certification upload file and update Redux store.
- */
-export const postCertificationsUploadFile = async (dispatch: AppDispatch, data: any) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.post("/v1/pharmacy-certification", data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        if (response?.data?.success) {
-            toast.success("Certification file uploaded successfully!");
-            return { ...response?.data };
-        }
-        return null;
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+export const postCertificationsUploadFile = async (dispatch: AppDispatch, data: FormDataPayload) => {
+  return apiHandler(dispatch, 'post', '/v1/pharmacy-certification', {
+    data,
+    isFormData: true,
+    successMessage: "Certification file uploaded successfully!"
+  });
 };
 
-/**
- * delete pharmacy certification and update Redux store.
- */
 export const deletePharmacyCertification = async (dispatch: AppDispatch, id?: string) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.delete("/v1/pharmacy-certification?certification_id=" + id);
-        if (response?.data?.success) {
-            await fetchPharmacyCertifications(dispatch);
-            toast.success("Certification file deleted successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'delete', '/v1/pharmacy-certification', {
+    params: { certification_id: id },
+    successMessage: "Certification file deleted successfully!",
+    refreshAction: () => fetchPharmacyCertifications(dispatch)
+  });
 };
 
+// ============= EXPENSE SERVICES =============
 
-/**
- * Fetch pharmacy stats and update Redux store.
- */
 export const fetchPharmacyExpense = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-expense");
-        if (response.status === 200) {
-            dispatch(setexpenseData(response.data));
-            toast.success("Expense fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setexpenseData([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-expense', {
+    successMessage: "Expense fetched successfully!",
+    onSuccess: (data) => dispatch(setexpenseData(data)),
+    onError: () => dispatch(setexpenseData([]))
+  });
 };
 
-
-/**
- * create new expense and update Redux store.
- */
-export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: any) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.post("/v1/pharmacy-expense", data);
-        if (response.data?.success) {
-            await fetchPharmacyExpense(dispatch);
-            toast.success("Expense created successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+export const createNewPharmacyExpense = async (dispatch: AppDispatch, data: ExpenseData) => {
+  return apiHandler(dispatch, 'post', '/v1/pharmacy-expense', {
+    data,
+    successMessage: "Expense created successfully!",
+    refreshAction: () => fetchPharmacyExpense(dispatch)
+  });
 };
 
-
-/**
- * update new expense  and update Redux store.
- */
-export const updatePharmacyExpense = async (dispatch: AppDispatch, data: any) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.put("/v1/pharmacy-expense?expense_id=" + data?.expense_id, data);
-        if (response.data?.success) {
-            await fetchPharmacyExpense(dispatch);
-            toast.success("Expense updated successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+export const updatePharmacyExpense = async (dispatch: AppDispatch, data: ExpenseData) => {
+  return apiHandler(dispatch, 'put', '/v1/pharmacy-expense', {
+    params: { expense_id: data?.expense_id },
+    data,
+    successMessage: "Expense updated successfully!",
+    refreshAction: () => fetchPharmacyExpense(dispatch)
+  });
 };
 
-
-/**
- * delete  expense  and update Redux store.
- */
 export const deletePharmacyExpense = async (dispatch: AppDispatch, id?: string) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.delete("/v1/pharmacy-expense?expense_id=" + id);
-        if (response?.data?.success) {
-            await fetchPharmacyExpense(dispatch);
-            toast.success("Expense deleted successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'delete', '/v1/pharmacy-expense', {
+    params: { expense_id: id },
+    successMessage: "Expense deleted successfully!",
+    refreshAction: () => fetchPharmacyExpense(dispatch)
+  });
 };
 
-/**
- * get pharmacy dashboard stats data and update Redux store.
- */
+// ============= STATISTICS SERVICES =============
+
 export const fetchPharmacyDashboardStats = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-stats");
-        if (response?.status === 200) {
-            dispatch(setPharmacyStatsData(response?.data));
-            toast.success("Stats fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setPharmacyStatsData([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-stats', {
+    successMessage: "Stats fetched successfully!",
+    onSuccess: (data) => dispatch(setPharmacyStatsData(data)),
+    onError: () => dispatch(setPharmacyStatsData([]))
+  });
 };
 
-/*
- * Fetch all stats and update Redux store.
- */
 export const fetchPharmacyExpenseStats = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-expense-stats");
-        if (response.status === 200) {
-            dispatch(setPharmacyExpenseStats(response.data));
-            toast.success("Stats fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setPharmacyExpenseStats([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-expense-stats', {
+    successMessage: "Stats fetched successfully!",
+    onSuccess: (data) => dispatch(setPharmacyExpenseStats(data)),
+    onError: () => dispatch(setPharmacyExpenseStats([]))
+  });
 };
 
-/*
-* Fetch pharmacy dashboard expense graph and update Redux store.
-*/
 export const fetchPharmacyExpenseGraph = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-expense-graph");
-        if (response.status === 200) {
-            dispatch(setExpenseGraphData(response.data));
-            toast.success("Expense Graph fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setExpenseGraphData([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-expense-graph', {
+    successMessage: "Expense Graph fetched successfully!",
+    onSuccess: (data) => dispatch(setExpenseGraphData(data)),
+    onError: () => dispatch(setExpenseGraphData([]))
+  });
 };
 
+// ============= COURSE SERVICES =============
 
-/**
- * Fetch all courses and update Redux store.
- */
 export const fetchAllPharmacyCourses = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-courses");
-        if (response.status === 200) {
-            dispatch(setPharmacyCourses(response.data));
-            toast.success("Courses fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setPharmacyCourses([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-courses', {
+    successMessage: "Courses fetched successfully!",
+    onSuccess: (data) => dispatch(setPharmacyCourses(data)),
+    onError: () => dispatch(setPharmacyCourses([]))
+  });
 };
 
+// ============= MARKETING SERVICES =============
 
-/**
- * fetch all marketing materials and update Redux store.
- */
 export const fetchAllPharmacyMarketingMaterials = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/pharmacy-marketing");
-        if (response.status === 200) {
-            dispatch(setPharmacyMarketingMaterials(response.data));
-            toast.success("Marketing Materials fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setPharmacyMarketingMaterials([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/pharmacy-marketing', {
+    successMessage: "Marketing Materials fetched successfully!",
+    onSuccess: (data) => dispatch(setPharmacyMarketingMaterials(data)),
+    onError: () => dispatch(setPharmacyMarketingMaterials([]))
+  });
 };
 
+// ============= PAYMENT RECONCILIATION SERVICES =============
 
-/**
- * create new payment reconciliation.
- */
-
-export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data: any) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.post("/v1/payment-reconciliation", data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        if (response?.data?.success) {
-            await fetchPaymentReconciliation(dispatch);
-            toast.success("Payment Reconciliation uploaded successfully!");
-        }
-    } catch (error: any) {
-        toast.error(error?.message || "Something went wrong");
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+export const createNewPaymentReconciliation = async (dispatch: AppDispatch, data: FormDataPayload, statement_id?: string) => {
+  return apiHandler(dispatch, 'post', '/v1/payment-reconciliation', {
+    params: { statement_id },
+    data,
+    isFormData: true,
+    successMessage: "Payment Reconciliation uploaded successfully!",
+    refreshAction: () => fetchPaymentReconciliation(dispatch)
+  });
 };
 
-/**
- * Fetch pharmacy stats and update Redux store.
- */
 export const fetchPaymentReconciliation = async (dispatch: AppDispatch) => {
-    try {
-        dispatch(setIsLoading(true));
-        const response = await axiosAdmin.get("/v1/payment-reconciliation");
-        if (response.status === 200) {
-            dispatch(setDocVerificationDetails(response.data));
-            toast.success("Payment Reconciliation History fetched successfully!");
-        }
-    } catch (error: any) {
-        if (error?.status === 404) {
-            toast.success(error?.response?.data?.detail)
-            dispatch(setexpenseData([]));
-        } else {
-            toast.error(error?.message || "Something went wrong");
-        }
-    } finally {
-        dispatch(setIsLoading(false));
-    }
+  return apiHandler(dispatch, 'get', '/v1/payment-reconciliation', {
+    successMessage: "Payment Reconciliation History fetched successfully!",
+    onSuccess: (data) => dispatch(setDocVerificationDetails(data)),
+    onError: () => dispatch(setDocVerificationDetails([]))
+  });
 };
+
+// ============= BANK STATEMENT SERVICES =============
+
+export const fetchBankStatements = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/bank-statement', {
+    successMessage: "Bank Statements fetched successfully!",
+    onSuccess: (data) => dispatch(setUploadedBankStatements(data)),
+    onError: () => dispatch(setUploadedBankStatements([]))
+  });
+};
+
+export const postBankStatement = async (dispatch: AppDispatch, data: FormDataPayload) => {
+  return apiHandler(dispatch, 'post', '/v1/upload-statement', {
+    data,
+    isFormData: true,
+    refreshAction: () => fetchBankStatements(dispatch)
+  });
+};
+
+export const deleteBankStatement = async (dispatch: AppDispatch, id: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/bank-statement', {
+    params: { statement_id: id },
+    refreshAction: () => fetchBankStatements(dispatch)
+  });
+};
+

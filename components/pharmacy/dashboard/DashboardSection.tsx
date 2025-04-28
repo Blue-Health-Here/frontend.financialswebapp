@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { onBoardingchecklists, pharmacyDashboardStatsData } from "@/utils/constants";
 import { StatsCard } from "@/components/common/StatsCard";
@@ -8,7 +8,6 @@ import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import ExpenseChart from "@/components/common/Linechart";
 import { Form, Formik } from "formik";
-import SelectField from "@/components/common/form/SelectField";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
@@ -17,6 +16,7 @@ import { fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/servic
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import { StatsCardProps } from "@/utils/types";
 import { assignPharmacyStatsValues } from "@/utils/helper";
+import SelectField from "@/components/common/form/SelectField";
 
 const DashboardSection = () => {
   const { pharmacyStatsData } = useSelector((state: RootState) => state.global);
@@ -26,11 +26,18 @@ const DashboardSection = () => {
     (state: RootState) => state.onboarding
   );
   const dispatch = useDispatch();
+  const isFetchedData = useRef(false);
 
   useEffect(() => {
+    if (isFetchedData.current) return;
+
     const fetchData = async () => {
       try {
-        await fetchPharmacyExpenseGraph(dispatch);
+        await Promise.all([
+          fetchPharmacyExpenseGraph(dispatch),
+          fetchPharmacyDashboardStats(dispatch)
+        ]);
+        isFetchedData.current = true;
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -38,9 +45,6 @@ const DashboardSection = () => {
 
     fetchData();
   }, [dispatch]);
-  useEffect(() => {
-    fetchPharmacyDashboardStats(dispatch); 
-}, [dispatch]);
 
   useEffect(() => {
     if (pharmacyStatsData) {

@@ -42,13 +42,21 @@ const ProfileSection = () => {
     license: [],
     certificate: []
   });
+  
+  const fetchData = async () => {
+    try {
+      await Promise.all([
+        fetchProfileDataPharmacy(dispatch),
+        fetchPharmacyLicense(dispatch),
+        fetchPharmacyCertifications(dispatch)
+      ]);
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to fetch profile data");
+    }
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchProfileDataPharmacy(dispatch);
-      await fetchPharmacyLicense(dispatch);
-      await fetchPharmacyCertifications(dispatch);
-    }
+    if (hasFetched.current) return;
     if (!hasFetched.current) {
       fetchData();
       hasFetched.current = true;
@@ -162,7 +170,7 @@ const ProfileSection = () => {
                   Save Changes
                 </SubmitButton>
               </div>
-              <div className="flex  flex-col-reverse md:flex-row gap-4 gap-x-8 pt-8">
+              <div className="flex flex-col-reverse md:flex-row gap-4 gap-x-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
                   <InputField
                     label="Pharmacy Name"
@@ -239,7 +247,7 @@ const ProfileSection = () => {
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-4 w-full">
+              <div className="flex flex-col gap-4 w-full mt-4">
                 <InputField
                   label="Services offered"
                   type="text"
@@ -250,7 +258,7 @@ const ProfileSection = () => {
                 <div className="w-full">
                   <Label className="text-grey text-xs">Licensing</Label>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {licenseData.length > 0 ? licenseData?.map((license: License) => (
                       <div
                         key={license.id}
@@ -292,37 +300,38 @@ const ProfileSection = () => {
                   />
                 </div>
 
-                <Label className="text-grey text-xs">Certifications</Label>
+                <div className="w-full">
+                  <Label className="text-grey text-xs">Certifications</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {certificationsData.length > 0 ? certificationsData?.map((license: License) => (
+                      <div
+                        key={license.id}
+                        className="flex items-center justify-between p-2 rounded-md border border-grey-500"
+                      >
+                        <span className="text-sm truncate">
+                          {license.filename}
+                        </span>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {certificationsData.length > 0 ? certificationsData?.map((license: License) => (
-                    <div
-                      key={license.id}
-                      className="flex items-center justify-between p-2 rounded-md border border-grey-500"
-                    >
-                      <span className="text-sm truncate">
-                        {license.filename}
-                      </span>
-
-                      <div className="flex items-center space-x-2">
-                        <button className="p-1 text-blue-500 hover:text-blue-700">
-                          <img
-                            src="/downloadFile.svg"
-                            alt="Download"
-                            className="w-4 h-4"
-                          />
-                        </button>
-                        <button className="p-1 text-red-500 hover:text-red-700">
-                          <img
-                            src="/delete-icon.svg"
-                            onClick={() => handleDeleteFile(license.id, "certification")}
-                            alt="Delete"
-                            className="w-4 h-4"
-                          />
-                        </button>
+                        <div className="flex items-center space-x-2">
+                          <button className="p-1 text-blue-500 hover:text-blue-700">
+                            <img
+                              src="/downloadFile.svg"
+                              alt="Download"
+                              className="w-4 h-4"
+                            />
+                          </button>
+                          <button className="p-1 text-red-500 hover:text-red-700">
+                            <img
+                              src="/delete-icon.svg"
+                              onClick={() => handleDeleteFile(license.id, "certification")}
+                              alt="Delete"
+                              className="w-4 h-4"
+                            />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )) : <TextMessage text="Certification not found." />}
+                    )) : <TextMessage text="Certification not found." />}
+                  </div>
                 </div>
 
                 <FileUploadField

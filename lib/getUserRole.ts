@@ -6,9 +6,12 @@ export const getUserRole = async (user: any) => {
     const { error, data } = await supabase.rpc("get_user_role", {
         user_id: user?.id,
     });
-    
-    if (error) {
+
+    // console.log(error, error?.code !== "PGRST202", data, "error")
+    if (error && error?.code !== "PGRST202") {
         return encodedRedirect("error", "/sign-in", error.message);
+    } else if (error) {
+        return encodedRedirect("error", "/sign-in", "")
     }
 
     let role = "";

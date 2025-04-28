@@ -18,7 +18,6 @@ const LoginForm: React.FC<any> = ({ message }) => {
     formData.append("password", values.password);
     signInAction(formData);
   };
-
   return (
     <Formik
       initialValues={signInInitialVals}
@@ -51,7 +50,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
           >
             {isSubmitting ? "Signing In..." : "Sign In"}
           </SubmitButton>
-          <FormMessage message={message} />
+          {message?.error !== "" && <FormMessage message={message} />}
 
           <Link
             className="text-sm text-center text-foreground underline"

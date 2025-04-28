@@ -24,7 +24,7 @@ import { AdminExpenseProps, BudgetStatsCardProps } from '@/utils/types';
 
 const BudgetDetail = () => {
     const params = useParams();
-    const pharmacyId = params?.pharmacy_id;
+    const pharmacyId: any = params?.pharmacy_id;
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { isAddExpense, adminExpenseData, pharmacyList, adminExpenseStats } = useSelector((state: RootState) => state.expense);
@@ -50,10 +50,10 @@ const BudgetDetail = () => {
     }, [])
    
     useEffect(() => {
-        if(adminExpenseStats){
+        if(adminExpenseStats?.length > 0){
             setStatsUpdatedData(assignAdminBudgetStatsValues(adminExpenseStats))
         }
-    }, [adminExpenseStats])
+    }, [adminExpenseStats]);
       
     const handleEditExpense = (data: AdminExpenseProps) => {
         dispatch(setIsAddExpense(true))

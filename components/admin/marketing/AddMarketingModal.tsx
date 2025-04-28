@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
@@ -22,10 +22,18 @@ const AddMarketingModal = () => {
     const { marketingMaterialsDetails } = useSelector((state: RootState) => state.marketing);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
     const dispatch = useDispatch();
+    const isFetchedPharmacies = useRef(false);
 
     const handleClose = () => {
         dispatch(setIsAddMarketing(false));
     };
+
+    useEffect(() => {
+        if (!isFetchedPharmacies.current) {
+            fetchAllPharmacies(dispatch);
+            isFetchedPharmacies.current = true;
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         if (marketingMaterialsDetails) {
@@ -50,7 +58,6 @@ const AddMarketingModal = () => {
             setInitialVals(addNewMarketingMaterialsInitialVals);
             setUploadedFile(null);
         }
-        fetchAllPharmacies(dispatch);
     }, []);
 
     const handleFileUpload = async (event: any, setValue: (value: any) => void) => {

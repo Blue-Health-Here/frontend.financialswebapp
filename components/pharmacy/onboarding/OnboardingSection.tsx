@@ -6,12 +6,12 @@ import { onBoardingchecklists } from "@/utils/constants";
 import { IoSearch, IoDownload } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
-import SelectField from "@/components/common/form/SelectField";
 import OnboardingExpenseModal from "./OnboardingExpenseModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
+import SelectField from "@/components/common/form/SelectField";
 
 const OnboardingSection = () => {
   const { isAddExpenseModal } = useSelector(
