@@ -459,3 +459,11 @@ export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string) => {
     successMessage: "Tasklist fetched successfully!",
   });
 };
+
+export const createNewOperationalItem = async (dispatch: AppDispatch, name: string) => {
+  return apiHandler(dispatch, 'post', '/v1/operational-item', {
+    params: { name: name},
+    successMessage: "Operational item created successfully!",
+    onSuccess: () => fetchAllChecklist(dispatch)
+  });
+};
