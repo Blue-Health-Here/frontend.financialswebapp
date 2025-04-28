@@ -9,15 +9,15 @@ import { setIsAddQuestion } from "@/store/features/admin/checklist/adminChecklis
 import SelectField from "@/components/common/form/SelectField";
 import TextareaField from "@/components/common/form/TextareaField";
 import MultiDateField from "@/components/common/form/MultiDateField";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RxCross2 } from "react-icons/rx";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { PharmacyCardProps, UploadedFileProps } from "@/utils/types";
+import { OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
 import { MdDone } from "react-icons/md";
-import { createNewOperationalItem } from "@/services/adminServices";
+import { createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
 
 interface AddNewQuestionModalProps {
     selectedType?: string;
@@ -25,6 +25,7 @@ interface AddNewQuestionModalProps {
 
 const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType }) => {
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+    const { operationalItems } = useSelector((state: RootState) => state.checklist);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
     const [itemName, setItemName] = useState("");
@@ -34,6 +35,7 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
     const handleClose = () => {
         dispatch(setIsAddQuestion(false));
     };
+    
 
     const handleDateSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newDate = event.target.value;
@@ -62,6 +64,10 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
         }
     };
 
+    useEffect(() => {
+        fetchAllOperationalItems(dispatch);
+    }, [dispatch]);
+
     return (
         <Modal>
         <HeaderModal title="Edit Question" onClose={handleClose} />
@@ -84,9 +90,11 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
                                 label="Operational Item"
                                 name="operational_item"
                                 options={[
-                                    { value: "Tier1", label: "Tier1" },
-                                    { value: "Tier2", label: "Tier2" },
+                                    ...(operationalItems.map((item: OperationalItemsProps, index: number) => ({
+                                        value: item.id, label: item.name
+                                    })))
                                 ]}
+                              placeholder = "Select operational item"
                             />
                         <div className="text-primary font-semibold text-xs sm:text-sm  cursor-pointer"
                            onClick={() => {
