@@ -9,9 +9,9 @@ import DeleteModal from "./DeleteModal";
 interface AccordionProps {
   items: any;
   handleEditQuestion?: () => void;
-  handleEditChecklist?: Function;
-  handleDelete?: (id: string) => void;
-  onChecklistSelect?: (checklistId: string) => void; 
+  handleEditChecklist?: Function
+  handleDelete?: (id: string) => void 
+  onChecklistSelect?: (id: string) => void 
 }
 
 const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete, onChecklistSelect }) => {
@@ -29,7 +29,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
     <div className="w-full mx-auto">
       {items?.map((item: any, index: number) => (
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
-        onClick={() => onChecklistSelect && onChecklistSelect(item.id)}>
+        onClick={() => onChecklistSelect?.(item.id)}>
           <div
             className={`flex justify-between items-center px-6 py-4 sm:py-2  md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => onTitleClick(index)}
