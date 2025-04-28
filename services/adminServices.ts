@@ -475,3 +475,11 @@ export const fetchAllOperationalItems = async (dispatch: AppDispatch) => {
     onError: () => dispatch(setCourses([]))
   });
 };
+
+export const createNewAssignChecklist = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist', {
+    data,
+    successMessage: "Assign Checklist created successfully!",
+    onSuccess: () => fetchAllChecklist(dispatch)
+  });
+};

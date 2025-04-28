@@ -113,4 +113,24 @@ export const addNewPaymentReconciliationInitialchema = Yup.object({
     checklist_name: Yup.string().required("Name is required"),
     checklist_type: Yup.string().required("Checklist type is required"),
 });
+
+export const AssignChecklistValidationSchema = Yup.object().shape({
+    checklist_id: Yup.string().required('Checklist ID is required'),
+    question: Yup.string().required('Question is required'),
+    is_all: Yup.boolean().required('Is All is required'),
+    note: Yup.string().required('Note is required'),
+    action_item: Yup.string().required('Action item is required'),
+    filename: Yup.string().required('Filename is required'),
+    file_url: Yup.string().url('File URL must be a valid URL').required('File URL is required'),
+    path: Yup.string().required('Path is required'),
+    operational_item: Yup.string().required('Operational item is required'),
+    follow_up_dates: Yup.array()
+      .of(Yup.string().required('Follow up date is required'))
+      .required('Follow up dates are required')
+      .min(1, 'At least one follow-up date is required'),
+    pharmacy_ids: Yup.array()
+      .of(Yup.string().required('Pharmacy ID is required'))
+      .required('Pharmacy IDs are required')
+      .min(1, 'At least one pharmacy ID is required'),
+  });
   

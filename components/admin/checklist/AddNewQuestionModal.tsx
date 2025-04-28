@@ -13,11 +13,14 @@ import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RxCross2 } from "react-icons/rx";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
+import { AssignChecklistProps, OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
 import { MdDone } from "react-icons/md";
-import { createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
+import { createNewAssignChecklist, createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
+import { AssignChecklistInitialVals } from "@/utils/initialVals";
+import toast from "react-hot-toast";
+import { AssignChecklistValidationSchema } from "@/utils/validationSchema";
 
 interface AddNewQuestionModalProps {
     selectedType?: string;
@@ -28,6 +31,7 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
     const { operationalItems } = useSelector((state: RootState) => state.checklist);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
+    const [initialVals, setInitialVals] = useState<any>(AssignChecklistInitialVals);
     const [itemName, setItemName] = useState("");
     const [addItems, setAddItems] = useState(false)
     const dispatch = useDispatch();
@@ -67,12 +71,44 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
     useEffect(() => {
         fetchAllOperationalItems(dispatch);
     }, [dispatch]);
+    
+
+    const handleSubmit = async (values: AssignChecklistProps) => {
+        const payload: any = {
+            checklist_id: values.checklist_id,
+            question: values.question,
+            note: values.note,
+            action_item: values.action_item,
+            filename: values.filename,
+            file_url: values.file_url,
+            path: values.path,
+            operational_item: values.operational_item,
+            follow_up_dates: values.follow_up_dates, 
+            pharmacy_ids: values.pharmacy_ids,       
+          };
+          if (values.pharmacy_ids[0] === "all") {
+            payload.is_all = true;
+        } else {
+            payload.pharmacy_ids = values.pharmacy_ids;
+        }
+
+        try {
+            await createNewAssignChecklist(dispatch, payload);
+            console.log("payload", payload)
+            handleClose();
+        } catch (error: any) {
+            toast.error(error?.message || "Something went wrong!!");
+        }
+    };
 
     return (
         <Modal>
         <HeaderModal title="Edit Question" onClose={handleClose} />
         <div className="p-6">
-            <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
+                <Formik initialValues={initialVals}
+                    onSubmit={handleSubmit}
+                    validationSchema={AssignChecklistValidationSchema}
+                >
                 <Form className="flex flex-col gap-y-4">
                     <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
                     <TextareaField label="Note" name="note" />
