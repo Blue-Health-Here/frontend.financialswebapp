@@ -74,7 +74,9 @@ const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedTyp
                                 ]}
                                 isDisabled={!!checklistDetail}      
                             />
-                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                            <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">
+                                {checklistDetail ? "Update": "Save"}
+                            </SubmitButton>
                         </Form>
                     </Formik>
                 </div>
