@@ -197,3 +197,8 @@ export type ChecklistProps = {
     checklist_type: string
 
 };
+
+export interface OperationalItemsProps {
+    id: string,
+    name: string,
+}
