@@ -468,3 +468,10 @@ export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data:
     errorMessage: "File already Exists!"
   });
 };
+
+export const deleteAssignChecklistUploadDocs = async (dispatch: AppDispatch, filename: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist/document', {
+    params: { filename },
+    successMessage: "File deleted successfully!"
+  });
+};

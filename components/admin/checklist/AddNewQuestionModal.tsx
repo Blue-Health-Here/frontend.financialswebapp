@@ -66,7 +66,7 @@ const AddNewQuestionModal = () => {
                         <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
                         <FileUploadField
                             label="Upload File"
-                            module="course"
+                            module="checklist"
                             name="file"
                             title="Upload"
                             uploadedFile={uploadedFile}
