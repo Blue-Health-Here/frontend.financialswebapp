@@ -473,7 +473,14 @@ export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data:
     data,
     isFormData: true,
     successMessage: "Document file uploaded successfully!",
-    errorMessage: "File already Exists!"
+    errorMessage: "File already Exists!",
+    onError: (error: any) => {
+      if (error.status === 409) {
+        toast.error("File Already Exists!")
+      } else {
+        toast.error(error?.response?.data?.detail);
+      }
+    }
   });
 };
 
