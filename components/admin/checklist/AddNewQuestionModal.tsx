@@ -16,14 +16,12 @@ import FileUploadField from "@/components/common/form/FileUploadField";
 import { OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
+import { postAssignChecklistUploadDocs } from "@/services/adminServices";
+import toast from "react-hot-toast";
 import { MdDone } from "react-icons/md";
 import { createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
 
-interface AddNewQuestionModalProps {
-    selectedType?: string;
-}
-
-const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType }) => {
+const AddNewQuestionModal = () => {
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
     const { operationalItems } = useSelector((state: RootState) => state.checklist);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
@@ -37,7 +35,6 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
         dispatch(setIsAddQuestion(false));
     };
 
-
     const handleDateSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newDate = event.target.value;
         if (newDate && !selectedDates.includes(newDate) && newDate !== "Selected Date(s)") {
@@ -49,8 +46,20 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
         setSelectedDates(selectedDates.filter(date => date !== dateToRemove));
     };
 
-    const handleFileUpload = async (event: any, setValue: (value: any) => void) => {
-        console.log(setValue)
+    const handleFileUploadDocs = async (event: any, setValue: (value: any) => void) => {
+        try {
+            const formData = new FormData();
+            formData.append("file", event.target.files[0]);
+            const response = await postAssignChecklistUploadDocs(dispatch, formData);
+
+            if (response) {
+                setUploadedFile(response);
+                console.log(response);
+                setValue(response); // Set Formik field with uploaded file
+            }
+        } catch (error: any) {
+            toast.error(error?.message || "Something went wrong!!");
+        }
     };
 
     const handleAddItem = (name: string) => {
@@ -80,7 +89,7 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
                 <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
                     <Form className="flex flex-col gap-y-4">
                         <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
-                        <TextareaField label="Note" name="note" />
+                        <TextareaField label="Pharmacy Comments" name="note" />
                         <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
                         <FileUploadField
                             label="Upload File"
@@ -89,7 +98,7 @@ const AddNewQuestionModal: React.FC<AddNewQuestionModalProps> = ({ selectedType 
                             title="Upload"
                             uploadedFile={uploadedFile}
                             setUploadedFile={setUploadedFile}
-                            handleFileUpload={(e, setValue) => handleFileUpload(e, setValue)}
+                            handleFileUpload={(e, setValue) => handleFileUploadDocs(e, setValue)}
                         />
                         <div>
                             <SelectField

@@ -72,7 +72,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
             setPreview([]);
         }
     }, [field.value]);
-      
+    
     const handleDelete = async (index?: number) => {
         if (uploadedFile && module) {
             await deleteUploadedFile(dispatch, module, uploadedFile.filename);
