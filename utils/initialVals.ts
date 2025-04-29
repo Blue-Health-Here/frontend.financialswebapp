@@ -51,17 +51,15 @@ export const uploadDocVerificationInitialVals: any = {
     statement_id: ''
 };
 
+
 export const AssignChecklistInitialVals = {
     checklist_id: '',
     question: '',
-    is_all: false,
     note: '',
     action_item: '',
-    filename: '',
-    file_url: '',
-    path: '',
     operational_item: '',
     follow_up_dates: [],
     pharmacy_ids: [],
-  };
+    file: null,
+};
   

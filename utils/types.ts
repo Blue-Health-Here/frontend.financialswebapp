@@ -206,14 +206,17 @@ export interface OperationalItemsProps {
 export interface AssignChecklistProps {
     checklist_id: string;
     question: string;
-    is_all: boolean;
     note: string;
     action_item: string;
-    filename: string;
-    file_url: string;
-    path: string;
     operational_item: string;
-    follow_up_dates: string[]; 
+    follow_up_dates: string[];
     pharmacy_ids: string[];
-  }
-  
+    file: null | {
+        filename: string;
+        file_url: string;
+        path: string;
+    };
+    filename?: string;
+    file_url?: string;
+    path?: string;
+}

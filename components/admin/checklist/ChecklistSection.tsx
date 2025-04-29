@@ -25,6 +25,7 @@ const ChecklistSection = () => {
     const checklists = useSelector((state: RootState) => state.checklist.checklists) as ChecklistProps[];
     const tasklist = useSelector((state: RootState) => state.checklist.tasklist);
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
+    const [selectedChecklistID, setSelectedChecklistID] = useState('');
     const isFetched = useRef(false);
     const dispatch = useDispatch();
 
@@ -63,7 +64,18 @@ const ChecklistSection = () => {
     const handleDeleteChecklist = (id?: string) => {
         deleteChecklist(dispatch, id);
     };
-    // console.log("tasklist", tasklist)
+    
+    const handleAddChecklistTask = (type: string) => {
+        const filteredChecklists = checklists.filter(
+            (checklist) => checklist.checklist_type === type
+        );
+
+        if (filteredChecklists.length > 0) {
+            setSelectedChecklistType(type);
+            setSelectedChecklistID(filteredChecklists[0].id);
+            dispatch(setIsAddQuestion(true));
+        }
+    };
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
@@ -127,10 +139,10 @@ const ChecklistSection = () => {
                                 </h3>
                                 <h3 className="align-middle text-base flex items-center justify-center gap-2">
                                     <span className="text-xs sm:text-sm md:text-[16px] font-medium text-grey">Add new Checklist Task</span>
-                                    <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1" onClick={() => {
-                                        setSelectedChecklistType(type);
-                                        dispatch(setIsAddQuestion(true));
-                                    }}><FaPlus className="text-white  text-xs" /></SubmitButton>
+                                    <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1"
+                                        onClick={() => handleAddChecklistTask(type)}>
+                                        <FaPlus className="text-white  text-xs" />
+                                    </SubmitButton>
                                 </h3>
                             </div>
                             <Accordion
@@ -143,7 +155,7 @@ const ChecklistSection = () => {
                     )
                 })}
             </div>
-            {isAddQuestion && <AddNewQuestionModal />}
+            {isAddQuestion && <AddNewQuestionModal checklistId={selectedChecklistID} selectedType={selectedChecklistType} />}
             {isEditQuestion && <EditQuestionModal />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
