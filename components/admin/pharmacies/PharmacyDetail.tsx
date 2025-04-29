@@ -30,6 +30,7 @@ import {
   deleteAdminLicense,
   deleteAdminCertification,
   fetchAdminPharmacyDetails,
+  fetchAllAdminPharmacyCourses,
 } from "@/services/adminServices";
 import { License } from "@/utils/types";
 import TextMessage from "@/components/common/TextMessage";
@@ -39,16 +40,12 @@ const PharmacyDetail = () => {
   const { licenseData } = useSelector((state: RootState) => state.global);
   const { certificationsData } = useSelector((state: RootState) => state.global);
   const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
-  const [courses, setCourses] = useState(courseData);
-  const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy);
-  const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+  const { isAddQuestion, pharmacyCourses } = useSelector((state: RootState) => state.pharmacy);
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
   const hasFetched = useRef(false);
   const id = Array.isArray(params?.pharmacy_id) ? params.pharmacy_id[0] : params?.pharmacy_id;
-  
-  
 
   useEffect(() => {
     if (!id) return;
@@ -57,6 +54,7 @@ const PharmacyDetail = () => {
         await fetchAdminPharmacyDetails(dispatch, id);
         await fetchAdminLicense(dispatch, id);
         await fetchAdminCertification(dispatch, id);
+        await fetchAllAdminPharmacyCourses(dispatch, id);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -118,16 +116,6 @@ const PharmacyDetail = () => {
     } catch (error) {
       console.error(`Error deleting ${fileType}:`, error);
     }
-  };
-
-  const toggleSelect = (id: number) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) =>
-        course.id === id
-          ? { ...course, isSelected: !course.isSelected }
-          : course
-      )
-    );
   };
 
   const handleEditQuestion = () => {
@@ -389,11 +377,10 @@ const PharmacyDetail = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
+          {pharmacyCourses?.length > 0 && pharmacyCourses.map((course: any) => (
             <CourseCard
               key={course.id}
               {...course}
-              onSelect={() => toggleSelect(course.id)}
             />
           ))}
         </div>

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isAddQuestion: false,
-    pharmacies: []
+    pharmacies: [],
+    pharmacyCourses: []
 }
 
 const adminPharmacySlice = createSlice({
@@ -14,9 +15,12 @@ const adminPharmacySlice = createSlice({
         },
         setIsAddQuestion: (state, action) => {
             state.isAddQuestion = action.payload
+        },
+        setAdminPharmacyCoursesData(state, action) {
+            state.pharmacyCourses = action.payload;
         }
     }
 })
 
-export const { setPharmacies, setIsAddQuestion } = adminPharmacySlice.actions
+export const { setPharmacies, setIsAddQuestion, setAdminPharmacyCoursesData } = adminPharmacySlice.actions
 export default adminPharmacySlice.reducer
