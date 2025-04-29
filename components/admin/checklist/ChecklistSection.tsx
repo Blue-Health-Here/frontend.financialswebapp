@@ -143,7 +143,7 @@ const ChecklistSection = () => {
                     )
                 })}
             </div>
-            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
+            {isAddQuestion && <AddNewQuestionModal />}
             {isEditQuestion && <EditQuestionModal />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
