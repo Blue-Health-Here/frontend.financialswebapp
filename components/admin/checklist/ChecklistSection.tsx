@@ -30,27 +30,27 @@ const ChecklistSection = () => {
 
     useEffect(() => {
         if (isAddQuestion || isEditQuestion) {
-          document.body.style.overflow = "hidden";
+            document.body.style.overflow = "hidden";
         } else {
-          document.body.style.overflow = "";
+            document.body.style.overflow = "";
         }
-      
+
         return () => {
-          document.body.style.overflow = "";
+            document.body.style.overflow = "";
         };
-      }, [isAddQuestion, isEditQuestion]);
+    }, [isAddQuestion, isEditQuestion]);
 
     const handleEditQuestion = () => {
         dispatch(setIsEditQuestion(true))
     }
 
-     useEffect(() => {
-         if (!isFetched.current) {
-             isFetched.current = true;
-             fetchAllChecklist(dispatch).finally(() => setLoading(false));
-         }
-     }, []);
-     
+    useEffect(() => {
+        if (!isFetched.current) {
+            isFetched.current = true;
+            fetchAllChecklist(dispatch).finally(() => setLoading(false));
+        }
+    }, []);
+
     const handleEditChecklist = (data: ChecklistProps) => {
         dispatch(setIsAddChecklist(true));
         dispatch(setChecklistDetail(data));
@@ -63,7 +63,7 @@ const ChecklistSection = () => {
     const handleDeleteChecklist = (id?: string) => {
         deleteChecklist(dispatch, id);
     };
-     console.log("tasklist",tasklist)
+    // console.log("tasklist", tasklist)
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
@@ -108,11 +108,11 @@ const ChecklistSection = () => {
             </div> */}
             <div className="flex flex-col gap-6 py-4">
                 {["onboarding", "operations"].map((type) => {
-                       const filteredChecklists = checklists
-                       .filter((checklist: ChecklistProps) => checklist.checklist_type === type)
-                       .sort((a, b) => a.checklist_name.localeCompare(b.checklist_name));
-                           return(
-                            <div className="w-full" key={type}>
+                    const filteredChecklists = checklists
+                        .filter((checklist: ChecklistProps) => checklist.checklist_type === type)
+                        .sort((a, b) => a.checklist_name.localeCompare(b.checklist_name));
+                    return (
+                        <div className="w-full" key={type}>
                             <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
                                 <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl">{type.charAt(0).toUpperCase() + type.slice(1)} Checklist</h2>
                                 <h3 className="align-middle text-base flex items-center justify-center gap-2">
@@ -133,19 +133,19 @@ const ChecklistSection = () => {
                                     }}><FaPlus className="text-white  text-xs" /></SubmitButton>
                                 </h3>
                             </div>
-                            <Accordion 
-                            items={filteredChecklists}
-                            handleEditQuestion={handleEditQuestion} 
-                            handleEditChecklist={(item: any) => handleEditChecklist(item)}
-                            handleDelete = {handleDeleteChecklist} 
-                            onChecklistSelect={handleChecklistSelect} />
+                            <Accordion
+                                items={filteredChecklists}
+                                handleEditQuestion={handleEditQuestion}
+                                handleEditChecklist={(item: any) => handleEditChecklist(item)}
+                                handleDelete={handleDeleteChecklist}
+                                onChecklistSelect={handleChecklistSelect} />
                         </div>
-                           )
+                    )
                 })}
             </div>
             {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
             {isEditQuestion && <EditQuestionModal />}
-            {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType}/>}
+            {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );
 }
