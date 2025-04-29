@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { AppDispatch } from "@/store/store";
-import { deleteCourseUploadFile, deleteMarketingUploadFile } from "@/services/adminServices";
+import { deleteAssignChecklistUploadDocs, deleteCourseUploadFile, deleteMarketingUploadFile } from "@/services/adminServices";
 
 /**
  * Reusable file delete function that determines the correct API based on the module
@@ -14,6 +14,9 @@ export const deleteUploadedFile = async (dispatch: AppDispatch, module: string, 
             case "course":
                 await deleteCourseUploadFile(dispatch, filename);
                 break;
+                case "checklist":
+                    await deleteAssignChecklistUploadDocs(dispatch, filename);
+                    break;
             default:
                 toast.error("Invalid module specified for file deletion.");
         }

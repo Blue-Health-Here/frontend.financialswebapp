@@ -92,7 +92,7 @@ const apiHandler = async <T = any>(
     }
     
     // Handle success
-    if (response?.status === 200 || response?.data?.success) {
+    if (response?.status === 200 || response?.data?.success || response?.status === 201) {
       if (successMessage) {
         toast.success(successMessage);
       }
@@ -457,6 +457,22 @@ export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string) => {
     params: { checklist_id: id },
     onSuccess: (data) => dispatch(setTasklist(data)),
     successMessage: "Tasklist fetched successfully!",
+  });
+};
+
+export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist/document', {
+    data,
+    isFormData: true,
+    successMessage: "Document file uploaded successfully!",
+    errorMessage: "File already Exists!"
+  });
+};
+
+export const deleteAssignChecklistUploadDocs = async (dispatch: AppDispatch, filename: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist/document', {
+    params: { filename },
+    successMessage: "File deleted successfully!"
   });
 };
 
