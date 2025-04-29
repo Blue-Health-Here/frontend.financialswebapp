@@ -469,6 +469,13 @@ export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data:
   });
 };
 
+export const deleteAssignChecklistUploadDocs = async (dispatch: AppDispatch, filename: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist/document', {
+    params: { filename },
+    successMessage: "File deleted successfully!"
+  });
+};
+
 export const createNewOperationalItem = async (dispatch: AppDispatch, name: string) => {
   return apiHandler(dispatch, 'post', '/v1/operational-item', {
     params: { name: name},
