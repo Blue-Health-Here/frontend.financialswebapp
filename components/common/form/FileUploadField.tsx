@@ -7,8 +7,6 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { UploadedFileProps } from "@/utils/types";
 import { useDispatch } from "react-redux";
 import { deleteUploadedFile } from "@/services/deleteFile";
-import { addNewPaymentReconciliationInitialchema } from "@/utils/validationSchema";
-import * as Yup from "yup";
 
 interface FileUploadFieldProps {
     module?: string;

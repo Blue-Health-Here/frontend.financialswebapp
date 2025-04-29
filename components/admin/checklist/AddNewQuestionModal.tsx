@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/common/Modal";
 import { Formik, Form } from "formik";
 import InputField from "@/components/common/form/InputField";
-import RadioField from "@/components/common/form/RadioField";
 import HeaderModal from "@/components/common/HeaderModal";
 import { SubmitButton } from "@/components/submit-button";
 import { setIsAddQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
@@ -13,19 +12,27 @@ import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RxCross2 } from "react-icons/rx";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
+import { AssignChecklistProps, OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
 import { postAssignChecklistUploadDocs } from "@/services/adminServices";
-import toast from "react-hot-toast";
 import { MdDone } from "react-icons/md";
-import { createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
+import { createNewAssignChecklist, createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
+import { AssignChecklistInitialVals } from "@/utils/initialVals";
+import toast from "react-hot-toast";
+import { AssignChecklistValidationSchema } from "@/utils/validationSchema";
 
-const AddNewQuestionModal = () => {
+interface AddNewChecklistModalProps {
+    selectedType?: string;
+    checklistId?: string;
+}
+
+const AddNewQuestionModal: React.FC<AddNewChecklistModalProps> = ({ selectedType, checklistId }) => {
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
     const { operationalItems } = useSelector((state: RootState) => state.checklist);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
+    const [initialVals, setInitialVals] = useState<any>(AssignChecklistInitialVals);
     const [itemName, setItemName] = useState("");
     const [addItems, setAddItems] = useState(false)
     const dispatch = useDispatch();
@@ -51,7 +58,6 @@ const AddNewQuestionModal = () => {
             const formData = new FormData();
             formData.append("file", event.target.files[0]);
             const response = await postAssignChecklistUploadDocs(dispatch, formData);
-
             if (response) {
                 setUploadedFile(response);
                 console.log(response);
@@ -80,27 +86,74 @@ const AddNewQuestionModal = () => {
             fetchAllOperationalItems(dispatch);
             isFetchedOperations.current = true;
         }
-    }, []);
+    }, [dispatch]);
+      
+    const handleSubmit = async (values: AssignChecklistProps) => {
+        let payload: any = {
+            checklist_id: checklistId,
+            question: values.question,
+            note: values.note,
+            action_item: values.action_item,
+            follow_up_dates: values.follow_up_dates,
+        };
+
+        if (selectedType === "operations") {
+            payload = {
+                ...payload,
+                operational_item: values.operational_item
+            };
+        }
+        if (values.pharmacy_ids[0] === "all") {
+            payload.is_all = true;
+        } else {
+            payload.pharmacy_ids = values.pharmacy_ids;
+        }
+
+        if (values.file) {
+            payload.filename = values.file.filename;
+            payload.file_url = values.file.file_url;
+            payload.path = values.file.path;
+        }
+
+        console.log("Sending payload to API:", payload);
+
+        try {
+            const response = await createNewAssignChecklist(dispatch, payload);
+            console.log("API response:", response);
+
+            toast.success("Question added successfully");
+            handleClose();
+        } catch (error: any) {
+            console.error("API error:", error);
+            toast.error(error?.message || "Failed to save question");
+        }
+    };
+
 
     return (
         <Modal>
-            <HeaderModal title="Edit Question" onClose={handleClose} />
+            <HeaderModal title="Add Question" onClose={handleClose} />
             <div className="p-6">
-                <Formik initialValues={{ name: "" }} onSubmit={() => { }}>
-                    <Form className="flex flex-col gap-y-4">
-                        <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
-                        <TextareaField label="Pharmacy Comments" name="note" />
-                        <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
-                        <FileUploadField
-                            label="Upload File"
-                            module="checklist"
-                            name="file"
-                            title="Upload"
-                            uploadedFile={uploadedFile}
-                            setUploadedFile={setUploadedFile}
-                            handleFileUpload={(e, setValue) => handleFileUploadDocs(e, setValue)}
-                        />
-                        <div>
+            <Formik initialValues={initialVals}
+                onSubmit={handleSubmit}
+                validationSchema={AssignChecklistValidationSchema(selectedType || "")}
+                validateOnChange={false}
+            >
+                <Form className="flex flex-col gap-y-4">
+                    <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
+                    <TextareaField label="Note" name="note" />
+                    <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
+                    <FileUploadField
+                        label="Upload File"
+                        module="checklist"
+                        name="file"
+                        title="Upload"
+                        uploadedFile={uploadedFile}
+                        setUploadedFile={setUploadedFile}
+                        handleFileUpload={(e, setValue) => handleFileUploadDocs(e, setValue)}
+                    />
+                    {selectedType === "operations" &&
+                        (<div>
                             <SelectField
                                 label="Operational Item"
                                 name="operational_item"
@@ -138,38 +191,40 @@ const AddNewQuestionModal = () => {
                                 </div>
                             )}
                         </div>
-                        <MultiDateField label="Key Follow-up dates" name="follow_up_dates" />
-                        {selectedDates.length > 0 && (
-                            <div>
-                                <Label size="xs">Selected Dates(s)</Label>
-                                <div className="flex flex-col gap-2 mt-2">
-                                    {selectedDates.map((date, index) => (
-                                        <div key={index} className="flex gap-x-2">
-                                            <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
-                                                <span>{date}</span>
-                                            </div>
-                                            <button onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
                         )}
-                        <MultiSelectField
-                            label="Pharmacy"
-                            name="pharmacy_ids"
-                            isMulti
-                            options={[
-                                { value: "all", label: "All" },
-                                ...(pharmacies.map((pharmacy: PharmacyCardProps, index: number) => ({
-                                    value: pharmacy.pharmacy_id, label: pharmacy.pharmacy_name
-                                })))
-                            ]}
-                            placeholder="Select Pharmacy"
-                        />
+                    <MultiDateField label="Key Follow-up dates" name="follow_up_dates" />
+                    {selectedDates.length > 0 && (
+                        <div>
+                            <Label size="xs">Selected Dates(s)</Label>
+                            <div className="flex flex-col gap-2 mt-2">
+                                {selectedDates.map((date, index) => (
+                                    <div key={index} className="flex gap-x-2">
+                                        <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                            <span>{date}</span>
+                                        </div>
+                                        <button onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
-                        <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
-                    </Form>
-                </Formik>
+                    <MultiSelectField
+                        label="Pharmacy"
+                        name="pharmacy_ids"
+                        isMulti
+                        options={[
+                            { value: "all", label: "All" },
+                            ...(pharmacies.map((pharmacy: PharmacyCardProps, index: number) => ({
+                                value: pharmacy.pharmacy_id, label: pharmacy.pharmacy_name
+                            })))
+                        ]}
+                        placeholder="Select Pharmacy"
+                    />
+
+                    <SubmitButton type="submit" className="text-primary hover:text-white bg-secondary">Save</SubmitButton>
+                </Form>
+            </Formik>
             </div>
         </Modal>
     )
