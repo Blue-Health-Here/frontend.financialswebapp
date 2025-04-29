@@ -14,7 +14,7 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-import { setChecklists, setOperationalItems, setTasklist } from "@/store/features/admin/checklist/adminChecklistSlice";
+import { setChecklists, setOnboardingdTasklist, setOperationalItems, setOperationsTasklist} from "@/store/features/admin/checklist/adminChecklistSlice";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -431,7 +431,7 @@ export const fetchAllChecklist = async (dispatch: AppDispatch) => {
   return apiHandler(dispatch, 'get', '/v1/admin-checklist', {
     successMessage: "Checklist fetched successfully!",
     onSuccess: (data) => dispatch(setChecklists(data)),
-    onError: () => dispatch(setCourses([]))
+    onError: () => dispatch(setChecklists([]))
   });
 };
 
@@ -452,13 +452,43 @@ export const deleteChecklist = async (dispatch: AppDispatch, id?: string) => {
   });
 };
 
-export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string) => {
+// export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string, type?: string) => {
+//   return apiHandler(dispatch, 'get', '/v1/admin-checklist/tasks', {
+//     params: { checklist_id: id },
+//     onSuccess: (data) => dispatch(setTasklist(data)),
+//     successMessage: "Tasklist fetched successfully!",
+//     onError: () => dispatch(setTasklist([]))
+//   });
+// };
+export const fetchAllTasklist = async (
+  dispatch: AppDispatch,
+  id?: string,
+  type?: string
+) => {
   return apiHandler(dispatch, 'get', '/v1/admin-checklist/tasks', {
     params: { checklist_id: id },
-    onSuccess: (data) => dispatch(setTasklist(data)),
-    successMessage: "Tasklist fetched successfully!",
+    onSuccess: (data) => {
+      // Optional filtering, if 'type' is provided
+      if (type === 'onboarding') {
+        dispatch(setOnboardingdTasklist(data));
+      } else if (type === 'operations') {
+        dispatch(setOperationsTasklist(data));
+      } else {
+        const onboardingTasks = data.filter((task: any) => task.type === 'onboarding');
+        const operationsTasks = data.filter((task: any) => task.type === 'operations');
+
+        dispatch(setOnboardingdTasklist(onboardingTasks));
+        dispatch(setOperationsTasklist(operationsTasks));
+      }
+    },
+    successMessage: 'Tasklist fetched successfully!',
+    onError: () => {
+      dispatch(setOnboardingdTasklist([]));
+      dispatch(setOperationsTasklist([]));
+    }
   });
 };
+
 
 export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data: any) => {
   return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist/document', {

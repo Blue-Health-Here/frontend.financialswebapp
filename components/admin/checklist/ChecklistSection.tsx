@@ -23,7 +23,9 @@ const ChecklistSection = () => {
     const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
     const checklists = useSelector((state: RootState) => state.checklist.checklists) as ChecklistProps[];
-    const tasklist = useSelector((state: RootState) => state.checklist.tasklist);
+    const [tasklists, setTasklists] = useState<any>([]); //
+
+
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
     const isFetched = useRef(false);
     const dispatch = useDispatch();
@@ -38,7 +40,7 @@ const ChecklistSection = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [isAddQuestion, isEditQuestion]);
+    }, [isAddQuestion, isEditQuestion, isAddChecklist]);//
 
     const handleEditQuestion = () => {
         dispatch(setIsEditQuestion(true))
@@ -56,9 +58,11 @@ const ChecklistSection = () => {
         dispatch(setChecklistDetail(data));
     };
 
-    const handleChecklistSelect = (checklistId: string) => {
-        fetchAllTasklist(dispatch, checklistId);
+    const handleChecklistSelect = async (checklistId: string, type: string) => {
+        const data = await fetchAllTasklist(dispatch, checklistId, type);//
+        setTasklists((prev:any) => ({ ...prev, [checklistId]: data }));//
     };
+    
 
     const handleDeleteChecklist = (id?: string) => {
         deleteChecklist(dispatch, id);
@@ -135,6 +139,7 @@ const ChecklistSection = () => {
                             </div>
                             <Accordion
                                 items={filteredChecklists}
+                                tasklist={tasklists}//
                                 handleEditQuestion={handleEditQuestion}
                                 handleEditChecklist={(item: any) => handleEditChecklist(item)}
                                 handleDelete={handleDeleteChecklist}
