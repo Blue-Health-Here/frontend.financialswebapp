@@ -1,7 +1,6 @@
-import { ChecklistProps } from "@/utils/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiDelete, FiEdit, FiTable, FiTrash, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import DeleteModal from "./DeleteModal";
@@ -24,7 +23,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
   const onTitleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
-console.log("items", items)
+
   return (
     <div className="w-full mx-auto">
       {items?.map((item: any, index: number) => (
@@ -99,7 +98,7 @@ console.log("items", items)
                     </li>
                   ))}
                 </ul>
-              ) : tasklist ? (
+              ) : tasklist?.length > 0 ? (
                 <ul>
                   {tasklist?.map((task: any, index: any) => (
                     <li key={index} className="py-3">

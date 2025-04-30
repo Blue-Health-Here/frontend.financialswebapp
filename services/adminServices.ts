@@ -452,14 +452,6 @@ export const deleteChecklist = async (dispatch: AppDispatch, id?: string) => {
   });
 };
 
-// export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string, type?: string) => {
-//   return apiHandler(dispatch, 'get', '/v1/admin-checklist/tasks', {
-//     params: { checklist_id: id },
-//     onSuccess: (data) => dispatch(setTasklist(data)),
-//     successMessage: "Tasklist fetched successfully!",
-//     onError: () => dispatch(setTasklist([]))
-//   });
-// };
 export const fetchAllTasklist = async (
   dispatch: AppDispatch,
   id?: string,
@@ -468,7 +460,6 @@ export const fetchAllTasklist = async (
   return apiHandler(dispatch, 'get', '/v1/admin-checklist/tasks', {
     params: { checklist_id: id },
     onSuccess: (data) => {
-      // Optional filtering, if 'type' is provided
       if (type === 'onboarding') {
         dispatch(setOnboardingdTasklist(data));
       } else if (type === 'operations') {
@@ -483,12 +474,15 @@ export const fetchAllTasklist = async (
     },
     successMessage: 'Tasklist fetched successfully!',
     onError: () => {
-      dispatch(setOnboardingdTasklist([]));
-      dispatch(setOperationsTasklist([]));
+      if (type === 'onboarding') {
+        dispatch(setOnboardingdTasklist([]));
+      } else if (type === 'operations') {
+        dispatch(setOperationsTasklist([]));
+      }
     }
+
   });
 };
-
 
 export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data: any) => {
   return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist/document', {

@@ -22,8 +22,9 @@ const ChecklistSection = () => {
     const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
     const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
+    const onboarding = useSelector((state: RootState) => state.checklist.onboarding);
+    const operations = useSelector((state: RootState) => state.checklist.operations);
     const checklists = useSelector((state: RootState) => state.checklist.checklists) as ChecklistProps[];
-    const [tasklists, setTasklists] = useState<any>([]); //
 
 
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
@@ -59,8 +60,7 @@ const ChecklistSection = () => {
     };
 
     const handleChecklistSelect = async (checklistId: string, type: string) => {
-        const data = await fetchAllTasklist(dispatch, checklistId, type);//
-        setTasklists((prev:any) => ({ ...prev, [checklistId]: data }));//
+        const data = await fetchAllTasklist(dispatch, checklistId, type);
     };
     
 
@@ -139,7 +139,7 @@ const ChecklistSection = () => {
                             </div>
                             <Accordion
                                 items={filteredChecklists}
-                                tasklist={tasklists}//
+                                tasklist={type === 'operations' ? operations : onboarding}
                                 handleEditQuestion={handleEditQuestion}
                                 handleEditChecklist={(item: any) => handleEditChecklist(item)}
                                 handleDelete={handleDeleteChecklist}
