@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    stats: null
+    stats: null,
+    adminExpenseGraphData: []
 };
 
 const adminDashboardSlice = createSlice({
@@ -10,10 +11,13 @@ const adminDashboardSlice = createSlice({
     reducers: {
         setStats: (state, action) => {
             state.stats = action.payload;
+        },
+        setAdminExpenseGraphData: (state, action) => {
+            state.adminExpenseGraphData = action.payload;
         }
     }
 });
 
-export const { setStats } = adminDashboardSlice.actions;
+export const { setStats, setAdminExpenseGraphData } = adminDashboardSlice.actions;
 
 export default adminDashboardSlice.reducer;
