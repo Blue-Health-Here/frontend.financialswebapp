@@ -22,8 +22,11 @@ const ChecklistSection = () => {
     const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
     const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
+    const onboarding = useSelector((state: RootState) => state.checklist.onboarding);
+    const operations = useSelector((state: RootState) => state.checklist.operations);
     const checklists = useSelector((state: RootState) => state.checklist.checklists) as ChecklistProps[];
-    const tasklist = useSelector((state: RootState) => state.checklist.tasklist);
+
+
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
     const [selectedChecklistID, setSelectedChecklistID] = useState('');
     const isFetched = useRef(false);
@@ -39,7 +42,7 @@ const ChecklistSection = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [isAddQuestion, isEditQuestion]);
+    }, [isAddQuestion, isEditQuestion, isAddChecklist]);//
 
     const handleEditQuestion = () => {
         dispatch(setIsEditQuestion(true))
@@ -57,9 +60,10 @@ const ChecklistSection = () => {
         dispatch(setChecklistDetail(data));
     };
 
-    const handleChecklistSelect = (checklistId: string) => {
-        fetchAllTasklist(dispatch, checklistId);
+    const handleChecklistSelect = async (checklistId: string, type: string) => {
+        const data = await fetchAllTasklist(dispatch, checklistId, type);
     };
+    
 
     const handleDeleteChecklist = (id?: string) => {
         deleteChecklist(dispatch, id);
@@ -147,6 +151,7 @@ const ChecklistSection = () => {
                             </div>
                             <Accordion
                                 items={filteredChecklists}
+                                tasklist={type === 'operations' ? operations : onboarding}
                                 handleEditQuestion={handleEditQuestion}
                                 handleEditChecklist={(item: any) => handleEditChecklist(item)}
                                 handleDelete={handleDeleteChecklist}

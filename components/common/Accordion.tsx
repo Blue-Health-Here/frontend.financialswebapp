@@ -1,7 +1,6 @@
-import { ChecklistProps } from "@/utils/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiDelete, FiEdit, FiTable, FiTrash, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import DeleteModal from "./DeleteModal";
@@ -11,10 +10,11 @@ interface AccordionProps {
   handleEditQuestion?: () => void;
   handleEditChecklist?: Function
   handleDelete?: (id: string) => void 
-  onChecklistSelect?: (id: string) => void 
+  onChecklistSelect?: (id: string, type: string) => void 
+  tasklist?:any
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete, onChecklistSelect }) => {
+const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete, onChecklistSelect, tasklist }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCloseModal, setIsCloseModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -24,12 +24,11 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
     setActiveIndex(index === activeIndex ? null : index);
   };
 
-
   return (
     <div className="w-full mx-auto">
       {items?.map((item: any, index: number) => (
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
-        onClick={() => activeIndex !== index && onChecklistSelect?.(item.id)}>
+        onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>
           <div
             className={`flex justify-between items-center px-6 py-4 sm:py-2  md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => onTitleClick(index)}
@@ -99,27 +98,40 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                     </li>
                   ))}
                 </ul>
-              ) : item?.content ? (
-                <div className="flex items-start sm:items-center justify-between">
-                  <div className="flex gap-2 items-start sm:items-center flex-1">
-                    <p className="text-grey text-xs sm:text-sm md:text-[16px]">
-                      {item?.content}
-                    </p>
-                  </div>
-                  <button
-                    className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
-                    onClick={handleEditQuestion}
-                  >
-                    <Image
-                      src="/edit-icon.svg"
-                      alt=""
-                      className="w-[12px] h-[12px] sm:w-[15px] sm:h-[15px]"
-                      width={15}
-                      height={15}
-                    />
-                  </button>
-                </div>
-              ) : <p>No data </p>}
+              ) : tasklist?.length > 0 ? (
+                <ul>
+                  {tasklist?.map((task: any, index: any) => (
+                    <li key={index} className="py-3">
+                      <div className="flex items-start sm:items-center justify-between">
+                        <div className="inline-flex gap-2 items-start sm:items-center flex-1">
+                          <Image
+                            src="/greencheck.png"
+                            alt=""
+                            className="w-3.5 h-3.5 sm:w-6 sm:h-6 mt-1 sm:mt-0"
+                            width={20}
+                            height={20}
+                          />
+                          <span className="text-grey text-xs sm:text-sm md:text-[16px] leading-6">
+                            {task.question}
+                          </span>
+                        </div>
+                        <button
+                          className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
+                          onClick={handleEditQuestion}
+                        >
+                          <Image
+                            src="/edit-icon.svg"
+                            alt=""
+                            className="w-[12px] h-[12px] sm:w-[15px] sm:h-[15px]"
+                            width={15}
+                            height={15}
+                          />
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p>No data</p>}
             </div>
           </div>
         </div>
