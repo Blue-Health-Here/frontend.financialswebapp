@@ -114,7 +114,7 @@ export const addNewChecklistValidationSchema = Yup.object().shape({
     checklist_type: Yup.string().required("Checklist type is required"),
 });
 
-export const AssignChecklistValidationSchema = (selectedType: string) => {
+export const assignChecklistValidationSchema = (selectedType: string) => {
     const baseSchema: { [key: string]: any } = {
         question: Yup.string().required('Question is required'),
         note: Yup.string().required('Note is required'),

@@ -527,14 +527,23 @@ export const fetchAllOperationalItems = async (dispatch: AppDispatch) => {
   return apiHandler(dispatch, 'get', '/v1/operational-item', {
     successMessage: "Operational items fetched successfully!",
     onSuccess: (data) => dispatch(setOperationalItems(data)),
-    onError: () => dispatch(setCourses([]))
+    onError: () => dispatch(setOperationalItems([]))
   });
 };
 
-export const createNewAssignChecklist = async (dispatch: AppDispatch, data: any) => {
+export const createNewAssignChecklist = async (dispatch: AppDispatch, data: any, type?: string) => {
   return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist', {
     data,
     successMessage: "Assign Checklist created successfully!",
-    onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id)
+    onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
+  });
+};
+
+export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, type?: string) => {
+  return apiHandler(dispatch, 'put', '/v1/admin/assign-checklist', {
+    params: { task_id: data?.task_id },
+    data,
+    successMessage: "Assign Checklist updated successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
   });
 };
