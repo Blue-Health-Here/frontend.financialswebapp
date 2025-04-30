@@ -9,12 +9,11 @@ import { IoSearch } from "react-icons/io5";
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setChecklistDetail, setIsAddChecklist, setIsAddQuestion, setIsEditQuestion } from "@/store/features/admin/checklist/adminChecklistSlice";
-import EditQuestionModal from "./EditQuestionModal";
+import { setChecklistDetail, setIsAddChecklist, setIsAddQuestion, setTasklistDetails } from "@/store/features/admin/checklist/adminChecklistSlice";
 import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
-import { ChecklistProps } from "@/utils/types";
+import { AssignChecklistProps, ChecklistProps } from "@/utils/types";
 import { deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
@@ -42,11 +41,7 @@ const ChecklistSection = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [isAddQuestion, isEditQuestion, isAddChecklist]);//
-
-    const handleEditQuestion = () => {
-        dispatch(setIsEditQuestion(true))
-    }
+    }, [isAddQuestion, isEditQuestion, isAddChecklist]);
 
     useEffect(() => {
         if (!isFetched.current) {
@@ -61,25 +56,38 @@ const ChecklistSection = () => {
     };
 
     const handleChecklistSelect = async (checklistId: string, type: string) => {
-        const data = await fetchAllTasklist(dispatch, checklistId, type);
+        await fetchAllTasklist(dispatch, checklistId, type);
     };
-    
+
 
     const handleDeleteChecklist = (id?: string) => {
         deleteChecklist(dispatch, id);
     };
-    
+
     const handleAddChecklistTask = (type: string) => {
         const filteredChecklists = checklists.filter(
             (checklist) => checklist.checklist_type === type
         );
-
+        dispatch(setTasklistDetails(null));
         if (filteredChecklists.length > 0) {
             setSelectedChecklistType(type);
             setSelectedChecklistID(filteredChecklists[0].id);
             dispatch(setIsAddQuestion(true));
         }
     };
+
+    const handleEditChecklistTask = (data: AssignChecklistProps, type: string) => {
+        const filteredChecklists = checklists.filter(
+            (checklist) => checklist.checklist_type === type
+        );
+        if (filteredChecklists.length > 0) {
+            setSelectedChecklistType(type);
+            dispatch(setTasklistDetails(data))
+            setSelectedChecklistID(filteredChecklists[0].id);
+            dispatch(setIsAddQuestion(true))
+        }
+    }
+
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
@@ -152,7 +160,7 @@ const ChecklistSection = () => {
                             <Accordion
                                 items={filteredChecklists}
                                 tasklist={type === 'operations' ? operations : onboarding}
-                                handleEditQuestion={handleEditQuestion}
+                                handleEditTasklist={(task: any) => handleEditChecklistTask(task, type)}
                                 handleEditChecklist={(item: any) => handleEditChecklist(item)}
                                 handleDelete={handleDeleteChecklist}
                                 onChecklistSelect={handleChecklistSelect} />
@@ -161,7 +169,6 @@ const ChecklistSection = () => {
                 })}
             </div>
             {isAddQuestion && <AddNewQuestionModal checklistId={selectedChecklistID} selectedType={selectedChecklistType} />}
-            {isEditQuestion && <EditQuestionModal />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );

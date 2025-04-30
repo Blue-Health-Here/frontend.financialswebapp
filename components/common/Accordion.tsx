@@ -7,14 +7,14 @@ import DeleteModal from "./DeleteModal";
 
 interface AccordionProps {
   items: any;
-  handleEditQuestion?: () => void;
+  handleEditTasklist?: Function;
   handleEditChecklist?: Function
-  handleDelete?: (id: string) => void 
-  onChecklistSelect?: (id: string, type: string) => void 
-  tasklist?:any
+  handleDelete?: (id: string) => void
+  onChecklistSelect?: (id: string, type: string) => void
+  tasklist?: any
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete, onChecklistSelect, tasklist }) => {
+const Accordion: React.FC<AccordionProps> = ({ items, handleEditTasklist, handleEditChecklist, handleDelete, onChecklistSelect, tasklist }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCloseModal, setIsCloseModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -28,7 +28,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
     <div className="w-full mx-auto">
       {items?.map((item: any, index: number) => (
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
-        onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>
+          onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>
           <div
             className={`flex justify-between items-center px-6 py-4 sm:py-2  md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => onTitleClick(index)}
@@ -50,7 +50,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                       setSelectedItem(item);
                       setIsCloseModal(true);
                     }}
-                   className={`${activeIndex === index ? "text-secondary" : "text-red-500 font"}`}
+                    className={`${activeIndex === index ? "text-secondary" : "text-red-500 font"}`}
                   />
                 </>
               )}
@@ -84,7 +84,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                         </div>
                         <button
                           className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
-                          onClick={handleEditQuestion}
+                          onClick={() => handleEditTasklist}
                         >
                           <Image
                             src="/edit-icon.svg"
@@ -117,7 +117,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                         </div>
                         <button
                           className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
-                          onClick={handleEditQuestion}
+                          onClick={() => handleEditTasklist && handleEditTasklist(task)}
                         >
                           <Image
                             src="/edit-icon.svg"
