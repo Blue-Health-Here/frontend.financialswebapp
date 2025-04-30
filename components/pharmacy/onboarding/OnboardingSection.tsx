@@ -84,7 +84,7 @@ const OnboardingSection = () => {
             <Accordion
               key={index}
               items={checklist.list}
-              handleEditQuestion={() => {
+              handleEditTasklist={() => {
                 dispatch(setIsAddExpenseModal(true));
               }}
             />

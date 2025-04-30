@@ -172,7 +172,7 @@ const PharmacyDetail = () => {
             <Accordion
               key={index}
               items={checklist.list}
-              handleEditQuestion={handleEditQuestion}
+              handleEditTasklist={handleEditQuestion}
             />
           </div>
         </div>
