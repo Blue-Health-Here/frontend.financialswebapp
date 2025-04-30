@@ -1,7 +1,7 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
-import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
+import { setAdminExpenseGraphData, setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { setAdminPharmacyCoursesData, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
 import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
@@ -155,6 +155,14 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
     successMessage: "Pharmacies fetched successfully!",
     onSuccess: (data) => dispatch(setPharmacies(data)),
     onError: () => dispatch(setPharmacies([]))
+  });
+};
+
+export const fetchExpenseGraph = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/admin/expenses/graph', {
+    successMessage: "Expense Graph fetched successfully!",
+    onSuccess: (data) => dispatch(setAdminExpenseGraphData(data)),
+    onError: () => dispatch(setAdminExpenseGraphData([]))
   });
 };
 

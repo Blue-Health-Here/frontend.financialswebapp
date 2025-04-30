@@ -7,7 +7,7 @@ import BarChart from "@/components/common/BarChart";
 import { IoSearch } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import StatsSection from './StatsSection';
-import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
+import { fetchAllPharmacies, fetchAllStats, fetchExpenseGraph } from '@/services/adminServices';
 import { RootState } from '@/store/store';
 import { PharmacyCardProps } from '@/utils/types';
 import useWindowSize from '@/hooks/useWindowSize';
@@ -18,13 +18,16 @@ const DashboardSection = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+    const { adminExpenseGraphData } = useSelector((state: RootState) => state.adminDashboard);
     const hasFetched = useRef(false);
-
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllStats(dispatch);
-            fetchAllPharmacies(dispatch).finally(() => setLoading(false));
+            Promise.all([
+                fetchAllStats(dispatch),
+                fetchAllPharmacies(dispatch),
+                fetchExpenseGraph(dispatch)
+            ]).finally(() => setLoading(false));
         }
     }, []);
     
@@ -39,7 +42,7 @@ const DashboardSection = () => {
     });
 
     const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
-    const fullDatasets = [80, 100, 220, 180, 80, 120, 120, 140, 160]
+    const fullDatasets = adminExpenseGraphData?.map((item: any, index: number) => item.total_expense);
     let labels, datasets;
 
     if (width > 1400) {
@@ -71,7 +74,7 @@ const DashboardSection = () => {
                         yAxisTitle="Total Expense"
                         pointStyle="circle"
                         showTopValues={false}
-                        stepSize={50}
+                        stepSize={5}
                         showXLabels={false}
                     />
                 </div>
