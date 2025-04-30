@@ -23,13 +23,13 @@ const PharmaciesSection = () => {
       fetchAllPharmacies(dispatch).finally(() => setLoading(false));
     }
   }, []);
-  
-      const filteredPharmacies = pharmacies.filter((pharmacy: PharmacyCardProps) => {
-          const nameMatches = pharmacy.pharmacy_name.toLowerCase().includes(searchQuery.toLowerCase());
-          const expenseMatches = pharmacy.expense !== null && pharmacy.expense.toString().includes(searchQuery);
-          return nameMatches || expenseMatches;
-      });
-  
+
+  const filteredPharmacies = pharmacies.filter((pharmacy: PharmacyCardProps) => {
+    const nameMatches = pharmacy.pharmacy_name.toLowerCase().includes(searchQuery.toLowerCase());
+    const expenseMatches = pharmacy.expense !== null && pharmacy.expense.toString().includes(searchQuery);
+    return nameMatches || expenseMatches;
+  });
+
 
   return (
     <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -49,17 +49,17 @@ const PharmaciesSection = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading ? (
-                    <TextMessage text="Loading pharmacies..." />
-                            ) : (
-                                filteredPharmacies.length > 0 ? (
-                                    filteredPharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
-                                        <PharmacyCard key={index} pharmacy={pharmacy} />
-                                    ))
-                                ) : (
-                                    <TextMessage text="No pharmacies match your search criteria." />
-                                )
-                            )}
+        {loading ? (
+          <TextMessage text="Loading pharmacies..." />
+        ) : (
+          filteredPharmacies.length > 0 ? (
+            filteredPharmacies.map((pharmacy: PharmacyCardProps, index: number) => (
+              <PharmacyCard key={index} pharmacy={pharmacy} />
+            ))
+          ) : (
+            <TextMessage text="No pharmacies match your search criteria." />
+          )
+        )}
       </div>
     </div>
   );

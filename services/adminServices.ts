@@ -170,7 +170,10 @@ export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: stri
   return apiHandler(dispatch, 'get', '/v1/pharmacy-details', {
     params: { pharmacy_id: id },
     successMessage: "Pharmacy details fetched successfully!",
-    onSuccess: (data) => dispatch(setPharmacyDetailsData(data))
+    onSuccess: (data) => {
+      dispatch(setPharmacyDetailsData(data))
+      dispatch(setAdminPharmacyCoursesData(data?.courses))
+    }
   });
 };
 

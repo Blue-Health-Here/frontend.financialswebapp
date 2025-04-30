@@ -41,7 +41,9 @@ const globalSlice = createSlice({
             state.pharmacyStatsData = action.payload;
         },
         setPharmacyDetailsData: (state, action) => {
-            state.pharmacyDetailsData = action.payload;
+            state.pharmacyDetailsData = action.payload?.pharmacy_details;
+            state.licenseData = action?.payload?.licenses;
+            state.certificationsData = action?.payload?.certifications;
         }
     }
 });
