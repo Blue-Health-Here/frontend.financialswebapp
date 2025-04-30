@@ -2,7 +2,7 @@ import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setAdminPharmacyCoursesData, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
 import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 import {
@@ -171,6 +171,14 @@ export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: stri
     params: { pharmacy_id: id },
     successMessage: "Pharmacy details fetched successfully!",
     onSuccess: (data) => dispatch(setPharmacyDetailsData(data))
+  });
+};
+
+export const fetchAllAdminPharmacyCourses = async (dispatch: AppDispatch, id?: string) => {
+  return apiHandler(dispatch, 'get', '/v1/admin/courses/overview', {
+    params: { pharmacy_id: id },
+    successMessage: "Courses fetched successfully!",
+    onSuccess: (data) => dispatch(setAdminPharmacyCoursesData(data))
   });
 };
 
@@ -489,7 +497,14 @@ export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data:
     data,
     isFormData: true,
     successMessage: "Document file uploaded successfully!",
-    errorMessage: "File already Exists!"
+    errorMessage: "File already Exists!",
+    onError: (error: any) => {
+      if (error.status === 409) {
+        toast.error("File Already Exists!")
+      } else {
+        toast.error(error?.response?.data?.detail);
+      }
+    }
   });
 };
 
@@ -513,5 +528,13 @@ export const fetchAllOperationalItems = async (dispatch: AppDispatch) => {
     successMessage: "Operational items fetched successfully!",
     onSuccess: (data) => dispatch(setOperationalItems(data)),
     onError: () => dispatch(setCourses([]))
+  });
+};
+
+export const createNewAssignChecklist = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist', {
+    data,
+    successMessage: "Assign Checklist created successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id)
   });
 };

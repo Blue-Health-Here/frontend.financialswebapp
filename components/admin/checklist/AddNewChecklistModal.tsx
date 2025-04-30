@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 interface AddNewChecklistModalProps {
     selectedType?: string;
+    checklistId?: string;
 }
 
 const AddNewChecklistModal: React.FC<AddNewChecklistModalProps> = ({ selectedType }) => {

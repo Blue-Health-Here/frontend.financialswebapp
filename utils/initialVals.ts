@@ -50,3 +50,16 @@ export const uploadDocVerificationInitialVals: any = {
     file_pdf: "",
     statement_id: ''
 };
+
+
+export const AssignChecklistInitialVals = {
+    checklist_id: '',
+    question: '',
+    note: '',
+    action_item: '',
+    operational_item: '',
+    follow_up_dates: [],
+    pharmacy_ids: [],
+    file: null,
+};
+  
