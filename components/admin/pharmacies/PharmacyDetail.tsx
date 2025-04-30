@@ -41,7 +41,7 @@ import PharmacyDetailCard from "./PharmacyDetailCard";
 const PharmacyDetail = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
   const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
-  const { isAddQuestion, pharmacyCourses } = useSelector((state: RootState) => state.pharmacy);
+  const { isAddQuestion, pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
@@ -159,20 +159,28 @@ const PharmacyDetail = () => {
           <Certifications handleDeleteFile={handleDeleteFile} setUploadedFile={setUploadedFile} handleFileUpload={handleFileUpload} />
         </div>
       </div>
-
-      {checklists.map((checklist, index) => (
+      {["onboarding", "operations"].map((type, index) => (
         <div
           className="w-full mt-6  px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg"
           key={index}
         >
           <div className="flex flex-col gap-6">
             <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
-              {checklist.name + " Checklist"}
+              {type + " Checklist"}
             </h2>
             <Accordion
               key={index}
-              items={checklist.list}
               handleEditTasklist={handleEditQuestion}
+              items={type === 'operations' ? operationsChecklist?.map((item: any, index: number) => ({ 
+                checklist_id: item.checklist_id,
+                checklist_name: "Test" + index,
+                checklist_type: type 
+              })) : onboardingChecklist?.map((item: any, index: number) => ({ 
+                checklist_id: item.checklist_id,
+                checklist_name: "Test" + index,
+                checklist_type: type 
+              }))}
+              tasklist={type === 'operations' ? operationsChecklist : onboardingChecklist}
             />
           </div>
         </div>

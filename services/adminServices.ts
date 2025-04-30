@@ -2,7 +2,7 @@ import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { setAdminPharmacyCoursesData, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setAdminPharmacyCoursesData, setOnboardingChecklist, setOperationsChecklist, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
 import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 import {
@@ -173,6 +173,8 @@ export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: stri
     onSuccess: (data) => {
       dispatch(setPharmacyDetailsData(data))
       dispatch(setAdminPharmacyCoursesData(data?.courses))
+      dispatch(setOperationsChecklist(data?.operations_checklist))
+      dispatch(setOnboardingChecklist(data?.onboarding_checklist))
     }
   });
 };
