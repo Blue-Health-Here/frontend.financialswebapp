@@ -21,40 +21,40 @@ const OperationsSection = () => {
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
-      <div className="flex flex-col md:flex-col lg:flex-row gap-4">
+        <div className="flex flex-col md:flex-col lg:flex-row gap-4">
           <h1 className=" text-lg font-semibold flex-1 text-nowrap lg:text-2xl">
             {operationalchecklists[0].name}
           </h1>
-                 <Formik
-                   initialValues={{ category: "", search: "" }}
-                   onSubmit={() => {}}
-                 >
-                   {({ isSubmitting }) => (
-                     <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
-                       <FileDownloadField title="Reports" className="min-w-48" parentClassName="flex-1" />
-                       <SelectField
-                         className="border-none shadow-lg rounded-lg font-medium min-w-48"
-                         parentClassName="flex-1"
-                         name="category"
-                         options={[
-                           { value: "Al Categories", label: "Al Categories" },
-                           { value: "operational", label: "Operational" },
-                         ]}
-                       />
-                       <div className="relative min-w-48 flex-1">
-                         <Input
-                           name="search"
-                           placeholder="Search Checklist"
-                           className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
-                         />
-                         <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                           <IoSearch size={18} />
-                         </span>
-                       </div>
-                     </Form>
-                   )}
-                 </Formik>
-               </div>
+          <Formik
+            initialValues={{ category: "", search: "" }}
+            onSubmit={() => { }}
+          >
+            {({ isSubmitting }) => (
+              <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
+                <FileDownloadField title="Reports" className="min-w-48" parentClassName="flex-1" />
+                <SelectField
+                  className="border-none shadow-lg rounded-lg font-medium min-w-48"
+                  parentClassName="flex-1"
+                  name="category"
+                  options={[
+                    { value: "Al Categories", label: "Al Categories" },
+                    { value: "operational", label: "Operational" },
+                  ]}
+                />
+                <div className="relative min-w-48 flex-1">
+                  <Input
+                    name="search"
+                    placeholder="Search Checklist"
+                    className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
+                  />
+                  <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
+                    <IoSearch size={18} />
+                  </span>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
 
         {operationalchecklists.map((checklist, index) => (
           <div className="flex flex-col gap-6 mt-6" key={index}>
@@ -68,7 +68,7 @@ const OperationsSection = () => {
               </div>
             </div>
             <div className="border-b border-[#F1F5F9] my-2"></div>
-            <Accordion key={index} items={checklist.list} handleEditQuestion={() => { dispatch(setIsAddOperationsExpense(true)) }} />
+            <Accordion key={index} items={checklist.list} handleEditTasklist={() => { dispatch(setIsAddOperationsExpense(true)) }} />
           </div>
         ))}
       </div>

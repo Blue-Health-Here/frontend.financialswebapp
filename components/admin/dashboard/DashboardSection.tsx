@@ -74,7 +74,6 @@ const DashboardSection = () => {
                         stepSize={50}
                         showXLabels={false}
                     />
-
                 </div>
             </div>
 
