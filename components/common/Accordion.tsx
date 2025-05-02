@@ -31,19 +31,20 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
           onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>
           <div
-            className={`flex justify-between items-center px-6 py-4 sm:py-2  md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
+            className={`flex justify-between items-center px-3 md:px-6 py-3 md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => onTitleClick(index)}
           >
-            <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
+            <h1 className="text-sm md:text-base lg:text-lg flex justify-between md:justify-normal gap-2 items-center">
               {item.checklist_name || item.title}
-              {item.checklist_name && (
+             <div className="flex gap-2">
+             {item.checklist_name && (
                 <>
                   <FiEdit
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEditChecklist && handleEditChecklist(item);
                     }}
-                    className={`${activeIndex === index ? "text-white" : "text-primary"}`}
+                    className={`w-4 h-4 md:w-5 md:h-5 ${activeIndex === index ? "text-white" : "text-primary"}`}
                   />
                   <FiTrash2
                     onClick={(e) => {
@@ -52,10 +53,11 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
                       setSelectedItemType("checklist");
                       setIsCloseModal(true);
                     }}
-                    className={`${activeIndex === index ? "text-secondary" : "text-red-500"}`}
+                    className={`w-4 h-4 md:w-5 md:h-5 ${activeIndex === index ? "text-secondary" : "text-red-500"}`}
                   />
                 </>
               )}
+             </div>
             </h1>
             {activeIndex === index ? (
               <RiArrowDropDownLine className="text-2xl md:text-[34px]" />
@@ -66,7 +68,7 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
           <div
             className={`transition-all duration-300 ease-in-out ${activeIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
           >
-            <div className="p-6 bg-white border-t border-gray-300">
+            <div className="p-3 md:p-6 bg-white border-t border-gray-300">
               {Array.isArray(item?.content) && item?.content?.length > 0 ? (
                 <ul className="divide-y divide-gray-300">
                   {item?.content?.map((text: any, idx: any) => (
@@ -91,7 +93,7 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
                           <Image
                             src="/edit-icon.svg"
                             alt=""
-                            className="w-[12px] h-[12px] sm:w-[15px] sm:h-[15px]"
+                            className="w-4 h-4 md:w-5 md:h-5 "
                             width={15}
                             height={15}
                           />
@@ -124,7 +126,7 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
                           <Image
                             src="/edit-icon.svg"
                             alt=""
-                            className="w-[12px] h-[12px] sm:w-[15px] sm:h-[15px]"
+                            className="w-4 h-4 md:w-5 md:h-5 "
                             width={15}
                             height={15}
                           />
@@ -135,7 +137,7 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
                               setSelectedItemType("tasklist");
                               setIsCloseModal(true);
                             }}
-                            className="text-red-500 ml-2 w-[12px] h-[12px] sm:w-[15px] sm:h-[15px] cursor-pointer"
+                            className="text-red-500 ml-2 w-4 h-4 md:w-5 md:h-5 cursor-pointer"
                           />
                       </div>
                     </li>
