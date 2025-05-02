@@ -101,7 +101,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                         </div>
                     )}
                     {variant === "button" ? (
-                        <>
+                        <div>
                             <SubmitButton type="button" className={`w-full relative p-0 text-primary bg-white hover:bg-white border border-secondary ${className}`}>
                                 <input
                                     type="file"
@@ -113,10 +113,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                                 <MdOutlineFileUpload className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                                 <p className="ml-2 text-xs md:text-sm">{title}</p>
                             </SubmitButton>
-                            {meta.touched && meta.error && (
-                                <p className="text-red-500 text-xs mt-1 font-semibold">{meta.error}</p>
-                            )}
-                        </>
+                        </div>
                     ) : (
                         // Dropzone-style upload
                         <div className="flex justify-center items-center border-dashed border h-[140px] md:h-[193px] border-black rounded-lg p-4 cursor-pointer hover:border-primary relative">
