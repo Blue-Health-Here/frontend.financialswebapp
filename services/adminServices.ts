@@ -555,3 +555,11 @@ export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, ty
     onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
   });
 };
+
+export const deleteAssignChecklist = async (dispatch: AppDispatch, task_id: string, checklist_id?: string, type?: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist', {
+    params: { task_id: task_id },
+    successMessage: "Assign Checklist deleted successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, checklist_id, type)
+  });
+};

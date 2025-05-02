@@ -9,16 +9,17 @@ interface AccordionProps {
   items: any;
   handleEditTasklist?: Function;
   handleEditChecklist?: Function
-  handleDelete?: (id: string) => void
+  handleDeleteChecklist?: (id: string) => void
+  handleDeleteTasklist?: (taskId: string, checklistId: string) => void;
   onChecklistSelect?: (id: string, type: string) => void
   tasklist?: any
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditTasklist, handleEditChecklist, handleDelete, onChecklistSelect, tasklist }) => {
+const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTasklist, handleEditChecklist, handleDeleteChecklist, handleDeleteTasklist, onChecklistSelect }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCloseModal, setIsCloseModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-
+  const [selectedItem, setSelectedTask] = useState<any>(null);
+  const [selectedItemType, setSelectedItemType] = useState<"checklist" | "tasklist" | null>(null);
 
   const onTitleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
@@ -47,10 +48,11 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditTasklist, handle
                   <FiTrash2
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedItem(item);
+                      setSelectedTask(item);
+                      setSelectedItemType("checklist");
                       setIsCloseModal(true);
                     }}
-                    className={`${activeIndex === index ? "text-secondary" : "text-red-500 font"}`}
+                    className={`${activeIndex === index ? "text-secondary" : "text-red-500"}`}
                   />
                 </>
               )}
@@ -116,7 +118,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditTasklist, handle
                           </span>
                         </div>
                         <button
-                          className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
+                          className="text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
                           onClick={() => handleEditTasklist && handleEditTasklist(task)}
                         >
                           <Image
@@ -127,6 +129,14 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditTasklist, handle
                             height={15}
                           />
                         </button>
+                          <FiTrash2
+                            onClick={() => {
+                              setSelectedTask(task);
+                              setSelectedItemType("tasklist");
+                              setIsCloseModal(true);
+                            }}
+                            className="text-red-500 ml-2 w-[12px] h-[12px] sm:w-[15px] sm:h-[15px] cursor-pointer"
+                          />
                       </div>
                     </li>
                   ))}
@@ -136,16 +146,21 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditTasklist, handle
           </div>
         </div>
       ))}
-      {isCloseModal && <DeleteModal title={selectedItem.checklist_name.toUpperCase()} content={`<p className="text-base">
-         <span>Are you sure you want to delete this ${selectedItem.checklist_name}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
+      {isCloseModal && <DeleteModal title="" content={`<p className="text-base">
+         <span>Are you sure you want to delete this ${selectedItemType === "checklist" ? selectedItem?.checklist_name : selectedItem?.question}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
         handleClose={() => {
           setIsCloseModal(false);
-          setSelectedItem(null);
+          setSelectedTask(null);
         }}
         handleSuccess={() => {
-          if (handleDelete) handleDelete(selectedItem.id);
+          if (selectedItemType === "checklist") {
+            handleDeleteChecklist?.(selectedItem.id);
+          } else if (selectedItemType === "tasklist") {
+            handleDeleteTasklist?.(selectedItem.id, selectedItem?.checklist_id);
+          }
           setIsCloseModal(false);
-          setSelectedItem(null);
+          setSelectedTask(null);
+          setSelectedItemType(null);
         }} />}
     </div>
   );
