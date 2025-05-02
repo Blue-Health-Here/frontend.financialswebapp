@@ -13,7 +13,6 @@ import {
 
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { useEffect, useState } from "react";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
 
