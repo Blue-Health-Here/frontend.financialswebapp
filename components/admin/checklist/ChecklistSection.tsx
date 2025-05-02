@@ -27,7 +27,6 @@ const ChecklistSection = () => {
 
 
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
-    const [selectedChecklistID, setSelectedChecklistID] = useState('');
     const isFetched = useRef(false);
     const dispatch = useDispatch();
 
@@ -71,7 +70,6 @@ const ChecklistSection = () => {
         dispatch(setTasklistDetails(null));
         if (filteredChecklists.length > 0) {
             setSelectedChecklistType(type);
-            setSelectedChecklistID(filteredChecklists[0].id);
             dispatch(setIsAddQuestion(true));
         }
     };
@@ -83,7 +81,6 @@ const ChecklistSection = () => {
         if (filteredChecklists.length > 0) {
             setSelectedChecklistType(type);
             dispatch(setTasklistDetails(data))
-            setSelectedChecklistID(filteredChecklists[0].id);
             dispatch(setIsAddQuestion(true))
         }
     }
@@ -168,7 +165,7 @@ const ChecklistSection = () => {
                     )
                 })}
             </div>
-            {isAddQuestion && <AddNewQuestionModal checklistId={selectedChecklistID} selectedType={selectedChecklistType} />}
+            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );

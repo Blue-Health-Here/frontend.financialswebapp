@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RxCross2 } from "react-icons/rx";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { AssignChecklistProps, OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
+import { AssignChecklistProps, ChecklistProps, OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
 import { postAssignChecklistUploadDocs, updateAssignChecklist } from "@/services/adminServices";
@@ -24,12 +24,11 @@ import { assignChecklistValidationSchema } from "@/utils/validationSchema";
 
 interface AddNewChecklistModalProps {
     selectedType?: string;
-    checklistId?: string;
 }
 
-const AddNewQuestionModal: React.FC<AddNewChecklistModalProps> = ({ selectedType, checklistId }) => {
+const AddNewQuestionModal: React.FC<AddNewChecklistModalProps> = ({ selectedType }) => {
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
-    const { operationalItems, tasklistDetails } = useSelector((state: RootState) => state.checklist);
+    const { operationalItems, tasklistDetails, checklists } = useSelector((state: RootState) => state.checklist);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
     const [initialVals, setInitialVals] = useState<any>(AssignChecklistInitialVals);
@@ -84,7 +83,7 @@ const AddNewQuestionModal: React.FC<AddNewChecklistModalProps> = ({ selectedType
         if (tasklistDetails) {
             const newFollowUpDates = tasklistDetails.follow_up_dates || [];
             setInitialVals({
-                checklist_id: checklistId,
+                checklist_id: tasklistDetails.checklist_id,
                 question: tasklistDetails.question,
                 note: tasklistDetails.note,
                 action_item: tasklistDetails.action_item,
@@ -105,7 +104,7 @@ const AddNewQuestionModal: React.FC<AddNewChecklistModalProps> = ({ selectedType
 
     const handleSubmit = async (values: AssignChecklistProps) => {
         let payload: any = {
-            checklist_id: checklistId,
+            checklist_id: values.checklist_id,
             question: values.question,
             note: values.note,
             action_item: values.action_item,
@@ -153,6 +152,19 @@ const AddNewQuestionModal: React.FC<AddNewChecklistModalProps> = ({ selectedType
                     enableReinitialize={true}
                 >
                     <Form className="flex flex-col gap-y-4">
+                        <SelectField
+                            label="Checklist"
+                            name="checklist_id"
+                            options={[
+                                ...(checklists
+                                    .filter((checklist: ChecklistProps) => checklist.checklist_type === selectedType) 
+                                    .map((checklist: ChecklistProps) => ({
+                                        value: checklist.id,
+                                        label: checklist.checklist_name,
+                                    })))
+                            ]}
+                            placeholder="Select Checklist"
+                        />
                         <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
                         <TextareaField label="Note" name="note" />
                         <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
