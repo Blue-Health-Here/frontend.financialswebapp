@@ -15,7 +15,11 @@ interface AccordionProps {
   tasklist?: any
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTasklist, handleEditChecklist, handleDeleteChecklist, handleDeleteTasklist, onChecklistSelect }) => {
+const Accordion: React.FC<AccordionProps> = ({ 
+  items,  tasklist, handleEditTasklist, 
+  handleEditChecklist, handleDeleteChecklist, handleDeleteTasklist, 
+  onChecklistSelect 
+}) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCloseModal, setIsCloseModal] = useState(false);
   const [selectedItem, setSelectedTask] = useState<any>(null);
@@ -146,7 +150,7 @@ const Accordion: React.FC<AccordionProps> = ({ items,  tasklist, handleEditTaskl
           </div>
         </div>
       ))}
-      {isCloseModal && <DeleteModal title="" content={`<p className="text-base">
+      {isCloseModal && <DeleteModal title={selectedItem?.checklist_name || selectedItem?.question || ""} content={`<p className="text-base">
          <span>Are you sure you want to delete this ${selectedItemType === "checklist" ? selectedItem?.checklist_name : selectedItem?.question}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
         handleClose={() => {
           setIsCloseModal(false);
