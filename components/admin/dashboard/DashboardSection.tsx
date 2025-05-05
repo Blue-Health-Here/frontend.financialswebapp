@@ -15,12 +15,13 @@ import useWindowSize from '@/hooks/useWindowSize';
 const DashboardSection = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
+    const [useLogScale, setUseLogScale] = useState(true);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
     const { adminExpenseGraphData } = useSelector((state: RootState) => state.adminDashboard);
     const hasFetched = useRef(false);
-
+    
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
@@ -102,29 +103,45 @@ const DashboardSection = () => {
         datasets = { pharmacy: chartData.datasets.pharmacy.slice(0, sliceSize) };
     }
 
+    const toggleScaleType = () => {
+        setUseLogScale(!useLogScale);
+    };
+
     return (
         <>
             <h3 className="text-themeGrey text-lg md:text-xl font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:auto-rows-fr">
                 <StatsSection />
-                <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg p-6 flex items-center justify-center">
-                    {!loading && adminExpenseGraphData && adminExpenseGraphData.length > 0 ? (
-                        <BarChart
-                            Xlabels={labels}
-                            Ylabels={datasets}
-                            useGradient={false}
-                            barColors={["#1E3A8A"]}
-                            barThickness={8}
-                            yAxisTitle="Total Expense"
-                            pointStyle="circle"
-                            showTopValues={false}
-                            stepSize={calculateStepSize(chartData.datasets.pharmacy)}
-                            chartMaxValue={getChartMaxValue(chartData.datasets.pharmacy)}
-                            showXLabels={true}
-                        />
-                    ) : (
-                        <p>Loading expense data...</p>
-                    )}
+                <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                    <div className="hidden">
+                        <button 
+                            onClick={toggleScaleType}
+                            className="text-sm px-3 py-1 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200"
+                        >
+                            {useLogScale ? 'Switch to Linear Scale' : 'Switch to Log Scale'}
+                        </button>
+                    </div>
+                    <div className="flex-1 flex items-center justify-center">
+                        {!loading && adminExpenseGraphData && adminExpenseGraphData.length > 0 ? (
+                            <BarChart
+                                Xlabels={labels}
+                                Ylabels={datasets}
+                                useGradient={false}
+                                barColors={["#1E3A8A"]}
+                                barThickness={8}
+                                yAxisTitle="Total Expense"
+                                pointStyle="circle"
+                                showTopValues={false}
+                                stepSize={calculateStepSize(chartData.datasets.pharmacy)}
+                                chartMaxValue={getChartMaxValue(chartData.datasets.pharmacy)}
+                                showXLabels={true}
+                                useLogarithmicScale={useLogScale}
+                                showVerticalGridLines={false}
+                            />
+                        ) : (
+                            <p>Loading expense data...</p>
+                        )}
+                    </div>
                 </div>
             </div>
 
