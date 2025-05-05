@@ -2,9 +2,13 @@ import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setAdminExpenseGraphData, setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { setAdminPharmacyCoursesData, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { 
+  setAdminPharmacyCoursesData, setOnboardingChecklist, 
+  setOperationsChecklist, setPharmacies 
+} from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setAdminExpenseStats, setAdminExpenseData, 
+  setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 import {
   setIsLoading,
   setProfileData,
@@ -14,7 +18,10 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-import { setChecklists, setOnboardingdTasklist, setOperationalItems, setOperationsTasklist} from "@/store/features/admin/checklist/adminChecklistSlice";
+import { 
+  setChecklists, setOnboardingdTasklist, 
+  setOperationalItems, setOperationsTasklist
+} from "@/store/features/admin/checklist/adminChecklistSlice";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -178,7 +185,12 @@ export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: stri
   return apiHandler(dispatch, 'get', '/v1/pharmacy-details', {
     params: { pharmacy_id: id },
     successMessage: "Pharmacy details fetched successfully!",
-    onSuccess: (data) => dispatch(setPharmacyDetailsData(data))
+    onSuccess: (data) => {
+      dispatch(setPharmacyDetailsData(data))
+      dispatch(setAdminPharmacyCoursesData(data?.courses))
+      dispatch(setOperationsChecklist(data?.operations_checklist))
+      dispatch(setOnboardingChecklist(data?.onboarding_checklist))
+    }
   });
 };
 
