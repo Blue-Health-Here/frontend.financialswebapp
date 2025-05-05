@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
@@ -40,6 +40,7 @@ const PharmacyDetail = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
   const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
   const { isAddQuestion, pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
+  const [selectedChecklistType, setSelectedChecklistType] = useState('');
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
@@ -110,10 +111,12 @@ const PharmacyDetail = () => {
     }
   };
 
-  const handleEditQuestion = () => {
+  const handleEditClick = (item: any, type: string) => {
+    dispatch(setSelectedChecklistItem(item));
+    setSelectedChecklistType(type)
     dispatch(setIsAddQuestion(true));
   };
-
+  
   useEffect(() => {
     if (isAddQuestion) {
       document.body.style.overflow = "hidden";
@@ -160,6 +163,8 @@ const PharmacyDetail = () => {
       {["onboarding", "operations"].map((type, index) => {
 
         const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist;
+console.log(operationsChecklist,"operationsChecklist")
+console.log(operationsChecklist,"onboardingChecklist")
 
         const uniqueChecklistIds = Array.from(
           new Set((checklistData || [])
@@ -188,7 +193,7 @@ const PharmacyDetail = () => {
                 return (
                   <Accordion
                     key={groupIndex}
-                    handleEditTasklist={handleEditQuestion}
+                    handleEditTasklist={(item:any) => handleEditClick(item, type)}
                     items={[uniqueItems[groupIndex]]}
                     tasklist={filteredTasks}
                   />
@@ -223,7 +228,7 @@ const PharmacyDetail = () => {
           ))}
         </div>
       </div>
-      {isAddQuestion && <AddNewQuestionModal />}
+      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType}/>}
     </>
   );
 };

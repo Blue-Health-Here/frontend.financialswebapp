@@ -5,7 +5,9 @@ const initialState = {
     pharmacies: [],
     pharmacyCourses: [],
     onboardingChecklist: [],
-    operationsChecklist: []
+    operationsChecklist: [],
+    selectedChecklistItem: null,
+
 }
 
 const adminPharmacySlice = createSlice({
@@ -26,9 +28,12 @@ const adminPharmacySlice = createSlice({
         },
         setOperationsChecklist(state, action) {
             state.operationsChecklist = action.payload;
-        }
+        },
+        setSelectedChecklistItem: (state, action) => {
+            state.selectedChecklistItem = action.payload;
+          },          
     }
 })
 
-export const { setPharmacies, setIsAddQuestion, setAdminPharmacyCoursesData, setOnboardingChecklist, setOperationsChecklist } = adminPharmacySlice.actions
+export const { setPharmacies, setIsAddQuestion, setAdminPharmacyCoursesData, setOnboardingChecklist, setOperationsChecklist, setSelectedChecklistItem } = adminPharmacySlice.actions
 export default adminPharmacySlice.reducer

@@ -220,3 +220,23 @@ export interface AssignChecklistProps {
     file_url?: string;
     path?: string;
 }
+
+export interface ChecklistOverviewProps {
+    checklist_id: string;
+    question: string;
+    note: string;
+    action_item: string;
+    operational_item: string;
+    follow_up_dates: string[];
+    pharmacy_ids: string[];
+    file: null | {
+        filename: string;
+        file_url: string;
+        path: string;
+    };
+    filename?: string;
+    file_url?: string;
+    path?: string;
+    pharmacy_comments: string;
+    status: string
+}

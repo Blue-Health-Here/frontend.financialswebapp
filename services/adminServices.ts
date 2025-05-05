@@ -2,7 +2,7 @@ import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { setAdminPharmacyCoursesData, setOnboardingChecklist, setOperationsChecklist, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setAdminPharmacyCoursesData, setOnboardingChecklist, setOperationsChecklist, setPharmacies, setSelectedChecklistItem } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
 import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 import {
@@ -550,5 +550,14 @@ export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, ty
     data,
     successMessage: "Assign Checklist updated successfully!",
     onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
+  });
+};
+
+export const updateChecklistOverview = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'put', '/v1/admin/checklist/overview', {
+    params: { assign_id: data?.assigned_id},
+    data,
+    successMessage: "Checklist overview updated successfully!",
+    // onSuccess: (data) => dispatch(setSelectedChecklistItem(data)),
   });
 };
