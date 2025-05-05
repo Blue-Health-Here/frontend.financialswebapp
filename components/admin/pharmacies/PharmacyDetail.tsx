@@ -32,8 +32,6 @@ import {
   fetchAdminPharmacyDetails,
   fetchAllAdminPharmacyCourses,
 } from "@/services/adminServices";
-import { License } from "@/utils/types";
-import TextMessage from "@/components/common/TextMessage";
 import Licensing from "./Licensing";
 import Certifications from "./Certifications";
 import PharmacyDetailCard from "./PharmacyDetailCard";
@@ -159,32 +157,47 @@ const PharmacyDetail = () => {
           <Certifications handleDeleteFile={handleDeleteFile} setUploadedFile={setUploadedFile} handleFileUpload={handleFileUpload} />
         </div>
       </div>
-      {["onboarding", "operations"].map((type, index) => (
-        <div
-          className="w-full mt-6  px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg"
-          key={index}
-        >
-          <div className="flex flex-col gap-6">
-            <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
-              {type + " Checklist"}
-            </h2>
-            <Accordion
-              key={index}
-              handleEditTasklist={handleEditQuestion}
-              items={type === 'operations' ? operationsChecklist?.map((item: any, index: number) => ({ 
-                checklist_id: item.checklist_id,
-                checklist_name: "Test" + index,
-                checklist_type: type 
-              })) : onboardingChecklist?.map((item: any, index: number) => ({ 
-                checklist_id: item.checklist_id,
-                checklist_name: "Test" + index,
-                checklist_type: type 
-              }))}
-              tasklist={type === 'operations' ? operationsChecklist : onboardingChecklist}
-            />
+      {["onboarding", "operations"].map((type, index) => {
+
+        const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist;
+
+        const uniqueChecklistIds = Array.from(
+          new Set((checklistData || [])
+            .map((item: any) => item?.checklist_id)
+            .filter((id: any) => id !== undefined))
+        );
+        const uniqueItems = uniqueChecklistIds.map(id => {
+          const item = checklistData?.find((item: any) => item.checklist_id === id);
+          return {
+            checklist_id: item?.checklist_id,
+            checklist_name: item?.checklist_name,
+            checklist_type: type
+          };
+        });
+
+        return (
+          <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
+            <div className="flex flex-col gap-6">
+              <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
+                {type.charAt(0).toUpperCase() + type.slice(1) + " Checklist"}
+              </h2>
+
+              {uniqueChecklistIds.map((checklistId, groupIndex) => {
+                const filteredTasks = checklistData?.filter((item: any) => item.checklist_id === checklistId);
+
+                return (
+                  <Accordion
+                    key={groupIndex}
+                    handleEditTasklist={handleEditQuestion}
+                    items={[uniqueItems[groupIndex]]}
+                    tasklist={filteredTasks}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
       <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
           <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">

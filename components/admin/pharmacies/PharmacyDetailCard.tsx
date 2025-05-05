@@ -25,7 +25,7 @@ const PharmacyDetailCard: React.FC<any> = ({ pharmacyDetailsData }) => {
                             Total Expense
                         </p>
                         <span className="text-xs sm:text-sm md:text-[16px] font-medium">
-                            ${pharmacyDetailsData?.expense.toLocaleString() ?? 0}
+                            ${pharmacyDetailsData?.expense?.toLocaleString() ?? 0}
                         </span>
                     </div>
 
