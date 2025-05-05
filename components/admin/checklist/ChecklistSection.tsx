@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
 import { AssignChecklistProps, ChecklistProps } from "@/utils/types";
-import { deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
+import { deleteAssignChecklist, deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
 const ChecklistSection = () => {
@@ -27,7 +27,6 @@ const ChecklistSection = () => {
 
 
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
-    const [selectedChecklistID, setSelectedChecklistID] = useState('');
     const isFetched = useRef(false);
     const dispatch = useDispatch();
 
@@ -71,7 +70,6 @@ const ChecklistSection = () => {
         dispatch(setTasklistDetails(null));
         if (filteredChecklists.length > 0) {
             setSelectedChecklistType(type);
-            setSelectedChecklistID(filteredChecklists[0].id);
             dispatch(setIsAddQuestion(true));
         }
     };
@@ -83,10 +81,18 @@ const ChecklistSection = () => {
         if (filteredChecklists.length > 0) {
             setSelectedChecklistType(type);
             dispatch(setTasklistDetails(data))
-            setSelectedChecklistID(filteredChecklists[0].id);
             dispatch(setIsAddQuestion(true))
         }
     }
+
+    const handleDeleteTasklist = (taskId: string, checklistId: string) => {
+        const checklist = checklists.find(
+            (checklist) => checklist?.id === checklistId
+        );
+        if (checklist) {
+            deleteAssignChecklist(dispatch, taskId, checklist?.id, checklist?.checklist_type);
+        }
+    };
 
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -162,13 +168,15 @@ const ChecklistSection = () => {
                                 tasklist={type === 'operations' ? operations : onboarding}
                                 handleEditTasklist={(task: any) => handleEditChecklistTask(task, type)}
                                 handleEditChecklist={(item: any) => handleEditChecklist(item)}
-                                handleDelete={handleDeleteChecklist}
-                                onChecklistSelect={handleChecklistSelect} />
+                                handleDeleteChecklist={handleDeleteChecklist}
+                                onChecklistSelect={handleChecklistSelect}
+                                handleDeleteTasklist={handleDeleteTasklist}
+                                />
                         </div>
                     )
                 })}
             </div>
-            {isAddQuestion && <AddNewQuestionModal checklistId={selectedChecklistID} selectedType={selectedChecklistType} />}
+            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );

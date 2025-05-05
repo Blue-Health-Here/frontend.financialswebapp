@@ -24,7 +24,7 @@ export default async function PharmacyLayout({
             <Sidebar role={role} />
             <div className="w-full">
                 <Topbar role={role} session={session} />
-                <div className="ml-auto lg:ml-[250px] xl:ml-[300px] min-h-screen p-6 pt-[6.7rem]">
+                <div className="ml-auto lg:ml-[250px] xl:ml-[300px] min-h-screen p-4 md:p-6 pt-[6.1rem] md:pt-[6.7rem]">
                     {children}
                 </div>
             </div>

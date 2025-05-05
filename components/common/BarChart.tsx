@@ -5,17 +5,25 @@ import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
+    LogarithmicScale,
     BarElement,
     Title,
     Tooltip,
     Legend,
     ChartOptions,
-
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { useEffect, useState } from "react";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
+ChartJS.register(
+    CategoryScale, 
+    LinearScale, 
+    LogarithmicScale,
+    BarElement, 
+    Title, 
+    Tooltip, 
+    Legend, 
+    ChartDataLabels
+);
 
 const BarChart = ({
     Xlabels,
@@ -26,6 +34,7 @@ const BarChart = ({
     pointStyle,
     showTopValues = true,
     stepSize,
+    chartMaxValue,
     borderRadius,
     yTitleColor,
     yLabelColor,
@@ -33,7 +42,8 @@ const BarChart = ({
     showXLabels = true,
     tooltipOptions = {},
     topValueSize,
-    barThickness
+    barThickness,
+    useLogarithmicScale = false,
 }: any) => {
 
     const getGradient = (ctx: any, chartArea: any) => {
@@ -46,21 +56,40 @@ const BarChart = ({
         return gradient;
     };
 
+    const adjustedYLabels = Object.keys(Ylabels).reduce((acc, key) => {
+        acc[key] = Ylabels[key].map((value: number) => {
+            if (!useLogarithmicScale && value > 0 && value < chartMaxValue * 0.01) {
+                return chartMaxValue * 0.01;
+            }
+            return value;
+        });
+        return acc;
+    }, {} as any);
+
     const data = {
         labels: Xlabels,
         datasets: Object.keys(Ylabels).map((key, index) => ({
             label: key.charAt(0).toUpperCase() + key.slice(1),
-            data: Ylabels[key],
+            data: useLogarithmicScale ? Ylabels[key] : adjustedYLabels[key],
             barThickness: barThickness,
             borderRadius: borderRadius,
             backgroundColor: (ctx: any) =>
                 useGradient && ctx.chart.chartArea ? getGradient(ctx.chart.ctx, ctx.chart.chartArea) : barColors[index] || "#999",
+            originalData: Ylabels[key],
         })),
     };
 
     const options: ChartOptions<"bar"> = {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }
+        },
         plugins: {
             legend: {
                 display: true,
@@ -78,7 +107,7 @@ const BarChart = ({
                 backgroundColor: '#93C5FD',
                 titleColor: '#1E3A8A',
                 bodyColor: '#1E3A8A',
-                ...tooltipOptions,
+                                ...tooltipOptions,
             },
             datalabels: {
                 display: showTopValues,
@@ -106,6 +135,7 @@ const BarChart = ({
             },
             y: {
                 stacked: true,
+                type: useLogarithmicScale ? 'logarithmic' : 'linear',
                 beginAtZero: true,
                 grid: { drawOnChartArea: true },
                 title: {
@@ -116,9 +146,23 @@ const BarChart = ({
                 },
                 ticks: {
                     padding: 10,
-                    stepSize: stepSize,
-                    color: yLabelColor
+                    stepSize: !useLogarithmicScale ? stepSize : undefined,
+                    color: yLabelColor,
+                    callback: function(value: number) {
+                        if (value === 0) return '0';
+                        
+                        if (value >= 1000000) {
+                            return '$' + (value / 1000000) + 'M';
+                        } else if (value >= 1000) {
+                            return '$' + (value / 1000) + 'K';
+                        }
+                        return '$' + value;
+                    }
                 },
+                ...(useLogarithmicScale && {
+                    min: 1,  
+                    max: chartMaxValue || undefined,
+                })
             },
         },
     };

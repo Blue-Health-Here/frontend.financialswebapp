@@ -25,6 +25,8 @@ const DashboardSection = () => {
   const { isAddExpenseModal } = useSelector(
     (state: RootState) => state.onboarding
   );
+  const [loading, setLoading] = useState(true);
+  
   const dispatch = useDispatch();
   const isFetchedData = useRef(false);
 
@@ -36,7 +38,7 @@ const DashboardSection = () => {
         await Promise.all([
           fetchPharmacyExpenseGraph(dispatch),
           fetchPharmacyDashboardStats(dispatch)
-        ]);
+        ]).finally(() => setLoading(false));
         isFetchedData.current = true;
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -109,7 +111,11 @@ const DashboardSection = () => {
                 />))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
-          <ExpenseChart ExpenseData={expenseGraphData} />
+          {!loading && expenseGraphData && expenseGraphData.length > 0 ? (
+            <ExpenseChart ExpenseData={expenseGraphData} />
+          ) : (
+            <p>Loading pharmacy expense data...</p>
+          )}
         </div>
       </div>
       <>

@@ -1,10 +1,14 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
-import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { setAdminPharmacyCoursesData, setOnboardingChecklist, setOperationsChecklist, setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setAdminExpenseGraphData, setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
+import { 
+  setAdminPharmacyCoursesData, setOnboardingChecklist, 
+  setOperationsChecklist, setPharmacies 
+} from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import { setAdminExpenseStats, setAdminExpenseData, 
+  setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
 import {
   setIsLoading,
   setProfileData,
@@ -14,7 +18,10 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-import { setChecklists, setOnboardingdTasklist, setOperationalItems, setOperationsTasklist} from "@/store/features/admin/checklist/adminChecklistSlice";
+import { 
+  setChecklists, setOnboardingdTasklist, 
+  setOperationalItems, setOperationsTasklist
+} from "@/store/features/admin/checklist/adminChecklistSlice";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -155,6 +162,14 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
     successMessage: "Pharmacies fetched successfully!",
     onSuccess: (data) => dispatch(setPharmacies(data)),
     onError: () => dispatch(setPharmacies([]))
+  });
+};
+
+export const fetchExpenseGraph = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/admin/expenses/graph', {
+    successMessage: "Expense Graph fetched successfully!",
+    onSuccess: (data) => dispatch(setAdminExpenseGraphData(data)),
+    onError: () => dispatch(setAdminExpenseGraphData([]))
   });
 };
 
@@ -550,5 +565,13 @@ export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, ty
     data,
     successMessage: "Assign Checklist updated successfully!",
     onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
+  });
+};
+
+export const deleteAssignChecklist = async (dispatch: AppDispatch, task_id: string, checklist_id?: string, type?: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist', {
+    params: { task_id: task_id },
+    successMessage: "Assign Checklist deleted successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, checklist_id, type)
   });
 };
