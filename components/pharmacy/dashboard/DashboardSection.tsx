@@ -165,7 +165,6 @@ const DashboardSection = () => {
                   ></div>
                 </div>
               </div>
-              <div className="border-b border-[#F1F5F9] my-2"></div>
               <Accordion
                 items={pharmacyChecklists?.checklist?.map((item: any) => ({
                   checklist_name: item.checklist_name,
