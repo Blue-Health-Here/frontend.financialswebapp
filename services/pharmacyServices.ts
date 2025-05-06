@@ -1,5 +1,5 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
-import { setIsLoading, setProfileData, setLicenseData, setCertificationsData, setPharmacyStatsData, setExpenseGraphData } from "@/store/features/global/globalSlice";
+import { setIsLoading, setProfileData, setLicenseData, setCertificationsData, setPharmacyStatsData, setExpenseGraphData, setPharmacyChecklists } from "@/store/features/global/globalSlice";
 import { setPharmacyCourses } from "@/store/features/pharmacy/course/pharmacyCourseSlice";
 import { setDocVerificationDetails, setUploadedBankStatements } from "@/store/features/pharmacy/document/DocumentVerificationSlice";
 import { setexpenseData, setPharmacyExpenseStats } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
@@ -336,3 +336,11 @@ export const deleteBankStatement = async (dispatch: AppDispatch, id: string) => 
   });
 };
 
+
+export const fetchPharmacyChecklist = async (dispatch: AppDispatch, type: string) => {
+  return apiHandler(dispatch, 'get', '/v1/pharmacy/checklists', {
+    params: { checklist_type: type },
+    successMessage: type === 'operations' ? "Operations Checklist fetched successfully!" : "Onboarding Checklist fetched successfully!",
+    onSuccess: (data) => dispatch(setPharmacyChecklists(data)),
+  });
+};
