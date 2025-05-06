@@ -11,12 +11,12 @@ import { RootState } from "@/store/store";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import SelectField from "@/components/common/form/SelectField";
-import { fetchPharmacyChecklist } from "@/services/pharmacyServices";
+import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist } from "@/services/pharmacyServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
 const OnboardingSection = () => {
   const { isAddExpenseModal } = useSelector((state: RootState) => state.onboarding);
-  const { pharmacyChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
   const isFetched = useRef(false);
   const dispatch = useDispatch();
 
@@ -38,6 +38,11 @@ const OnboardingSection = () => {
             fetchPharmacyChecklist(dispatch, "onboarding").finally(() => setLoading(false));
         }
     }, []);
+
+  const handleChecklistSelect = async (checklistId: string) => {
+    await fetchPharmacyAssignChecklist(dispatch, checklistId, "onboarding");
+  };
+
   return (
     <>
      <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
@@ -89,10 +94,13 @@ const OnboardingSection = () => {
               <Accordion
                 items={pharmacyChecklists?.checklist?.map((item: any) => ({
                   checklist_name: item.checklist_name,
+                  id: item.checklist_id
                 }))}
+                tasklist={pharmacyAssignChecklists}
                 handleEditTasklist={() => {
                   dispatch(setIsAddExpenseModal(true));
                 }}
+                onChecklistSelect={handleChecklistSelect}
               />
             </div>
       </div>
