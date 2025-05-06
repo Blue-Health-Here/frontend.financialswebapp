@@ -121,9 +121,10 @@ export const assignChecklistValidationSchema = (selectedType: string) => {
         action_item: Yup.string().required('Action item is required'),
         follow_up_dates: Yup.array().min(1, 'At least one follow-up date is required'),
         pharmacy_ids: Yup.array().min(1, 'At least one pharmacy must be selected'),
+        status:  Yup.string().required('Add Status'),
+        pharmacy_comments:  Yup.string().required('Add comments'),
         checklist_id: Yup.string().required('Checklist is required'),
-        file: Yup.mixed()
-        .required('File is required')
+        file: Yup.mixed().required('File is required')
     };
     if (selectedType === 'operations') {
         baseSchema.operational_item = Yup.string().required('Operational item is required');
@@ -131,4 +132,3 @@ export const assignChecklistValidationSchema = (selectedType: string) => {
 
     return Yup.object().shape(baseSchema);
 };
-

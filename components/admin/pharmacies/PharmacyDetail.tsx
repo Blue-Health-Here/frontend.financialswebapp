@@ -5,9 +5,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import { GoHome } from "react-icons/go";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Image from "next/image";
-import FileUploadField from "@/components/common/form/FileUploadField";
-import { Form, Formik } from "formik";
-import { checklists, courseData, pharmacyData } from "@/utils/constants";
 import Accordion from "@/components/common/Accordion";
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
@@ -17,20 +14,16 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
-import { Label } from "@/components/ui/label";
 import {
-  fetchAdminLicense,
-  fetchAdminCertification,
   postAdminLicenseUploadFile,
   postAdminCertificationUploadFile,
   deleteAdminLicense,
   deleteAdminCertification,
   fetchAdminPharmacyDetails,
-  fetchAllAdminPharmacyCourses,
 } from "@/services/adminServices";
 import Licensing from "./Licensing";
 import Certifications from "./Certifications";
@@ -40,6 +33,7 @@ const PharmacyDetail = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
   const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
   const { isAddQuestion, pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
+  const [selectedChecklistType, setSelectedChecklistType] = useState('');
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
@@ -110,7 +104,9 @@ const PharmacyDetail = () => {
     }
   };
 
-  const handleEditQuestion = () => {
+  const handleEditClick = (item: any, type: string) => {
+    dispatch(setSelectedChecklistItem(item));
+    setSelectedChecklistType(type)
     dispatch(setIsAddQuestion(true));
   };
 
@@ -159,8 +155,7 @@ const PharmacyDetail = () => {
       </div>
       {["onboarding", "operations"].map((type, index) => {
 
-        const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist;
-
+        const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist
         const uniqueChecklistIds = Array.from(
           new Set((checklistData || [])
             .map((item: any) => item?.checklist_id)
@@ -188,7 +183,7 @@ const PharmacyDetail = () => {
                 return (
                   <Accordion
                     key={groupIndex}
-                    handleEditTasklist={handleEditQuestion}
+                    handleEditTasklist={(item: any) => handleEditClick(item, type)}
                     items={[uniqueItems[groupIndex]]}
                     tasklist={filteredTasks}
                   />
@@ -223,7 +218,7 @@ const PharmacyDetail = () => {
           ))}
         </div>
       </div>
-      {isAddQuestion && <AddNewQuestionModal />}
+      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} pharmacyId={id || ''} />}
     </>
   );
 };

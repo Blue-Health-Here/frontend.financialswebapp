@@ -9,12 +9,14 @@ interface MultiDateFieldProps {
   label?: string;
   name: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const MultiDateField: React.FC<MultiDateFieldProps> = ({
   className,
   label,
   name,
+  disabled = false,
 }) => {
   const [field, meta, helpers] = useField(name);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -83,13 +85,15 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({
       {label && <Label className="text-xs text-grey">{label}</Label>}
       <div className="relative w-full">
         <div
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-xs items-center justify-between cursor-pointer"
-          onClick={() => setOpenCalendar(!openCalendar)}
+          className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-xs items-center justify-between ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}       
+              onClick={() => {
+            if (!disabled) setOpenCalendar(!openCalendar);
+          }}
         >
           <span className={selectedDates.length === 0 ? "text-muted-foreground" : ""}>
             {selectedDates.length === 0 ? "Select a date" : `${selectedDates.length} date(s) selected`}
           </span>
-          <Calendar size={14} className="text-gray-500" />
+          <Calendar size={14} className="text-gray-500"/>
         </div>
         {openCalendar && (
           <div
@@ -109,6 +113,7 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({
               onChange={handleDateChange}
               highlightDates={selectedDates}
               inline
+              disabled={disabled}
             />
           </div>
         )}
@@ -128,6 +133,7 @@ const MultiDateField: React.FC<MultiDateFieldProps> = ({
                   type="button"
                   onClick={() => removeDate(date)}
                   className="ml-2 text-black-500"
+                  disabled={disabled}
                 >
                   <X size={14} />
                 </button>

@@ -220,3 +220,13 @@ export interface AssignChecklistProps {
     file_url?: string;
     path?: string;
 }
+
+export interface ChecklistOverviewProps {
+    pharmacy_comments: string;
+    status: string
+}
+
+export interface EditAssignTaskModalProps {
+    selectedType: string;
+    pharmacyId: string;
+}

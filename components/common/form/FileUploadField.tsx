@@ -23,6 +23,7 @@ interface FileUploadFieldProps {
     uploadedFile?: UploadedFileProps | null | any;
     setUploadedFile?: (file: UploadedFileProps | null) => void;
     handleFileUpload?: (event: any, setValue: (value: any) => void) => void;
+    disabled?: boolean;
 };
 
 const FileUploadField: React.FC<FileUploadFieldProps> = ({
@@ -40,6 +41,7 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
     type,
     setUploadedFile,
     handleFileUpload,
+    disabled = false
 }) => {
     const [field, meta, helpers] = useField(name);
     const [preview, setPreview] = useState<File[]>([]);
@@ -90,13 +92,14 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                 <FilePreview
                     file={{ name: uploadedFile.filename, file_url: uploadedFile.file_url }}
                     handleDelete={handleDelete}
+                    disabled={disabled}
                 />
             ) : (
                 <div className="flex justify-center md:justify-start flex-col gap-2">
                     {preview.length > 0 && (
                         <div className={`grid ${isMultiSelect ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "grid-cols-1"}`}>
                             {preview.map((file, index) => (
-                                <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} />
+                                <FilePreview key={index} file={file} handleDelete={() => handleDelete(index)} disabled={disabled}/>
                             ))}
                         </div>
                     )}
@@ -108,7 +111,8 @@ const FileUploadField: React.FC<FileUploadFieldProps> = ({
                                     multiple={isMultiSelect}
                                     onChange={handleFileChange}
                                     name={name}
-                                    className="absolute left-0 right-0 top-0 bottom-0 opacity-0 cursor-pointer"
+                                    className={`absolute left-0 right-0 top-0 bottom-0 opacity-0 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                                    disabled={disabled}
                                 />
                                 <MdOutlineFileUpload className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                                 <p className="ml-2 text-xs md:text-sm">{title}</p>

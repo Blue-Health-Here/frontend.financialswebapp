@@ -7,9 +7,10 @@ import { MdOutlineFileDownload } from 'react-icons/md'
 interface FilePreviewProps {
     file?: any;
     handleDelete?: () => void;
+    disabled?: boolean;
 }
 
-const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, }) => {
+const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, disabled = false}) => {
     const fileDownload = async () => {
         try {
             const response = await axiosAdmin.get(file.file_url, {responseType: "blob",});
@@ -31,11 +32,11 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, }) => {
     };
 
     return (
-        <div className="flex items-center justify-between bg-white px-4 py-2.5 border rounded-lg shadow-sm w-full">
+        <div className={`flex items-center justify-between bg-white px-4 py-2.5 border rounded-lg shadow-sm w-full ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <span className="text-sm cursor-pointer break-words line-clamp-1 pr-4" onClick={fileDownload}>{file.name}</span>
             <div className="flex space-x-3 cursor-pointer">
                 <MdOutlineFileDownload className="text-grey w-6 h-6" size={20} onClick={fileDownload} />
-                <Image src="/delete-icon.svg" alt="delete-icon" width={15} height={15} onClick={handleDelete} />
+                    <Image src="/delete-icon.svg" alt="delete-icon" width={15} height={15} onClick={handleDelete} />
             </div>
         </div>
     );

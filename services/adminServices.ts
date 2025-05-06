@@ -4,7 +4,7 @@ import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setAdminExpenseGraphData, setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
 import { 
   setAdminPharmacyCoursesData, setOnboardingChecklist, 
-  setOperationsChecklist, setPharmacies 
+  setOperationsChecklist, setPharmacies, setSelectedChecklistItem 
 } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
 import { setAdminExpenseStats, setAdminExpenseData, 
@@ -568,6 +568,15 @@ export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, ty
   });
 };
 
+export const updateChecklistOverview = async (dispatch: AppDispatch, data: any, pharmacyId: string) => {
+  return apiHandler(dispatch, 'put', '/v1/admin/checklist/overview', {
+    params: { assign_id: data?.assigned_id},
+    data,
+    successMessage: "Checklist overview updated successfully!",
+    onSuccess: () => fetchAdminPharmacyDetails(dispatch, pharmacyId)
+  });
+};
+
 export const deleteAssignChecklist = async (dispatch: AppDispatch, task_id: string, checklist_id?: string, type?: string) => {
   return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist', {
     params: { task_id: task_id },
@@ -575,3 +584,4 @@ export const deleteAssignChecklist = async (dispatch: AppDispatch, task_id: stri
     onSuccess: () => fetchAllTasklist(dispatch, checklist_id, type)
   });
 };
+
