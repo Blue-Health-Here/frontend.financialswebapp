@@ -9,9 +9,10 @@ interface TextareaFieldProps {
     placeholder?: string;
     className?: string;
     ref?: any;
+    disabled?: boolean;
 }
 
-const TextareaField: React.FC<TextareaFieldProps> = ({ className, ref, label, ...props }) => {
+const TextareaField: React.FC<TextareaFieldProps> = ({ className, ref, label, disabled = false, ...props }) => {
     const [field, meta] = useField(props);
 
     return (
@@ -22,6 +23,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({ className, ref, label, ..
                     "flex h-20 w-full rounded-md placeholder:text-themeLight border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
                     className,
                 )}
+                disabled={disabled}
                 ref={ref}
                 {...props}
                 {...field}

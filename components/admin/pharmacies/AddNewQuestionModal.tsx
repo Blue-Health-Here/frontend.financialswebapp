@@ -11,21 +11,18 @@ import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RxCross2 } from "react-icons/rx";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { ChecklistOverviewProps, OperationalItemsProps, UploadedFileProps } from "@/utils/types";
+import { ChecklistOverviewProps, EditAssignTaskModalProps, OperationalItemsProps, UploadedFileProps } from "@/utils/types";
 import { RootState } from "@/store/store";
 import { postAssignChecklistUploadDocs, updateChecklistOverview } from "@/services/adminServices";
 import { MdDone } from "react-icons/md";
 import { createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
-import { AssignChecklistInitialVals, ChecklistOverviewInitialVals } from "@/utils/initialVals";
+import { ChecklistOverviewInitialVals } from "@/utils/initialVals";
 import toast from "react-hot-toast";
 import { assignChecklistValidationSchema } from "@/utils/validationSchema";
 import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 
-interface EditAssignTaskModalProps {
-    selectedType: string;
-}
 
-const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType }) => {
+const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType, pharmacyId }) => {
     const { selectedChecklistItem } = useSelector((state: RootState) => state.pharmacy);
     const { operationalItems } = useSelector((state: RootState) => state.checklist);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
@@ -104,11 +101,10 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType 
             pharmacy_comments: values.pharmacy_comments,
             status: values.status
         };
-        
+
         try {
             if (selectedChecklistItem) {
-                await updateChecklistOverview(dispatch, { assigned_id: selectedChecklistItem.assigned_id, ...payload });
-                console.log("payload",payload)
+                await updateChecklistOverview(dispatch, { assigned_id: selectedChecklistItem.assigned_id, ...payload }, pharmacyId);
             }
             handleClose();
         } catch (error: any) {
@@ -121,17 +117,17 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType 
         <Modal>
             <HeaderModal title={`${selectedChecklistItem ? "Edit" : "Add New"} Question`} onClose={handleClose} />
             <div className="p-6">
-                <Formik 
+                <Formik
                     enableReinitialize={true}
                     initialValues={initialVals}
                     onSubmit={handleSubmit}
                     validationSchema={assignChecklistValidationSchema(selectedType || "")}
                 >
                     <Form className="flex flex-col gap-y-4">
-                        <TextareaField label="Question" className="placeholder:text-themeLight" name="question" />
+                        <TextareaField label="Question" className="placeholder:text-themeLight" name="question" disabled={true} />
                         <TextareaField label="Pharmacy comments" className="placeholder:text-themeLight" name="pharmacy_comments" />
-                        <TextareaField label="Note" name="note" />
-                        <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" />
+                        <TextareaField label="Note" name="note" disabled={true} />
+                        <InputField label="Action Items" className="placeholder:text-themeLight" name="action_item" disabled={true} />
                         <FileUploadField
                             label="Upload File"
                             module="checklist"
@@ -140,12 +136,14 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType 
                             uploadedFile={uploadedFile}
                             setUploadedFile={setUploadedFile}
                             handleFileUpload={(e, setValue) => handleFileUploadDocs(e, setValue)}
+                            disabled={true}
                         />
                         {selectedType === "operations" &&
                             (<div>
                                 <SelectField
                                     label="Operational Item"
                                     name="operational_item"
+                                    isDisabled={true}
                                     options={[
                                         ...(operationalItems.map((item: OperationalItemsProps, index: number) => ({
                                             value: item.name, label: item.name
@@ -153,9 +151,11 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType 
                                     ]}
                                     placeholder="Select operational item"
                                 />
-                                <p className="text-primary w-max ml-auto mt-2 font-semibold text-right text-xs sm:text-sm cursor-pointer" onClick={() => setAddItems(true)}>
+                                <button
+                                    disabled
+                                    className="text-primary w-max ml-auto mt-2 font-semibold text-right text-xs sm:text-sm cursor-not-allowed flex justify-end items-end" onClick={() => setAddItems(true)}>
                                     +Add New Item
-                                </p>
+                                </button>
                                 {addItems && (
                                     <div className="flex gap-x-4 mt-2 justify-normal md:justify-between">
                                         <input
@@ -181,17 +181,17 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType 
                                 )}
                             </div>
                             )}
-                        <MultiDateField label="Key Follow-up dates" name="follow_up_dates" />
+                        <MultiDateField label="Key Follow-up dates" name="follow_up_dates" disabled={true} />
                         {selectedDates.length > 0 && (
                             <div>
                                 <Label size="xs">Selected Dates(s)</Label>
                                 <div className="flex flex-col gap-2 mt-2">
                                     {selectedDates.map((date, index) => (
                                         <div key={index} className="flex gap-x-2">
-                                            <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                                            <div className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm cursor-not-allowed">
                                                 <span>{date}</span>
                                             </div>
-                                            <button onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
+                                            <button disabled onClick={() => handleRemoveDate(date)}><RxCross2 size={15} /></button>
                                         </div>
                                     ))}
                                 </div>

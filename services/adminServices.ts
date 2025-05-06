@@ -553,11 +553,11 @@ export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, ty
   });
 };
 
-export const updateChecklistOverview = async (dispatch: AppDispatch, data: any) => {
+export const updateChecklistOverview = async (dispatch: AppDispatch, data: any, pharmacyId: string) => {
   return apiHandler(dispatch, 'put', '/v1/admin/checklist/overview', {
     params: { assign_id: data?.assigned_id},
     data,
     successMessage: "Checklist overview updated successfully!",
-    // onSuccess: (data) => dispatch(setSelectedChecklistItem(data)),
+    onSuccess: () => fetchAdminPharmacyDetails(dispatch, pharmacyId)
   });
 };

@@ -5,9 +5,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import { GoHome } from "react-icons/go";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Image from "next/image";
-import FileUploadField from "@/components/common/form/FileUploadField";
-import { Form, Formik } from "formik";
-import { checklists, courseData, pharmacyData } from "@/utils/constants";
 import Accordion from "@/components/common/Accordion";
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
@@ -21,16 +18,12 @@ import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/adm
 import AddNewQuestionModal from "./AddNewQuestionModal";
 import { UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
-import { Label } from "@/components/ui/label";
 import {
-  fetchAdminLicense,
-  fetchAdminCertification,
   postAdminLicenseUploadFile,
   postAdminCertificationUploadFile,
   deleteAdminLicense,
   deleteAdminCertification,
   fetchAdminPharmacyDetails,
-  fetchAllAdminPharmacyCourses,
 } from "@/services/adminServices";
 import Licensing from "./Licensing";
 import Certifications from "./Certifications";
@@ -116,7 +109,7 @@ const PharmacyDetail = () => {
     setSelectedChecklistType(type)
     dispatch(setIsAddQuestion(true));
   };
-  
+
   useEffect(() => {
     if (isAddQuestion) {
       document.body.style.overflow = "hidden";
@@ -162,10 +155,7 @@ const PharmacyDetail = () => {
       </div>
       {["onboarding", "operations"].map((type, index) => {
 
-        const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist;
-console.log(operationsChecklist,"operationsChecklist")
-console.log(operationsChecklist,"onboardingChecklist")
-
+        const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist
         const uniqueChecklistIds = Array.from(
           new Set((checklistData || [])
             .map((item: any) => item?.checklist_id)
@@ -193,7 +183,7 @@ console.log(operationsChecklist,"onboardingChecklist")
                 return (
                   <Accordion
                     key={groupIndex}
-                    handleEditTasklist={(item:any) => handleEditClick(item, type)}
+                    handleEditTasklist={(item: any) => handleEditClick(item, type)}
                     items={[uniqueItems[groupIndex]]}
                     tasklist={filteredTasks}
                   />
@@ -228,7 +218,7 @@ console.log(operationsChecklist,"onboardingChecklist")
           ))}
         </div>
       </div>
-      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType}/>}
+      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} pharmacyId={id || ''} />}
     </>
   );
 };
