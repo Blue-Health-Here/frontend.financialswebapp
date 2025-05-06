@@ -123,6 +123,8 @@ export const assignChecklistValidationSchema = (selectedType: string) => {
         pharmacy_ids: Yup.array().min(1, 'At least one pharmacy must be selected'),
         status:  Yup.string().required('Add Status'),
         pharmacy_comments:  Yup.string().required('Add comments'),
+        checklist_id: Yup.string().required('Checklist is required'),
+        file: Yup.mixed().required('File is required')
     };
     if (selectedType === 'operations') {
         baseSchema.operational_item = Yup.string().required('Operational item is required');
