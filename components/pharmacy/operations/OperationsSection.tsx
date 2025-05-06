@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { operationalchecklists } from "@/utils/constants";
 import { IoSearch } from "react-icons/io5";
@@ -12,24 +12,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsAddOperationsExpense } from "@/store/features/pharmacy/operations/operationsExpenseSlice";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import SelectField from "@/components/common/form/SelectField";
+import { fetchPharmacyChecklist } from "@/services/pharmacyServices";
+import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
 
 const OperationsSection = () => {
   const { isAddOperationsExpense } = useSelector((state: RootState) => state.operations)
+  const { pharmacyChecklists } = useSelector((state: RootState) => state.global);
   const dispatch = useDispatch()
+  const isFetched = useRef(false);
+  useEffect(() => {
+      if (!isFetched.current) {
+          isFetched.current = true;
+          fetchPharmacyChecklist(dispatch, "operations").finally(() => setLoading(false));
+      }
+  }, []);
 
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
         <div className="flex flex-col md:flex-col lg:flex-row gap-4">
-          <h1 className=" text-lg font-semibold flex-1 text-nowrap lg:text-2xl">
-            {operationalchecklists[0].name}
+          <h1 className="text-xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
+            Operations Checklist
           </h1>
           <Formik
             initialValues={{ category: "", search: "" }}
-            onSubmit={() => { }}
+            onSubmit={() => {}}
           >
-            {({ isSubmitting }) => (
+              {({ isSubmitting }) => (
               <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                 <FileDownloadField title="Reports" className="min-w-48" parentClassName="flex-1" />
                 <SelectField
@@ -37,8 +47,8 @@ const OperationsSection = () => {
                   parentClassName="flex-1"
                   name="category"
                   options={[
-                    { value: "Al Categories", label: "Al Categories" },
-                    { value: "operational", label: "Operational" },
+                      { value: "Al Categories", label: "Al Categories" },
+                      { value: "operational", label: "Operational" },
                   ]}
                 />
                 <div className="relative min-w-48 flex-1">
@@ -55,22 +65,24 @@ const OperationsSection = () => {
             )}
           </Formik>
         </div>
-
-        {operationalchecklists.map((checklist, index) => (
-          <div className="flex flex-col gap-6 mt-6" key={index}>
-            <div>
-              <p className="font-semibold">Checklist Progress</p>
-              <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
-                <div
-                  className="bg-primary h-[4px] rounded-full"
-                  style={{ width: `${checklist.progress}%` }}
-                ></div>
+            <div className="flex flex-col gap-6 mt-6" >
+              <div>
+                <p className="font-semibold">Checklist Progress</p>
+                <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
+                  <div
+                    className="bg-primary h-[4px] rounded-full"
+                    style={{ width: `${pharmacyChecklists.checklist_progress || 0}%` }}
+                  ></div>
+                </div>
               </div>
+              <div className="border-b border-[#F1F5F9] my-2"></div>
+              <Accordion
+                items={pharmacyChecklists?.checklist?.map((item: any) => ({
+                  checklist_name: item.checklist_name,
+                }))}
+                handleEditTasklist={() => { dispatch(setIsAddOperationsExpense(true)) }} 
+              />
             </div>
-            <div className="border-b border-[#F1F5F9] my-2"></div>
-            <Accordion key={index} items={checklist.list} handleEditTasklist={() => { dispatch(setIsAddOperationsExpense(true)) }} />
-          </div>
-        ))}
       </div>
       {isAddOperationsExpense && <OperationsExpenseModal />}
     </>
