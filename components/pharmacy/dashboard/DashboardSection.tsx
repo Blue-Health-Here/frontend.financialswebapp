@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
-import { fetchPharmacyChecklist, fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
+import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist, fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import { StatsCardProps } from "@/utils/types";
 import { assignPharmacyStatsValues } from "@/utils/helper";
@@ -20,7 +20,7 @@ import SelectField from "@/components/common/form/SelectField";
 
 const DashboardSection = () => {
   const { pharmacyStatsData } = useSelector((state: RootState) => state.global);
-  const { expenseGraphData, pharmacyChecklists } = useSelector((state: RootState) => state.global);
+  const { expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
   const [statsUpdatedData, setStatsUpdatedData] = useState<StatsCardProps[]>(pharmacyDashboardStatsData);
   const { isAddExpenseModal } = useSelector(
     (state: RootState) => state.onboarding
@@ -58,6 +58,12 @@ const DashboardSection = () => {
     }
   }, [pharmacyStatsData]);
 
+  const handleChecklistSelect = async (checklistId: string) => {
+    await fetchPharmacyAssignChecklist(dispatch, checklistId, "onboarding");
+  };
+  
+  
+console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
 
   // const statsData = [
   //   {
@@ -169,10 +175,13 @@ const DashboardSection = () => {
               <Accordion
                 items={pharmacyChecklists?.checklist?.map((item: any) => ({
                   checklist_name: item.checklist_name,
+                  id: item.checklist_id
                 }))}
+                tasklist={pharmacyAssignChecklists}
                 handleEditTasklist={() => {
                   dispatch(setIsAddExpenseModal(true));
                 }}
+                onChecklistSelect={handleChecklistSelect}
               />
             </div>
       </div>

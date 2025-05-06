@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { operationalchecklists } from "@/utils/constants";
 import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
@@ -12,13 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsAddOperationsExpense } from "@/store/features/pharmacy/operations/operationsExpenseSlice";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import SelectField from "@/components/common/form/SelectField";
-import { fetchPharmacyChecklist } from "@/services/pharmacyServices";
+import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist } from "@/services/pharmacyServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 
 
 const OperationsSection = () => {
   const { isAddOperationsExpense } = useSelector((state: RootState) => state.operations)
-  const { pharmacyChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
   const dispatch = useDispatch()
   const isFetched = useRef(false);
   useEffect(() => {
@@ -27,6 +26,10 @@ const OperationsSection = () => {
           fetchPharmacyChecklist(dispatch, "operations").finally(() => setLoading(false));
       }
   }, []);
+
+  const handleChecklistSelect = async (checklistId: string) => {
+    await fetchPharmacyAssignChecklist(dispatch, checklistId, "operations");
+  };
 
   return (
     <>
@@ -79,8 +82,11 @@ const OperationsSection = () => {
               <Accordion
                 items={pharmacyChecklists?.checklist?.map((item: any) => ({
                   checklist_name: item.checklist_name,
+                  id: item.checklist_id
                 }))}
+                tasklist={pharmacyAssignChecklists}
                 handleEditTasklist={() => { dispatch(setIsAddOperationsExpense(true)) }} 
+                onChecklistSelect={handleChecklistSelect}
               />
             </div>
       </div>
