@@ -61,7 +61,7 @@ const apiHandler = async <T = any>(
 
   try {
     dispatch(setIsLoading(true));
-    
+
     // Build URL with query parameters if needed
     let url = endpoint;
     if (params) {
@@ -69,19 +69,19 @@ const apiHandler = async <T = any>(
         .filter(([_, value]) => value !== undefined)
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
-      
+
       url = queryParams ? `${endpoint}?${queryParams}` : endpoint;
     }
-    
+
     // Configure request
     const config: any = {};
     if (isFormData) {
       config.headers = { "Content-Type": "multipart/form-data" };
     }
-    
+
     // Make API call
     let response: ApiResponse<T>;
-    
+
     switch (method) {
       case 'get':
         response = await axiosAdmin.get(url, config);
@@ -96,24 +96,23 @@ const apiHandler = async <T = any>(
         response = await axiosAdmin.delete(url, config);
         break;
     }
-    console.log(response, "res");
     // Handle success
     if (response?.status === 200 || response?.data?.success) {
       if (successMessage) {
         toast.success(successMessage);
       }
-      
+
       if (refreshAction) {
         await refreshAction();
       }
-      
+
       if (onSuccess && response.data) {
         onSuccess(response.data);
       }
-      
+
       return response.data || null;
     }
-    
+
     return null;
   } catch (error: any) {
     // Handle 404 differently in some cases
@@ -121,19 +120,19 @@ const apiHandler = async <T = any>(
       if (error?.response?.data?.detail) {
         toast.success(error.response.data.detail);
       }
-      
+
       if (onError) {
         onError(error);
       }
     } else {
       // Handle other errors
       toast.error(error?.message || errorMessage);
-      
+
       if (onError) {
         onError(error);
       }
     }
-    
+
     return null;
   } finally {
     dispatch(setIsLoading(false));
@@ -353,3 +352,11 @@ export const fetchPharmacyAssignChecklist = async (dispatch: AppDispatch, id: st
   });
 };
 
+export const updatePharmacyAssignChecklist = async (dispatch: AppDispatch, data: any, type: string) => {
+  return apiHandler(dispatch, 'put', '/v1/pharmacy/assigned-checklist', {
+    params: { assigned_id: data?.assigned_id },
+    data,
+    successMessage: type === 'operations' ? "Operations assigned checklist updated successfully!" : "Onboarding assigned checklist updated successfully!",
+    onSuccess: () => fetchPharmacyAssignChecklist(dispatch, data?.checklist_id, type)
+  });
+};

@@ -227,6 +227,6 @@ export interface ChecklistOverviewProps {
 }
 
 export interface EditAssignTaskModalProps {
-    selectedType: string;
-    pharmacyId: string;
+    selectedType?: string;
+    pharmacyId?: string;
 }
