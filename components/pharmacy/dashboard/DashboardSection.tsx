@@ -17,22 +17,22 @@ import FileDownloadField from "@/components/common/form/FileDownloadField";
 import { StatsCardProps } from "@/utils/types";
 import { assignPharmacyStatsValues } from "@/utils/helper";
 import SelectField from "@/components/common/form/SelectField";
+import { setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 
 const DashboardSection = () => {
-  const { pharmacyStatsData } = useSelector((state: RootState) => state.global);
-  const { expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
   const [statsUpdatedData, setStatsUpdatedData] = useState<StatsCardProps[]>(pharmacyDashboardStatsData);
   const { isAddExpenseModal } = useSelector(
     (state: RootState) => state.onboarding
   );
   const [loading, setLoading] = useState(true);
-  
+
   const dispatch = useDispatch();
   const isFetchedData = useRef(false);
 
   useEffect(() => {
     if (isFetchedData.current) return;
-    
+
     const fetchData = async () => {
       try {
         await Promise.all([
@@ -61,9 +61,8 @@ const DashboardSection = () => {
   const handleChecklistSelect = async (checklistId: string) => {
     await fetchPharmacyAssignChecklist(dispatch, checklistId, "onboarding");
   };
-  
-  
-console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
+
+
 
   // const statsData = [
   //   {
@@ -103,6 +102,13 @@ console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
       document.body.style.overflow = "";
     };
   }, [isAddExpenseModal]);
+
+  const handleEditClick = (item: any) => {
+    console.log("item", item)
+    dispatch(setSelectedChecklistItem(item))
+    dispatch(setIsAddExpenseModal(true));
+  };
+
   return (
     <>
       <h3 className="text-themeGrey font-medium mb-2">Statistics</h3>
@@ -115,7 +121,7 @@ console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
               label={item.label}
               color={item.color}
               icon={item.icon}
-                />))}
+            />))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
           {!loading && expenseGraphData && expenseGraphData.length > 0 ? (
@@ -125,17 +131,17 @@ console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
           )}
         </div>
       </div>
-      
+
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
         <div className="flex flex-col md:flex-col lg:flex-row gap-4">
           <h1 className="text-xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
             Onboarding Checklist
           </h1>
           <Formik
-              initialValues={{ category: "", search: "" }}
-            onSubmit={() => {}}
+            initialValues={{ category: "", search: "" }}
+            onSubmit={() => { }}
           >
-              {({ isSubmitting }) => (
+            {({ isSubmitting }) => (
               <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                 <FileDownloadField title="Reports" className="min-w-48" parentClassName="flex-1" />
                 <SelectField
@@ -143,8 +149,8 @@ console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
                   parentClassName="flex-1"
                   name="category"
                   options={[
-                      { value: "Al Categories", label: "Al Categories" },
-                      { value: "operational", label: "Operational" },
+                    { value: "Al Categories", label: "Al Categories" },
+                    { value: "operational", label: "Operational" },
                   ]}
                 />
                 <div className="relative min-w-48 flex-1">
@@ -161,30 +167,28 @@ console.log("pharmacyAssignChecklists",pharmacyAssignChecklists)
             )}
           </Formik>
         </div>
-            <div className="flex flex-col gap-6 mt-6">
-              <div>
-                <p className="font-semibold">Checklist Progress</p>
-                <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
-                  <div
-                    className="bg-primary h-[4px] rounded-full"
-                    style={{ width: `${pharmacyChecklists.checklist_progress || 0}%` }}
-                  ></div>
-                </div>
-              </div>
-              <Accordion
-                items={pharmacyChecklists?.checklist?.map((item: any) => ({
-                  checklist_name: item.checklist_name,
-                  id: item.checklist_id
-                }))}
-                tasklist={pharmacyAssignChecklists}
-                handleEditTasklist={() => {
-                  dispatch(setIsAddExpenseModal(true));
-                }}
-                onChecklistSelect={handleChecklistSelect}
-              />
+        <div className="flex flex-col gap-6 mt-6">
+          <div>
+            <p className="font-semibold">Checklist Progress</p>
+            <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
+              <div
+                className="bg-primary h-[4px] rounded-full"
+                style={{ width: `${pharmacyChecklists.checklist_progress || 0}%` }}
+              ></div>
             </div>
+          </div>
+          <Accordion
+            items={pharmacyChecklists?.checklist?.map((item: any) => ({
+              checklist_name: item.checklist_name,
+              id: item.checklist_id
+            }))}
+            tasklist={pharmacyAssignChecklists}
+            handleEditTasklist={(item: any) => handleEditClick(item)}
+            onChecklistSelect={handleChecklistSelect}
+          />
+        </div>
       </div>
-      {isAddExpenseModal && <OnboardingExpenseModal />}
+      {isAddExpenseModal && <OnboardingExpenseModal selectedType="onboarding" />}
     </>
   );
 };

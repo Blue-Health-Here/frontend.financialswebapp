@@ -218,7 +218,7 @@ const PharmacyDetail = () => {
           ))}
         </div>
       </div>
-      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} pharmacyId={id || ''} />}
+      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} pharmacyId={id} />}
     </>
   );
 };
