@@ -11,20 +11,16 @@ import { Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
-import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist, fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import { StatsCardProps } from "@/utils/types";
 import { assignPharmacyStatsValues } from "@/utils/helper";
 import SelectField from "@/components/common/form/SelectField";
-import { setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 
 const DashboardSection = () => {
-  const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
   const [statsUpdatedData, setStatsUpdatedData] = useState<StatsCardProps[]>(pharmacyDashboardStatsData);
-  const { isAddExpenseModal } = useSelector(
-    (state: RootState) => state.onboarding
-  );
   const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -92,7 +88,7 @@ const DashboardSection = () => {
   // ];
 
   useEffect(() => {
-    if (isAddExpenseModal) {
+    if (isAddQuestion) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -101,12 +97,12 @@ const DashboardSection = () => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isAddExpenseModal]);
+  }, [isAddQuestion]);
 
   const handleEditClick = (item: any) => {
     console.log("item", item)
     dispatch(setSelectedChecklistItem(item))
-    dispatch(setIsAddExpenseModal(true));
+    dispatch(setIsAddQuestion(true));
   };
 
   return (
@@ -188,7 +184,7 @@ const DashboardSection = () => {
           />
         </div>
       </div>
-      {isAddExpenseModal && <OnboardingExpenseModal selectedType="onboarding" />}
+      {isAddQuestion && <OnboardingExpenseModal selectedType="onboarding" isOnboardingMode={true} />}
     </>
   );
 };

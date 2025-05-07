@@ -12,8 +12,8 @@ const initialState = {
     pharmacyStatsData: null,
     pharmacyChecklists: [],
     pharmacyAssignChecklists: [],
-    selectedChecklistItem: null
-
+    selectedChecklistItem: null,
+    isAddQuestion: false,
 };
 
 const globalSlice = createSlice({
@@ -58,12 +58,15 @@ const globalSlice = createSlice({
         setSelectedChecklistItem: (state, action) => {
             state.selectedChecklistItem = action.payload;
           },  
+          setIsAddQuestion: (state, action) => {
+            state.isAddQuestion = action.payload
+        },
     }
 });
 export const { 
     setIsSidebarOpen, setIsLoading, setProfileData, setLicenseData, 
     setCertificationsData, setExpenseCategories, setPharmacyStatsData, 
     setExpenseGraphData, setPharmacyDetailsData, setPharmacyChecklists, 
-    setPharmacyAssignChecklists, setSelectedChecklistItem
+    setPharmacyAssignChecklists, setSelectedChecklistItem, setIsAddQuestion,
 } = globalSlice.actions;
 export default globalSlice.reducer;

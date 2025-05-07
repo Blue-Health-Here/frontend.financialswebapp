@@ -6,20 +6,20 @@ import { Input } from "@/components/ui/input";
 import { Form, Formik } from "formik";
 import { FaPlus } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
-import AddNewQuestionModal from "./AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setChecklistDetail, setIsAddChecklist, setIsAddQuestion, setTasklistDetails } from "@/store/features/admin/checklist/adminChecklistSlice";
+import { setChecklistDetail, setIsAddChecklist, setTasklistDetails } from "@/store/features/admin/checklist/adminChecklistSlice";
 import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
 import { AssignChecklistProps, ChecklistProps } from "@/utils/types";
 import { deleteAssignChecklist, deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
+import OnboardingExpenseModal from "@/components/pharmacy/onboarding/OnboardingExpenseModal";
+import { setIsAddQuestion,} from "@/store/features/global/globalSlice";
 
 const ChecklistSection = () => {
-    const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
-    const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
+    const isAddQuestion = useSelector((state: RootState) => state.global);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
     const onboarding = useSelector((state: RootState) => state.checklist.onboarding);
     const operations = useSelector((state: RootState) => state.checklist.operations);
@@ -31,7 +31,7 @@ const ChecklistSection = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isAddQuestion || isEditQuestion) {
+        if (isAddQuestion) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
@@ -40,7 +40,7 @@ const ChecklistSection = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [isAddQuestion, isEditQuestion, isAddChecklist]);
+    }, [isAddQuestion, isAddChecklist]);
 
     useEffect(() => {
         if (!isFetched.current) {
@@ -177,7 +177,7 @@ const ChecklistSection = () => {
                     )
                 })}
             </div>
-            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
+            {isAddQuestion && <OnboardingExpenseModal selectedType={selectedChecklistType} isOnboardingMode={false}  />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );

@@ -14,8 +14,6 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-import AddNewQuestionModal from "./AddNewQuestionModal";
 import { UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
 import {
@@ -28,11 +26,13 @@ import {
 import Licensing from "./Licensing";
 import Certifications from "./Certifications";
 import PharmacyDetailCard from "./PharmacyDetailCard";
+import OnboardingExpenseModal from "@/components/pharmacy/onboarding/OnboardingExpenseModal";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 
 const PharmacyDetail = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
-  const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
-  const { isAddQuestion, pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
+  const { pharmacyDetailsData, isAddQuestion } = useSelector((state: RootState) => state.global);
+  const { pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
   const [selectedChecklistType, setSelectedChecklistType] = useState('');
   const dispatch = useDispatch();
   const router = useRouter();
@@ -218,7 +218,7 @@ const PharmacyDetail = () => {
           ))}
         </div>
       </div>
-      {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} pharmacyId={id} />}
+      {isAddQuestion && <OnboardingExpenseModal selectedType={selectedChecklistType} pharmacyId={id} isOnboardingMode={true}/>}
     </>
   );
 };

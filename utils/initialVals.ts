@@ -61,6 +61,8 @@ export const AssignChecklistInitialVals = {
     follow_up_dates: [],
     pharmacy_ids: [],
     file: null,
+    pharmacy_comments: '',
+    status:''
 };
 
 export const ChecklistOverviewInitialVals = {
