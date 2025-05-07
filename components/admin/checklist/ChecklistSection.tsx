@@ -171,7 +171,8 @@ const ChecklistSection = () => {
                                 handleDeleteChecklist={handleDeleteChecklist}
                                 onChecklistSelect={handleChecklistSelect}
                                 handleDeleteTasklist={handleDeleteTasklist}
-                                />
+                                showChecklistActions={true}
+                            />
                         </div>
                     )
                 })}

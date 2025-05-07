@@ -12,13 +12,14 @@ interface AccordionProps {
   handleDeleteChecklist?: (id: string) => void
   handleDeleteTasklist?: (taskId: string, checklistId: string) => void;
   onChecklistSelect?: (id: string, type: string) => void
-  tasklist?: any
+  tasklist?: any;
+  showChecklistActions?: boolean;
 }
 
 const Accordion: React.FC<AccordionProps> = ({ 
   items,  tasklist, handleEditTasklist, 
   handleEditChecklist, handleDeleteChecklist, handleDeleteTasklist, 
-  onChecklistSelect 
+  onChecklistSelect, showChecklistActions = false
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCloseModal, setIsCloseModal] = useState(false);
@@ -41,7 +42,7 @@ const Accordion: React.FC<AccordionProps> = ({
             <h1 className="text-sm md:text-base lg:text-lg flex justify-between md:justify-normal gap-2 items-center">
               {item.checklist_name || item.title}
              <div className="flex gap-2">
-             {item.checklist_name && (
+             {showChecklistActions && (
                 <>
                   <FiEdit
                     onClick={(e) => {
