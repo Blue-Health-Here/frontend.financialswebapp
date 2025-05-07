@@ -18,7 +18,7 @@ import { MdDone } from "react-icons/md";
 import { createNewOperationalItem, fetchAllOperationalItems } from "@/services/adminServices";
 import { ChecklistOverviewInitialVals } from "@/utils/initialVals";
 import toast from "react-hot-toast";
-import { assignChecklistValidationSchema } from "@/utils/validationSchema";
+import { updatePharmacyChecklistValidationSchema } from "@/utils/validationSchema";
 import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 
 
@@ -103,7 +103,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType,
         };
 
         try {
-            if (selectedChecklistItem) {
+            if (selectedChecklistItem && pharmacyId) {
                 await updateChecklistOverview(dispatch, { assigned_id: selectedChecklistItem.assigned_id, ...payload }, pharmacyId);
             }
             handleClose();
@@ -121,7 +121,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({ selectedType,
                     enableReinitialize={true}
                     initialValues={initialVals}
                     onSubmit={handleSubmit}
-                    validationSchema={assignChecklistValidationSchema(selectedType || "")}
+                    validationSchema={updatePharmacyChecklistValidationSchema}
                 >
                     <Form className="flex flex-col gap-y-4">
                         <TextareaField label="Question" className="placeholder:text-themeLight" name="question" disabled={true} />
