@@ -25,7 +25,6 @@ const DashboardSection = () => {
   const { isAddExpenseModal } = useSelector(
     (state: RootState) => state.onboarding
   );
-  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const isFetchedData = useRef(false);
@@ -124,7 +123,7 @@ const DashboardSection = () => {
             />))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
-          {!loading && expenseGraphData && expenseGraphData.length > 0 ? (
+          {expenseGraphData && expenseGraphData.length > 0 ? (
             <ExpenseChart ExpenseData={expenseGraphData} />
           ) : (
             <p>Loading pharmacy expense data...</p>
