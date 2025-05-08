@@ -33,10 +33,10 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, handleDelete, disabled 
 
     return (
         <div className={`flex items-center justify-between bg-white px-4 py-2.5 border rounded-lg shadow-sm w-full ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
-            <span className="text-sm cursor-pointer break-words line-clamp-1 pr-4" onClick={fileDownload}>{file.name}</span>
+            <span className={`text-sm break-words line-clamp-1 pr-4 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={disabled ? undefined : fileDownload}>{file.name}</span>
             <div className="flex space-x-3 cursor-pointer">
-                <MdOutlineFileDownload className="text-grey w-6 h-6" size={20} onClick={fileDownload} />
-                    <Image src="/delete-icon.svg" alt="delete-icon" width={15} height={15} onClick={handleDelete} />
+                <MdOutlineFileDownload className={`text-grey w-6 h-6 ${disabled ? 'cursor-not-allowed' : ''}`} size={20} onClick={disabled ? undefined : fileDownload} />
+                    <Image src="/delete-icon.svg" alt="delete-icon" className={`${disabled ? 'cursor-not-allowed' : ''}`} width={15} height={15} onClick={disabled ? undefined : handleDelete} />
             </div>
         </div>
     );
