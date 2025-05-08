@@ -21,7 +21,6 @@ import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 const DashboardSection = () => {
   const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
   const [statsUpdatedData, setStatsUpdatedData] = useState<StatsCardProps[]>(pharmacyDashboardStatsData);
-  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const isFetchedData = useRef(false);
@@ -58,35 +57,6 @@ const DashboardSection = () => {
     await fetchPharmacyAssignChecklist(dispatch, checklistId, "onboarding");
   };
 
-
-
-  // const statsData = [
-  //   {
-  //     value: 0,
-  //     label: "Categories",
-  //     color: "text-custom-green",
-  //     icon: "/statistics-Category.svg",
-  //   },
-  //   {
-  //     value: 0,
-  //     label: "Pharmacies",
-  //     color: "text-custom-purple",
-  //     icon: "/statistics-pharmacy.svg",
-  //   },
-  //   {
-  //     value: `$${pharmacyStatsData?.monthly_expense ?? 0}`,
-  //     label: "Total monthly expense",
-  //     color: "text-custom-orange",
-  //     icon: "/statistics-expense.svg",
-  //   },
-  //   {
-  //     value: pharmacyStatsData?.assigned_courses ?? 0,
-  //     label: "Total task completed",
-  //     color: "text-custom-red",
-  //     icon: "/statistics-task.svg",
-  //   },
-  // ];
-
   useEffect(() => {
     if (isAddQuestion) {
       document.body.style.overflow = "hidden";
@@ -120,7 +90,7 @@ const DashboardSection = () => {
             />))}
         </div>
         <div className="bg-white w-full h-60 md:h-full  rounded-lg shadow-lg flex items-center justify-center">
-          {!loading && expenseGraphData && expenseGraphData.length > 0 ? (
+          {expenseGraphData && expenseGraphData.length > 0 ? (
             <ExpenseChart ExpenseData={expenseGraphData} />
           ) : (
             <p>Loading pharmacy expense data...</p>
