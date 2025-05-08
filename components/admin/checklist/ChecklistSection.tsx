@@ -6,20 +6,20 @@ import { Input } from "@/components/ui/input";
 import { Form, Formik } from "formik";
 import { FaPlus } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
-import AddNewQuestionModal from "./AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setChecklistDetail, setIsAddChecklist, setIsAddQuestion, setTasklistDetails } from "@/store/features/admin/checklist/adminChecklistSlice";
+import { setChecklistDetail, setIsAddChecklist, setTasklistDetails } from "@/store/features/admin/checklist/adminChecklistSlice";
 import { useEffect, useRef, useState } from "react";
 import SelectField from "@/components/common/form/SelectField";
 import AddNewChecklistModal from "./AddNewChecklistModal";
 import { AssignChecklistProps, ChecklistProps } from "@/utils/types";
 import { deleteAssignChecklist, deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
+import { setIsAddQuestion } from "@/store/features/global/globalSlice";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 
 const ChecklistSection = () => {
-    const isAddQuestion = useSelector((state: RootState) => state.checklist.isAddQuestion);
-    const isEditQuestion = useSelector((state: RootState) => state.checklist.isEditQuestion);
+    const { isAddQuestion } = useSelector((state: RootState) => state.global);
     const isAddChecklist = useSelector((state: RootState) => state.checklist.isAddChecklist);
     const onboarding = useSelector((state: RootState) => state.checklist.onboarding);
     const operations = useSelector((state: RootState) => state.checklist.operations);
@@ -31,7 +31,7 @@ const ChecklistSection = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isAddQuestion || isEditQuestion) {
+        if (isAddQuestion || isAddChecklist) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
@@ -40,7 +40,7 @@ const ChecklistSection = () => {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [isAddQuestion, isEditQuestion, isAddChecklist]);
+    }, [isAddQuestion, isAddChecklist]);
 
     useEffect(() => {
         if (!isFetched.current) {
@@ -134,8 +134,6 @@ const ChecklistSection = () => {
                     )}
                 </Formik>
             </div>
-            {/* <div className="py-4 flex items-center justify-between flex-wrap gap-4 pb-6">
-            </div> */}
             <div className="flex flex-col gap-6 py-4">
                 {["onboarding", "operations"].map((type) => {
                     const filteredChecklists = checklists
@@ -152,14 +150,14 @@ const ChecklistSection = () => {
                                             setSelectedChecklistType(type);
                                             dispatch(setIsAddChecklist(true));
                                             dispatch(setChecklistDetail(null));
-                                        }}><FaPlus className="text-white  text-xs" />
+                                        }}><FaPlus className="text-white text-xs" />
                                     </SubmitButton>
                                 </h3>
                                 <h3 className="align-middle text-base flex items-center justify-center gap-2">
                                     <span className="text-xs sm:text-sm md:text-[16px] font-medium text-grey">Add new Checklist Task</span>
                                     <SubmitButton className="w-6 h-6 md:w-7 md:h-7 p-1"
                                         onClick={() => handleAddChecklistTask(type)}>
-                                        <FaPlus className="text-white  text-xs" />
+                                        <FaPlus className="text-white text-xs" />
                                     </SubmitButton>
                                 </h3>
                             </div>
@@ -177,7 +175,7 @@ const ChecklistSection = () => {
                     )
                 })}
             </div>
-            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} />}
+            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} isUpdatedMode={false} />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );

@@ -136,6 +136,7 @@ const Accordion: React.FC<AccordionProps> = ({
                             height={15}
                           />
                         </button>
+                        {showChecklistActions && (
                           <FiTrash2
                             onClick={() => {
                               setSelectedTask(task);
@@ -143,7 +144,7 @@ const Accordion: React.FC<AccordionProps> = ({
                               setIsCloseModal(true);
                             }}
                             className="text-red-500 ml-2 w-4 h-4 md:w-5 md:h-5 cursor-pointer"
-                          />
+                          />)}
                       </div>
                     </li>
                   ))}

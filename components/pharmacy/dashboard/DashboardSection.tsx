@@ -10,21 +10,17 @@ import ExpenseChart from "@/components/common/Linechart";
 import { Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
-import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist, fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import { StatsCardProps } from "@/utils/types";
 import { assignPharmacyStatsValues } from "@/utils/helper";
 import SelectField from "@/components/common/form/SelectField";
-import { setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 
 const DashboardSection = () => {
-  const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
   const [statsUpdatedData, setStatsUpdatedData] = useState<StatsCardProps[]>(pharmacyDashboardStatsData);
-  const { isAddExpenseModal } = useSelector(
-    (state: RootState) => state.onboarding
-  );
 
   const dispatch = useDispatch();
   const isFetchedData = useRef(false);
@@ -61,37 +57,8 @@ const DashboardSection = () => {
     await fetchPharmacyAssignChecklist(dispatch, checklistId, "onboarding");
   };
 
-
-
-  // const statsData = [
-  //   {
-  //     value: 0,
-  //     label: "Categories",
-  //     color: "text-custom-green",
-  //     icon: "/statistics-Category.svg",
-  //   },
-  //   {
-  //     value: 0,
-  //     label: "Pharmacies",
-  //     color: "text-custom-purple",
-  //     icon: "/statistics-pharmacy.svg",
-  //   },
-  //   {
-  //     value: `$${pharmacyStatsData?.monthly_expense ?? 0}`,
-  //     label: "Total monthly expense",
-  //     color: "text-custom-orange",
-  //     icon: "/statistics-expense.svg",
-  //   },
-  //   {
-  //     value: pharmacyStatsData?.assigned_courses ?? 0,
-  //     label: "Total task completed",
-  //     color: "text-custom-red",
-  //     icon: "/statistics-task.svg",
-  //   },
-  // ];
-
   useEffect(() => {
-    if (isAddExpenseModal) {
+    if (isAddQuestion) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -100,12 +67,12 @@ const DashboardSection = () => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isAddExpenseModal]);
+  }, [isAddQuestion]);
 
   const handleEditClick = (item: any) => {
     console.log("item", item)
     dispatch(setSelectedChecklistItem(item))
-    dispatch(setIsAddExpenseModal(true));
+    dispatch(setIsAddQuestion(true));
   };
 
   return (
@@ -187,7 +154,7 @@ const DashboardSection = () => {
           />
         </div>
       </div>
-      {isAddExpenseModal && <OnboardingExpenseModal selectedType="onboarding" />}
+      {isAddQuestion && <AddNewQuestionModal selectedType="onboarding" isUpdatedMode={true} />}
     </>
   );
 };

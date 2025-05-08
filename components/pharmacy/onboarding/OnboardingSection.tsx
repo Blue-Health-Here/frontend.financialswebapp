@@ -5,24 +5,22 @@ import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
-import OnboardingExpenseModal from "./OnboardingExpenseModal";
+import AddNewQuestionModal from "../../common/AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddExpenseModal } from "@/store/features/pharmacy/onboarding/pharmacyOnboardingExpenseSlice";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import SelectField from "@/components/common/form/SelectField";
 import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist } from "@/services/pharmacyServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
-import { setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 
 const OnboardingSection = () => {
-  const { isAddExpenseModal } = useSelector((state: RootState) => state.onboarding);
-  const { pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
   const isFetched = useRef(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isAddExpenseModal) {
+    if (isAddQuestion) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -31,7 +29,7 @@ const OnboardingSection = () => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isAddExpenseModal]);
+  }, [isAddQuestion]);
 
   useEffect(() => {
     if (!isFetched.current) {
@@ -46,7 +44,7 @@ const OnboardingSection = () => {
 
   const handleEditClick = (item: any) => {
     dispatch(setSelectedChecklistItem(item))
-    dispatch(setIsAddExpenseModal(true));
+    dispatch(setIsAddQuestion(true));
   };
 
   return (
@@ -108,7 +106,7 @@ const OnboardingSection = () => {
           />
         </div>
       </div>
-      {isAddExpenseModal && <OnboardingExpenseModal selectedType="onboarding" />}
+      {isAddQuestion && <AddNewQuestionModal selectedType="onboarding" isUpdatedMode={true}/>}
     </>
   );
 };

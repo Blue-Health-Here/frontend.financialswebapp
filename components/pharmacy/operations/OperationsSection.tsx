@@ -7,18 +7,16 @@ import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
 import { RootState } from '@/store/store'
 import { useDispatch, useSelector } from "react-redux";
-import { setIsAddOperationsExpense } from "@/store/features/pharmacy/operations/operationsExpenseSlice";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import SelectField from "@/components/common/form/SelectField";
 import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist } from "@/services/pharmacyServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
-import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
-import { setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 
 
 const OperationsSection = () => {
-  const { isAddOperationsExpense } = useSelector((state: RootState) => state.operations)
-  const { pharmacyChecklists, pharmacyAssignChecklists } = useSelector((state: RootState) => state.global);
+  const { pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
   const dispatch = useDispatch()
   const isFetched = useRef(false);
   useEffect(() => {
@@ -34,7 +32,7 @@ const OperationsSection = () => {
 
   const handleEditClick = (item: any) => {
     dispatch(setSelectedChecklistItem(item))
-    dispatch(setIsAddOperationsExpense(true));
+    dispatch(setIsAddQuestion(true));
   };
   return (
     <>
@@ -95,7 +93,7 @@ const OperationsSection = () => {
           />
         </div>
       </div>
-      {isAddOperationsExpense && <OnboardingExpenseModal selectedType="operations" />}
+      {isAddQuestion && <AddNewQuestionModal selectedType="operations" isUpdatedMode={true}/>}
     </>
   );
 };
