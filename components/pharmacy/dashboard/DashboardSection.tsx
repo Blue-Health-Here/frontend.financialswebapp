@@ -10,13 +10,13 @@ import ExpenseChart from "@/components/common/Linechart";
 import { Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist, fetchPharmacyDashboardStats, fetchPharmacyExpenseGraph } from "@/services/pharmacyServices";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
 import { StatsCardProps } from "@/utils/types";
 import { assignPharmacyStatsValues } from "@/utils/helper";
 import SelectField from "@/components/common/form/SelectField";
 import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 
 const DashboardSection = () => {
   const { pharmacyStatsData, expenseGraphData, pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
@@ -184,7 +184,7 @@ const DashboardSection = () => {
           />
         </div>
       </div>
-      {isAddQuestion && <OnboardingExpenseModal selectedType="onboarding" isOnboardingMode={true} />}
+      {isAddQuestion && <AddNewQuestionModal selectedType="onboarding" isUpdatedMode={true} />}
     </>
   );
 };

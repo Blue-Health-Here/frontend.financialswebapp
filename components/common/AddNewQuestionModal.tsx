@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { RxCross2 } from "react-icons/rx";
 import FileUploadField from "@/components/common/form/FileUploadField";
-import { AssignChecklistProps, ChecklistOverviewProps, ChecklistProps, EditAssignTaskModalProps, OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
+import { ChecklistProps, EditAssignTaskModalProps, OperationalItemsProps, PharmacyCardProps, UploadedFileProps } from "@/utils/types";
 import MultiSelectField from "@/components/common/form/MultiSelectField";
 import { RootState } from "@/store/store";
 import { postAssignChecklistUploadDocs, updateAssignChecklist, updateChecklistOverview } from "@/services/adminServices";
@@ -25,10 +25,10 @@ import { setIsAddQuestion } from "@/store/features/global/globalSlice";
 
 
 
-const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
+const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
     selectedType,
     pharmacyId,
-    isOnboardingMode = false
+    isUpdatedMode = false
 }) => {
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
@@ -36,7 +36,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
     const { selectedChecklistItem } = useSelector((state: RootState) => state.global);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
-    const [initialVals, setInitialVals] = useState<any>(isOnboardingMode ? ChecklistOverviewInitialVals : AssignChecklistInitialVals);
+    const [initialVals, setInitialVals] = useState<any>(isUpdatedMode ? ChecklistOverviewInitialVals : AssignChecklistInitialVals);
     const [itemName, setItemName] = useState("");
     const [addItems, setAddItems] = useState(false);
 
@@ -44,7 +44,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
     const isFetchedOperations = useRef(false);
 
     // Get the appropriate data source based on the mode
-    const dataSource = isOnboardingMode ? selectedChecklistItem : tasklistDetails;
+    const dataSource = isUpdatedMode ? selectedChecklistItem : tasklistDetails;
 
     const handleClose = () => {
         dispatch(setIsAddQuestion(false));
@@ -91,7 +91,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
 
     // Initialize form values based on mode
     useEffect(() => {
-        if (isOnboardingMode && selectedChecklistItem) {
+        if (isUpdatedMode && selectedChecklistItem) {
             const newFollowUpDates = selectedChecklistItem.follow_up_dates || [];
             setInitialVals({
                 question: selectedChecklistItem.question,
@@ -106,7 +106,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
             if (selectedChecklistItem?.file_url && selectedChecklistItem?.filename) {
                 setUploadedFile({ file_url: selectedChecklistItem?.file_url, filename: selectedChecklistItem?.filename, path: selectedChecklistItem?.path });
             }
-        } else if (!isOnboardingMode && tasklistDetails) {
+        } else if (!isUpdatedMode && tasklistDetails) {
             const newFollowUpDates = tasklistDetails.follow_up_dates || [];
             setInitialVals({
                 checklist_id: tasklistDetails.checklist_id,
@@ -114,7 +114,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                 note: tasklistDetails.note,
                 action_item: tasklistDetails.action_item,
                 follow_up_dates: newFollowUpDates,
-                pharmacy_ids: tasklistDetails?.pharmacy_ids || [],
+                pharmacy_ids: tasklistDetails?.pharmacy_ids,
                 ...(selectedType === "operations" && { operational_item: tasklistDetails.operational_item || "" })
             });
             setSelectedDates(newFollowUpDates);
@@ -122,14 +122,14 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                 setUploadedFile({ file_url: tasklistDetails?.file_url, filename: tasklistDetails?.filename, path: tasklistDetails?.path });
             }
         } else {
-            setInitialVals(isOnboardingMode ? ChecklistOverviewInitialVals : AssignChecklistInitialVals);
+            setInitialVals(isUpdatedMode ? ChecklistOverviewInitialVals : AssignChecklistInitialVals);
             setSelectedDates([]);
             setUploadedFile(null);
         }
-    }, [isOnboardingMode, selectedChecklistItem, tasklistDetails, selectedType]);
+    }, [isUpdatedMode, selectedChecklistItem, tasklistDetails, selectedType]);
 
     const handleSubmit = async (values: any) => {
-        if (isOnboardingMode) {
+        if (isUpdatedMode) {
             const payload: any = {
                 pharmacy_comments: values.pharmacy_comments,
                 status: values.status
@@ -178,8 +178,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                     operational_item: values.operational_item
                 };
             }
-
-            if (values.pharmacy_ids && values.pharmacy_ids[0] === "all") {
+            if (values.pharmacy_ids[0] === "all") {
                 payload.is_all = true;
             } else {
                 payload.pharmacy_ids = values.pharmacy_ids;
@@ -190,7 +189,6 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                 payload.file_url = uploadedFile.file_url;
                 payload.path = uploadedFile.path;
             }
-
             try {
                 if (tasklistDetails) {
                     await updateAssignChecklist(dispatch, { task_id: tasklistDetails.id, ...payload }, selectedType);
@@ -204,7 +202,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
         }
     };
 
-    const validationSchema = isOnboardingMode
+    const validationSchema = isUpdatedMode
         ? updatePharmacyChecklistValidationSchema
         : assignChecklistValidationSchema(selectedType || "");
 
@@ -218,11 +216,12 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                 <Formik
                     initialValues={initialVals}
                     onSubmit={handleSubmit}
-                    // validationSchema={validationSchema}
+                    validationSchema={validationSchema}
+
                     enableReinitialize={true}
                 >
                     <Form className="flex flex-col gap-y-4">
-                        {!isOnboardingMode && (
+                        {!isUpdatedMode && (
                             <SelectField
                                 label="Checklist"
                                 name="checklist_id"
@@ -242,20 +241,20 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                             label="Question"
                             className="placeholder:text-themeLight"
                             name="question"
-                            disabled={isOnboardingMode}
+                            disabled={isUpdatedMode}
                         />
 
                         <TextareaField
                             label="Note"
                             name="note"
-                            disabled={isOnboardingMode}
+                            disabled={isUpdatedMode}
                         />
 
                         <InputField
                             label="Action Items"
                             className="placeholder:text-themeLight"
                             name="action_item"
-                            disabled={isOnboardingMode}
+                            disabled={isUpdatedMode}
                         />
 
                         <FileUploadField
@@ -265,8 +264,8 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                             title="Upload"
                             uploadedFile={uploadedFile}
                             setUploadedFile={setUploadedFile}
-                            handleFileUpload={(e, setValue) => handleFileUploadDocs(e, setValue)}
-                            disabled={isOnboardingMode}
+                            handleFileUpload={(e, setValue) => !isUpdatedMode && handleFileUploadDocs(e, setValue)}
+                            disabled={isUpdatedMode}
                         />
 
                         {selectedType === "operations" && (
@@ -274,7 +273,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                                 <SelectField
                                     label="Operational Item"
                                     name="operational_item"
-                                    isDisabled={isOnboardingMode}
+                                    isDisabled={isUpdatedMode}
                                     options={[
                                         ...(operationalItems.map((item: OperationalItemsProps) => ({
                                             value: item.name,
@@ -285,13 +284,13 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                                 />
 
                                 <p
-                                    className={`text-primary w-max ml-auto mt-2 font-semibold text-right text-xs sm:text-sm ${isOnboardingMode ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                                    onClick={() => !isOnboardingMode && setAddItems(true)}
+                                    className={`text-primary w-max ml-auto mt-2 font-semibold text-right text-xs sm:text-sm ${isUpdatedMode ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                    onClick={() => !isUpdatedMode && setAddItems(true)}
                                 >
                                     +Add New Item
                                 </p>
 
-                                {addItems && !isOnboardingMode && (
+                                {addItems && !isUpdatedMode && (
                                     <div className="flex gap-x-4 mt-2 justify-normal md:justify-between">
                                         <input
                                             ref={inputRef}
@@ -320,7 +319,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                         <MultiDateField
                             label="Key Follow-up dates"
                             name="follow_up_dates"
-                            disabled={isOnboardingMode}
+                            disabled={isUpdatedMode}
                         />
 
                         {selectedDates.length > 0 && (
@@ -329,13 +328,13 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                                 <div className="flex flex-col gap-2 mt-2">
                                     {selectedDates.map((date, index) => (
                                         <div key={index} className="flex gap-x-2">
-                                            <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${isOnboardingMode ? 'cursor-not-allowed' : ''}`}>
+                                            <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${isUpdatedMode ? 'cursor-not-allowed' : ''}`}>
                                                 <span>{date}</span>
                                             </div>
                                             <button
                                                 type="button"
-                                                disabled={isOnboardingMode}
-                                                onClick={() => !isOnboardingMode && handleRemoveDate(date)}
+                                                disabled={isUpdatedMode}
+                                                onClick={() => !isUpdatedMode && handleRemoveDate(date)}
                                             >
                                                 <RxCross2 size={15} />
                                             </button>
@@ -345,7 +344,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                             </div>
                         )}
 
-                        {isOnboardingMode && (
+                        {isUpdatedMode && (
                             <>
                                 <TextareaField
                                     label="Pharmacy comments"
@@ -365,7 +364,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                             </>
                         )}
 
-                        {!isOnboardingMode && (
+                        {!isUpdatedMode && (
                             <MultiSelectField
                                 label="Pharmacy"
                                 name="pharmacy_ids"
@@ -394,4 +393,4 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
     );
 };
 
-export default OnboardingExpenseModal;
+export default AddNewQuestionModal;

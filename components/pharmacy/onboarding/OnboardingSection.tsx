@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
 import { Form, Formik } from "formik";
-import OnboardingExpenseModal from "./OnboardingExpenseModal";
+import AddNewQuestionModal from "../../common/AddNewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import FileDownloadField from "@/components/common/form/FileDownloadField";
@@ -106,7 +106,7 @@ const OnboardingSection = () => {
           />
         </div>
       </div>
-      {isAddQuestion && <OnboardingExpenseModal selectedType="onboarding" isOnboardingMode={true}/>}
+      {isAddQuestion && <AddNewQuestionModal selectedType="onboarding" isUpdatedMode={true}/>}
     </>
   );
 };

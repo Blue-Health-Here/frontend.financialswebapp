@@ -26,7 +26,7 @@ import {
 import Licensing from "./Licensing";
 import Certifications from "./Certifications";
 import PharmacyDetailCard from "./PharmacyDetailCard";
-import OnboardingExpenseModal from "@/components/pharmacy/onboarding/OnboardingExpenseModal";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 
 const PharmacyDetail = () => {
@@ -218,7 +218,7 @@ const PharmacyDetail = () => {
           ))}
         </div>
       </div>
-      {isAddQuestion && <OnboardingExpenseModal pharmacyId={id} isOnboardingMode={true} />}
+      {isAddQuestion && <AddNewQuestionModal pharmacyId={id} isUpdatedMode={true} />}
     </>
   );
 };

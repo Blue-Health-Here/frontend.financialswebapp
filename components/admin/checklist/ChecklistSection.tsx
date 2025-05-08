@@ -16,7 +16,7 @@ import { AssignChecklistProps, ChecklistProps } from "@/utils/types";
 import { deleteAssignChecklist, deleteChecklist, fetchAllChecklist, fetchAllTasklist } from "@/services/adminServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { setIsAddQuestion } from "@/store/features/global/globalSlice";
-import OnboardingExpenseModal from "@/components/pharmacy/onboarding/OnboardingExpenseModal";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 
 const ChecklistSection = () => {
     const { isAddQuestion } = useSelector((state: RootState) => state.global);
@@ -175,7 +175,7 @@ const ChecklistSection = () => {
                     )
                 })}
             </div>
-            {isAddQuestion && <OnboardingExpenseModal selectedType={selectedChecklistType} isOnboardingMode={false} />}
+            {isAddQuestion && <AddNewQuestionModal selectedType={selectedChecklistType} isUpdatedMode={false} />}
             {isAddChecklist && <AddNewChecklistModal selectedType={selectedChecklistType} />}
         </div>
     );

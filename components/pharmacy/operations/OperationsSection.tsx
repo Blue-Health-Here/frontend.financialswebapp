@@ -11,8 +11,8 @@ import FileDownloadField from "@/components/common/form/FileDownloadField";
 import SelectField from "@/components/common/form/SelectField";
 import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist } from "@/services/pharmacyServices";
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
-import OnboardingExpenseModal from "../onboarding/OnboardingExpenseModal";
 import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
 
 
 const OperationsSection = () => {
@@ -93,7 +93,7 @@ const OperationsSection = () => {
           />
         </div>
       </div>
-      {isAddQuestion && <OnboardingExpenseModal selectedType="operations" isOnboardingMode={true}/>}
+      {isAddQuestion && <AddNewQuestionModal selectedType="operations" isUpdatedMode={true}/>}
     </>
   );
 };
