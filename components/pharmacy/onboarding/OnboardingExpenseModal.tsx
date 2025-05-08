@@ -218,7 +218,7 @@ const OnboardingExpenseModal: React.FC<EditAssignTaskModalProps> = ({
                 <Formik
                     initialValues={initialVals}
                     onSubmit={handleSubmit}
-                    validationSchema={validationSchema}
+                    // validationSchema={validationSchema}
                     enableReinitialize={true}
                 >
                     <Form className="flex flex-col gap-y-4">

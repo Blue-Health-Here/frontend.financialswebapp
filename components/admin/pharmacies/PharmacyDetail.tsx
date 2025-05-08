@@ -218,7 +218,7 @@ const PharmacyDetail = () => {
           ))}
         </div>
       </div>
-      {isAddQuestion && <OnboardingExpenseModal selectedType={selectedChecklistType} pharmacyId={id} isOnboardingMode={true}/>}
+      {isAddQuestion && <OnboardingExpenseModal pharmacyId={id} isOnboardingMode={true} />}
     </>
   );
 };

@@ -2,13 +2,15 @@ import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
 import { setAdminExpenseGraphData, setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { 
-  setAdminPharmacyCoursesData, setOnboardingChecklist, 
-  setOperationsChecklist, setPharmacies, setSelectedChecklistItem 
+import {
+  setAdminPharmacyCoursesData, setOnboardingChecklist,
+  setOperationsChecklist, setPharmacies, setSelectedChecklistItem
 } from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setAdminExpenseStats, setAdminExpenseData, 
-  setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import {
+  setAdminExpenseStats, setAdminExpenseData,
+  setPharmacyList
+} from "@/store/features/admin/expense/adminExpenseSlice";
 import {
   setIsLoading,
   setProfileData,
@@ -18,8 +20,8 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-import { 
-  setChecklists, setOnboardingdTasklist, 
+import {
+  setChecklists, setOnboardingdTasklist,
   setOperationalItems, setOperationsTasklist
 } from "@/store/features/admin/checklist/adminChecklistSlice";
 
@@ -62,7 +64,7 @@ const apiHandler = async <T = any>(
 
   try {
     dispatch(setIsLoading(true));
-    
+
     // Build URL with query parameters if needed
     let url = endpoint;
     if (params) {
@@ -70,19 +72,19 @@ const apiHandler = async <T = any>(
         .filter(([_, value]) => value !== undefined)
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
-      
+
       url = queryParams ? `${endpoint}?${queryParams}` : endpoint;
     }
-    
+
     // Configure request
     const config: any = {};
     if (isFormData) {
       config.headers = { "Content-Type": "multipart/form-data" };
     }
-    
+
     // Make API call
     let response: ApiResponse<T>;
-    
+
     switch (method) {
       case 'get':
         response = await axiosAdmin.get(url, config);
@@ -97,20 +99,20 @@ const apiHandler = async <T = any>(
         response = await axiosAdmin.delete(url, config);
         break;
     }
-    
+
     // Handle success
     if (response?.status === 200 || response?.data?.success || response?.status === 201) {
       if (successMessage) {
         toast.success(successMessage);
       }
-      
+
       if (onSuccess && response.data) {
         onSuccess(response.data);
       }
-      
+
       return response.data || null;
     }
-    
+
     return null;
   } catch (error: any) {
     // Handle 404 differently in some cases
@@ -118,19 +120,19 @@ const apiHandler = async <T = any>(
       if (error?.response?.data?.detail) {
         toast.success(error.response.data.detail);
       }
-      
+
       if (onError) {
         onError(error);
       }
     } else {
       // Handle other errors
       toast.error(error?.message || errorMessage);
-      
+
       if (onError) {
         onError(error);
       }
     }
-    
+
     return null;
   } finally {
     dispatch(setIsLoading(false));
@@ -537,9 +539,9 @@ export const deleteAssignChecklistUploadDocs = async (dispatch: AppDispatch, fil
 
 export const createNewOperationalItem = async (dispatch: AppDispatch, name: string) => {
   return apiHandler(dispatch, 'post', '/v1/operational-item', {
-    params: { name: name},
+    params: { name: name },
     successMessage: "Operational item created successfully!",
-    onSuccess: () => fetchAllChecklist(dispatch)
+    onSuccess: () => fetchAllOperationalItems(dispatch)
   });
 };
 
@@ -570,7 +572,7 @@ export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, ty
 
 export const updateChecklistOverview = async (dispatch: AppDispatch, data: any, pharmacyId: string) => {
   return apiHandler(dispatch, 'put', '/v1/admin/checklist/overview', {
-    params: { assign_id: data?.assigned_id},
+    params: { assign_id: data?.assigned_id },
     data,
     successMessage: "Checklist overview updated successfully!",
     onSuccess: () => fetchAdminPharmacyDetails(dispatch, pharmacyId)
