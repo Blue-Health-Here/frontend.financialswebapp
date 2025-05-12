@@ -6,7 +6,7 @@ const PharmacyDetailCard: React.FC<any> = ({ pharmacyDetailsData }) => {
             <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="rounded-full object-cover overflow-hidden">
                     <Image
-                        src={pharmacyDetailsData?.image_url || "/Ellipse.png"}
+                        src={pharmacyDetailsData?.image_url || "/default-user.png"}
                         alt="Profile Image"
                         width={300}
                         height={300}

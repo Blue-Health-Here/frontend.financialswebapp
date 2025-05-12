@@ -104,7 +104,7 @@ export const marketinMaterial = ['Marketing Material 1', 'Marketing Material 2',
 
 export const corses = ['couse1', 'course2', 'course3', 'course4', 'course5', 'course6']
 
-export const expenseCategories = [
+export const expenseCategoriesData = [
     { name: "Utilities", budget: "10,000", actual: "8,000", percentage: 15 },
     { name: "Salaries", budget: "10,000", actual: "12,000", percentage: 5 },
     { name: "Rent", budget: "10,000", actual: "8,000", percentage: 15 },
@@ -118,10 +118,10 @@ export const categories = [
    }]
 
 export const budgetStatsData = [
-    { value: 0, label: "Revenue", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
-    { value: 0, label: "Total monthly Expense", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
-    { value: 0, label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
-];
+  { value: "0", label: "Revenue", color: "text-primary", icon: "/statistic-dollar-total-revenue.svg" },
+  { value: "0", label: "Total monthly Expense", color: "text-custom-orange", icon: "/statistic-dollar-total-expenese.svg" },
+  { value: "0", label: "Profit", color: "text-custom-green", icon: "/statistics-dollar-total-profit.svg" },
+]
 
 export const chartData = {
     Xlabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "sep"],

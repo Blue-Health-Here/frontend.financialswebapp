@@ -125,7 +125,7 @@ const Accordion: React.FC<AccordionProps> = ({
                           </span>
                         </div>
                         <button
-                          className="text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
+                          className="text-gray-500 hover:text-blue-500 transition flex-shrink-0"
                           onClick={() => handleEditTasklist && handleEditTasklist(task)}
                         >
                           <Image

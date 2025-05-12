@@ -5,12 +5,13 @@ import { RootState } from "@/store/store";
 import { License } from "@/utils/types";
 import { Form, Formik } from "formik";
 import { useSelector } from "react-redux";
+import { fileDownload } from "./Licensing";
 
 const Certifications: React.FC<any> = ({
     handleDeleteFile, handleFileUpload, setUploadedFile
 }) => {
     const { certificationsData } = useSelector((state: RootState) => state.global);
-    return (
+        return (
         <Formik
             initialValues={{ documents: [] }}
             onSubmit={(values) => console.log(values)}
@@ -27,12 +28,14 @@ const Certifications: React.FC<any> = ({
                                 key={license.id}
                                 className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                             >
-                                <span className="text-xs sm:text-sm truncate">
+                                <span className="text-sm truncate">
                                     {license.filename}
                                 </span>
 
-                                <div className="flex items-center space-x-2">
-                                    <button className="p-1 text-blue-500 hover:text-blue-700">
+                                <div className="flex items-center gap-x-2 ml-2 flex-shrink-0">
+                                    <button className="p-1 text-blue-500 hover:text-blue-700"
+                                        type="button"
+                                        onClick={() => fileDownload(license)}>
                                         <img
                                             src="/downloadFile.svg"
                                             alt="Download"
@@ -60,7 +63,7 @@ const Certifications: React.FC<any> = ({
                         handleFileUpload={(e, setValue) =>
                             handleFileUpload(e, setValue, "certification")
                         }
-                        className="w-60 border-primary mt-4"
+                        className="sm:w-60 border-primary mt-4"
                     />
                 </Form>
             )}

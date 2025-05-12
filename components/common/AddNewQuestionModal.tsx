@@ -100,7 +100,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                 follow_up_dates: newFollowUpDates,
                 pharmacy_comments: selectedChecklistItem?.pharmacy_comments || "",
                 status: selectedChecklistItem?.status || "todo",
-                ...(selectedType === "operations" && { operational_item: selectedChecklistItem.operational_item || "" })
+                 operational_item: selectedChecklistItem.operational_item 
             });
             setSelectedDates(newFollowUpDates);
             if (selectedChecklistItem?.file_url && selectedChecklistItem?.filename) {
@@ -268,7 +268,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                             disabled={isUpdatedMode}
                         />
 
-                        {selectedType === "operations" && (
+                        {(selectedType === "operations" || (isUpdatedMode && selectedChecklistItem?.operational_item)) && (
                             <div>
                                 <SelectField
                                     label="Operational Item"
@@ -324,11 +324,11 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
 
                         {selectedDates.length > 0 && (
                             <div>
-                                <Label size="xs">Selected Dates(s)</Label>
+                                <Label size="xs" className={`${isUpdatedMode ? 'text-gray-400' : ''}`}>Selected Dates(s)</Label>
                                 <div className="flex flex-col gap-2 mt-2">
                                     {selectedDates.map((date, index) => (
                                         <div key={index} className="flex gap-x-2">
-                                            <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${isUpdatedMode ? 'cursor-not-allowed' : ''}`}>
+                                            <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${isUpdatedMode ? 'cursor-not-allowed text-gray-300' : ''}`}>
                                                 <span>{date}</span>
                                             </div>
                                             <button
@@ -336,7 +336,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                                                 disabled={isUpdatedMode}
                                                 onClick={() => !isUpdatedMode && handleRemoveDate(date)}
                                             >
-                                                <RxCross2 size={15} />
+                                                <RxCross2 size={15}  className={`${isUpdatedMode ? 'cursor-not-allowed text-gray-400' : ''}`}/>
                                             </button>
                                         </div>
                                     ))}

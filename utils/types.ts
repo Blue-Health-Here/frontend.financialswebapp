@@ -20,6 +20,7 @@ export type PharmacyCardProps = {
     total_assigned: number;
     total_completed: number;
     completion_percentage: number;
+    image_url: string;
 };
 
 export type CourseProps = {

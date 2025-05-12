@@ -24,7 +24,7 @@ const ChecklistSection = () => {
     const onboarding = useSelector((state: RootState) => state.checklist.onboarding);
     const operations = useSelector((state: RootState) => state.checklist.operations);
     const checklists = useSelector((state: RootState) => state.checklist.checklists) as ChecklistProps[];
-
+    const [searchQuery, setSearchQuery] = useState("");
 
     const [selectedChecklistType, setSelectedChecklistType] = useState('');
     const isFetched = useRef(false);
@@ -94,8 +94,13 @@ const ChecklistSection = () => {
         }
     };
 
+    const filteredChecklists = checklists.filter((checklist: ChecklistProps) => {
+        const nameMatches = checklist.checklist_name.toLowerCase().includes(searchQuery.toLowerCase());        
+        return nameMatches;
+    });
+
     return (
-        <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
+        <div className="p-6 pt-8 pb-2 bg-white shadow-lg rounded-lg">
             <div className="flex items-center justify-between flex-wrap gap-4 pb-4 border-b border-gray-100">
                 <div className="flex items-center justify-between gap-3">
                     <h1 className="text-lg md:text-2xl">Checklist</h1>
@@ -111,8 +116,9 @@ const ChecklistSection = () => {
                                 parentClassName="flex-1"
                                 name="type"
                                 options={[
+                                    { value: "", label: "All Types" },
                                     { value: "onboarding", label: "Onboarding" },
-                                    { value: "operational", label: "Operational" },
+                                    { value: "operations", label: "Operational" },
                                 ]}
                             />
                             <SelectField
@@ -125,7 +131,12 @@ const ChecklistSection = () => {
                                 ]}
                             />
                             <div className="relative min-w-48 flex-1">
-                                <Input name="search" placeholder="Search Checklist" className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
+                                <Input
+                                    name="search"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search Checklist"
+                                    className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs" />
                                 <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                                     <IoSearch size={18} />
                                 </span>
@@ -134,14 +145,14 @@ const ChecklistSection = () => {
                     )}
                 </Formik>
             </div>
-            <div className="flex flex-col gap-6 py-4">
+            <div className="flex flex-col gap-6 pt-4">
                 {["onboarding", "operations"].map((type) => {
-                    const filteredChecklists = checklists
+                    const filteredChecklistTypes = filteredChecklists
                         .filter((checklist: ChecklistProps) => checklist.checklist_type === type)
                         .sort((a, b) => a.checklist_name.localeCompare(b.checklist_name));
                     return (
                         <div className="w-full" key={type}>
-                            <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+                            <div className="flex items-center justify-between flex-wrap gap-4">
                                 <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl">{type.charAt(0).toUpperCase() + type.slice(1)} Checklist</h2>
                                 <h3 className="align-middle text-base flex items-center justify-center gap-2">
                                     <span className="text-xs sm:text-sm md:text-base font-medium text-grey">Add New Checklist</span>
@@ -162,7 +173,7 @@ const ChecklistSection = () => {
                                 </h3>
                             </div>
                             <Accordion
-                                items={filteredChecklists}
+                                items={filteredChecklistTypes}
                                 tasklist={type === 'operations' ? operations : onboarding}
                                 handleEditTasklist={(task: any) => handleEditChecklistTask(task, type)}
                                 handleEditChecklist={(item: any) => handleEditChecklist(item)}
