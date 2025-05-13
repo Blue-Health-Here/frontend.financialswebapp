@@ -39,6 +39,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
     const [initialVals, setInitialVals] = useState<any>(isUpdatedMode ? ChecklistOverviewInitialVals : AssignChecklistInitialVals);
     const [itemName, setItemName] = useState("");
     const [addItems, setAddItems] = useState(false);
+    const [hasTaskId, setHasTaskId] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const isFetchedOperations = useRef(false);
@@ -107,6 +108,9 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                 setUploadedFile({ file_url: selectedChecklistItem?.file_url, filename: selectedChecklistItem?.filename, path: selectedChecklistItem?.path });
             }
         } else if (!isUpdatedMode && tasklistDetails) {
+            // Check if we have a task ID (indicating an update operation)
+            setHasTaskId(!!tasklistDetails.id);
+            
             const newFollowUpDates = tasklistDetails.follow_up_dates || [];
             setInitialVals({
                 checklist_id: tasklistDetails.checklist_id,
@@ -114,7 +118,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                 note: tasklistDetails.note,
                 action_item: tasklistDetails.action_item,
                 follow_up_dates: newFollowUpDates,
-                pharmacy_ids: tasklistDetails?.pharmacy_ids,
+                pharmacy_ids: tasklistDetails?.pharmacy_ids || [],
                 ...(selectedType === "operations" && { operational_item: tasklistDetails.operational_item || "" })
             });
             setSelectedDates(newFollowUpDates);
@@ -125,6 +129,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
             setInitialVals(isUpdatedMode ? ChecklistOverviewInitialVals : AssignChecklistInitialVals);
             setSelectedDates([]);
             setUploadedFile(null);
+            setHasTaskId(false);
         }
     }, [isUpdatedMode, selectedChecklistItem, tasklistDetails, selectedType]);
 
@@ -178,10 +183,14 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                     operational_item: values.operational_item
                 };
             }
-            if (values.pharmacy_ids[0] === "all") {
-                payload.is_all = true;
-            } else {
-                payload.pharmacy_ids = values.pharmacy_ids;
+            
+            // Only set pharmacy_ids if it exists in values
+            if (values.pharmacy_ids && values.pharmacy_ids.length > 0) {
+                if (values.pharmacy_ids[0] === "all") {
+                    payload.is_all = true;
+                } else {
+                    payload.pharmacy_ids = values.pharmacy_ids;
+                }
             }
 
             if (uploadedFile) {
@@ -189,8 +198,9 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
                 payload.file_url = uploadedFile.file_url;
                 payload.path = uploadedFile.path;
             }
+            
             try {
-                if (tasklistDetails) {
+                if (tasklistDetails && tasklistDetails.id) {
                     await updateAssignChecklist(dispatch, { task_id: tasklistDetails.id, ...payload }, selectedType);
                 } else {
                     await createNewAssignChecklist(dispatch, payload, selectedType);
@@ -202,9 +212,12 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
         }
     };
 
+    // Determine if we're in an update flow within the "add new" mode
+    const isUpdateFlow = !isUpdatedMode && hasTaskId;
+
     const validationSchema = isUpdatedMode
         ? updatePharmacyChecklistValidationSchema
-        : assignChecklistValidationSchema(selectedType || "");
+        : assignChecklistValidationSchema(selectedType || "", isUpdateFlow);
 
     return (
         <Modal>
@@ -220,173 +233,173 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
 
                     enableReinitialize={true}
                 >
-                    <Form className="flex flex-col gap-y-4">
-                        {!isUpdatedMode && (
-                            <SelectField
-                                label="Checklist"
-                                name="checklist_id"
-                                options={[
-                                    ...(checklists
-                                        .filter((checklist: ChecklistProps) => checklist.checklist_type === selectedType)
-                                        .map((checklist: ChecklistProps) => ({
-                                            value: checklist.id,
-                                            label: checklist.checklist_name,
-                                        })))
-                                ]}
-                                placeholder="Select Checklist"
-                            />
-                        )}
-
-                        <TextareaField
-                            label="Question"
-                            className="placeholder:text-themeLight"
-                            name="question"
-                            disabled={isUpdatedMode}
-                        />
-
-                        <TextareaField
-                            label="Note"
-                            name="note"
-                            disabled={isUpdatedMode}
-                        />
-
-                        <InputField
-                            label="Action Items"
-                            className="placeholder:text-themeLight"
-                            name="action_item"
-                            disabled={isUpdatedMode}
-                        />
-
-                        <FileUploadField
-                            label="Upload File"
-                            module="checklist"
-                            name="file"
-                            title="Upload"
-                            uploadedFile={uploadedFile}
-                            setUploadedFile={setUploadedFile}
-                            handleFileUpload={(e, setValue) => !isUpdatedMode && handleFileUploadDocs(e, setValue)}
-                            disabled={isUpdatedMode}
-                        />
-
-                        {(selectedType === "operations" || (isUpdatedMode && selectedChecklistItem?.operational_item)) && (
-                            <div>
+                        <Form className="flex flex-col gap-y-4">
+                            {!isUpdatedMode && (
                                 <SelectField
-                                    label="Operational Item"
-                                    name="operational_item"
-                                    isDisabled={isUpdatedMode}
+                                    label="Checklist"
+                                    name="checklist_id"
                                     options={[
-                                        ...(operationalItems.map((item: OperationalItemsProps) => ({
-                                            value: item.name,
-                                            label: item.name
-                                        })))
+                                        ...(checklists
+                                            .filter((checklist: ChecklistProps) => checklist.checklist_type === selectedType)
+                                            .map((checklist: ChecklistProps) => ({
+                                                value: checklist.id,
+                                                label: checklist.checklist_name,
+                                            })))
                                     ]}
-                                    placeholder="Select operational item"
+                                    placeholder="Select Checklist"
                                 />
+                            )}
 
-                                <p
-                                    className={`text-primary w-max ml-auto mt-2 font-semibold text-right text-xs sm:text-sm ${isUpdatedMode ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                                    onClick={() => !isUpdatedMode && setAddItems(true)}
-                                >
-                                    +Add New Item
-                                </p>
+                            <TextareaField
+                                label="Question"
+                                className="placeholder:text-themeLight"
+                                name="question"
+                                disabled={isUpdatedMode}
+                            />
 
-                                {addItems && !isUpdatedMode && (
-                                    <div className="flex gap-x-4 mt-2 justify-normal md:justify-between">
-                                        <input
-                                            ref={inputRef}
-                                            placeholder="Add Item Name"
-                                            className="h-10 w-full rounded-md border border-input focus:outline-none bg-background px-3 py-2 !text-xs placeholder:text-themeLight min-full sm:min-w-[275px]"
-                                            type="text"
-                                            onChange={(e) => setItemName(e.target.value)}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={resetItemField}
-                                        >
-                                            <RxCross2 className="text-red-500 hover:text-red-400" size={18} />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleAddItem(itemName)}
-                                        >
-                                            <MdDone className="text-green-600 hover:text-secondary" size={18} />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                            <TextareaField
+                                label="Note"
+                                name="note"
+                                disabled={isUpdatedMode}
+                            />
 
-                        <MultiDateField
-                            label="Key Follow-up dates"
-                            name="follow_up_dates"
-                            disabled={isUpdatedMode}
-                        />
+                            <InputField
+                                label="Action Items"
+                                className="placeholder:text-themeLight"
+                                name="action_item"
+                                disabled={isUpdatedMode}
+                            />
 
-                        {selectedDates.length > 0 && (
-                            <div>
-                                <Label size="xs" className={`${isUpdatedMode ? 'text-gray-400' : ''}`}>Selected Dates(s)</Label>
-                                <div className="flex flex-col gap-2 mt-2">
-                                    {selectedDates.map((date, index) => (
-                                        <div key={index} className="flex gap-x-2">
-                                            <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${isUpdatedMode ? 'cursor-not-allowed text-gray-300' : ''}`}>
-                                                <span>{date}</span>
-                                            </div>
+                            <FileUploadField
+                                label="Upload File"
+                                module="checklist"
+                                name="file"
+                                title="Upload"
+                                uploadedFile={uploadedFile}
+                                setUploadedFile={setUploadedFile}
+                                handleFileUpload={(e, setValue) => !isUpdatedMode && handleFileUploadDocs(e, setValue)}
+                                disabled={isUpdatedMode}
+                            />
+
+                            {(selectedType === "operations" || (isUpdatedMode && selectedChecklistItem?.operational_item)) && (
+                                <div>
+                                    <SelectField
+                                        label="Operational Item"
+                                        name="operational_item"
+                                        isDisabled={isUpdatedMode}
+                                        options={[
+                                            ...(operationalItems.map((item: OperationalItemsProps) => ({
+                                                value: item.name,
+                                                label: item.name
+                                            })))
+                                        ]}
+                                        placeholder="Select operational item"
+                                    />
+
+                                    <p
+                                        className={`text-primary w-max ml-auto mt-2 font-semibold text-right text-xs sm:text-sm ${isUpdatedMode ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                        onClick={() => !isUpdatedMode && setAddItems(true)}
+                                    >
+                                        +Add New Item
+                                    </p>
+
+                                    {addItems && !isUpdatedMode && (
+                                        <div className="flex gap-x-4 mt-2 justify-normal md:justify-between">
+                                            <input
+                                                ref={inputRef}
+                                                placeholder="Add Item Name"
+                                                className="h-10 w-full rounded-md border border-input focus:outline-none bg-background px-3 py-2 !text-xs placeholder:text-themeLight min-full sm:min-w-[275px]"
+                                                type="text"
+                                                onChange={(e) => setItemName(e.target.value)}
+                                            />
                                             <button
                                                 type="button"
-                                                disabled={isUpdatedMode}
-                                                onClick={() => !isUpdatedMode && handleRemoveDate(date)}
+                                                onClick={resetItemField}
                                             >
-                                                <RxCross2 size={15}  className={`${isUpdatedMode ? 'cursor-not-allowed text-gray-400' : ''}`}/>
+                                                <RxCross2 className="text-red-500 hover:text-red-400" size={18} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAddItem(itemName)}
+                                            >
+                                                <MdDone className="text-green-600 hover:text-secondary" size={18} />
                                             </button>
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {isUpdatedMode && (
-                            <>
-                                <TextareaField
-                                    label="Pharmacy comments"
-                                    className="placeholder:text-themeLight"
-                                    name="pharmacy_comments"
-                                />
-
-                                <SelectField
-                                    label="Status"
-                                    name="status"
-                                    options={[
-                                        { value: "inprogress", label: "Inprogress" },
-                                        { value: "todo", label: "Todo" },
-                                        { value: "pending", label: "Pending" },
-                                    ]}
-                                />
-                            </>
-                        )}
-
-                        {!isUpdatedMode && (
-                            <MultiSelectField
-                                label="Pharmacy"
-                                name="pharmacy_ids"
-                                isMulti
-                                options={[
-                                    { value: "all", label: "All" },
-                                    ...(pharmacies.map((pharmacy: PharmacyCardProps) => ({
-                                        value: pharmacy.pharmacy_id,
-                                        label: pharmacy.pharmacy_name
-                                    })))
-                                ]}
-                                placeholder="Select Pharmacy"
+                            <MultiDateField
+                                label="Key Follow-up dates"
+                                name="follow_up_dates"
+                                disabled={isUpdatedMode}
                             />
-                        )}
 
-                        <SubmitButton
-                            type="submit"
-                            className="text-primary hover:text-white bg-secondary"
-                        >
-                            {dataSource ? "Update" : "Save"}
-                        </SubmitButton>
-                    </Form>
+                            {selectedDates.length > 0 && (
+                                <div>
+                                    <Label size="xs" className={`${isUpdatedMode ? 'text-gray-400' : ''}`}>Selected Dates(s)</Label>
+                                    <div className="flex flex-col gap-2 mt-2">
+                                        {selectedDates.map((date, index) => (
+                                            <div key={index} className="flex gap-x-2">
+                                                <div className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${isUpdatedMode ? 'cursor-not-allowed text-gray-300' : ''}`}>
+                                                    <span>{date}</span>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    disabled={isUpdatedMode}
+                                                    onClick={() => !isUpdatedMode && handleRemoveDate(date)}
+                                                >
+                                                    <RxCross2 size={15}  className={`${isUpdatedMode ? 'cursor-not-allowed text-gray-400' : ''}`}/>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {isUpdatedMode && (
+                                <>
+                                    <TextareaField
+                                        label="Pharmacy comments"
+                                        className="placeholder:text-themeLight"
+                                        name="pharmacy_comments"
+                                    />
+
+                                    <SelectField
+                                        label="Status"
+                                        name="status"
+                                        options={[
+                                            { value: "inprogress", label: "Inprogress" },
+                                            { value: "todo", label: "Todo" },
+                                            { value: "pending", label: "Pending" },
+                                        ]}
+                                    />
+                                </>
+                            )}
+
+                            {!isUpdatedMode && !isUpdateFlow && (
+                                <MultiSelectField
+                                    label="Pharmacy"
+                                    name="pharmacy_ids"
+                                    isMulti
+                                    options={[
+                                        { value: "all", label: "All" },
+                                        ...(pharmacies.map((pharmacy: PharmacyCardProps) => ({
+                                            value: pharmacy.pharmacy_id,
+                                            label: pharmacy.pharmacy_name
+                                        })))
+                                    ]}
+                                    placeholder="Select Pharmacy"
+                                />
+                            )}
+
+                            <SubmitButton
+                                type="submit"
+                                className="text-primary hover:text-white bg-secondary"
+                            >
+                                {dataSource ? "Update" : "Save"}
+                            </SubmitButton>
+                        </Form>
                 </Formik>
             </div>
         </Modal>

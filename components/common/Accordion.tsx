@@ -31,7 +31,7 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full mx-auto mt-2">
       {items?.map((item: any, index: number) => (
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
           onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>

@@ -44,6 +44,7 @@ const BarChart = ({
     topValueSize,
     barThickness,
     useLogarithmicScale = false,
+    height = "100%", 
 }: any) => {
 
     const getGradient = (ctx: any, chartArea: any) => {
@@ -86,7 +87,7 @@ const BarChart = ({
             padding: {
                 left: 0,
                 right: 0,
-                top: 0,
+                top: showTopValues ? 20 : 0, // Add top padding if showing values
                 bottom: 0
             }
         },
@@ -99,7 +100,7 @@ const BarChart = ({
                     pointStyle: pointStyle,
                     boxWidth: 8,
                     boxHeight: 8,
-                    padding: 30,
+                    padding: 20, // Reduced padding to save space
                     borderRadius: 50,
                 },
             },
@@ -107,14 +108,14 @@ const BarChart = ({
                 backgroundColor: '#93C5FD',
                 titleColor: '#1E3A8A',
                 bodyColor: '#1E3A8A',
-                                ...tooltipOptions,
+                ...tooltipOptions,
             },
             datalabels: {
                 display: showTopValues,
                 color: "black",
                 anchor: "end",
                 align: "top",
-                font: { size: topValueSize },
+                font: { size: topValueSize || 10 }, // Provide a default size
                 formatter: (value, context) => {
                     const datasetIndex = context.datasetIndex;
                     const dataIndex = context.dataIndex;
@@ -142,10 +143,10 @@ const BarChart = ({
                     display: true,
                     text: yAxisTitle,
                     color: yTitleColor,
-                    font: { size: 14 },
+                    font: { size: 12 },
                 },
                 ticks: {
-                    padding: 10,
+                    padding: 5, 
                     stepSize: !useLogarithmicScale ? stepSize : undefined,
                     color: yLabelColor,
                     callback: function(value: number) {
@@ -167,7 +168,11 @@ const BarChart = ({
         },
     };
 
-    return <Bar data={data} options={options} />;
+    return (
+        <div style={{ position: 'relative', height: height, width: '100%' }}>
+            <Bar data={data} options={options} />
+        </div>
+    );
 };
 
 export default BarChart;

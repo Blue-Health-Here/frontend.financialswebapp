@@ -112,7 +112,7 @@ const DashboardSection = () => {
             <h3 className="text-themeGrey text-lg md:text-xl font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:auto-rows-fr">
                 <StatsSection />
-                <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg p-6 flex flex-col">
+                  <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg  p-4 md:p-6 flex flex-col">
                     <div className="hidden">
                         <button 
                             onClick={toggleScaleType}
@@ -121,14 +121,14 @@ const DashboardSection = () => {
                             {useLogScale ? 'Switch to Linear Scale' : 'Switch to Log Scale'}
                         </button>
                     </div>
-                    <div className="flex-1 flex items-center justify-center">
+                    <div className="flex-1" style={{ height: 'calc(100% - 30px)' }}>
                         {!loading && adminExpenseGraphData && adminExpenseGraphData.length > 0 ? (
                             <BarChart
                                 Xlabels={labels}
                                 Ylabels={datasets}
                                 useGradient={false}
                                 barColors={["#1E3A8A"]}
-                                barThickness={8}
+                                barThickness={width < 768 ? 4 : 8}
                                 yAxisTitle="Total Expense"
                                 pointStyle="circle"
                                 showTopValues={false}
@@ -137,9 +137,12 @@ const DashboardSection = () => {
                                 showXLabels={true}
                                 useLogarithmicScale={useLogScale}
                                 showVerticalGridLines={false}
+                                height="100%"
                             />
                         ) : (
-                            <p>Loading expense data...</p>
+                            <div className="h-full flex items-center justify-center">
+                                <p>Loading expense data...</p>
+                            </div>
                         )}
                     </div>
                 </div>

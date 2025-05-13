@@ -114,18 +114,25 @@ export const addNewChecklistValidationSchema = Yup.object().shape({
     checklist_type: Yup.string().required("Checklist type is required"),
 });
 
-export const assignChecklistValidationSchema = (selectedType: string) => {
+export const assignChecklistValidationSchema = (selectedType:string, isUpdateMode = false) => {
     const baseSchema: Record<string, any> = {
         question: Yup.string().required('Question is required'),
         note: Yup.string().required('Note is required'),
         action_item: Yup.string().required('Action item is required'),
         follow_up_dates: Yup.array().min(1, 'At least one follow-up date is required'),
-        pharmacy_ids: Yup.array().min(1, 'At least one pharmacy must be selected'),
         checklist_id: Yup.string().required('Checklist is required'),
-        file: Yup.object({
+                file: Yup.object({
             filename: Yup.string().required('File is required'),
-        }).required('File is required')
+        }).required('File is required') 
     };
+
+    if (!isUpdateMode) {
+        baseSchema.pharmacy_ids = Yup.array().min(1, 'At least one pharmacy must be selected');
+    }
+
+    if (!isUpdateMode) {
+        baseSchema.file = Yup.mixed();
+    }
 
     if (selectedType === 'operations') {
         baseSchema.operational_item = Yup.string().required('Operational item is required');
@@ -133,7 +140,6 @@ export const assignChecklistValidationSchema = (selectedType: string) => {
 
     return Yup.object().shape(baseSchema);
 };
-
 
 export const updatePharmacyChecklistValidationSchema = Yup.object().shape({
         pharmacy_comments: Yup.string().required('Add comments'),
