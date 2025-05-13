@@ -114,16 +114,16 @@ export const addNewChecklistValidationSchema = Yup.object().shape({
     checklist_type: Yup.string().required("Checklist type is required"),
 });
 
-export const assignChecklistValidationSchema = (selectedType:string, isUpdateMode = false) => {
+export const assignChecklistValidationSchema = (selectedType: string, isUpdateMode = false) => {
     const baseSchema: Record<string, any> = {
         question: Yup.string().required('Question is required'),
         note: Yup.string().required('Note is required'),
         action_item: Yup.string().required('Action item is required'),
         follow_up_dates: Yup.array().min(1, 'At least one follow-up date is required'),
         checklist_id: Yup.string().required('Checklist is required'),
-                file: Yup.object({
+        file: Yup.object({
             filename: Yup.string().required('File is required'),
-        }).required('File is required') 
+        }).required('File is required')
     };
 
     if (!isUpdateMode) {
@@ -142,6 +142,29 @@ export const assignChecklistValidationSchema = (selectedType:string, isUpdateMod
 };
 
 export const updatePharmacyChecklistValidationSchema = Yup.object().shape({
-        pharmacy_comments: Yup.string().required('Add comments'),
-        status: Yup.string().required('Add Status')
+    pharmacy_comments: Yup.string().required('Add comments'),
+    status: Yup.string().required('Add Status')
+});
+
+export const PharmacyProfileValidationSchema = Yup.object().shape({
+    pharmacy_name: Yup.string()
+        .required('Pharmacy Name is required'),
+    address: Yup.string()
+        .required('Address is required'),
+    email: Yup.string()
+        .email('Invalid email address'),
+    contact: Yup.string()
+        .required('Contact is required')
+        .matches(/^[0-9+\-() ]+$/, 'Invalid contact number'),
+
+    services_offered: Yup.string()
+        .nullable(),
+});
+
+export const adminProfileSchema = Yup.object().shape({
+    name: Yup.string()
+        .required('Full name is required')
+        .max(100, 'Full name must be at most 100 characters'),
+    email: Yup.string()
+        .email('Invalid email format')
 });

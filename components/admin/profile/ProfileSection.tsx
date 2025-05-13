@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { fetchProfileData, postProfileUpdate } from '@/services/adminServices';
 import toast from 'react-hot-toast';
+import { adminProfileSchema } from '@/utils/validationSchema';
 
 const ProfileSection = () => {
     const [initialVals, setInitialVals] = useState<{ name?: string; email?: string; file?: File | null | string }>({ name: "", email: "", file: "" })
@@ -20,7 +21,7 @@ const ProfileSection = () => {
     const fileInputRef: any = useRef(null);
     const dispatch = useDispatch();
     const isFetched = useRef(false);
-    
+
     const fetchData = async () => {
         await fetchProfileData(dispatch);
     };
@@ -69,10 +70,11 @@ const ProfileSection = () => {
 
     return (
         <div>
-            <Formik 
-                initialValues={initialVals} 
+            <Formik
+                initialValues={initialVals}
                 enableReinitialize={true}
                 onSubmit={handleSubmit}
+                validationSchema={adminProfileSchema}
             >
                 {({ values }) => {
                     return (

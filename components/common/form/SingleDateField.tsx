@@ -9,12 +9,16 @@ interface SingleDateFieldProps {
   label?: string;
   name: string;
   className?: string;
+  dateplaceholder?: string;
+  onChange?: (date: string) => void;
 }
 
 const SingleDateField: React.FC<SingleDateFieldProps> = ({
   className,
   label,
   name,
+  dateplaceholder = "Select a date",
+  onChange,
 }) => {
   const [field, meta, helpers] = useField(name);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -50,7 +54,28 @@ const SingleDateField: React.FC<SingleDateFieldProps> = ({
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
-    helpers.setValue(date ? date.toISOString().split("T")[0] : "");
+
+    const formattedDate = date
+      ? date.getFullYear() +
+      "-" +
+      String(date.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(date.getDate()).padStart(2, "0")
+      : "";
+    helpers.setValue(formattedDate);
+    if (onChange && formattedDate) {
+      onChange(formattedDate);
+    }
+    setOpenCalendar(false);
+  };
+
+  const handleClearDate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedDate(null);
+    helpers.setValue("");
+    if (onChange) {
+      onChange("");
+    }
   };
 
   return (
@@ -62,13 +87,24 @@ const SingleDateField: React.FC<SingleDateFieldProps> = ({
           onClick={() => setOpenCalendar(!openCalendar)}
         >
           <span className="text-muted-foreground">
-            {selectedDate ? selectedDate.toDateString() : "Select a date"}
+            {selectedDate ? selectedDate.toDateString() : dateplaceholder}
           </span>
-          <Calendar size={14} className="text-gray-500" />
+          <div className="flex items-center">
+            {selectedDate && (
+              <button
+                type="button"
+                className="text-gray-400 hover:text-gray-600 mr-2"
+                onClick={handleClearDate}
+              >
+                ✕
+              </button>
+            )}
+            <Calendar size={14} className="text-gray-500" />
+          </div>
         </div>
         {openCalendar && (
           <div
-            className="absolute left-0 bottom-full z-50 bg-white shadow-lg border rounded-md"
+            className="absolute left-0 top-full mt-2 z-50 bg-white shadow-lg border rounded-md"
             style={{
               padding: 0,
               margin: 0,

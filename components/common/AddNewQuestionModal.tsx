@@ -84,7 +84,7 @@ const AddNewQuestionModal: React.FC<EditAssignTaskModalProps> = ({
     };
 
     useEffect(() => {
-        if (!isFetchedOperations.current && selectedType === "operations") {
+        if (!isFetchedOperations.current && selectedType === "operations" && !isUpdatedMode) {
             fetchAllOperationalItems(dispatch);
             isFetchedOperations.current = true;
         }
