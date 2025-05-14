@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { UploadedFileProps } from "@/utils/types";
+import { CourseProps, UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
 import {
   postAdminLicenseUploadFile,
@@ -34,6 +34,7 @@ const PharmacyDetail = () => {
   const { pharmacyDetailsData, isAddQuestion } = useSelector((state: RootState) => state.global);
   const { pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
   const [selectedChecklistType, setSelectedChecklistType] = useState('');
+  const [searchCourse, setSearchCourse] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
@@ -122,9 +123,14 @@ const PharmacyDetail = () => {
     };
   }, [isAddQuestion]);
 
+  const filterCourses = pharmacyCourses.filter((course: CourseProps) => {
+    const nameMatches = course.title.toLowerCase().includes(searchCourse.toLowerCase());
+    return nameMatches;
+  });
+
   return (
     <>
-      <div className="px-5 md:px-6 py-8 bg-white shadow-lg rounded-lg">
+      <div className="px-4 md:px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
           <div className="flex gap-x-2 items-center text-grey">
             <div
@@ -142,9 +148,9 @@ const PharmacyDetail = () => {
               {pharmacyDetailsData?.pharmacy_name || "Loading..."}
             </p>
           </div>
-          <div className="flex gap-x-4 items-center">
-            <FileDownloadField title="Reports" />
-            <Image src="/delete-icon.svg" alt="" width={20} height={20} />
+          <div className="flex gap-x-3 items-center">
+            <FileDownloadField title="Reports" className="w-40"/>
+            <Image src="/delete-icon.svg" alt="" width={16} height={16} className="md:w-5 md:h-5"/>
           </div>
         </div>
         <PharmacyDetailCard pharmacyDetailsData={pharmacyDetailsData} />
@@ -171,7 +177,7 @@ const PharmacyDetail = () => {
         });
 
         return (
-          <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
+          <div className="w-full mt-6 px-4 md:px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
             <div className="flex flex-col gap-6">
               <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
                 {type.charAt(0).toUpperCase() + type.slice(1) + " Checklist"}
@@ -193,7 +199,7 @@ const PharmacyDetail = () => {
           </div>
         );
       })}
-      <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
+      <div className="mt-6 px-4 md:px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
           <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
             Courses
@@ -203,6 +209,8 @@ const PharmacyDetail = () => {
               name="email"
               placeholder="Search Courses"
               className="h-[42px] border-none shadow-lg rounded-lg font-medium"
+              value={searchCourse}
+              onChange={(e) => setSearchCourse(e.target.value)} 
             />
             <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
               <IoSearch className="w-5 h-5" />
@@ -210,7 +218,7 @@ const PharmacyDetail = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pharmacyCourses?.length > 0 && pharmacyCourses.map((course: any) => (
+          {filterCourses?.length > 0 && filterCourses.map((course: any) => (
             <CourseCard
               key={course.id}
               {...course}

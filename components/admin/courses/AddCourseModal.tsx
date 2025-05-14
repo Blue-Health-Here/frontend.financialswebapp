@@ -62,6 +62,7 @@ const AddCourseModal = () => {
             const formData = new FormData();
             formData.append("file", event.target.files[0]);
             const response = await postCoursesUploadFile(dispatch, formData);
+    console.log("response",response)
             
             if (response?.success) {
                 setUploadedFile(response.data);

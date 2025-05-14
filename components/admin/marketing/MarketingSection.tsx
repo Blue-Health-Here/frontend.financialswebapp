@@ -23,6 +23,7 @@ import {
 } from "@/utils/types";
 
 const MarketingSection = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const { isAddMarketing, marketingMaterials } = useSelector(
     (state: RootState) => state.marketing
   );
@@ -56,6 +57,10 @@ const MarketingSection = () => {
     dispatch(setIsAddMarketing(true)); // Open modal
   };
 
+    const filterCourses = marketingMaterials.filter((marketing: MarketingMaterialCardProps) => {
+        const nameMatches = marketing.title.toLowerCase().includes(searchQuery.toLowerCase());
+        return nameMatches; });
+
   return (
     <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
       {/* Header */}
@@ -73,6 +78,8 @@ const MarketingSection = () => {
         <div className="relative w-[390px] sm:max-w-md">
           <Input
             name="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} 
             placeholder="Search Marketing Material"
             className="h-[42px] border-none shadow-lg rounded-lg font-medium"
           />
@@ -84,8 +91,8 @@ const MarketingSection = () => {
 
       {/* Marketing Materials Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {marketingMaterials.length > 0 &&
-          marketingMaterials.map(
+        {filterCourses.length > 0 &&
+          filterCourses.map(
             (marketing: MarketingMaterialCardProps, index: number) => (
               <InfoCard
                 key={index}

@@ -24,6 +24,7 @@ import {
   setChecklists, setOnboardingdTasklist,
   setOperationalItems, setOperationsTasklist
 } from "@/store/features/admin/checklist/adminChecklistSlice";
+import { fetchExpenseCategories } from "./globalService";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -243,7 +244,8 @@ export const postCoursesUploadFile = async (dispatch: AppDispatch, data: any) =>
   return apiHandler(dispatch, 'post', '/v1/courses-upload-file', {
     data,
     isFormData: true,
-    successMessage: "Course file uploaded successfully!"
+    successMessage: "Course file uploaded successfully!",
+    // onError: 
   });
 };
 
@@ -365,7 +367,10 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id: string) => {
   return apiHandler(dispatch, 'get', '/v1/admin-expense', {
     params: { pharmacy_id: id },
     successMessage: "Expense fetched successfully!",
-    onSuccess: (data) => dispatch(setAdminExpenseData(data)),
+    onSuccess: (data) => {
+      dispatch(setAdminExpenseData(data));
+      fetchExpenseCategories(dispatch);
+    },
     onError: () => dispatch(setAdminExpenseData([]))
   });
 };

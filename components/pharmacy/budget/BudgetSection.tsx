@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels } from "@/utils/constants";
+import { budgetStatsData, categories, expenseCategoriesData, fullDatasets, fullLabels } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -133,7 +133,7 @@ const BudgetSection = () => {
             <div className="mt-6 px-6 py-8 space-y-4 bg-white shadow-lg rounded-lg">
                 <h2 className="text-lg sm:text-xl font-semibold">Expense Categories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {expenseCategories.map((category, index) => (
+                    {expenseCategoriesData.map((category, index) => (
                         <ExpenseCategoryCard key={index} category={category} />
                     ))}
                 </div>

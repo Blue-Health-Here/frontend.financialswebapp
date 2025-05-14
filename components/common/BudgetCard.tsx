@@ -36,7 +36,7 @@ export const BudgetCard = ({
   };
   return (
     <div
-      className={`bg-white p-6 shadow-md rounded-lg flex flex-col ${className}`}
+      className={`p-6 min-h-36 bg-white shadow-lg rounded-lg flex flex-col gap-4 ${className}`}
     >
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-sm sm:text-lg md:text-xl font-bold">

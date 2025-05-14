@@ -1,6 +1,5 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Pencil, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -12,7 +11,6 @@ import DeleteAccountModal from "./DeleteAccountModal";
 import InputField from "@/components/common/form/InputField";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { UseSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import {
   fetchProfileDataPharmacy, postProfileUpdatePharmacy, fetchPharmacyLicense, deletePharmacyLicense, fetchPharmacyCertifications, postCertificationsUploadFile, deletePharmacyCertification
@@ -29,6 +27,7 @@ const ProfileSection = () => {
   const { certificationsData } = useSelector((state: RootState) => state.global);
   const [isCloseModal, setIsCloseModal] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [isImageRemoved, setIsImageRemoved] = useState(false);
   const fileInputRef: any = useRef(null);
   const hasFetched: any = useRef(false);
   const dispatch = useDispatch();
@@ -77,14 +76,16 @@ const ProfileSection = () => {
     }
   }, [profileData]);
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
-      setProfile(file);
-    } else {
-      toast.error("Please select a valid image file (png, jpg, jpeg).");
-    }
-  };
+const handleFileChange = (e: any) => {
+  const file = e.target.files[0];
+  if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
+    setProfile(file);
+    setIsImageRemoved(false);
+  } else {
+    toast.error("Please select a valid image file (png, jpg, jpeg).");
+  }
+};
+
 
   const handleSubmit = async (values: any) => {
     const formData = new FormData();
@@ -130,6 +131,7 @@ const ProfileSection = () => {
 
   const handleRemoveClick = () => {
     setProfile(null);
+    setIsImageRemoved(true);
   };
 
   const handleDelete = () => {
@@ -205,17 +207,19 @@ const ProfileSection = () => {
                 <div className="flex flex-col items-center w-auto mt-4">
                   <div className="relative">
                     <div className="w-full h-full relative overflow-hidden rounded-md">
-                      <Image
-                        src={
-                          profile
-                            ? URL.createObjectURL(profile)
-                            : (profileData?.image_url ?? "/default-profile.png")
-                        }
-                        alt="Profile"
-                        width={120}
-                        height={120}
-                        className="rounded-md object-cover"
-                      />
+                        <Image
+                          src={
+                            profile
+                              ? URL.createObjectURL(profile)
+                              : isImageRemoved
+                                ? "/default-profile.png"
+                                : (profileData?.image_url ?? "/default-profile.png")
+                          }
+                          alt="Profile"
+                          width={120}
+                          height={120}
+                          className="rounded-md object-cover"
+                        />
                     </div>
                     <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
                       <button

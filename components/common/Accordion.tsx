@@ -31,7 +31,7 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full mx-auto mt-2">
       {items?.map((item: any, index: number) => (
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
           onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>
@@ -125,7 +125,7 @@ const Accordion: React.FC<AccordionProps> = ({
                           </span>
                         </div>
                         <button
-                          className="text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
+                          className="text-gray-500 hover:text-blue-500 transition flex-shrink-0"
                           onClick={() => handleEditTasklist && handleEditTasklist(task)}
                         >
                           <Image
