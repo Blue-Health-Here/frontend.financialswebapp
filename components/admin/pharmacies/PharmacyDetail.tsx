@@ -132,7 +132,7 @@ const PharmacyDetail = () => {
     <>
       <div className="px-4 md:px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-          <div className="flex gap-x-2 items-center text-grey">
+          <div className="flex gap-x-2 flex-wrap gap-y-4 items-center text-grey">
             <div
               onClick={() => router.back()}
               className="flex gap-x-2 items-center"
@@ -177,8 +177,8 @@ const PharmacyDetail = () => {
         });
 
         return (
-          <div className="w-full mt-6 px-4 md:px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
-            <div className="flex flex-col gap-6">
+          <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
+            <div className="flex flex-col">
               <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
                 {type.charAt(0).toUpperCase() + type.slice(1) + " Checklist"}
               </h2>

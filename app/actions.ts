@@ -53,8 +53,8 @@ export const signInAction = async (formData: FormData) => {
 
   const { data: { session }, error } = await supabase.auth.getSession();
 
-  if ((userMessage && !user) || (!session && error)) {
-    return encodedRedirect("error", "/sign-in", userMessage?.message || error?.message || "Unknown error");
+   if ((userMessage && !user) || (!session && error)) {
+    return { error: userMessage?.message || error?.message || "Unknown error" };
   }
 
   const role = await getUserRole(user);

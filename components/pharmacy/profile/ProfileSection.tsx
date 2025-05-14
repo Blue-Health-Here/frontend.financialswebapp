@@ -270,7 +270,7 @@ const ProfileSection = () => {
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                       >
-                        <span className="text-sm truncate">
+                        <span className="text-xs md:text-sm truncate">
                           {license.filename}
                         </span>
 
@@ -313,7 +313,7 @@ const ProfileSection = () => {
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                       >
-                        <span className="text-sm truncate">
+                        <span className="text-xs md:text-sm truncate">
                           {license.filename}
                         </span>
 
