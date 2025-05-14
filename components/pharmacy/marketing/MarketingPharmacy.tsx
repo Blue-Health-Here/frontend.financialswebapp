@@ -14,15 +14,22 @@ import PharmacyInfoCrad from "@/components/common/PharmacyInfoCrad";
 const MarketingPharmacy = () => {
     const { marketingMaterials } = useSelector((state: RootState) => state.pharmacyMarketing);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
     const dispatch = useDispatch();
     const isFetched = useRef(false);
-    
+
     useEffect(() => {
         if (!isFetched.current) {
             isFetched.current = true;
-        fetchAllPharmacyMarketingMaterials(dispatch).finally(() => setLoading(false));
+            fetchAllPharmacyMarketingMaterials(dispatch).finally(() => setLoading(false));
         }
     }, [dispatch]);
+
+    const filterMarketing = marketingMaterials.filter((marketing: pharmacyMarketingProps) => {
+        const nameMatches = marketing.title.toLowerCase().includes(searchQuery.toLowerCase());
+        return nameMatches;
+    });
+
 
     return (
         <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
@@ -32,7 +39,12 @@ const MarketingPharmacy = () => {
 
                 </div>
                 <div className="relative w-[390px] sm:max-w-md">
-                    <Input name="email" placeholder="Search Courses" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
+                    <Input
+                        name="email"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search Marketing Material"
+                        className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
                         <IoSearch className="w-5 h-5" />
                     </span>
@@ -41,21 +53,21 @@ const MarketingPharmacy = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
                     <TextMessage text="Loading courses..." />
-                ):
-                (marketingMaterials.length > 0 ? marketingMaterials.map((course: pharmacyMarketingProps, index: number) => (
-                    <PharmacyInfoCrad
-                     key={index}
-                     title={course.title}
-                     description={course.description}
-                     link={course.link}
-                     file_url={course.file_url}
-                     filename={course.filename}
-                   />
-                )) : (
-                    <TextMessage text="Courses not found." />
-                ))}
+                ) :
+                    (filterMarketing.length > 0 ? filterMarketing.map((course: pharmacyMarketingProps, index: number) => (
+                        <PharmacyInfoCrad
+                            key={index}
+                            title={course.title}
+                            description={course.description}
+                            link={course.link}
+                            file_url={course.file_url}
+                            filename={course.filename}
+                        />
+                    )) : (
+                        <TextMessage text="Courses not found." />
+                    ))}
             </div>
-            
+
         </div>
     );
 };

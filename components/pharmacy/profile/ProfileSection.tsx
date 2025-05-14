@@ -19,6 +19,8 @@ import { License, UploadedFileProps } from "@/utils/types";
 import { postLicenseUploadFile } from "@/services/pharmacyServices";
 import toast from "react-hot-toast";
 import TextMessage from "@/components/common/TextMessage";
+import { PharmacyProfileValidationSchema } from "@/utils/validationSchema";
+import { fileDownload } from "@/components/admin/pharmacies/Licensing";
 
 const ProfileSection = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
@@ -41,7 +43,7 @@ const ProfileSection = () => {
     license: [],
     certificate: []
   });
-  
+
   const fetchData = async () => {
     try {
       await Promise.all([
@@ -76,15 +78,15 @@ const ProfileSection = () => {
     }
   }, [profileData]);
 
-const handleFileChange = (e: any) => {
-  const file = e.target.files[0];
-  if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
-    setProfile(file);
-    setIsImageRemoved(false);
-  } else {
-    toast.error("Please select a valid image file (png, jpg, jpeg).");
-  }
-};
+  const handleFileChange = (e: any) => {
+    const file = e.target.files[0];
+    if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
+      setProfile(file);
+      setIsImageRemoved(false);
+    } else {
+      toast.error("Please select a valid image file (png, jpg, jpeg).");
+    }
+  };
 
 
   const handleSubmit = async (values: any) => {
@@ -102,7 +104,7 @@ const handleFileChange = (e: any) => {
     await postProfileUpdatePharmacy(dispatch, formData);
   };
 
-  const handleFileUpload = async ( event: any, setValue: (value: any) => void, fileType: "license" | "certification" ) => {
+  const handleFileUpload = async (event: any, setValue: (value: any) => void, fileType: "license" | "certification") => {
     try {
       const formData = new FormData();
       formData.append("file", event.target.files[0]);
@@ -159,6 +161,7 @@ const handleFileChange = (e: any) => {
         initialValues={initialVals}
         enableReinitialize={true}
         onSubmit={handleSubmit}
+        validationSchema={PharmacyProfileValidationSchema}
       >
         {({ values }) => {
           return (
@@ -166,7 +169,6 @@ const handleFileChange = (e: any) => {
               <div className="flex items-center justify-between mb-4">
                 <h1 className="text-lg md:text-xl font-semibold">Account</h1>
                 <SubmitButton
-                  type="submit"
                   className="bg-secondary text-primary hover:text-white"
                 >
                   Save Changes
@@ -207,19 +209,19 @@ const handleFileChange = (e: any) => {
                 <div className="flex flex-col items-center w-auto mt-4">
                   <div className="relative">
                     <div className="w-full h-full relative overflow-hidden rounded-md">
-                        <Image
-                          src={
-                            profile
-                              ? URL.createObjectURL(profile)
-                              : isImageRemoved
-                                ? "/default-profile.png"
-                                : (profileData?.image_url ?? "/default-profile.png")
-                          }
-                          alt="Profile"
-                          width={120}
-                          height={120}
-                          className="rounded-md object-cover"
-                        />
+                      <Image
+                        src={
+                          profile
+                            ? URL.createObjectURL(profile)
+                            : isImageRemoved
+                              ? "/default-profile.png"
+                              : (profileData?.image_url ?? "/default-profile.png")
+                        }
+                        alt="Profile"
+                        width={120}
+                        height={120}
+                        className="rounded-md object-cover"
+                      />
                     </div>
                     <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-2">
                       <button
@@ -268,19 +270,19 @@ const handleFileChange = (e: any) => {
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                       >
-                        <span className="text-sm truncate">
+                        <span className="text-xs md:text-sm truncate">
                           {license.filename}
                         </span>
 
                         <div className="flex items-center space-x-2">
-                          <button className="p-1 text-blue-500 hover:text-blue-700">
+                          <button onClick={() => fileDownload(license)} type="button" className="p-1 text-blue-500 hover:text-blue-700">
                             <img
                               src="/downloadFile.svg"
                               alt="Download"
                               className="w-4 h-4"
                             />
                           </button>
-                          <button className="p-1 text-red-500 hover:text-red-700">
+                          <button type="button" className="p-1 text-red-500 hover:text-red-700">
                             <img
                               src="/delete-icon.svg"
                               onClick={() => handleDeleteFile(license.id, "license")}
@@ -299,7 +301,6 @@ const handleFileChange = (e: any) => {
                     isMultiSelect={false}
                     setUploadedFile={setUploadedFile}
                     handleFileUpload={(e, setValue) => handleFileUpload(e, setValue, "license")}
-
                     className="sm:w-60 border-primary mt-4"
                   />
                 </div>
@@ -312,19 +313,19 @@ const handleFileChange = (e: any) => {
                         key={license.id}
                         className="flex items-center justify-between p-2 rounded-md border border-grey-500"
                       >
-                        <span className="text-sm truncate">
+                        <span className="text-xs md:text-sm truncate">
                           {license.filename}
                         </span>
 
                         <div className="flex items-center space-x-2">
-                          <button className="p-1 text-blue-500 hover:text-blue-700">
+                          <button onClick={() => fileDownload(license)} type="button" className="p-1 text-blue-500 hover:text-blue-700">
                             <img
                               src="/downloadFile.svg"
                               alt="Download"
                               className="w-4 h-4"
                             />
                           </button>
-                          <button className="p-1 text-red-500 hover:text-red-700">
+                          <button type="button" className="p-1 text-red-500 hover:text-red-700">
                             <img
                               src="/delete-icon.svg"
                               onClick={() => handleDeleteFile(license.id, "certification")}

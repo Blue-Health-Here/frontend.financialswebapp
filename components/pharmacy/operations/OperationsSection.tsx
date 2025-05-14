@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
 import Accordion from "@/components/common/Accordion";
@@ -13,10 +13,12 @@ import { fetchPharmacyAssignChecklist, fetchPharmacyChecklist } from "@/services
 import { setLoading } from "@/store/features/pharmacy/expense/pharmacyExpenseSlice";
 import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
+import TextMessage from "@/components/common/TextMessage";
 
 
 const OperationsSection = () => {
   const { pharmacyChecklists, pharmacyAssignChecklists, isAddQuestion } = useSelector((state: RootState) => state.global);
+  const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch()
   const isFetched = useRef(false);
   useEffect(() => {
@@ -34,6 +36,13 @@ const OperationsSection = () => {
     dispatch(setSelectedChecklistItem(item))
     dispatch(setIsAddQuestion(true));
   };
+
+    const filteredPharmacyChecklists = pharmacyChecklists?.checklist?.filter((checklist: any) => {
+    const nameMatches = checklist.checklist_name.toLowerCase().includes(searchQuery.toLowerCase());
+    return nameMatches
+  });
+
+
   return (
     <>
       <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg">
@@ -48,18 +57,11 @@ const OperationsSection = () => {
             {({ isSubmitting }) => (
               <Form className="flex md:min-w-64 flex-wrap pb-6 text-grey gap-2 [&>input]:mb-3 [&>input]:placeholder:text-themeLight [&>input]:placeholder:text-[12px]">
                 <FileDownloadField title="Reports" className="min-w-48" parentClassName="flex-1" />
-                <SelectField
-                  className="border-none shadow-lg rounded-lg font-medium min-w-48"
-                  parentClassName="flex-1"
-                  name="category"
-                  options={[
-                    { value: "Al Categories", label: "Al Categories" },
-                    { value: "operational", label: "Operational" },
-                  ]}
-                />
                 <div className="relative min-w-48 flex-1">
                   <Input
                     name="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search Checklist"
                     className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
                   />
@@ -82,15 +84,19 @@ const OperationsSection = () => {
             </div>
           </div>
           <div className="border-b border-[#F1F5F9] my-2"></div>
-          <Accordion
-            items={pharmacyChecklists?.checklist?.map((item: any) => ({
-              checklist_name: item.checklist_name,
-              id: item.checklist_id
-            }))}
-            tasklist={pharmacyAssignChecklists}
-            handleEditTasklist={handleEditClick}
-            onChecklistSelect={handleChecklistSelect}
-          />
+          {filteredPharmacyChecklists?.length > 0 ? (
+            <Accordion
+              items={filteredPharmacyChecklists.map((item: any) => ({
+                checklist_name: item.checklist_name,
+                id: item.checklist_id
+              }))}
+              tasklist={pharmacyAssignChecklists}
+              handleEditTasklist={handleEditClick}
+              onChecklistSelect={handleChecklistSelect}
+            />
+          ) : (
+            <TextMessage text="Checklist not found." />
+          )}
         </div>
       </div>
       {isAddQuestion && <AddNewQuestionModal selectedType="operations" isUpdatedMode={true}/>}

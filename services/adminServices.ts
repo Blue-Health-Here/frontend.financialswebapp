@@ -125,10 +125,17 @@ const apiHandler = async <T = any>(
       if (onError) {
         onError(error);
       }
+    } if (error?.status === 409) {
+      if (error?.response?.data?.detail) {
+        toast.success(error.response.data.detail);
+      }
+
+      if (onError) {
+        onError(error);
+      }
     } else {
       // Handle other errors
       toast.error(error?.message || errorMessage);
-
       if (onError) {
         onError(error);
       }
@@ -219,7 +226,15 @@ export const createNewCourse = async (dispatch: AppDispatch, data: any) => {
   return apiHandler(dispatch, 'post', '/v1/courses', {
     data,
     successMessage: "Course created successfully!",
-    onSuccess: () => fetchAllCourses(dispatch)
+    onSuccess: () => fetchAllCourses(dispatch),
+    errorMessage: "File already Exists!",
+    onError: (error: any) => {
+      if (error.status === 409) {
+        toast.error("File Already Exists!")
+      } else {
+        toast.error(error?.response?.data?.detail);
+      }
+    }
   });
 };
 

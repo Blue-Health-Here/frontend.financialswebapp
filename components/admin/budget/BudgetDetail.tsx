@@ -167,7 +167,7 @@ const BudgetDetail = () => {
                         </SubmitButton>
                     </div>
                     {
-                        filtereAdminExpenseData?.length > 0 &&
+                        adminExpenseData?.length > 0 &&
                         <div className="relative w-[390px] sm:max-w-md">
                             <Input
                                 name="email"
