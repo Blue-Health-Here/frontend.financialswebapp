@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ role }) => {
         <>
         {isSidebarOpen && ( <div className="fixed inset-0 z-[98] bg-black  bg-opacity-50 lg:hidden"/> )}
         <aside className={asideClass}>
-            {isSidebarOpen && <span onClick={() => dispatch(setIsSidebarOpen(false))} className='absolute top-4 right-4'><RxCross2 size={20} /></span>}
+            {isSidebarOpen && <span onClick={() => dispatch(setIsSidebarOpen(false))} className='absolute top-4 right-4 cursor-pointer'><RxCross2 size={20} /></span>}
             <h1 className="text-xl text-center font-semibold">LOGO</h1>
             <ul className="mt-16 flex flex-col gap-y-2 text-[15px]">
                 {sidebarItems.map((item, index) => {

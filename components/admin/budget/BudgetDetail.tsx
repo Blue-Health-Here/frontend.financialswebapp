@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { budgetStatsData, categories, expenseCategories, fullDatasets, fullLabels} from "@/utils/constants";
+import { budgetStatsData, categories, expenseCategoriesData, fullDatasets, fullLabels } from "@/utils/constants";
 import BudgetStatsCard from '@/components/common/BudgetStatsCard';
 import { SubmitButton } from '@/components/submit-button';
 import { FaPlus } from "react-icons/fa";
@@ -28,8 +28,10 @@ const BudgetDetail = () => {
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { isAddExpense, adminExpenseData, pharmacyList, adminExpenseStats } = useSelector((state: RootState) => state.expense);
+    const { expenseCategories } = useSelector((state: RootState) => state.global);
     const [loading, setLoading] = useState(true);
     const [statsUpdatedData, setStatsUpdatedData] = useState<BudgetStatsCardProps[]>(budgetStatsData);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         if (isAddExpense) {
@@ -48,13 +50,13 @@ const BudgetDetail = () => {
         fetchAdminExpenseStats(dispatch, pharmacyId).finally(() => setLoading(false))
 
     }, [])
-   
+
     useEffect(() => {
-        if(adminExpenseStats?.length > 0){
+        if (adminExpenseStats) {
             setStatsUpdatedData(assignAdminBudgetStatsValues(adminExpenseStats))
         }
     }, [adminExpenseStats]);
-      
+
     const handleEditExpense = (data: AdminExpenseProps) => {
         dispatch(setIsAddExpense(true))
         dispatch(setAdminExpenseDetail(data))
@@ -65,7 +67,7 @@ const BudgetDetail = () => {
         dispatch(setAdminExpenseDetail(null));
     };
 
-     const handleDeleteExpense = (expenseId: string) => {
+    const handleDeleteExpense = (expenseId: string) => {
         deleteAdminPharmacyExpense(dispatch, expenseId);
         fetchAdminExpense(dispatch, pharmacyId)
     };
@@ -100,6 +102,12 @@ const BudgetDetail = () => {
             Others: fullDatasets.Others.slice(0, 5),
         };
     }
+
+    const filtereAdminExpenseData = adminExpenseData.filter((budget: AdminExpenseProps) => {
+        const nameMatches = budget.title.toLowerCase().includes(searchQuery.toLowerCase());
+        const expensAmounteMatches = budget.amount !== null && budget.amount.toString().includes(searchQuery);
+        return nameMatches || expensAmounteMatches;
+    });
 
     return (
         <>
@@ -136,7 +144,7 @@ const BudgetDetail = () => {
             <div className="mt-6 px-6 py-8 space-y-4 bg-white shadow-lg rounded-lg">
                 <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">Expense Categories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {expenseCategories.map((category, index) => (
+                    {expenseCategoriesData.map((category, index) => (
                         <ExpenseCategoryCard key={index} category={category} />
                     ))}
                 </div>
@@ -147,7 +155,7 @@ const BudgetDetail = () => {
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <h1 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">Expense</h1>
                     <div className="flex gap-x-4 items-center">
-                        <FileDownloadField title='Reports' />
+                        <FileDownloadField title='Reports' className='w-40' />
                     </div>
                 </div>
                 <div className="flex items-center justify-between flex-wrap gap-4 py-6">
@@ -158,20 +166,28 @@ const BudgetDetail = () => {
                             <FaPlus className="text-primary group-hover:text-white" size={12} />
                         </SubmitButton>
                     </div>
-                    <div className="relative w-[390px] sm:max-w-md">
-                        <Input name="email" placeholder="Search Pharmacy" className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
-                        <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
-                            <IoSearch className="w-5 h-5" />
-                        </span>
-                    </div>
+                    {
+                        adminExpenseData?.length > 0 &&
+                        <div className="relative w-[390px] sm:max-w-md">
+                            <Input
+                                name="email"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search Expense"
+                                className="h-[42px] border-none shadow-lg rounded-lg font-medium" />
+                            <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
+                                <IoSearch className="w-5 h-5" />
+                            </span>
+                        </div>
+                    }
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {loading ? (
-                        <TextMessage text="Loading expense..."/>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+                    {loading ? (
+                        <TextMessage text="Loading expense..." />
                     ) : (
-                        adminExpenseData?.length > 0 ? adminExpenseData?.map((budget: AdminExpenseProps) => (
-                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={categories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
+                        filtereAdminExpenseData?.length > 0 ? filtereAdminExpenseData?.map((budget: AdminExpenseProps) => (
+                            <BudgetCard key={budget.id} id={budget.id} budget={budget} categories={expenseCategories} handleDeleteModal={handleDeleteExpense} handleEdit={() => handleEditExpense(budget)} />
                         )) : <TextMessage text="Expense not found." />
                     )}
                 </div>

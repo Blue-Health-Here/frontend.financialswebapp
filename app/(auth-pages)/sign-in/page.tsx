@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Message } from "@/components/form-message";
 import Link from "next/link";
 import AuthBackgroundImage from "@/components/common/AuthBackgroundImage";
 import LoginForm from "@/components/auth/LoginForm";
@@ -8,8 +7,7 @@ export const metadata: Metadata = {
   title: "Sign In - Financials Web App",
 };
 
-export default async function Login(props: { searchParams: Promise<Message> }) {
-  const searchParams = await props.searchParams;
+export default async function Login() {
   return (
     <div className="flex h-screen">
       <AuthBackgroundImage />
@@ -20,7 +18,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             Welcome to Vuexy! 👋🏻
           </h1>
           <p className="text-grey">Please sign-in to your account</p>
-          <LoginForm message={searchParams} />
+          <LoginForm />
         </div>
         <p className="text-center text-grey">
           New on our platform? <Link href="/sign-up" className="text-black text-sm font-semibold">Register Account</Link>

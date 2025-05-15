@@ -7,10 +7,10 @@ export const BudgetDetailCard: React.FC<{ budget: BudgetDetailCardProps}> = ({
 }) => {
   return (
     <Link href={`/admin/budget/${budget.pharmacy_id}`}>
-      <div className="bg-white p-4 shadow-md rounded-lg min-h-[250px] flex flex-col">
+      <div className="bg-white p-4 shadow-md rounded-lg min-h-[200px] flex flex-col">
         <div className="flex flex-col gap-3">
           <Image
-            src="/Ellipse.png"
+            src={budget.image_url || "/default-user.png"}
             alt=""
             className="rounded-full"
             width={48}

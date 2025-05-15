@@ -5,9 +5,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import { GoHome } from "react-icons/go";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Image from "next/image";
-import FileUploadField from "@/components/common/form/FileUploadField";
-import { Form, Formik } from "formik";
-import { checklists, courseData, pharmacyData } from "@/utils/constants";
 import Accordion from "@/components/common/Accordion";
 import { Input } from "@/components/ui/input";
 import { IoSearch } from "react-icons/io5";
@@ -17,50 +14,43 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setIsAddQuestion } from "@/store/features/admin/pharmacy/adminPharmacySlice";
-import AddNewQuestionModal from "./AddNewQuestionModal";
-import { UploadedFileProps } from "@/utils/types";
+import { CourseProps, UploadedFileProps } from "@/utils/types";
 import toast from "react-hot-toast";
-import { Label } from "@/components/ui/label";
 import {
-  fetchAdminLicense,
-  fetchAdminCertification,
   postAdminLicenseUploadFile,
   postAdminCertificationUploadFile,
   deleteAdminLicense,
   deleteAdminCertification,
   fetchAdminPharmacyDetails,
 } from "@/services/adminServices";
-import { License } from "@/utils/types";
-import TextMessage from "@/components/common/TextMessage";
+import Licensing from "./Licensing";
+import Certifications from "./Certifications";
+import PharmacyDetailCard from "./PharmacyDetailCard";
+import AddNewQuestionModal from "@/components/common/AddNewQuestionModal";
+import { setIsAddQuestion, setSelectedChecklistItem } from "@/store/features/global/globalSlice";
 
 const PharmacyDetail = () => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFileProps | null>(null);
-  const { licenseData } = useSelector((state: RootState) => state.global);
-  const { certificationsData } = useSelector((state: RootState) => state.global);
-  const { pharmacyDetailsData } = useSelector((state: RootState) => state.global);
-  const [courses, setCourses] = useState(courseData);
-  const { isAddQuestion } = useSelector((state: RootState) => state.pharmacy);
-  const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+  const { pharmacyDetailsData, isAddQuestion } = useSelector((state: RootState) => state.global);
+  const { pharmacyCourses, onboardingChecklist, operationsChecklist } = useSelector((state: RootState) => state.pharmacy);
+  const [selectedChecklistType, setSelectedChecklistType] = useState('');
+  const [searchCourse, setSearchCourse] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
   const params = useParams();
   const hasFetched = useRef(false);
   const id = Array.isArray(params?.pharmacy_id) ? params.pharmacy_id[0] : params?.pharmacy_id;
-  
-  
+
+  const fetchData = async () => {
+    try {
+      await fetchAdminPharmacyDetails(dispatch, id);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
-    const fetchData = async () => {
-      try {
-        await fetchAdminPharmacyDetails(dispatch, id);
-        await fetchAdminLicense(dispatch, id);
-        await fetchAdminCertification(dispatch, id);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     if (!hasFetched.current) {
       hasFetched.current = true;
       fetchData();
@@ -91,10 +81,7 @@ const PharmacyDetail = () => {
       if (response?.success) {
         setUploadedFile(response.data[0]);
         setValue(response.data);
-
-        fileType === "license"
-          ? fetchAdminLicense(dispatch, id)
-          : fetchAdminCertification(dispatch, id);
+        await fetchData();
       }
     } catch (error: any) {
       toast.error(error?.message || "Something went wrong!!");
@@ -109,28 +96,18 @@ const PharmacyDetail = () => {
       if (!id) return;
       if (fileType === "license") {
         await deleteAdminLicense(dispatch, fileId);
-         fetchAdminLicense(dispatch, id);
       } else {
         await deleteAdminCertification(dispatch, fileId);
-        fetchAdminCertification(dispatch, id);
-        
       }
+      await fetchData();
     } catch (error) {
       console.error(`Error deleting ${fileType}:`, error);
     }
   };
 
-  const toggleSelect = (id: number) => {
-    setCourses((prevCourses) =>
-      prevCourses.map((course) =>
-        course.id === id
-          ? { ...course, isSelected: !course.isSelected }
-          : course
-      )
-    );
-  };
-
-  const handleEditQuestion = () => {
+  const handleEditClick = (item: any, type: string) => {
+    dispatch(setSelectedChecklistItem(item));
+    setSelectedChecklistType(type)
     dispatch(setIsAddQuestion(true));
   };
 
@@ -146,11 +123,16 @@ const PharmacyDetail = () => {
     };
   }, [isAddQuestion]);
 
+  const filterCourses = pharmacyCourses.filter((course: CourseProps) => {
+    const nameMatches = course.title.toLowerCase().includes(searchCourse.toLowerCase());
+    return nameMatches;
+  });
+
   return (
     <>
-      <div className="px-5 md:px-6 py-8 bg-white shadow-lg rounded-lg">
+      <div className="px-4 md:px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
-          <div className="flex gap-x-2 items-center text-grey">
+          <div className="flex gap-x-2 flex-wrap gap-y-4 items-center text-grey">
             <div
               onClick={() => router.back()}
               className="flex gap-x-2 items-center"
@@ -166,213 +148,58 @@ const PharmacyDetail = () => {
               {pharmacyDetailsData?.pharmacy_name || "Loading..."}
             </p>
           </div>
-          <div className="flex gap-x-4 items-center">
-            <FileDownloadField title="Reports" />
-            <Image src="/delete-icon.svg" alt="" width={20} height={20} />
+          <div className="flex gap-x-3 items-center">
+            <FileDownloadField title="Reports" className="w-40"/>
+            <Image src="/delete-icon.svg" alt="" width={16} height={16} className="md:w-5 md:h-5"/>
           </div>
         </div>
-        <div className="py-6 grid grid-cols-1 lg:grid-cols-2 gap-y-10 md:gap-x-10 lg:gap-x-20 items-center">
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="rounded-full object-cover overflow-hidden">
-              <Image
-                src={pharmacyDetailsData?.image_url || "/Ellipse.png"}
-                alt="Profile Image"
-                width={300}
-                height={300}
-                sizes="(max-width: 767px) 128px, 300px"
-                className="rounded-full object-cover"
-                onError={(e) => (e.currentTarget.src = "/Ellipse.png")}
-              />
-            </div>
-            <div className="space-y-3 text-black w-full">
-              <h2 className="text-sm sm:text-lg lg:text-xl font-bold">
-                {pharmacyDetailsData?.pharmacy_name || "Loading..."}
-              </h2>
-
-              <div className="flex justify-between flex-wrap gap-4">
-                <p className="text-xs sm:text-sm md:text-[16px] font-medium">
-                  Total Expense
-                </p>
-                <span className="text-xs sm:text-sm md:text-[16px] font-medium">
-                  ${pharmacyDetailsData?.expense ?? 0}
-                </span>
-              </div>
-
-              <div className="flex justify-between flex-wrap gap-4">
-                <p className="text-xs font-semibold">Courses Completed</p>
-                <span className="text-xs sm:text-sm md:text-[12px] font-semibold">
-                  {pharmacyDetailsData?.total_completed ?? 0}
-                </span>
-              </div>
-
-              <div className="w-full">
-                <div className="flex justify-between flex-wrap gap-4">
-                  <p className="text-[12px] font-semibold">
-                    Onboarding Checklist Progress
-                  </p>{" "}
-                  <span className="text-[12px] font-semibold">
-                    {pharmacyDetailsData?.completion_percentage ?? 0}%
-                  </span>
-                </div>{" "}
-                <div className="w-full bg-gray-200 rounded-full h-[4px] mt-2">
-                  <div
-                    className="bg-primary h-[4px] rounded-full"
-                    style={{
-                      width: `${pharmacyDetailsData?.completion_percentage ?? 0}%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-grey space-y-3">
-            <p className=" text-xs md:text-sm">
-              <strong className="text-black">Address:</strong>{" "}
-              {pharmacyDetailsData?.address ?? "N/A"}
-            </p>
-            <p className="text-xs md:text-sm">
-              <strong className="text-black">Email:</strong>{" "}
-              {pharmacyDetailsData?.email ?? "N/A"}
-            </p>
-            <p className="text-xs md:text-sm">
-              <strong className="text-black">Contact:</strong>{" "}
-              {pharmacyDetailsData?.contact ?? "N/A"}
-            </p>
-          </div>
-        </div>
-
+        <PharmacyDetailCard pharmacyDetailsData={pharmacyDetailsData} />
         <div className="">
-          <Formik
-            initialValues={{ documents: [] }}
-            onSubmit={(values) => console.log(values)}
-          >
-            {() => (
-              <Form>
-                <div className="w-full">
-                  <Label className="font-semibold text-lg">Licensing</Label>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-                    {licenseData?.length > 0 ? licenseData?.map((license: License) => (
-                      <div
-                        key={license.id}
-                        className="flex items-center justify-between p-2 rounded-md border border-grey-500"
-                      >
-                        <span className="text-xs sm:text-sm truncate">
-                          {license.filename}
-                        </span>
-
-                        <div className="flex items-center space-x-2">
-                          <button className="sm:p-1 text-blue-500 hover:text-blue-700">
-                            <img
-                              src="/downloadFile.svg"
-                              alt="Download"
-                              className="w-3 h-3 sm:w-4 sm:h-4"
-                            />
-                          </button>
-                          <button className="p-1 text-red-500 hover:text-red-700">
-                            <img
-                              src="/delete-icon.svg"
-                              onClick={() =>
-                                handleDeleteFile(license.id, "license")
-                              }
-                              alt="Delete"
-                              className="w-3 h-3 sm:w-4 sm:h-4"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    )) : <TextMessage text="License not found." />}
-                  </div>
-
-                  <FileUploadField
-                    title="Upload License"
-                    name="license"
-                    setUploadedFile={setUploadedFile}
-                    handleFileUpload={(e, setValue) =>
-                      handleFileUpload(e, setValue, "license")
-                    }
-                    className="w-60 border-primary mt-4 mb-4"
-                  />
-                </div>
-              </Form>
-            )}
-          </Formik>
-          <Formik
-            initialValues={{ documents: [] }}
-            onSubmit={(values) => console.log(values)}
-          >
-            {() => (
-              <Form className="w-full ">
-                <Label className=" font-semibold text-lg ">
-                  Certifications
-                </Label>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-                  {certificationsData?.length > 0 ? certificationsData?.map((license: License) => (
-                    <div
-                      key={license.id}
-                      className="flex items-center justify-between p-2 rounded-md border border-grey-500"
-                    >
-                      <span className="text-xs sm:text-sm truncate">
-                        {license.filename}
-                      </span>
-
-                      <div className="flex items-center space-x-2">
-                        <button className="p-1 text-blue-500 hover:text-blue-700">
-                          <img
-                            src="/downloadFile.svg"
-                            alt="Download"
-                            className="w-3 h-3 sm:w-4 sm:h-4"
-                          />
-                        </button>
-                        <button className="p-1 text-red-500 hover:text-red-700">
-                          <img
-                            src="/delete-icon.svg"
-                            onClick={() =>
-                              handleDeleteFile(license.id, "certification")
-                            }
-                            alt="Delete"
-                            className="w-3 h-3 sm:w-4 sm:h-4"
-                          />
-                        </button>
-                      </div>
-                    </div>
-                  )) : <TextMessage text="Certifications not found." />}
-                </div>
-
-                <FileUploadField
-                  title="Upload Certification"
-                  name="certificate"
-                  handleFileUpload={(e, setValue) =>
-                    handleFileUpload(e, setValue, "certification")
-                  }
-                  className="w-60 border-primary mt-4"
-                />
-              </Form>
-            )}
-          </Formik>
+          <Licensing handleDeleteFile={handleDeleteFile} setUploadedFile={setUploadedFile} handleFileUpload={handleFileUpload} />
+          <Certifications handleDeleteFile={handleDeleteFile} setUploadedFile={setUploadedFile} handleFileUpload={handleFileUpload} />
         </div>
       </div>
+      {["onboarding", "operations"].map((type, index) => {
 
-      {checklists.map((checklist, index) => (
-        <div
-          className="w-full mt-6  px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg"
-          key={index}
-        >
-          <div className="flex flex-col gap-6">
-            <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
-              {checklist.name + " Checklist"}
-            </h2>
-            <Accordion
-              key={index}
-              items={checklist.list}
-              handleEditQuestion={handleEditQuestion}
-            />
+        const checklistData = type === 'operations' ? operationsChecklist : onboardingChecklist
+        const uniqueChecklistIds = Array.from(
+          new Set((checklistData || [])
+            .map((item: any) => item?.checklist_id)
+            .filter((id: any) => id !== undefined))
+        );
+        const uniqueItems = uniqueChecklistIds.map(id => {
+          const item = checklistData?.find((item: any) => item.checklist_id === id);
+          return {
+            checklist_id: item?.checklist_id,
+            checklist_name: item?.checklist_name,
+            checklist_type: type
+          };
+        });
+
+        return (
+          <div className="w-full mt-6 px-6 pt-8 pb-4 bg-white shadow-lg rounded-lg" key={index}>
+            <div className="flex flex-col">
+              <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
+                {type.charAt(0).toUpperCase() + type.slice(1) + " Checklist"}
+              </h2>
+
+              {uniqueChecklistIds.map((checklistId, groupIndex) => {
+                const filteredTasks = checklistData?.filter((item: any) => item.checklist_id === checklistId);
+
+                return (
+                  <Accordion
+                    key={groupIndex}
+                    handleEditTasklist={(item: any) => handleEditClick(item, type)}
+                    items={[uniqueItems[groupIndex]]}
+                    tasklist={filteredTasks}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
-      <div className="mt-6 px-6 py-8 bg-white shadow-lg rounded-lg">
+        );
+      })}
+      <div className="mt-6 px-4 md:px-6 py-8 bg-white shadow-lg rounded-lg">
         <div className="flex items-center justify-between flex-wrap gap-4 pb-6">
           <h2 className="text-base sm:text-2xl font-semibold flex-1 text-nowrap md:text-xl lg:text-2xl">
             Courses
@@ -382,6 +209,8 @@ const PharmacyDetail = () => {
               name="email"
               placeholder="Search Courses"
               className="h-[42px] border-none shadow-lg rounded-lg font-medium"
+              value={searchCourse}
+              onChange={(e) => setSearchCourse(e.target.value)} 
             />
             <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
               <IoSearch className="w-5 h-5" />
@@ -389,16 +218,15 @@ const PharmacyDetail = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
+          {filterCourses?.length > 0 && filterCourses.map((course: any) => (
             <CourseCard
               key={course.id}
               {...course}
-              onSelect={() => toggleSelect(course.id)}
             />
           ))}
         </div>
       </div>
-      {isAddQuestion && <AddNewQuestionModal />}
+      {isAddQuestion && <AddNewQuestionModal pharmacyId={id} isUpdatedMode={true} />}
     </>
   );
 };

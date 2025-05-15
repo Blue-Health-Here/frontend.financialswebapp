@@ -11,7 +11,6 @@ import { uploadDocVerificationInitialVals } from '@/utils/initialVals'
 import toast from 'react-hot-toast'
 import { createNewPaymentReconciliation, fetchBankStatements, fetchPaymentReconciliation, postBankStatement } from '@/services/pharmacyServices'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNewPaymentReconciliationInitialchema } from '@/utils/validationSchema'
 import { RootState } from '@/store/store'
 import { PaymentReconciliationProps } from '@/utils/types'
 import { setIsLoading } from '@/store/features/global/globalSlice'
@@ -19,12 +18,18 @@ import FilePreview from '@/components/common/FilePreview'
 import * as Yup from "yup";
 import { formatCreatedAt } from '@/utils/helper'
 import SelectField from '@/components/common/form/SelectField'
+import SingleDateField from '@/components/common/form/SingleDateField'
+import { format } from 'date-fns';
 
 const DocumentVerification = () => {
   const { docVerificationDetails = [], bankStatements } = useSelector((state: RootState) => state.DocumentVerification);
   const [initialVals, setInitialVals] = useState(uploadDocVerificationInitialVals)
   const [isClient, setIsClient] = useState(false)
   const [uploaded835Files, set835UploadedFiles] = useState<File[]>([]);
+  const [searchText, setSearchText] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [paymentDateFilter, setPaymentDateFilter] = useState('');
+
   const dispatch = useDispatch()
   const isFetched = useRef(false);
 
@@ -97,21 +102,21 @@ const DocumentVerification = () => {
       toast.error(error?.message);
     }
   };
-  
+
   const handle835Upload = async (event: React.ChangeEvent<HTMLInputElement>, setValue: any, value: any) => {
     const files: any = Array.from(event.currentTarget.files || []);
-    
+
     // Check if any file has invalid extension or size
     const hasInvalidFile = files.some((file: File) => {
       const extension = file.name.split('.').pop()?.toLowerCase();
       const isInvalidExtension = extension !== '835';
       const isInvalidSize = file.size > 25 * 1024 * 1024; // 25MB in bytes
-      
+
       if (isInvalidExtension) {
         toast.error("Only .835 file format is allowed");
         return true;
       }
-      
+
       if (isInvalidSize) {
         toast.error("File size must be under 25MB");
         return true;
@@ -133,7 +138,7 @@ const DocumentVerification = () => {
     set835UploadedFiles(updatedFiles);
     setValue("file_835", updatedFiles?.length > 0 ? [...updatedFiles] : "");
   };
-  
+
   const getDynamicValidationSchema = () => {
     return Yup.object({
       file_835: uploaded835Files.length > 0
@@ -147,6 +152,23 @@ const DocumentVerification = () => {
         : Yup.mixed().required('Bank Statement file is required'),
     });
   };
+
+  // Handle date filter change
+  const handleDateFilterChange = (date: string) => {
+    setPaymentDateFilter(date);
+  };
+
+  const filteredData = docVerificationDetails.filter((item: any) => {
+    const matchesPayer = item.payer_name.toLowerCase().includes(searchText.toLowerCase());
+    const matchesStatus = statusFilter ? item.status === statusFilter : true;
+    
+    // Payment date filtering
+    const matchesDate = paymentDateFilter
+      ? item.payment_date === format(new Date(paymentDateFilter), 'yyyy-MM-dd')
+      : true;
+    
+    return matchesPayer && matchesStatus && matchesDate;
+  });
 
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -216,31 +238,37 @@ const DocumentVerification = () => {
         <div className="pb-6 px-6">
           <div className="flex flex-col sm:flex-col md:flex-row md:items-center md:justify-between gap-4">
             <h1 className="text-lg md:text-2xl">History</h1>
-            <Formik initialValues={{ type: "", category: "", search: "" }} onSubmit={() => { }}>
-              {({ isSubmitting }) => (
+            <Formik initialValues={{ paymentDateFilter: "", status: "", search: "" }} onSubmit={() => { }}>
+              {({ setFieldValue }) => (
                 <Form className="flex flex-col sm:flex-row md:flex-row gap-2 sm:gap-4 w-full md:w-auto">
+                  <div className="relative">
+                    <SingleDateField
+                      name="paymentDateFilter"
+                      dateplaceholder="pick a date"
+                      className="mb-4 border-none shadow-lg rounded-lg font-medium min-w-48 z-50"
+                      onChange={(date) => {
+                        handleDateFilterChange(date);
+                      }}
+                    />
+                  </div>
                   <SelectField
                     className="border-none shadow-lg rounded-lg font-medium min-w-48"
-                    name="type"
+                    name="status"
                     options={[
-                      { value: "all", label: "All Types" },
-                      { value: "on-boarding", label: "On boarding" },
-                      { value: "operational", label: "Operational" },
+                      { label: "All status", value: "" },
+                      { label: "Cleared", value: "Cleared" },
+                      { label: "Uncleared", value: "Uncleared" },
                     ]}
-                  />
-                  <SelectField
-                    className="border-none shadow-lg rounded-lg font-medium min-w-48"
-                    name="category"
-                    options={[
-                      { value: "", label: "Select Status" },
-                      { value: "on-boarding", label: "On boarding" },
-                      { value: "operational", label: "Operational" },
-                    ]}
+                    variant="borderless"
+                    value={statusFilter}
+                    onChange={(e: any) => setStatusFilter(e.target.value)}
                   />
                   <div className="relative sm:max-w-md">
                     <Input
                       name="search"
-                      placeholder="Search Checklist"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                      placeholder="Search"
                       className="border-none shadow-lg rounded-lg font-medium placeholder:text-xs"
                     />
                     <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
@@ -270,8 +298,8 @@ const DocumentVerification = () => {
             </thead>
 
             <tbody>
-              {isClient && docVerificationDetails && docVerificationDetails.length > 0 ? (
-                [...docVerificationDetails].sort(
+              {isClient && filteredData && filteredData.length > 0 ? (
+                [...filteredData].sort(
                   (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
                 )?.map((item: PaymentReconciliationProps, index: number) => (
                   <tr key={index} className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
@@ -298,7 +326,7 @@ const DocumentVerification = () => {
                 ))
               ) : (
                 <tr className="border-b text-xs md:text-sm text-center border-[#EBE9F1] bg-white">
-                  <td colSpan={6} className="p-4 text-grey font-medium">No data available</td>
+                  <td colSpan={9} className="p-4 text-grey font-medium">No data available</td>
                 </tr>
               )}
             </tbody>

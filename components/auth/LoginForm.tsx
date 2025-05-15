@@ -10,14 +10,24 @@ import { signInValidationSchema } from "@/utils/validationSchema";
 import Link from "next/link";
 import { FiEye, FiEyeOff  } from "react-icons/fi";
 
-const LoginForm: React.FC<any> = ({ message }) => {
+const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const handleSubmit = (values: typeof signInInitialVals) => {
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (values: typeof signInInitialVals) => {
     const formData = new FormData();
     formData.append("email", values.email);
     formData.append("password", values.password);
-    signInAction(formData);
+
+    const result = await signInAction(formData);
+
+    if (result?.error) {
+      setError(result.error); 
+    } else {
+      setError("");
+    }
   };
+
   return (
     <Formik
       initialValues={signInInitialVals}
@@ -39,7 +49,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
             name="password"
             type={showPassword ? "text" : "password"}
             placeholder="Your password"
-            Icon={showPassword ? FiEyeOff  : FiEye}
+            Icon={showPassword ? FiEyeOff : FiEye}
             onIconClick={() => setShowPassword(!showPassword)}
           />
           <SubmitButton
@@ -50,8 +60,7 @@ const LoginForm: React.FC<any> = ({ message }) => {
           >
             {isSubmitting ? "Signing In..." : "Sign In"}
           </SubmitButton>
-          {message?.error !== "" && <FormMessage message={message} />}
-
+          {error && <FormMessage message={{ error }} />}
           <Link
             className="text-sm text-center text-foreground underline"
             href="/forgot-password"

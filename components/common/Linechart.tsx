@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle } from "chart.js";
 import { Line } from "react-chartjs-2";
 import customSubtitlePlugin from "./customSubtitlePlugin";
@@ -8,7 +8,7 @@ import { ExpenseChartProps } from "@/utils/types";
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Title, SubTitle, customSubtitlePlugin);
 
 
-const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
+const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData = [] }) => {
     const chartRef = useRef<ChartJS<"line"> | null>(null);
     const currentMonth = new Date().toLocaleString("en-US", { month: "short" });
     const currentMonthExpense =
@@ -70,7 +70,10 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
                     top: -35,
                     bottom: 5,
                 },
-
+                customSubtitle: {
+                    currentMonth,
+                    currentExpense: currentMonthExpense,
+                }
             },
         },
         scales: {
@@ -96,7 +99,7 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
                         gradient.addColorStop(0, "#93C5FD");
                         gradient.addColorStop(0.5, "#1E3A8A");
                         gradient.addColorStop(1, "#1E3A8A");
-        
+
                         chart.data.datasets[0].borderColor = gradient;
                         chart.data.datasets[0].borderWidth = 2;
                         chart.data.datasets[0].pointRadius = 0;
@@ -110,7 +113,7 @@ const ExpenseChart: React.FC<ExpenseChartProps> = ({ ExpenseData=[] }) => {
 
     return (
         <div className=" w-full p-6 h-60 md:h-full">
-            <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} height={400}/>
+            <Line ref={(el) => (chartRef.current = el as ChartJS<"line"> | null)} data={data} options={options} height={400} />
         </div>
     );
 };

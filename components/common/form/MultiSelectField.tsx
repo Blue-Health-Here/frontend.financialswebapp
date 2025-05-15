@@ -33,6 +33,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps & React.ComponentProps<ty
         } else {
             helpers.setValue(values); // Normal selection
         }
+        helpers.setTouched(true); 
     };
 
     return (

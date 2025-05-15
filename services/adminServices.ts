@@ -1,10 +1,16 @@
 import { axiosAdmin } from "@/lib/axiosAdmin";
 import { setSelectCategories } from "@/store/features/admin/category/adminCategorySlice";
 import { setCourses } from "@/store/features/admin/course/adminCourseSlice";
-import { setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
-import { setPharmacies } from "@/store/features/admin/pharmacy/adminPharmacySlice";
+import { setAdminExpenseGraphData, setStats } from "@/store/features/admin/dashboard/adminDashboardSlice";
+import {
+  setAdminPharmacyCoursesData, setOnboardingChecklist,
+  setOperationsChecklist, setPharmacies, setSelectedChecklistItem
+} from "@/store/features/admin/pharmacy/adminPharmacySlice";
 import { setMarketingMaterials } from "@/store/features/admin/marketing/adminMarketingSlice";
-import { setAdminExpenseStats, setAdminExpenseData, setPharmacyList } from "@/store/features/admin/expense/adminExpenseSlice";
+import {
+  setAdminExpenseStats, setAdminExpenseData,
+  setPharmacyList
+} from "@/store/features/admin/expense/adminExpenseSlice";
 import {
   setIsLoading,
   setProfileData,
@@ -14,7 +20,11 @@ import {
 } from "@/store/features/global/globalSlice";
 import { AppDispatch } from "@/store/store";
 import toast from "react-hot-toast";
-import { setChecklists, setTasklist } from "@/store/features/admin/checklist/adminChecklistSlice";
+import {
+  setChecklists, setOnboardingdTasklist,
+  setOperationalItems, setOperationsTasklist
+} from "@/store/features/admin/checklist/adminChecklistSlice";
+import { fetchExpenseCategories } from "./globalService";
 
 // Types
 type ApiMethod = 'get' | 'post' | 'put' | 'delete';
@@ -55,7 +65,7 @@ const apiHandler = async <T = any>(
 
   try {
     dispatch(setIsLoading(true));
-    
+
     // Build URL with query parameters if needed
     let url = endpoint;
     if (params) {
@@ -63,19 +73,19 @@ const apiHandler = async <T = any>(
         .filter(([_, value]) => value !== undefined)
         .map(([key, value]) => `${key}=${value}`)
         .join('&');
-      
+
       url = queryParams ? `${endpoint}?${queryParams}` : endpoint;
     }
-    
+
     // Configure request
     const config: any = {};
     if (isFormData) {
       config.headers = { "Content-Type": "multipart/form-data" };
     }
-    
+
     // Make API call
     let response: ApiResponse<T>;
-    
+
     switch (method) {
       case 'get':
         response = await axiosAdmin.get(url, config);
@@ -90,20 +100,20 @@ const apiHandler = async <T = any>(
         response = await axiosAdmin.delete(url, config);
         break;
     }
-    
+
     // Handle success
-    if (response?.status === 200 || response?.data?.success) {
+    if (response?.status === 200 || response?.data?.success || response?.status === 201) {
       if (successMessage) {
         toast.success(successMessage);
       }
-      
+
       if (onSuccess && response.data) {
         onSuccess(response.data);
       }
-      
+
       return response.data || null;
     }
-    
+
     return null;
   } catch (error: any) {
     // Handle 404 differently in some cases
@@ -111,19 +121,26 @@ const apiHandler = async <T = any>(
       if (error?.response?.data?.detail) {
         toast.success(error.response.data.detail);
       }
-      
+
+      if (onError) {
+        onError(error);
+      }
+    } if (error?.status === 409) {
+      if (error?.response?.data?.detail) {
+        toast.success(error.response.data.detail);
+      }
+
       if (onError) {
         onError(error);
       }
     } else {
       // Handle other errors
       toast.error(error?.message || errorMessage);
-      
       if (onError) {
         onError(error);
       }
     }
-    
+
     return null;
   } finally {
     dispatch(setIsLoading(false));
@@ -158,6 +175,14 @@ export const fetchAllPharmacies = async (dispatch: AppDispatch) => {
   });
 };
 
+export const fetchExpenseGraph = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/admin/expenses/graph', {
+    successMessage: "Expense Graph fetched successfully!",
+    onSuccess: (data) => dispatch(setAdminExpenseGraphData(data)),
+    onError: () => dispatch(setAdminExpenseGraphData([]))
+  });
+};
+
 export const fetchBudgetingList = async (dispatch: AppDispatch) => {
   return apiHandler(dispatch, 'get', '/v1/admin-budget', {
     successMessage: "Pharmacies budgeting list fetched successfully!",
@@ -170,7 +195,20 @@ export const fetchAdminPharmacyDetails = async (dispatch: AppDispatch, id?: stri
   return apiHandler(dispatch, 'get', '/v1/pharmacy-details', {
     params: { pharmacy_id: id },
     successMessage: "Pharmacy details fetched successfully!",
-    onSuccess: (data) => dispatch(setPharmacyDetailsData(data))
+    onSuccess: (data) => {
+      dispatch(setPharmacyDetailsData(data))
+      dispatch(setAdminPharmacyCoursesData(data?.courses))
+      dispatch(setOperationsChecklist(data?.operations_checklist))
+      dispatch(setOnboardingChecklist(data?.onboarding_checklist))
+    }
+  });
+};
+
+export const fetchAllAdminPharmacyCourses = async (dispatch: AppDispatch, id?: string) => {
+  return apiHandler(dispatch, 'get', '/v1/admin/courses/overview', {
+    params: { pharmacy_id: id },
+    successMessage: "Courses fetched successfully!",
+    onSuccess: (data) => dispatch(setAdminPharmacyCoursesData(data))
   });
 };
 
@@ -188,7 +226,15 @@ export const createNewCourse = async (dispatch: AppDispatch, data: any) => {
   return apiHandler(dispatch, 'post', '/v1/courses', {
     data,
     successMessage: "Course created successfully!",
-    onSuccess: () => fetchAllCourses(dispatch)
+    onSuccess: () => fetchAllCourses(dispatch),
+    errorMessage: "File already Exists!",
+    onError: (error: any) => {
+      if (error.status === 409) {
+        toast.error("File Already Exists!")
+      } else {
+        toast.error(error?.response?.data?.detail);
+      }
+    }
   });
 };
 
@@ -213,7 +259,8 @@ export const postCoursesUploadFile = async (dispatch: AppDispatch, data: any) =>
   return apiHandler(dispatch, 'post', '/v1/courses-upload-file', {
     data,
     isFormData: true,
-    successMessage: "Course file uploaded successfully!"
+    successMessage: "Course file uploaded successfully!",
+    // onError: 
   });
 };
 
@@ -335,7 +382,10 @@ export const fetchAdminExpense = async (dispatch: AppDispatch, id: string) => {
   return apiHandler(dispatch, 'get', '/v1/admin-expense', {
     params: { pharmacy_id: id },
     successMessage: "Expense fetched successfully!",
-    onSuccess: (data) => dispatch(setAdminExpenseData(data)),
+    onSuccess: (data) => {
+      dispatch(setAdminExpenseData(data));
+      fetchExpenseCategories(dispatch);
+    },
     onError: () => dispatch(setAdminExpenseData([]))
   });
 };
@@ -431,7 +481,7 @@ export const fetchAllChecklist = async (dispatch: AppDispatch) => {
   return apiHandler(dispatch, 'get', '/v1/admin-checklist', {
     successMessage: "Checklist fetched successfully!",
     onSuccess: (data) => dispatch(setChecklists(data)),
-    onError: () => dispatch(setCourses([]))
+    onError: () => dispatch(setChecklists([]))
   });
 };
 
@@ -452,10 +502,108 @@ export const deleteChecklist = async (dispatch: AppDispatch, id?: string) => {
   });
 };
 
-export const fetchAllTasklist = async (dispatch: AppDispatch, id?: string) => {
+export const fetchAllTasklist = async (
+  dispatch: AppDispatch,
+  id?: string,
+  type?: string
+) => {
   return apiHandler(dispatch, 'get', '/v1/admin-checklist/tasks', {
     params: { checklist_id: id },
-    onSuccess: (data) => dispatch(setTasklist(data)),
-    successMessage: "Tasklist fetched successfully!",
+    onSuccess: (data) => {
+      if (type === 'onboarding') {
+        dispatch(setOnboardingdTasklist(data));
+      } else if (type === 'operations') {
+        dispatch(setOperationsTasklist(data));
+      } else {
+        const onboardingTasks = data.filter((task: any) => task.type === 'onboarding');
+        const operationsTasks = data.filter((task: any) => task.type === 'operations');
+
+        dispatch(setOnboardingdTasklist(onboardingTasks));
+        dispatch(setOperationsTasklist(operationsTasks));
+      }
+    },
+    successMessage: 'Tasklist fetched successfully!',
+    onError: () => {
+      if (type === 'onboarding') {
+        dispatch(setOnboardingdTasklist([]));
+      } else if (type === 'operations') {
+        dispatch(setOperationsTasklist([]));
+      }
+    }
+
   });
 };
+
+export const postAssignChecklistUploadDocs = async (dispatch: AppDispatch, data: any) => {
+  return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist/document', {
+    data,
+    isFormData: true,
+    successMessage: "Document file uploaded successfully!",
+    errorMessage: "File already Exists!",
+    onError: (error: any) => {
+      if (error.status === 409) {
+        toast.error("File Already Exists!")
+      } else {
+        toast.error(error?.response?.data?.detail);
+      }
+    }
+  });
+};
+
+export const deleteAssignChecklistUploadDocs = async (dispatch: AppDispatch, filename: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist/document', {
+    params: { filename },
+    successMessage: "File deleted successfully!"
+  });
+};
+
+export const createNewOperationalItem = async (dispatch: AppDispatch, name: string) => {
+  return apiHandler(dispatch, 'post', '/v1/operational-item', {
+    params: { name: name },
+    successMessage: "Operational item created successfully!",
+    onSuccess: () => fetchAllOperationalItems(dispatch)
+  });
+};
+
+export const fetchAllOperationalItems = async (dispatch: AppDispatch) => {
+  return apiHandler(dispatch, 'get', '/v1/operational-item', {
+    successMessage: "Operational items fetched successfully!",
+    onSuccess: (data) => dispatch(setOperationalItems(data)),
+    onError: () => dispatch(setOperationalItems([]))
+  });
+};
+
+export const createNewAssignChecklist = async (dispatch: AppDispatch, data: any, type?: string) => {
+  return apiHandler(dispatch, 'post', '/v1/admin/assign-checklist', {
+    data,
+    successMessage: "Assign Checklist created successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
+  });
+};
+
+export const updateAssignChecklist = async (dispatch: AppDispatch, data: any, type?: string) => {
+  return apiHandler(dispatch, 'put', '/v1/admin/assign-checklist', {
+    params: { task_id: data?.task_id },
+    data,
+    successMessage: "Assign Checklist updated successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, data.checklist_id, type)
+  });
+};
+
+export const updateChecklistOverview = async (dispatch: AppDispatch, data: any, pharmacyId: string) => {
+  return apiHandler(dispatch, 'put', '/v1/admin/checklist/overview', {
+    params: { assign_id: data?.assigned_id },
+    data,
+    successMessage: "Checklist overview updated successfully!",
+    onSuccess: () => fetchAdminPharmacyDetails(dispatch, pharmacyId)
+  });
+};
+
+export const deleteAssignChecklist = async (dispatch: AppDispatch, task_id: string, checklist_id?: string, type?: string) => {
+  return apiHandler(dispatch, 'delete', '/v1/admin/assign-checklist', {
+    params: { task_id: task_id },
+    successMessage: "Assign Checklist deleted successfully!",
+    onSuccess: () => fetchAllTasklist(dispatch, checklist_id, type)
+  });
+};
+

@@ -7,7 +7,7 @@ import BarChart from "@/components/common/BarChart";
 import { IoSearch } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
 import StatsSection from './StatsSection';
-import { fetchAllPharmacies, fetchAllStats } from '@/services/adminServices';
+import { fetchAllPharmacies, fetchAllStats, fetchExpenseGraph } from '@/services/adminServices';
 import { RootState } from '@/store/store';
 import { PharmacyCardProps } from '@/utils/types';
 import useWindowSize from '@/hooks/useWindowSize';
@@ -15,16 +15,21 @@ import useWindowSize from '@/hooks/useWindowSize';
 const DashboardSection = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
+    const [useLogScale, setUseLogScale] = useState(true);
     const { width } = useWindowSize();
     const dispatch = useDispatch();
     const { pharmacies } = useSelector((state: RootState) => state.pharmacy);
+    const { adminExpenseGraphData } = useSelector((state: RootState) => state.adminDashboard);
     const hasFetched = useRef(false);
-
+    
     useEffect(() => {
         if (!hasFetched.current) {
             hasFetched.current = true;
-            fetchAllStats(dispatch);
-            fetchAllPharmacies(dispatch).finally(() => setLoading(false));
+            Promise.all([
+                fetchAllStats(dispatch),
+                fetchAllPharmacies(dispatch),
+                fetchExpenseGraph(dispatch)
+            ]).finally(() => setLoading(false));
         }
     }, []);
     
@@ -38,43 +43,108 @@ const DashboardSection = () => {
         return nameMatches || expenseMatches;
     });
 
-    const fullLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
-    const fullDatasets = [80, 100, 220, 180, 80, 120, 120, 140, 160]
-    let labels, datasets;
+    const calculateStepSize = (dataArray: number[]) => {
+        if (!dataArray || dataArray.length === 0) return 20000;
+        
+        const max = Math.max(...dataArray);
+        const min = Math.min(...dataArray);
+        
+        if (max > 200000 && min < 5000) {
+            return 25000; 
+        }
+        
+        if (max < 50000) return 10000;
+        if (max < 100000) return 20000;
+        if (max < 200000) return 25000;
+        if (max < 500000) return 50000;
+        return 100000;
+    };
 
+    const getChartMaxValue = (dataArray: number[]) => {
+        if (!dataArray || dataArray.length === 0) return 160000;
+        
+        const max = Math.max(...dataArray);
+        const step = calculateStepSize(dataArray);
+        
+        return Math.ceil(max / step) * step;
+    };
+
+    const formatChartData = () => {
+        if (!adminExpenseGraphData || adminExpenseGraphData.length === 0) {
+            return { labels: [], datasets: { pharmacy: [] } };
+        }
+
+        const labels = adminExpenseGraphData.map((item: any) => item.pharmacy_name);
+        const expenses = adminExpenseGraphData.map((item: any) => item.total_expense);
+
+        return {
+            labels,
+            datasets: { pharmacy: expenses }
+        };
+    };
+
+    const chartData = formatChartData();
+    
+    let labels, datasets;
     if (width > 1400) {
-        labels = fullLabels;
-        datasets = fullDatasets;
+        labels = chartData.labels;
+        datasets = { pharmacy: chartData.datasets.pharmacy };
     } else if (width > 1200) {
-        labels = fullLabels.slice(0, 9);
-        datasets = fullDatasets.slice(0, 9);
+        const sliceSize = Math.min(9, chartData.labels.length);
+        labels = chartData.labels.slice(0, sliceSize);
+        datasets = { pharmacy: chartData.datasets.pharmacy.slice(0, sliceSize) };
     } else if (width > 600) {
-        labels = fullLabels.slice(0, 7);
-        datasets = fullDatasets.slice(0, 7);
+        const sliceSize = Math.min(7, chartData.labels.length);
+        labels = chartData.labels.slice(0, sliceSize);
+        datasets = { pharmacy: chartData.datasets.pharmacy.slice(0, sliceSize) };
     } else {
-        labels = fullLabels.slice(0, 5);
-        datasets = fullDatasets.slice(0, 5);
+        const sliceSize = Math.min(5, chartData.labels.length);
+        labels = chartData.labels.slice(0, sliceSize);
+        datasets = { pharmacy: chartData.datasets.pharmacy.slice(0, sliceSize) };
     }
+
+    const toggleScaleType = () => {
+        setUseLogScale(!useLogScale);
+    };
 
     return (
         <>
             <h3 className="text-themeGrey text-lg md:text-xl font-medium mb-2">Statistics</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:auto-rows-fr">
                 <StatsSection />
-                <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg p-6  flex items-center justify-center">
-                    <BarChart
-                        Xlabels={labels}
-                        Ylabels={{ pharmacy: datasets }}
-                        useGradient={false}
-                        barColors={["#1E3A8A"]}
-                        barThickness={8}
-                        yAxisTitle="Total Expense"
-                        pointStyle="circle"
-                        showTopValues={false}
-                        stepSize={50}
-                        showXLabels={false}
-                    />
-
+                  <div className="w-full h-[300px] md:h-full bg-white rounded-lg shadow-lg  p-4 md:p-6 flex flex-col">
+                    <div className="hidden">
+                        <button 
+                            onClick={toggleScaleType}
+                            className="text-sm px-3 py-1 bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200"
+                        >
+                            {useLogScale ? 'Switch to Linear Scale' : 'Switch to Log Scale'}
+                        </button>
+                    </div>
+                    <div className="flex-1" style={{ height: 'calc(100% - 30px)' }}>
+                        {!loading && adminExpenseGraphData && adminExpenseGraphData.length > 0 ? (
+                            <BarChart
+                                Xlabels={labels}
+                                Ylabels={datasets}
+                                useGradient={false}
+                                barColors={["#1E3A8A"]}
+                                barThickness={width < 768 ? 4 : 8}
+                                yAxisTitle="Total Expense"
+                                pointStyle="circle"
+                                showTopValues={false}
+                                stepSize={calculateStepSize(chartData.datasets.pharmacy)}
+                                chartMaxValue={getChartMaxValue(chartData.datasets.pharmacy)}
+                                showXLabels={true}
+                                useLogarithmicScale={useLogScale}
+                                showVerticalGridLines={false}
+                                height="100%"
+                            />
+                        ) : (
+                            <div className="h-full flex items-center justify-center">
+                                <p>Loading expense data...</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -113,4 +183,4 @@ const DashboardSection = () => {
     );
 };
 
-export default DashboardSection
+export default DashboardSection;

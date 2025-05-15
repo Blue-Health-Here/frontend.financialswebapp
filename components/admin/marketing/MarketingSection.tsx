@@ -23,6 +23,7 @@ import {
 } from "@/utils/types";
 
 const MarketingSection = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const { isAddMarketing, marketingMaterials } = useSelector(
     (state: RootState) => state.marketing
   );
@@ -56,6 +57,10 @@ const MarketingSection = () => {
     dispatch(setIsAddMarketing(true)); // Open modal
   };
 
+    const filterMarketing = marketingMaterials.filter((marketing: MarketingMaterialCardProps) => {
+        const nameMatches = marketing.title.toLowerCase().includes(searchQuery.toLowerCase());
+        return nameMatches; });
+
   return (
     <div className="p-6 pt-8 pb-9 bg-white shadow-lg rounded-lg">
       {/* Header */}
@@ -70,22 +75,24 @@ const MarketingSection = () => {
           </SubmitButton>
         </div>
         {/* Search Input */}
-        <div className="relative w-[390px] sm:max-w-md">
+       {marketingMaterials.length > 0 && ( <div className="relative w-[390px] sm:max-w-md">
           <Input
             name="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} 
             placeholder="Search Marketing Material"
             className="h-[42px] border-none shadow-lg rounded-lg font-medium"
           />
           <span className="absolute right-3 top-2.5 text-gray-500 cursor-pointer">
             <IoSearch className="w-5 h-5" />
           </span>
-        </div>
+        </div>)}
       </div>
 
       {/* Marketing Materials Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {marketingMaterials.length > 0 &&
-          marketingMaterials.map(
+        {filterMarketing.length > 0 &&
+          filterMarketing.map(
             (marketing: MarketingMaterialCardProps, index: number) => (
               <InfoCard
                 key={index}

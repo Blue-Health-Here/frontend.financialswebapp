@@ -5,17 +5,25 @@ import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
+    LogarithmicScale,
     BarElement,
     Title,
     Tooltip,
     Legend,
     ChartOptions,
-
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { useEffect, useState } from "react";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels);
+ChartJS.register(
+    CategoryScale, 
+    LinearScale, 
+    LogarithmicScale,
+    BarElement, 
+    Title, 
+    Tooltip, 
+    Legend, 
+    ChartDataLabels
+);
 
 const BarChart = ({
     Xlabels,
@@ -26,6 +34,7 @@ const BarChart = ({
     pointStyle,
     showTopValues = true,
     stepSize,
+    chartMaxValue,
     borderRadius,
     yTitleColor,
     yLabelColor,
@@ -33,7 +42,9 @@ const BarChart = ({
     showXLabels = true,
     tooltipOptions = {},
     topValueSize,
-    barThickness
+    barThickness,
+    useLogarithmicScale = false,
+    height = "100%", 
 }: any) => {
 
     const getGradient = (ctx: any, chartArea: any) => {
@@ -46,21 +57,40 @@ const BarChart = ({
         return gradient;
     };
 
+    const adjustedYLabels = Object.keys(Ylabels).reduce((acc, key) => {
+        acc[key] = Ylabels[key].map((value: number) => {
+            if (!useLogarithmicScale && value > 0 && value < chartMaxValue * 0.01) {
+                return chartMaxValue * 0.01;
+            }
+            return value;
+        });
+        return acc;
+    }, {} as any);
+
     const data = {
         labels: Xlabels,
         datasets: Object.keys(Ylabels).map((key, index) => ({
             label: key.charAt(0).toUpperCase() + key.slice(1),
-            data: Ylabels[key],
+            data: useLogarithmicScale ? Ylabels[key] : adjustedYLabels[key],
             barThickness: barThickness,
             borderRadius: borderRadius,
             backgroundColor: (ctx: any) =>
                 useGradient && ctx.chart.chartArea ? getGradient(ctx.chart.ctx, ctx.chart.chartArea) : barColors[index] || "#999",
+            originalData: Ylabels[key],
         })),
     };
 
     const options: ChartOptions<"bar"> = {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: showTopValues ? 20 : 0, // Add top padding if showing values
+                bottom: 0
+            }
+        },
         plugins: {
             legend: {
                 display: true,
@@ -70,7 +100,7 @@ const BarChart = ({
                     pointStyle: pointStyle,
                     boxWidth: 8,
                     boxHeight: 8,
-                    padding: 30,
+                    padding: 20, // Reduced padding to save space
                     borderRadius: 50,
                 },
             },
@@ -85,7 +115,7 @@ const BarChart = ({
                 color: "black",
                 anchor: "end",
                 align: "top",
-                font: { size: topValueSize },
+                font: { size: topValueSize || 10 }, // Provide a default size
                 formatter: (value, context) => {
                     const datasetIndex = context.datasetIndex;
                     const dataIndex = context.dataIndex;
@@ -106,24 +136,43 @@ const BarChart = ({
             },
             y: {
                 stacked: true,
+                type: useLogarithmicScale ? 'logarithmic' : 'linear',
                 beginAtZero: true,
                 grid: { drawOnChartArea: true },
                 title: {
                     display: true,
                     text: yAxisTitle,
                     color: yTitleColor,
-                    font: { size: 14 },
+                    font: { size: 12 },
                 },
                 ticks: {
-                    padding: 10,
-                    stepSize: stepSize,
-                    color: yLabelColor
+                    padding: 5, 
+                    stepSize: !useLogarithmicScale ? stepSize : undefined,
+                    color: yLabelColor,
+                    callback: function(value: number) {
+                        if (value === 0) return '0';
+                        
+                        if (value >= 1000000) {
+                            return '$' + (value / 1000000) + 'M';
+                        } else if (value >= 1000) {
+                            return '$' + (value / 1000) + 'K';
+                        }
+                        return '$' + value;
+                    }
                 },
+                ...(useLogarithmicScale && {
+                    min: 1,  
+                    max: chartMaxValue || undefined,
+                })
             },
         },
     };
 
-    return <Bar data={data} options={options} />;
+    return (
+        <div style={{ position: 'relative', height: height, width: '100%' }}>
+            <Bar data={data} options={options} />
+        </div>
+    );
 };
 
 export default BarChart;

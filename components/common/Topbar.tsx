@@ -80,8 +80,8 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
                     </div>
                 </>
             )}
-            <div className="bg-bodyBG fixed top-0 left-0 lg:left-[250px] xl:left-[300px] right-0 px-6 py-4 z-50">
-                <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex justify-between items-center z-50">
+            <div className="bg-bodyBG fixed top-0 left-0 lg:left-[250px] xl:left-[300px] right-0 px-4 md:px-6 py-4 z-50">
+                <nav className="topbar bg-white shadow-lg p-4 h-[62px] rounded-lg flex gap-x-4 justify-between items-center z-50">
                     <p className="text-sm md:text-[18px] lg:text-[20px] xl:text-[21px] font-medium">{currentDate}</p>
                     <div className="flex justify-end items-center gap-x-4 cursor-pointer">
                         <div className="relative hidden lg:block">
@@ -91,11 +91,11 @@ const Topbar: React.FC<TopbarProps> = ({ role, session }) => {
                         <div className="flex gap-x-4 items-center relative" ref={dropdownRef}>
                             <button className='flex gap-x-3 items-center' onClick={toggleDropdown}>
                                 <div className="text-right hidden md:block">
-                                    <span className="text-grey text-sm font-medium">{profileData?.name ?? user?.user_metadata?.name}</span>
+                                    <span className="text-grey text-sm font-medium">{profileData?.name || user?.user_metadata?.name}</span>
                                     <p className="text-themeLight text-sm">{capitalize(role)}</p>
                                 </div>
                                 <div className='border rounded-full object-cover shadow-sm overflow-hidden w-9 h-9 flex items-center justify-center'>
-                                    <Image src={profileData?.image_url ?? user?.user_metadata?.image_url ?? profileImage} alt="" className='object-cover shadow-sm w-full h-full' width={30} height={30} />
+                                    <Image src={profileData?.image_url || user?.user_metadata?.image_url || profileImage} alt="" className='object-cover shadow-sm w-full h-full' width={30} height={30} />
                                 </div>
                             </button>
                             {isDropdownOpen && (

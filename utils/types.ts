@@ -20,6 +20,7 @@ export type PharmacyCardProps = {
     total_assigned: number;
     total_completed: number;
     completion_percentage: number;
+    image_url: string;
 };
 
 export type CourseProps = {
@@ -197,3 +198,37 @@ export type ChecklistProps = {
     checklist_type: string
 
 };
+
+export interface OperationalItemsProps {
+    id: string,
+    name: string,
+}
+
+export interface AssignChecklistProps {
+    checklist_id: string;
+    question: string;
+    note: string;
+    action_item: string;
+    operational_item: string;
+    follow_up_dates: string[];
+    pharmacy_ids: string[];
+    file: null | {
+        filename: string;
+        file_url: string;
+        path: string;
+    };
+    filename?: string;
+    file_url?: string;
+    path?: string;
+}
+
+export interface ChecklistOverviewProps {
+    pharmacy_comments: string;
+    status: string
+}
+
+export interface EditAssignTaskModalProps {
+    selectedType?: string;
+    pharmacyId?: string;
+    isUpdatedMode?: boolean;
+}

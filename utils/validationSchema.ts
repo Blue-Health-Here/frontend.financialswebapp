@@ -76,41 +76,95 @@ export const addNewPharmacyExpenseValidationSchema = Yup.object().shape({
     amount: Yup.number().typeError("Expense amount must be a number").required("Expense amount is required"),
     expense_date: Yup.string().required("Date is required"),
     category_id: Yup.string().required("Expense category selection is required"),
-    revenue:  Yup.number().typeError("Revenue must be a number").required("Revenue is required"),
+    revenue: Yup.number().typeError("Revenue must be a number").required("Revenue is required"),
 });
 
 export const addNewPaymentReconciliationInitialchema = Yup.object({
     file_835: Yup.mixed()
-      .required('835 File is required')
-      .test('fileFormat', 'Only .835 file format is allowed', (value) => {
-        if (!value) return false;
-        const file = value as File;
-        const extension = file.name.split('.').pop()?.toLowerCase();
-        return extension === '835';
-      })
-      .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
-        if (!value) return false;
-        const file = value as File;
-        return file.size <= 25 * 1024 * 1024;
-      }),
-  
+        .required('835 File is required')
+        .test('fileFormat', 'Only .835 file format is allowed', (value) => {
+            if (!value) return false;
+            const file = value as File;
+            const extension = file.name.split('.').pop()?.toLowerCase();
+            return extension === '835';
+        })
+        .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
+            if (!value) return false;
+            const file = value as File;
+            return file.size <= 25 * 1024 * 1024;
+        }),
+
     file_pdf: Yup.mixed()
-      .required('Bank Statement is required')
-      .test('fileFormat', 'Only .pdf file format is allowed', (value) => {
-        if (!value) return false;
-        const file = value as File;
-        const extension = file.name.split('.').pop()?.toLowerCase();
-        return extension === 'pdf';
-      })
-      .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
-        if (!value) return false;
-        const file = value as File;
-        return file.size <= 25 * 1024 * 1024;
-      }),
-  });
-  
-  export const addNewChecklistValidationSchema = Yup.object().shape({
+        .required('Bank Statement is required')
+        .test('fileFormat', 'Only .pdf file format is allowed', (value) => {
+            if (!value) return false;
+            const file = value as File;
+            const extension = file.name.split('.').pop()?.toLowerCase();
+            return extension === 'pdf';
+        })
+        .test('fileSize', 'File is too large. Max size is 25MB.', (value) => {
+            if (!value) return false;
+            const file = value as File;
+            return file.size <= 25 * 1024 * 1024;
+        }),
+});
+
+export const addNewChecklistValidationSchema = Yup.object().shape({
     checklist_name: Yup.string().required("Name is required"),
     checklist_type: Yup.string().required("Checklist type is required"),
 });
-  
+
+export const assignChecklistValidationSchema = (selectedType: string, isUpdateMode = false) => {
+    const baseSchema: Record<string, any> = {
+        question: Yup.string().required('Question is required'),
+        note: Yup.string().required('Note is required'),
+        action_item: Yup.string().required('Action item is required'),
+        follow_up_dates: Yup.array().min(1, 'At least one follow-up date is required'),
+        checklist_id: Yup.string().required('Checklist is required'),
+        file: Yup.object({
+            filename: Yup.string().required('File is required'),
+        }).required('File is required')
+    };
+
+    if (!isUpdateMode) {
+        baseSchema.pharmacy_ids = Yup.array().min(1, 'At least one pharmacy must be selected');
+    }
+
+    if (!isUpdateMode) {
+        baseSchema.file = Yup.mixed();
+    }
+
+    if (selectedType === 'operations') {
+        baseSchema.operational_item = Yup.string().required('Operational item is required');
+    }
+
+    return Yup.object().shape(baseSchema);
+};
+
+export const updatePharmacyChecklistValidationSchema = Yup.object().shape({
+    pharmacy_comments: Yup.string().required('Add comments'),
+    status: Yup.string().required('Add Status')
+});
+
+export const PharmacyProfileValidationSchema = Yup.object().shape({
+    pharmacy_name: Yup.string()
+        .required('Pharmacy Name is required'),
+    address: Yup.string()
+        .required('Address is required'),
+    email: Yup.string()
+        .email('Invalid email address'),
+    contact: Yup.string()
+        .required('Contact is required')
+        .matches(/^[0-9+\-() ]+$/, 'Invalid contact number'),
+
+    services_offered: Yup.string()
+        .nullable(),
+});
+
+export const adminProfileSchema = Yup.object().shape({
+    name: Yup.string()
+        .required('Full name is required')
+        .max(100, 'Full name must be at most 100 characters'),
+    email: Yup.string()
+        .email('Invalid email format')
+});

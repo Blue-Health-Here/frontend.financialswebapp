@@ -1,60 +1,68 @@
-import { ChecklistProps } from "@/utils/types";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiDelete, FiEdit, FiTable, FiTrash, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import DeleteModal from "./DeleteModal";
 
 interface AccordionProps {
   items: any;
-  handleEditQuestion?: () => void;
+  handleEditTasklist?: Function;
   handleEditChecklist?: Function
-  handleDelete?: (id: string) => void 
-  onChecklistSelect?: (id: string) => void 
+  handleDeleteChecklist?: (id: string) => void
+  handleDeleteTasklist?: (taskId: string, checklistId: string) => void;
+  onChecklistSelect?: (id: string, type: string) => void
+  tasklist?: any;
+  showChecklistActions?: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handleEditChecklist, handleDelete, onChecklistSelect }) => {
+const Accordion: React.FC<AccordionProps> = ({ 
+  items,  tasklist, handleEditTasklist, 
+  handleEditChecklist, handleDeleteChecklist, handleDeleteTasklist, 
+  onChecklistSelect, showChecklistActions = false
+}) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isCloseModal, setIsCloseModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-
+  const [selectedItem, setSelectedTask] = useState<any>(null);
+  const [selectedItemType, setSelectedItemType] = useState<"checklist" | "tasklist" | null>(null);
 
   const onTitleClick = (index: number) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
 
-
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full mx-auto mt-2">
       {items?.map((item: any, index: number) => (
         <div key={index} className="shadow-md rounded-xl mb-6 overflow-hidden"
-        onClick={() => onChecklistSelect?.(item.id)}>
+          onClick={() => activeIndex !== index && onChecklistSelect?.(item.id, item.checklist_type)}>
           <div
-            className={`flex justify-between items-center px-6 py-4 sm:py-2  md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
+            className={`flex justify-between items-center px-3 md:px-6 py-3 md:py-4 cursor-pointer ${activeIndex === index ? "bg-primary text-white" : "bg-white"}`}
             onClick={() => onTitleClick(index)}
           >
-            <h1 className="text-xs sm:text-sm md:text-[16px] lg:text-lg flex gap-2 items-center">
+            <h1 className="text-sm md:text-base lg:text-lg flex justify-between md:justify-normal gap-2 items-center">
               {item.checklist_name || item.title}
-              {item.checklist_name && (
+             <div className="flex gap-2">
+             {showChecklistActions && (
                 <>
                   <FiEdit
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEditChecklist && handleEditChecklist(item);
                     }}
-                    className={`${activeIndex === index ? "text-white" : "text-primary"}`}
+                    className={`w-4 h-4 md:w-5 md:h-5 ${activeIndex === index ? "text-white" : "text-primary"}`}
                   />
                   <FiTrash2
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedItem(item);
+                      setSelectedTask(item);
+                      setSelectedItemType("checklist");
                       setIsCloseModal(true);
                     }}
-                   className={`${activeIndex === index ? "text-secondary" : "text-red-500 font"}`}
+                    className={`w-4 h-4 md:w-5 md:h-5 ${activeIndex === index ? "text-secondary" : "text-red-500"}`}
                   />
                 </>
               )}
+             </div>
             </h1>
             {activeIndex === index ? (
               <RiArrowDropDownLine className="text-2xl md:text-[34px]" />
@@ -65,7 +73,7 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
           <div
             className={`transition-all duration-300 ease-in-out ${activeIndex === index ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden`}
           >
-            <div className="p-6 bg-white border-t border-gray-300">
+            <div className="p-3 md:p-6 bg-white border-t border-gray-300">
               {Array.isArray(item?.content) && item?.content?.length > 0 ? (
                 <ul className="divide-y divide-gray-300">
                   {item?.content?.map((text: any, idx: any) => (
@@ -85,12 +93,12 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                         </div>
                         <button
                           className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
-                          onClick={handleEditQuestion}
+                          onClick={() => handleEditTasklist}
                         >
                           <Image
                             src="/edit-icon.svg"
                             alt=""
-                            className="w-[12px] h-[12px] sm:w-[15px] sm:h-[15px]"
+                            className="w-4 h-4 md:w-5 md:h-5 "
                             width={15}
                             height={15}
                           />
@@ -99,41 +107,68 @@ const Accordion: React.FC<AccordionProps> = ({ items, handleEditQuestion, handle
                     </li>
                   ))}
                 </ul>
-              ) : item?.content ? (
-                <div className="flex items-start sm:items-center justify-between">
-                  <div className="flex gap-2 items-start sm:items-center flex-1">
-                    <p className="text-grey text-xs sm:text-sm md:text-[16px]">
-                      {item?.content}
-                    </p>
-                  </div>
-                  <button
-                    className="ml-2 text-gray-500 hover:text-blue-500 transition w-6 h-6 flex-shrink-0"
-                    onClick={handleEditQuestion}
-                  >
-                    <Image
-                      src="/edit-icon.svg"
-                      alt=""
-                      className="w-[12px] h-[12px] sm:w-[15px] sm:h-[15px]"
-                      width={15}
-                      height={15}
-                    />
-                  </button>
-                </div>
-              ) : <p>No data </p>}
+              ) : tasklist?.length > 0 ? (
+                <ul>
+                  {tasklist?.map((task: any, index: any) => (
+                    <li key={index} className="py-3">
+                      <div className="flex items-start sm:items-center justify-between">
+                        <div className="inline-flex gap-2 items-start sm:items-center flex-1">
+                          <Image
+                            src="/greencheck.png"
+                            alt=""
+                            className="w-3.5 h-3.5 sm:w-6 sm:h-6 mt-1 sm:mt-0"
+                            width={20}
+                            height={20}
+                          />
+                          <span className="text-grey text-xs sm:text-sm md:text-[16px] leading-6">
+                            {task.question}
+                          </span>
+                        </div>
+                        <button
+                          className="text-gray-500 hover:text-blue-500 transition flex-shrink-0"
+                          onClick={() => handleEditTasklist && handleEditTasklist(task)}
+                        >
+                          <Image
+                            src="/edit-icon.svg"
+                            alt=""
+                            className="w-4 h-4 md:w-5 md:h-5 "
+                            width={15}
+                            height={15}
+                          />
+                        </button>
+                        {showChecklistActions && (
+                          <FiTrash2
+                            onClick={() => {
+                              setSelectedTask(task);
+                              setSelectedItemType("tasklist");
+                              setIsCloseModal(true);
+                            }}
+                            className="text-red-500 ml-2 w-4 h-4 md:w-5 md:h-5 cursor-pointer"
+                          />)}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p>No data</p>}
             </div>
           </div>
         </div>
       ))}
-      {isCloseModal && <DeleteModal title={selectedItem.checklist_name.toUpperCase()} content={`<p className="text-base">
-         <span>Are you sure you want to delete this ${selectedItem.checklist_name}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
+      {isCloseModal && <DeleteModal title={selectedItem?.checklist_name || selectedItem?.question || ""} content={`<p className="text-base">
+         <span>Are you sure you want to delete this ${selectedItemType === "checklist" ? selectedItem?.checklist_name : selectedItem?.question}?</span> <br /><span>You'll not be able to recover it.</span></p>`}
         handleClose={() => {
           setIsCloseModal(false);
-          setSelectedItem(null);
+          setSelectedTask(null);
         }}
         handleSuccess={() => {
-          if (handleDelete) handleDelete(selectedItem.id);
+          if (selectedItemType === "checklist") {
+            handleDeleteChecklist?.(selectedItem.id);
+          } else if (selectedItemType === "tasklist") {
+            handleDeleteTasklist?.(selectedItem.id, selectedItem?.checklist_id);
+          }
           setIsCloseModal(false);
-          setSelectedItem(null);
+          setSelectedTask(null);
+          setSelectedItemType(null);
         }} />}
     </div>
   );
